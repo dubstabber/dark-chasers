@@ -1,0 +1,45 @@
+[gd_scene load_steps=11 format=3 uid="uid://dlrskmhmu7g2e"]
+
+[ext_resource type="Script" path="res://scenes/rooms/world.gd" id="1_8dhik"]
+[ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player.tscn" id="1_iniq2"]
+[ext_resource type="Texture2D" uid="uid://co5uy0k6hjm4t" path="res://images/skyboxes/space1.png" id="2_iti3t"]
+[ext_resource type="PackedScene" uid="uid://5q2aomrq4gjw" path="res://scenes/rooms/room_1.tscn" id="2_tcowc"]
+[ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemy.tscn" id="2_vwpol"]
+[ext_resource type="PackedScene" uid="uid://c8ofnx5cpjm60" path="res://scenes/rooms/fdm_backrooms.tscn" id="3_sf1wm"]
+[ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="7_ipvkk"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4836h"]
+panorama = ExtResource("2_iti3t")
+
+[sub_resource type="Sky" id="Sky_c7vkd"]
+sky_material = SubResource("PanoramaSkyMaterial_4836h")
+
+[sub_resource type="Environment" id="Environment_bov2m"]
+background_mode = 2
+sky = SubResource("Sky_c7vkd")
+fog_enabled = true
+fog_light_color = Color(0.392157, 0.545098, 0.839216, 1)
+fog_sky_affect = 0.0
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_8dhik")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_bov2m")
+
+[node name="fdm_backrooms" parent="." instance=ExtResource("3_sf1wm")]
+
+[node name="room1" parent="." instance=ExtResource("2_tcowc")]
+
+[node name="Player" parent="." instance=ExtResource("1_iniq2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8774, 7.13002, 62.9133)
+
+[node name="Enemy" parent="." instance=ExtResource("2_vwpol")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.78702, 33.4255)
+specific_enemy = "swag hacker"
+
+[node name="Teleport" parent="." instance=ExtResource("7_ipvkk")]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 40.0457, 2.01625, 91.2728)
+
+[node name="Marker3D" type="Marker3D" parent="Teleport" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -128.747, 45.606, -159.631)

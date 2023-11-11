@@ -3,9 +3,11 @@
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_xs0mp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
+radius = 0.231423
+height = 1.38924
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
-collision_mask = 6
+collision_mask = 14
 script = ExtResource("1_xs0mp")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

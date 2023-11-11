@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dlrskmhmu7g2e"]
+[gd_scene load_steps=12 format=3 uid="uid://dlrskmhmu7g2e"]
 
 [ext_resource type="Script" path="res://scenes/rooms/world.gd" id="1_8dhik"]
 [ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player.tscn" id="1_iniq2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemy.tscn" id="2_vwpol"]
 [ext_resource type="PackedScene" uid="uid://c8ofnx5cpjm60" path="res://scenes/rooms/fdm_backrooms.tscn" id="3_sf1wm"]
 [ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="7_ipvkk"]
+[ext_resource type="PackedScene" uid="uid://c2jqgo5cy7g7l" path="res://scenes/rooms/mansion_1.tscn" id="8_ckl1j"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4836h"]
 panorama = ExtResource("2_iti3t")
@@ -18,7 +19,8 @@ sky_material = SubResource("PanoramaSkyMaterial_4836h")
 background_mode = 2
 sky = SubResource("Sky_c7vkd")
 fog_enabled = true
-fog_light_color = Color(0.392157, 0.545098, 0.839216, 1)
+fog_light_color = Color(0.576471, 0.694118, 0.913725, 1)
+fog_density = 0.005
 fog_sky_affect = 0.0
 
 [node name="World" type="Node3D"]
@@ -30,16 +32,26 @@ environment = SubResource("Environment_bov2m")
 [node name="fdm_backrooms" parent="." instance=ExtResource("3_sf1wm")]
 
 [node name="room1" parent="." instance=ExtResource("2_tcowc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 123.042, 0)
+
+[node name="mansion1" parent="." instance=ExtResource("8_ckl1j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -374.411, 344.662)
 
 [node name="Player" parent="." instance=ExtResource("1_iniq2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8774, 7.13002, 62.9133)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.8774, 130.017, 62.9133)
 
 [node name="Enemy" parent="." instance=ExtResource("2_vwpol")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.78702, 33.4255)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 126.541, 33.4255)
 specific_enemy = "swag hacker"
 
 [node name="Teleport" parent="." instance=ExtResource("7_ipvkk")]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 40.0457, 2.01625, 91.2728)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 40.0457, 124.873, 91.9885)
 
 [node name="Marker3D" type="Marker3D" parent="Teleport" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -128.747, 45.606, -159.631)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -117.502, -279.315, -183.862)
+
+[node name="Teleport2" parent="." instance=ExtResource("7_ipvkk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.7973, 126.494, 92.0787)
+
+[node name="Marker3D" type="Marker3D" parent="Teleport2" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.20919, -298.177, 166.5)

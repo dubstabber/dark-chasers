@@ -12,6 +12,7 @@ var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
 var killed := false
 var death_throw :=  10.5
 var clip_mode := false
+var transit_pos: Marker3D = null
 
 @onready var camera_3d = $Camera3D
 @onready var color_rect = $Camera3D/ColorRect
@@ -55,6 +56,10 @@ func _physics_process(delta):
 			else:
 				collision_mask = 6
 				
+		if Input.is_action_just_pressed("use"):
+			if transit_pos:
+				position = transit_pos.global_position
+				transit_pos = null
 
 		var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
 		direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()

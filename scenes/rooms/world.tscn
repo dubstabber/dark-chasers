@@ -55,3 +55,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.7973, 126.494, 92.0787)
 
 [node name="Marker3D" type="Marker3D" parent="Teleport2" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.20919, -298.177, 166.5)
+
+[node name="Teleport3" parent="." instance=ExtResource("7_ipvkk")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 12.9114, 128.856, 57.4084)
+
+[node name="Marker3D" type="Marker3D" parent="Teleport3" groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 83.5447, -604.894, 797.503)

@@ -1,6 +1,7 @@
 extends Node3D
 
-@onready var transitions = $Transitions
+@onready var transitions: Node3D = $Transitions
+
 
 func _ready():
 	for t in transitions.get_children():
@@ -10,7 +11,7 @@ func _ready():
 			if m.is_in_group('manual_spawn_point'):
 				t.connect("body_entered", _on_transition_entered.bind(m))
 				t.connect("body_exited", _on_transition_exited)
-
+	
 
 func handle_transition(body, transitor):
 	if transitor:
@@ -28,3 +29,12 @@ func _on_transition_exited(body):
 		if "transit_pos" in body:
 			body.transit_pos = null
 
+
+func _on_ladder_body_entered(body):
+	if body.is_in_group('player'):
+		body.is_climbing = true
+
+
+func _on_ladder_body_exited(body):
+	if body.is_in_group('player'):
+		body.is_climbing = false

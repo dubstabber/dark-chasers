@@ -1,4 +1,4 @@
-[gd_scene load_steps=290 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=291 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -600,6 +600,9 @@ size = Vector3(1, 2.20598, 0.146158)
 [sub_resource type="BoxShape3D" id="BoxShape3D_twoj1"]
 size = Vector3(1, 2.20598, 0.146158)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wkois"]
+size = Vector3(0.052217, 7.57013, 0.567396)
+
 [node name="mansion1" type="Node3D"]
 script = ExtResource("1_0bnm5")
 
@@ -751,7 +754,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_lldh5")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -94.062, 249.568, -119.306)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.0266, 222.345, -32.82)
 light_energy = 11.021
 omni_range = 1063.46
 
@@ -905,3 +908,13 @@ shape = SubResource("BoxShape3D_twoj1")
 
 [node name="Marker3D" type="Marker3D" parent="Transitions/ManualArea3D13" groups=["manual_spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, -0.781258)
+
+[node name="Ladder" type="Area3D" parent="." groups=["ladder"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)
+collision_layer = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ladder"]
+shape = SubResource("BoxShape3D_wkois")
+
+[connection signal="body_entered" from="Ladder" to="." method="_on_ladder_body_entered"]
+[connection signal="body_exited" from="Ladder" to="." method="_on_ladder_body_exited"]

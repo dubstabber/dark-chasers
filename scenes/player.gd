@@ -13,6 +13,7 @@ var killed := false
 var death_throw :=  10.5
 var clip_mode := false
 var transit_pos: Marker3D = null
+var is_climbing := false
 
 @onready var camera_3d = $Camera3D
 @onready var color_rect = $Camera3D/ColorRect
@@ -69,7 +70,8 @@ func _physics_process(delta):
 		else:
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
-
+		if is_climbing and input_dir:
+			velocity.y = SPEED
 		move_and_slide()
 	else:
 		if death_throw > 0:

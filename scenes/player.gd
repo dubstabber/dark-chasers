@@ -1,5 +1,7 @@
 extends CharacterBody3D
 
+signal mode_changed(mode, value)
+
 const JUMP_VELOCITY = 4.5
 
 @export var SPEED = 5.0
@@ -47,15 +49,24 @@ func _physics_process(delta):
 		if Input.is_action_just_released("run"):
 			camera_3d.fov = 85
 			SPEED = 5.0
-		if Input.is_action_just_pressed("crounch") and not clip_mode:
-			
-			pass
+		if Input.is_action_just_pressed("crounch"):
+			if clip_mode:
+				velocity.y = -SPEED
+			else:
+				#TODO: implement crounching
+				pass
+		elif Input.is_action_just_released("crounch"):
+			if clip_mode:
+				velocity.y = move_toward(velocity.y, 0, SPEED)
+		
 		if Input.is_action_just_pressed("toggle-clip-mode"):
 			clip_mode = not clip_mode
-			if collision_mask == 6:
-				collision_mask = 2
+			mode_changed.emit("clip_mode",clip_mode)
+			if collision_mask == 14:
+				collision_mask = 10
+				velocity.y = 0
 			else:
-				collision_mask = 6
+				collision_mask = 14
 				
 		if Input.is_action_just_pressed("use"):
 			if transit_pos:

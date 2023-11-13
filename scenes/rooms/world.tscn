@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dlrskmhmu7g2e"]
+[gd_scene load_steps=13 format=3 uid="uid://dlrskmhmu7g2e"]
 
 [ext_resource type="Script" path="res://scenes/rooms/world.gd" id="1_8dhik"]
 [ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player.tscn" id="1_iniq2"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c8ofnx5cpjm60" path="res://scenes/rooms/fdm_backrooms.tscn" id="3_sf1wm"]
 [ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="7_ipvkk"]
 [ext_resource type="PackedScene" uid="uid://c2jqgo5cy7g7l" path="res://scenes/rooms/mansion_1.tscn" id="8_ckl1j"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="9_e4hb2"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_4836h"]
 panorama = ExtResource("2_iti3t")
@@ -61,3 +62,7 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 12.9114, 128.856, 57.40
 
 [node name="Marker3D" type="Marker3D" parent="Teleport3" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 83.5447, -604.894, 797.503)
+
+[node name="HUD" parent="." instance=ExtResource("9_e4hb2")]
+
+[connection signal="mode_changed" from="Player" to="HUD" method="_on_player_mode_changed"]

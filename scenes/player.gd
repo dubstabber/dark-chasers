@@ -90,6 +90,8 @@ func _physics_process(delta):
 			move_and_slide()
 			death_throw -= 0.1
 
+func get_camera() -> Camera3D:
+	return $Camera3D
 
 func kill(pos):
 	direction = (pos - position).normalized()

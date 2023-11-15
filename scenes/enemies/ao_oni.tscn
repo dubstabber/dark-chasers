@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=3 uid="uid://b1vimowqmce5w"]
+
+[ext_resource type="Script" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
+[ext_resource type="Texture2D" uid="uid://bhgrkq04i5nfs" path="res://images/enemies/ao-oni/AONIA4A6.png" id="2_bgw0k"]
+[ext_resource type="Texture2D" uid="uid://b1pskcfv7wyvc" path="res://images/enemies/ao-oni/AONIA1.png" id="2_iaafa"]
+[ext_resource type="Texture2D" uid="uid://qe7ijko24ssb" path="res://images/enemies/ao-oni/AONIB4B6.png" id="2_u6v1l"]
+[ext_resource type="Texture2D" uid="uid://bhos8kwin57l5" path="res://images/enemies/ao-oni/AONIB1.png" id="2_xkk46"]
+[ext_resource type="Texture2D" uid="uid://c4dgs5h82d03n" path="res://images/enemies/ao-oni/AONIA3A7.png" id="3_bu3lp"]
+[ext_resource type="Texture2D" uid="uid://bfv3dygs83x66" path="res://images/enemies/ao-oni/AONIC5.png" id="4_c3h1a"]
+[ext_resource type="Texture2D" uid="uid://beijksyrqiunb" path="res://images/enemies/ao-oni/AONIC1.png" id="4_y64dm"]
+[ext_resource type="Texture2D" uid="uid://b3q8cfyh37g3u" path="res://images/enemies/ao-oni/AONIC3C7.png" id="5_k2h66"]
+[ext_resource type="Texture2D" uid="uid://vgfc4lpa8uoh" path="res://images/enemies/ao-oni/AONIB3B7.png" id="7_aoo63"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7k82f"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_u6v1l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_bgw0k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_c3h1a")
+}],
+"loop": true,
+"name": &"run-back",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xkk46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_iaafa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_y64dm")
+}],
+"loop": true,
+"name": &"run-front",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_k2h66")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_bu3lp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_aoo63")
+}],
+"loop": true,
+"name": &"run-side",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bgw0k")
+}],
+"loop": false,
+"name": &"stay-back",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_iaafa")
+}],
+"loop": false,
+"name": &"stay-front",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_bu3lp")
+}],
+"loop": false,
+"name": &"stay-side",
+"speed": 1.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl8o4"]
+radius = 0.5975
+height = 1.195
+
+[node name="Ao oni" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 2
+collision_mask = 13
+slide_on_ceiling = false
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.26187
+floor_snap_length = 0.31
+script = ExtResource("1_xmjcu")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42917, 0)
+billboard = 2
+sprite_frames = SubResource("SpriteFrames_7k82f")
+animation = &"stay-back"
+frame_progress = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_dl8o4")
+
+[node name="FindPathTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]

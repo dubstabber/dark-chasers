@@ -10,7 +10,6 @@ var target: CharacterBody3D
 var enemy_data: Dictionary
 var direction: Vector3
 var jump_speed: float = 0
-var clip_mode := false
 
 @onready var nav := $NavigationAgent3D
 @onready var image := $Sprite3D
@@ -19,6 +18,7 @@ var clip_mode := false
 
 
 func _ready():
+	
 	target = get_tree().get_first_node_in_group('player')
 	if specific_enemy:
 		for enemy in EnemyDb.ENEMIES:
@@ -41,6 +41,7 @@ func _ready():
 	elif "musics" in enemy_data:
 		sound_music.connect("finished", _draw_music)
 		_draw_music()
+
 
 func _physics_process(delta):
 	if target:

@@ -1,6 +1,6 @@
 extends Node3D
 
-@onready var transitions: Node3D = $Transitions
+@onready var transitions = $MansionAooni6_0_0Map01/Transitions
 
 
 func _ready():

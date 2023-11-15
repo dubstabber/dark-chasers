@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb0ja5up2c6ny"]
 
-[ext_resource type="Script" path="res://scenes/enemy.gd" id="1_fvloq"]
+[ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nli0v"]
 radius = 0.360225
@@ -10,7 +10,7 @@ height = 1.195
 radius = 0.392898
 height = 1.495
 
-[node name="Enemy" type="CharacterBody3D"]
+[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
 collision_layer = 2
 collision_mask = 13
 slide_on_ceiling = false

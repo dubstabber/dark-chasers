@@ -203,6 +203,8 @@ albedo_texture = ExtResource("21_diqn8")
 albedo_texture = ExtResource("22_7mnk3")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hlbcq"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.988235)
 albedo_texture = ExtResource("23_etxqa")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m2cku"]
@@ -219,6 +221,7 @@ albedo_texture = ExtResource("27_y0tvm")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tc0mc"]
 albedo_texture = ExtResource("28_x57g8")
+uv1_scale = Vector3(0.125, 0.2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_am55r"]
 albedo_texture = ExtResource("29_fg02s")
@@ -236,7 +239,14 @@ albedo_texture = ExtResource("32_3d3oo")
 albedo_texture = ExtResource("33_2offb")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1bo1"]
+transparency = 1
 albedo_texture = ExtResource("34_yjtkn")
+emission_energy_multiplier = 9.31
+clearcoat_roughness = 0.56
+subsurf_scatter_strength = 0.1
+uv1_scale = Vector3(2, 1, 1)
+grow_amount = 1.622
+point_size = 71.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pwbft"]
 albedo_texture = ExtResource("35_ogsua")
@@ -248,6 +258,7 @@ albedo_texture = ExtResource("36_47403")
 albedo_texture = ExtResource("37_q2f8i")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yu81h"]
+transparency = 1
 albedo_texture = ExtResource("38_b7tre")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dx5so"]
@@ -263,15 +274,19 @@ albedo_texture = ExtResource("41_e3v3n")
 albedo_texture = ExtResource("42_mk1q0")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tqgjw"]
+transparency = 1
 albedo_texture = ExtResource("43_bgbmb")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sryn1"]
+transparency = 1
 albedo_texture = ExtResource("44_jclgp")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0cop8"]
+transparency = 1
 albedo_texture = ExtResource("45_a15e8")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hhi50"]
+transparency = 1
 albedo_texture = ExtResource("46_lpdwi")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_74vqy"]
@@ -411,6 +426,9 @@ albedo_texture = ExtResource("91_tloes")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1jh17"]
 albedo_texture = ExtResource("92_ojmwr")
+uv1_scale = Vector3(0.34, 1, 1)
+grow_amount = -0.314
+point_size = 28.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_io6ae"]
 albedo_texture = ExtResource("93_pa3ro")
@@ -420,9 +438,11 @@ albedo_texture = ExtResource("94_uv2wj")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c6o1k"]
 albedo_texture = ExtResource("95_ulwgb")
+uv1_scale = Vector3(0.125, 0.2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q84ul"]
 albedo_texture = ExtResource("96_gy23f")
+uv1_scale = Vector3(0.125, 0.2, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu7yr"]
 albedo_texture = ExtResource("97_a6ymw")
@@ -432,6 +452,7 @@ albedo_texture = ExtResource("98_x0163")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mdhkl"]
 albedo_texture = ExtResource("99_bwf58")
+uv1_scale = Vector3(1.3, 1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m06lh"]
 albedo_texture = ExtResource("100_yfvor")
@@ -753,161 +774,163 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_lldh5")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.0266, 222.345, -32.82)
-light_energy = 11.021
-omni_range = 1063.46
+[node name="Transitions" type="Node3D" parent="MansionAooni6_0_0Map01"]
 
-[node name="Transitions" type="Node3D" parent="."]
-
-[node name="Area3D" type="Area3D" parent="Transitions"]
+[node name="Area3D" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.8766, 204.579, -19.8768)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.903076, 0.139891)
 shape = SubResource("BoxShape3D_ckarb")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.0788, -3.2674, 128.03)
 
-[node name="Area3D2" type="Area3D" parent="Transitions"]
+[node name="Area3D2" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.16595, 201.118, 107.234)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_qwtuk")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D2" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D2" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.9857, 3.57982, -128.043)
 
-[node name="Area3D3" type="Area3D" parent="Transitions"]
+[node name="Area3D3" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06098, 207.017, 115.741)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D3"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_tqmk0")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D3" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D3" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.0371, -5.47302, -8.6801)
 
-[node name="Area3D4" type="Area3D" parent="Transitions"]
+[node name="Area3D4" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0927, 201.579, 105.969)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D4"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_j8qqi")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D4" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D4" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2642, 4.91086, 9.061)
 
-[node name="Area3D5" type="Area3D" parent="Transitions"]
+[node name="Area3D5" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4936, 194.093, 111.093)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D5"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D5"]
 shape = SubResource("BoxShape3D_aw2s6")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D5" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D5" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 18.2073, 3.75611)
 
-[node name="Area3D6" type="Area3D" parent="Transitions"]
+[node name="Area3D6" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.359, 202.456, 106.993)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D6"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0149841, 1.03539, -1.50446)
 shape = SubResource("BoxShape3D_hy2fy")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D6" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D6" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.0146, 3.11525, 2.658)
 
-[node name="Area3D7" type="Area3D" parent="Transitions"]
+[node name="Area3D7" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5643, 206.027, 110.265)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D7"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D7"]
 shape = SubResource("BoxShape3D_u2kem")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D7" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D7" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.8583, -2.99069, -4.27702)
 
-[node name="Area3D8" type="Area3D" parent="Transitions"]
+[node name="Area3D8" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.6297, 203.435, -18.4716)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D8"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D8"]
 shape = SubResource("BoxShape3D_uyito")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D8" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D8" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.4184, -0.297089, 84.1018)
 
-[node name="Area3D12" type="Area3D" parent="Transitions"]
+[node name="Area3D12" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.7462, 203.451, 65.0796)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D12"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D12"]
 shape = SubResource("BoxShape3D_tmodv")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D12" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D12" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4353, -0.00393677, -84.0352)
 
-[node name="Area3D9" type="Area3D" parent="Transitions"]
+[node name="Area3D9" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 194.815, 100.759)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D9"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D9"]
 shape = SubResource("CylinderShape3D_m48fq")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D9" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D9" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 15.1677, 13.3726)
 
-[node name="Area3D10" type="Area3D" parent="Transitions"]
+[node name="Area3D10" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 208.035, 118.057)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/Area3D10"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D10"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.89096, 2.84669, -3.91628)
 shape = SubResource("CylinderShape3D_xdisi")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/Area3D10" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/Area3D10" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.804131, -5.18744, -17.4785)
 
-[node name="ManualArea3D11" type="Area3D" parent="Transitions"]
+[node name="ManualArea3D11" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.0032)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/ManualArea3D11"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/ManualArea3D11"]
 shape = SubResource("BoxShape3D_1hhje")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/ManualArea3D11" groups=["manual_spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/ManualArea3D11" groups=["manual_spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, 0.864449)
 
-[node name="ManualArea3D13" type="Area3D" parent="Transitions"]
+[node name="ManualArea3D13" type="Area3D" parent="MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.3587)
 collision_layer = 8
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Transitions/ManualArea3D13"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MansionAooni6_0_0Map01/Transitions/ManualArea3D13"]
 shape = SubResource("BoxShape3D_twoj1")
 
-[node name="Marker3D" type="Marker3D" parent="Transitions/ManualArea3D13" groups=["manual_spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="MansionAooni6_0_0Map01/Transitions/ManualArea3D13" groups=["manual_spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, -0.781258)
+
+[node name="Decorations" type="Node3D" parent="MansionAooni6_0_0Map01"]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.0266, 222.345, -32.82)
+light_energy = 11.021
+omni_range = 1063.46
 
 [node name="Ladder" type="Area3D" parent="." groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

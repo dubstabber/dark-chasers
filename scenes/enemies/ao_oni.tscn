@@ -111,4 +111,14 @@ autostart = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
+[node name="NoticeRay" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0, 200)
+collision_mask = 13
+collide_with_areas = true
+
+[node name="sightTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
 [connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]
+[connection signal="timeout" from="sightTimer" to="." method="_on_sight_timer_timeout"]

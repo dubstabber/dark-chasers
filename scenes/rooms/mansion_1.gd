@@ -1,9 +1,15 @@
 extends Node3D
 
+var player_spawners: Array
+var playerScene := preload("res://scenes/player.tscn")
+
 @onready var transitions = $MansionAooni6_0_0Map01/Transitions
 
-
 func _ready():
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	player_spawners = get_tree().get_nodes_in_group('player_spawn')
+	respawn()
 	for t in transitions.get_children():
 		for m in t.get_children():
 			if m.is_in_group('spawn_point'):
@@ -12,6 +18,19 @@ func _ready():
 				t.connect("body_entered", _on_transition_entered.bind(m))
 				t.connect("body_exited", _on_transition_exited)
 	
+func _physics_process(_delta):
+	if Input.is_action_just_pressed("menu"):
+		get_tree().quit()
+	if Input.is_action_just_pressed('toggle-window-mode'):
+		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+func respawn():
+	var player = playerScene.instantiate() as CharacterBody3D
+	add_child(player)
+	player.position = player_spawners[0].global_position
 
 func handle_transition(body, transitor):
 	if transitor:

@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED = 5.0
+const SPEED = 7.0
 const ACCEL = 10
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -8,25 +8,30 @@ var target: CharacterBody3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
 var direction: Vector3
+var noticed_target := false
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $FindPathTimer
 @onready var animated_sprite_3d = $AnimatedSprite3D
+@onready var sight_raycast = $NoticeRay
 
 
 func _ready():
 	target = get_tree().get_first_node_in_group('player')
 
-
 func _physics_process(delta):
-	if not target: return
-	var next_pos = nav.get_next_path_position()
-	if global_position != next_pos and is_on_floor():
-		look_at(next_pos)
-	direction = (next_pos - global_position).normalized()
-	
-	velocity = velocity.lerp(direction * (SPEED+jump_speed), ACCEL * delta)
-	animateSprite()
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	if target:
+		if sight_raycast.is_colliding() and sight_raycast.get_collider().is_in_group("player") and not noticed_target:
+			noticed_target = true
+		if noticed_target:
+			var next_pos = nav.get_next_path_position()
+			if global_position != next_pos and is_on_floor():
+				look_at(next_pos)
+			direction = (next_pos - global_position).normalized()
+			velocity = velocity.lerp(direction * (SPEED+jump_speed), ACCEL * delta)
+		animateSprite()
 	move_and_slide()
 	
 
@@ -36,14 +41,15 @@ func animateSprite():
 	var horizontal_side = global_transform.basis.x
 	var h_dot = horizontal_side.dot(p_pos)
 	var v_dot = vertical_side.dot(p_pos)
+	var state = 'run' if velocity else 'stay'
 	if v_dot < -0.5:
-		animated_sprite_3d.play('stay-front')
+		animated_sprite_3d.play(state+'-front')
 	elif v_dot > 0.5:
-		animated_sprite_3d.play('stay-back')
+		animated_sprite_3d.play(state+'-back')
 	else:
 		animated_sprite_3d.flip_h = h_dot > 0
 		if abs(v_dot) < 0.3:
-			animated_sprite_3d.play('stay-side')
+			animated_sprite_3d.play(state+'-side')
 
 func makepath() -> void:
 	if !!target:
@@ -62,3 +68,8 @@ func _on_find_path_timer_timeout():
 	else:
 		find_path_timer.wait_time = 4.0
 	makepath()
+
+
+func _on_sight_timer_timeout():
+	if target:
+		sight_raycast.target_position = target.global_position - global_position

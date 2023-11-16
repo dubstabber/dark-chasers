@@ -7,6 +7,8 @@ const JUMP_VELOCITY = 4.5
 @export var SPEED = 5.0
 @export var sensivity = 0.3
 
+var current_room: String
+var map: Node3D
 var direction: Vector3
 var fov := false
 var lerp_speed := 1
@@ -22,6 +24,7 @@ var is_climbing := false
 
 
 func _ready():
+	map = get_tree().get_first_node_in_group('map')
 	camera_3d.fov = 85
 
 func _input(event):

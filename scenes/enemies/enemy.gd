@@ -56,14 +56,14 @@ func makepath() -> void:
 
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
-	if distance_to_target < 5:
+	if distance_to_target < 10:
 		find_path_timer.wait_time = 0.1
-	elif distance_to_target < 10:
-		find_path_timer.wait_time = 0.6
 	elif distance_to_target < 20:
-		find_path_timer.wait_time = 1.0
+		find_path_timer.wait_time = 0.3
+	elif distance_to_target < 35:
+		find_path_timer.wait_time = 0.6
 	elif distance_to_target < 50:
-		find_path_timer.wait_time = 2.0
+		find_path_timer.wait_time = 1.0
 	else:
 		find_path_timer.wait_time = 4.0
 	makepath()

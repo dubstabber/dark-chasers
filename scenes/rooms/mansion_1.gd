@@ -2,6 +2,7 @@ extends Node3D
 
 var player_spawners: Array
 var playerScene := preload("res://scenes/player.tscn")
+var hudScene := preload("res://scenes/hud.tscn")
 var enemies: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
@@ -13,7 +14,10 @@ func _ready():
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	var player = playerScene.instantiate() as CharacterBody3D
 	add_child(player)
-	player.current_room = "ThirdFloor"
+	var hud = hudScene.instantiate()
+	add_child(hud)
+	player.connect("mode_changed", hud._on_player_mode_changed)
+	player.current_room = "BigHall"
 	respawn(player)
 	enemies = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
@@ -47,6 +51,7 @@ func handle_transition(body, area3dname, marker):
 	body.position = marker.global_position
 	if "find_path_timer" in body:
 		body.find_path_timer.wait_time = 0.1
+		body.find_path_timer.start()
 
 
 func _on_transition_entered(body, transitor):

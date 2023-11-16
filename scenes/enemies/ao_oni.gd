@@ -125,3 +125,12 @@ func _on_kill_zone_body_entered(body):
 		body.kill(position)
 		noticed_target = false
 		velocity = Vector3.ZERO
+
+
+func _on_navigation_agent_3d_link_reached(details):
+	if details.owner.is_in_group("jump-down"):
+		jump_speed = gravity
+
+
+func _on_navigation_agent_3d_waypoint_reached(_details):
+	jump_speed = 0

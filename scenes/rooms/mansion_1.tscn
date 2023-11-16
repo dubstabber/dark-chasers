@@ -945,7 +945,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, -0.7
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.034, 203.221, -86.1795)
 
 [node name="TestMarker3D2" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["player_spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.0418, 203.226, 115.84)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.5613, 203.693, 71.6035)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)
@@ -964,6 +964,11 @@ omni_range = 1063.46
 [node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("139_d02at")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.2193, 202.889, -9.87136)
 current_room = "FirstFloor"
+
+[node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.0933, 202.719, 101.094)
+bidirectional = false
+end_position = Vector3(0.59457, -7.7601, -0.050705)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

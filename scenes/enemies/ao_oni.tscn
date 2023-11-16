@@ -131,5 +131,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.456569, 0)
 shape = SubResource("CapsuleShape3D_qvs6v")
 
 [connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]
+[connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
+[connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
 [connection signal="timeout" from="sightTimer" to="." method="_on_sight_timer_timeout"]
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]

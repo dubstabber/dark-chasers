@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b1vimowqmce5w"]
+[gd_scene load_steps=14 format=3 uid="uid://b1vimowqmce5w"]
 
 [ext_resource type="Script" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
 [ext_resource type="Texture2D" uid="uid://bhgrkq04i5nfs" path="res://images/enemies/ao-oni/AONIA4A6.png" id="2_bgw0k"]
@@ -81,8 +81,12 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl8o4"]
-radius = 0.5975
-height = 1.195
+radius = 0.488764
+height = 0.977527
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qvs6v"]
+radius = 0.57991
+height = 2.05769
 
 [node name="Ao oni" type="CharacterBody3D" groups=["enemy"]]
 collision_layer = 2
@@ -91,18 +95,19 @@ slide_on_ceiling = false
 wall_min_slide_angle = 0.0
 floor_stop_on_slope = false
 floor_block_on_wall = false
-floor_max_angle = 1.26187
+floor_max_angle = 0.349066
 floor_snap_length = 0.31
 script = ExtResource("1_xmjcu")
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42917, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.440367, 0)
 billboard = 2
 sprite_frames = SubResource("SpriteFrames_7k82f")
 animation = &"stay-back"
 frame_progress = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0771326, 0)
 shape = SubResource("CapsuleShape3D_dl8o4")
 
 [node name="FindPathTimer" type="Timer" parent="."]
@@ -120,5 +125,12 @@ collide_with_areas = true
 wait_time = 0.1
 autostart = true
 
+[node name="KillZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.456569, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
+shape = SubResource("CapsuleShape3D_qvs6v")
+
 [connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]
 [connection signal="timeout" from="sightTimer" to="." method="_on_sight_timer_timeout"]
+[connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]

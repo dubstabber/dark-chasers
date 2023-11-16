@@ -1,7 +1,8 @@
 extends Node
 
-func safe_look_at(node : Node3D, target : Vector3) -> void:
-	var origin : Vector3 = node.global_transform.origin
+
+func safe_look_at(node: Node3D, target: Vector3) -> void:
+	var origin: Vector3 = node.global_transform.origin
 	var v_z := (origin - target).normalized()
 
 	# Just return if at same position
@@ -11,7 +12,7 @@ func safe_look_at(node : Node3D, target : Vector3) -> void:
 	# Find an up vector that we can rotate around
 	var up := Vector3.ZERO
 	for entry in [Vector3.UP, Vector3.RIGHT, Vector3.BACK]:
-		var v_x : Vector3 = entry.cross(v_z).normalized()
+		var v_x: Vector3 = entry.cross(v_z).normalized()
 		if v_x.length() != 0:
 			up = entry
 			break

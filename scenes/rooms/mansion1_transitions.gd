@@ -1,27 +1,29 @@
 extends Node3D
 
 var map_transitions := {
-	"FirstFloor": {
-		"FirstFloorUpstairs": "SecondFloor",
-		"BigHallEntry": "BigHall"
-	},
-	"SecondFloor": {
-		"SecondFloorDownstairs": "FirstFloor", 
-		"SecondFloorUpstairs": "ThirdFloor", 
+	"FirstFloor": {"FirstFloorUpstairs": "SecondFloor", "BigHallEntry": "BigHall"},
+	"SecondFloor":
+	{
+		"SecondFloorDownstairs": "FirstFloor",
+		"SecondFloorUpstairs": "ThirdFloor",
 		"PianoRoomEntry": "PianoRoom",
 	},
-	"ThirdFloor": {
-		"ThirdFloorDownstairs": "SecondFloor", 
+	"ThirdFloor":
+	{
+		"ThirdFloorDownstairs": "SecondFloor",
 		"ThirdFloorAbyss": "PianoRoom",
 	},
-	"PianoRoom": {
+	"PianoRoom":
+	{
 		"PianoRoomExit": "SecondFloor",
 	},
-	"BigHall": {
+	"BigHall":
+	{
 		"FirstFloorEntry": "FirstFloor",
 		"BasementGap": "Basement",
 	},
-	"Basement": {
+	"Basement":
+	{
 		"BasementLadder": "BigHall",
 	},
 }

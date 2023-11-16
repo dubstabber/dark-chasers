@@ -25,8 +25,9 @@ func _ready():
 
 
 func _physics_process(delta):
-	if not is_on_floor():
-		velocity.y -= gravity * delta
+#	if not is_on_floor():
+	velocity.y -= gravity * delta
+		
 	if target:
 		if (
 			sight_raycast.is_colliding()
@@ -68,7 +69,6 @@ func makepath() -> void:
 		else:
 			var transition_point = find_path_to_player()[0]
 			nav.target_position = transitionsNode.get_node(transition_point).global_position
-			
 
 
 func find_path_to_player():
@@ -90,13 +90,13 @@ func find_path_to_player():
 
 			for transitionPoint in transitionsNode.map_transitions[c_room].keys():
 				var nextRoom = transitionsNode.map_transitions[c_room][transitionPoint]
-				if transitionPoint == "ThirdFloorAbyss": continue
+				if transitionPoint == "ThirdFloorAbyss":
+					continue
 				if nextRoom not in visitedRooms:
 					var new_path = path.duplicate()
 					new_path.append(transitionPoint)
 					new_path.append(nextRoom)
 					queue.append(new_path)
-
 	return null
 
 

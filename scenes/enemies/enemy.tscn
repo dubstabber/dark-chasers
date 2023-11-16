@@ -29,6 +29,7 @@ billboard = 2
 shape = SubResource("CapsuleShape3D_nli0v")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_postprocessing = 1
 
 [node name="FindPathTimer" type="Timer" parent="."]
 wait_time = 0.3

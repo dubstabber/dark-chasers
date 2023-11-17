@@ -129,7 +129,6 @@ func _on_kill_zone_body_entered(body):
 
 func _on_navigation_agent_3d_link_reached(details):
 	if details.owner.is_in_group("jump-down"):
-		print('jumpdown')
 		jump_speed = gravity
 
 

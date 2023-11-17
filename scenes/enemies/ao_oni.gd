@@ -11,7 +11,7 @@ var target: CharacterBody3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
 var direction: Vector3
-var noticed_target := true
+var noticed_target := false
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $FindPathTimer

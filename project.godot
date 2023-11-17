@@ -85,3 +85,4 @@ use={
 3d_physics/layer_2="Enemy"
 3d_physics/layer_3="Walls"
 3d_physics/layer_4="Objects"
+3d_physics/layer_6="Walls for enemies"

@@ -25,8 +25,8 @@ func _ready():
 
 
 func _physics_process(delta):
-#	if not is_on_floor():
-	velocity.y -= gravity * delta
+	if not is_on_floor():
+		velocity.y -= gravity * delta
 		
 	if target:
 		if (
@@ -111,7 +111,7 @@ func _on_find_path_timer_timeout():
 	elif distance_to_target < 50:
 		find_path_timer.wait_time = 1.0
 	else:
-		find_path_timer.wait_time = 4.0
+		find_path_timer.wait_time = 2.0
 	makepath()
 
 
@@ -129,6 +129,7 @@ func _on_kill_zone_body_entered(body):
 
 func _on_navigation_agent_3d_link_reached(details):
 	if details.owner.is_in_group("jump-down"):
+		print('jumpdown')
 		jump_speed = gravity
 
 

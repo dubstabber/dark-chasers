@@ -17,7 +17,7 @@ func _ready():
 	var hud = hudScene.instantiate()
 	add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
-	player.current_room = "BigHall"
+	player.current_room = "FirstFloor"
 	respawn(player)
 	enemies = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
@@ -43,7 +43,7 @@ func _physics_process(_delta):
 
 
 func respawn(p):
-	p.position = player_spawners[1].global_position
+	p.position = player_spawners[0].global_position
 
 
 func handle_transition(body, area3dname, marker):

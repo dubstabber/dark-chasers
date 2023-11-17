@@ -11,13 +11,14 @@ var current_room: String
 var map: Node3D
 var direction: Vector3
 var fov := false
-var lerp_speed := 1
+var lerp_speed := 2
 var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
 var killed := false
 var death_throw := 10.5
 var clip_mode := false
 var transit_pos: Marker3D = null
 var is_climbing := false
+var killed_pos: Vector3
 
 @onready var camera_3d = $Camera3D
 @onready var color_rect = $Camera3D/ColorRect
@@ -91,6 +92,7 @@ func _physics_process(delta):
 	else:
 		if death_throw > 0:
 			velocity = -direction * death_throw
+			transform = transform.interpolate_with(transform.looking_at(killed_pos), lerp_speed * delta)
 			move_and_slide()
 			death_throw -= 0.1
 
@@ -104,3 +106,4 @@ func kill(pos):
 	direction.y = 0
 	killed = true
 	color_rect.modulate.a = 0.7
+	killed_pos = pos

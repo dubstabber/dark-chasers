@@ -19,9 +19,13 @@ var clip_mode := false
 var transit_pos: Marker3D = null
 var is_climbing := false
 var killed_pos: Vector3
+var is_crounching := false
 
 @onready var camera_3d = $Camera3D
 @onready var color_rect = $Camera3D/ColorRect
+@onready var stay_col = $CollisionShape3D
+@onready var crounch_col = $CollisionShape3D2
+@onready var ray_cast_3d = $RayCast3D
 
 
 func _ready():
@@ -36,6 +40,19 @@ func _input(event):
 			camera_3d.rotation_degrees.x = clamp(camera_3d.rotation_degrees.x, -90, 90)
 			rotation_degrees.y -= event.relative.x * sensivity
 
+
+func _unhandled_input(_event):
+	if not killed:
+		if is_crounching:
+			stay_col.disabled = true
+			crounch_col.disabled = false
+			camera_3d.position.y = 0.154
+			SPEED = 2.0
+		elif not ray_cast_3d.is_colliding():
+			stay_col.disabled = false
+			crounch_col.disabled = true
+			camera_3d.position.y = 0.387
+			SPEED = 5.0
 
 func _physics_process(delta):
 	if !killed:
@@ -57,12 +74,15 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("crounch"):
 			if clip_mode:
 				velocity.y = -SPEED
-			else:
-				#TODO: implement crounching
-				pass
+		elif Input.is_action_pressed("crounch"):
+			if not clip_mode:
+				is_crounching = true
 		elif Input.is_action_just_released("crounch"):
 			if clip_mode:
 				velocity.y = move_toward(velocity.y, 0, SPEED)
+			else:
+				is_crounching = false
+
 
 		if Input.is_action_just_pressed("toggle-clip-mode"):
 			clip_mode = not clip_mode

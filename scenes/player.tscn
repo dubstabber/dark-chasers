@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=4 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_xs0mp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
 height = 1.19463
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
+radius = 0.202198
+height = 0.606244
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_mask = 14
@@ -31,3 +35,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0, 0, 1)
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_y831t")
+disabled = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 0.9, 0)
+collision_mask = 12

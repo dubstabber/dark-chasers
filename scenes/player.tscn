@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=8 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_xs0mp"]
 
@@ -8,7 +8,97 @@ height = 1.19463
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
 radius = 0.202198
-height = 0.606244
+height = 0.678998
+
+[sub_resource type="Animation" id="Animation_nqp58"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_j6b8x"]
+resource_name = "jump"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0523599, 0, 0.0349066), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wf0y5"]
+resource_name = "landing"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0523599, 0, 0.0349066), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_scfly"]
+_data = {
+"RESET": SubResource("Animation_nqp58"),
+"jump": SubResource("Animation_j6b8x"),
+"landing": SubResource("Animation_wf0y5")
+}
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_mask = 14
@@ -19,15 +109,31 @@ floor_max_angle = 1.39626
 floor_snap_length = 0.4
 script = ExtResource("1_xs0mp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599877, 0)
 shape = SubResource("CapsuleShape3D_gryrd")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.387382, -0.0406087)
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.342077, 0)
+shape = SubResource("CapsuleShape3D_y831t")
+disabled = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 1.22, 0)
+collision_mask = 12
+
+[node name="nek" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="head" type="Node3D" parent="nek"]
+
+[node name="eyes" type="Node3D" parent="nek/head"]
+
+[node name="Camera3D" type="Camera3D" parent="nek/head/eyes"]
 current = true
 fov = 85.0
 
-[node name="ColorRect" type="ColorRect" parent="Camera3D"]
+[node name="ColorRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,10 +142,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0, 0, 1)
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_y831t")
-disabled = true
-
-[node name="RayCast3D" type="RayCast3D" parent="."]
-target_position = Vector3(0, 0.9, 0)
-collision_mask = 12
+[node name="AnimationPlayer" type="AnimationPlayer" parent="nek/head/eyes"]
+libraries = {
+"": SubResource("AnimationLibrary_scfly")
+}

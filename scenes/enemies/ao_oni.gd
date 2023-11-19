@@ -7,7 +7,7 @@ const ACCEL = 10
 
 var transitionsNode: Node3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var target: CharacterBody3D
+var target: Camera3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
 var direction: Vector3
@@ -117,7 +117,7 @@ func _on_find_path_timer_timeout():
 
 func _on_sight_timer_timeout():
 	if target:
-		sight_raycast.target_position = target.global_position - global_position
+		sight_raycast.target_position = (target.global_position) - global_position
 
 
 func _on_kill_zone_body_entered(body):

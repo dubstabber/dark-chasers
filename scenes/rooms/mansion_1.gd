@@ -44,7 +44,8 @@ func _physics_process(_delta):
 
 
 func respawn(p):
-	p.position = player_spawners[0].global_position
+	p.position = player_spawners.pick_random().global_position
+	p.rotate_y(3.15)
 
 
 func handle_transition(body, area3dname, marker):

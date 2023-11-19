@@ -29,6 +29,7 @@ var killed := false
 var death_throw := 10.5
 var clip_mode := false
 var transit_pos: Marker3D = null
+var door_to_open: Area3D = null
 var is_climbing := false
 var killed_pos: Vector3
 var is_crounching := false
@@ -180,6 +181,7 @@ func _physics_process(delta):
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null
+			
 
 		if direction:
 			velocity.x = direction.x * current_speed

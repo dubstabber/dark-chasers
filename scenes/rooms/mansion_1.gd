@@ -3,6 +3,7 @@ extends Node3D
 var player_spawners: Array
 var playerScene := preload("res://scenes/player.tscn")
 var hudScene := preload("res://scenes/hud.tscn")
+var doors: Array
 var enemies: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
@@ -11,6 +12,9 @@ var enemies: Array
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	doors = get_tree().get_nodes_in_group("door")
+	for door in doors:
+		door.connect("body_entered",_door_body_entered.bind(door.name))
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	var player = playerScene.instantiate() as CharacterBody3D
 	add_child(player)
@@ -76,3 +80,13 @@ func _on_ladder_body_entered(body):
 func _on_ladder_body_exited(body):
 	if body.is_in_group("player"):
 		body.is_climbing = false
+
+
+
+
+func _door_body_entered(body, door_name):
+	if body.is_in_group("player"):
+		if "door_to_open" in body:
+			body.door_to_open
+			print(door_name)
+

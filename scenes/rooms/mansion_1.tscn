@@ -1,4 +1,4 @@
-[gd_scene load_steps=396 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=397 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -939,6 +939,9 @@ size = Vector3(1.07958, 1, 0.514557)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ct443"]
 size = Vector3(0.372451, 1, 0.23546)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w6joo"]
+size = Vector3(1.09283, 2.33245, 0.411117)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -1905,6 +1908,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6001, 202.8, -86.1795)
 
 [node name="Marker3D5" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.2934, 202.8, -86.1795)
+
+[node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="LibraryDoor" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9625, 203.474, -26.8317)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/LibraryDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.29177, 2.50297, 0.108851)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/LibraryDoor"]
+shape = SubResource("BoxShape3D_w6joo")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

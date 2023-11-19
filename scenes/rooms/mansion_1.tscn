@@ -1734,7 +1734,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_j8qqi")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/ThirdFloorDownstairs" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2642, 5.47769, 9.02548)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2642, 4.71765, 9.02548)
 
 [node name="ThirdFloorAbyss" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4936, 194.093, 111.093)
@@ -1756,7 +1756,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_hy2fy")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/PianoRoomExit" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90.8966, 2.18636, 3.86818)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90.8966, 1.60336, 4.0245)
 
 [node name="PianoRoomEntry" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5643, 206.027, 110.265)
@@ -1767,7 +1767,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_u2kem")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/PianoRoomEntry" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.8583, -2.99069, -4.12794)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.8583, -3.64207, -4.12794)
 
 [node name="BigHallEntry" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.6297, 203.435, -18.4716)
@@ -1812,7 +1812,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.89096, 2.84669, -3.91628)
 shape = SubResource("CylinderShape3D_xdisi")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/BasementLadder" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.804131, -5.18744, -17.4785)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640198, -5.85236, -17.4785)
 
 [node name="CageEntry" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.0032)

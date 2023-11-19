@@ -21,7 +21,8 @@ func _ready():
 	respawn(player)
 	enemies = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
-		enemy.target = player
+		enemy.camera = get_viewport().get_camera_3d()
+		enemy.targets.append(player)
 
 	for t in transitions.get_children():
 		for m in t.get_children():

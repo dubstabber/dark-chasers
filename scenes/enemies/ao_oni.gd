@@ -7,7 +7,8 @@ const ACCEL = 10
 
 var transitionsNode: Node3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var target: Camera3D
+var targets: Array[CharacterBody3D]
+var camera: Camera3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
 var direction: Vector3
@@ -21,14 +22,13 @@ var noticed_target := false
 
 func _ready():
 	transitionsNode = get_tree().get_first_node_in_group("transitions")
-	target = get_tree().get_first_node_in_group("player")
 
 
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-		
-	if target:
+	
+	if targets.size():
 		if (
 			sight_raycast.is_colliding()
 			and sight_raycast.get_collider().is_in_group("player")
@@ -41,12 +41,12 @@ func _physics_process(delta):
 				look_at(next_pos, Vector3(0.01, 0.91, 0.01))
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
-		animateSprite()
-		move_and_slide()
+	animateSprite()
+	move_and_slide()
 
 
 func animateSprite():
-	var p_pos = global_position.direction_to(target.global_position)
+	var p_pos = global_position.direction_to(camera.global_position)
 	var vertical_side = global_transform.basis.z
 	var horizontal_side = global_transform.basis.x
 	var h_dot = horizontal_side.dot(p_pos)
@@ -63,9 +63,9 @@ func animateSprite():
 
 
 func makepath() -> void:
-	if !!target:
-		if target.current_room == current_room:
-			nav.target_position = target.global_position
+	if !!targets[0]:
+		if targets[0].current_room == current_room:
+			nav.target_position = targets[0].global_position
 		else:
 			var transition_point = find_path_to_player()[0]
 			nav.target_position = transitionsNode.get_node(transition_point).global_position
@@ -79,7 +79,7 @@ func find_path_to_player():
 		var path = queue.pop_front()
 		var c_room = path[-1]
 
-		if c_room == target.current_room:
+		if c_room == targets[0].current_room:
 			var transitions = []
 			for i in range(1, path.size(), 2):
 				transitions.append(path[i])
@@ -116,8 +116,8 @@ func _on_find_path_timer_timeout():
 
 
 func _on_sight_timer_timeout():
-	if target:
-		sight_raycast.target_position = (target.global_position) - global_position
+	if targets[0]:
+		sight_raycast.target_position = targets[0].camera_3d.global_position - global_position
 
 
 func _on_kill_zone_body_entered(body):

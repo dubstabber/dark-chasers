@@ -1698,7 +1698,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.903076, 0.139891)
 shape = SubResource("BoxShape3D_ckarb")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/FirstFloorUpstairs" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.0788, -2.55409, 128.361)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.0788, -3.36469, 128.361)
 
 [node name="SecondFloorDownstairs" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.16595, 201.118, 107.234)
@@ -1710,7 +1710,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_qwtuk")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/SecondFloorDownstairs" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.9857, 3.57982, -128.043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.9857, 3.20764, -128.043)
 
 [node name="SecondFloorUpstairs" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06098, 207.017, 115.741)
@@ -1722,7 +1722,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 0.364929, 0.139893)
 shape = SubResource("BoxShape3D_tqmk0")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/SecondFloorUpstairs" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.0371, -5.23071, -8.64111)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.0371, -5.7484, -8.64111)
 
 [node name="ThirdFloorDownstairs" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0927, 201.579, 106.072)
@@ -1745,7 +1745,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_aw2s6")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/ThirdFloorAbyss" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 18.2073, 3.75611)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 17.7892, 3.75611)
 
 [node name="PianoRoomExit" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3305, 203.478, 105.426)
@@ -1778,7 +1778,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_uyito")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/BigHallEntry" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.4184, -0.132736, 84.3817)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.4184, -0.854492, 84.3817)
 
 [node name="FirstFloorEntry" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.7462, 203.451, 65.0796)
@@ -1789,7 +1789,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_tmodv")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/FirstFloorEntry" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4353, -0.00393677, -84.2516)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4353, -1.04015, -84.2516)
 
 [node name="BasementGap" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 194.815, 100.759)
@@ -1800,7 +1800,7 @@ collision_mask = 3
 shape = SubResource("CylinderShape3D_m48fq")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/BasementGap" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 15.1677, 13.3726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 14.582, 13.3726)
 
 [node name="BasementLadder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 208.035, 118.057)
@@ -1823,7 +1823,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_1hhje")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/CageEntry" groups=["manual_spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, 0.864449)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.880829, 0.864449)
 
 [node name="CageExit" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.3587)
@@ -1834,7 +1834,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_twoj1")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions/CageExit" groups=["manual_spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.0921783, -0.781258)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.877014, -0.781258)
 
 [node name="Decorations" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

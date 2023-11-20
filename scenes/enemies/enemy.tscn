@@ -36,7 +36,7 @@ wait_time = 0.3
 autostart = true
 
 [node name="SoundMusic" type="AudioStreamPlayer3D" parent="."]
-volume_db = -10.0
+volume_db = -31.935
 
 [node name="Area3D" type="Area3D" parent="."]
 

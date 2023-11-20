@@ -1,8 +1,9 @@
 extends Node3D
 
+const PLAYER_SCENE := preload("res://scenes/player.tscn")
+const HUD_SCENE := preload("res://scenes/hud.tscn")
+
 var player_spawners: Array
-var playerScene := preload("res://scenes/player.tscn")
-var hudScene := preload("res://scenes/hud.tscn")
 var doors: Array
 var enemies: Array
 
@@ -16,9 +17,9 @@ func _ready():
 	for door in doors:
 		door.connect("body_entered",_door_body_entered.bind(door.name))
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
-	var player = playerScene.instantiate() as CharacterBody3D
+	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
 	add_child(player)
-	var hud = hudScene.instantiate()
+	var hud = HUD_SCENE.instantiate()
 	add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
 	player.current_room = "FirstFloor"

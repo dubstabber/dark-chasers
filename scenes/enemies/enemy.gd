@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-const SPEED = 5.0
+const SPEED = 7.0
 const ACCEL = 10
 
 @export var specific_enemy: String
@@ -65,7 +65,7 @@ func _on_find_path_timer_timeout():
 	elif distance_to_target < 50:
 		find_path_timer.wait_time = 1.0
 	else:
-		find_path_timer.wait_time = 4.0
+		find_path_timer.wait_time = 2.0
 	makepath()
 
 

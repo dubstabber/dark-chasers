@@ -23,7 +23,7 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	current_game_mode = GAME_MODE.NONE
+	current_game_mode = GAME_MODE.STANDARD
 	
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	var player = PLAYER_SCENE.instantiate() as CharacterBody3D

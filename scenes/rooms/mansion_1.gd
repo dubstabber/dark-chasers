@@ -15,7 +15,8 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
-		door.connect("body_entered",_door_body_entered.bind(door.name))
+		door.connect("body_entered",_door_body_entered.bind(door))
+		door.connect("body_exited",_door_body_exited)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
 	add_child(player)
@@ -83,11 +84,13 @@ func _on_ladder_body_exited(body):
 		body.is_climbing = false
 
 
-
-
-func _door_body_entered(body, door_name):
+func _door_body_entered(body, door_area):
 	if body.is_in_group("player"):
 		if "door_to_open" in body:
-			body.door_to_open
-			print(door_name)
+			body.door_to_open = door_area
+	if body.is_in_group("enemy"):
+		door_area.open()
 
+func _door_body_exited(body):
+	if "door_to_open" in body:
+		body.door_to_open = null

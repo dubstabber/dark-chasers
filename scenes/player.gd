@@ -178,6 +178,8 @@ func _physics_process(delta):
 				collision_mask = 14
 
 		if Input.is_action_just_pressed("use"):
+			if door_to_open:
+				door_to_open.open()
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null

@@ -25,7 +25,7 @@ func _ready():
 				enemy_data = enemy
 				image.texture = enemy_data.image
 				break
-	if !enemy_data:
+	if not enemy_data:
 		enemy_data = EnemyDb.ENEMIES.pick_random()
 		image.texture = enemy_data.image
 	var sizeto = 300

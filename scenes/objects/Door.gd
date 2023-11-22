@@ -7,12 +7,13 @@ var tween: Tween
 
 @export var move_speed := 0.5
 @export var move_range := 2.5
-@export var time_to_close := 3.4
+@export var time_to_close := 1.2
 @export var open_only := false
+
 
 func _ready():
 	opened_position = closed_position + move_range
-
+	
 
 func open():
 	is_opening = not is_opening

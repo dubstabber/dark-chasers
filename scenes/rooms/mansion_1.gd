@@ -6,6 +6,7 @@ const HUD_SCENE := preload("res://scenes/hud.tscn")
 var player_spawners: Array
 var doors: Array
 var enemies: Array
+var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
 
@@ -90,6 +91,7 @@ func _door_body_entered(body, door_area):
 			body.door_to_open = door_area
 	if body.is_in_group("enemy"):
 		door_area.open()
+
 
 func _door_body_exited(body):
 	if "door_to_open" in body:

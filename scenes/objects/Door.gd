@@ -1,14 +1,15 @@
 extends Area3D
 
-var closed_position := position.y
-var opened_position: float
-var is_opening := false
-var tween: Tween
-
 @export var move_speed := 0.5
 @export var move_range := 2.5
 @export var time_to_close := 1.2
 @export var open_only := false
+@export var key_needed: String
+
+var closed_position := position.y
+var opened_position: float
+var is_opening := false
+var tween: Tween
 
 
 func _ready():

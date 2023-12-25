@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EnemyDb="*res://scenes/globals/enemyDB.gd"
 Utils="*res://scenes/globals/utils.gd"
+Preloads="*res://scenes/globals/preloads.gd"
 
 [input]
 

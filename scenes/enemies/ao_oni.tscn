@@ -101,6 +101,7 @@ script = ExtResource("1_xmjcu")
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.498549, 0)
 billboard = 2
+shaded = true
 sprite_frames = SubResource("SpriteFrames_7k82f")
 animation = &"stay-back"
 frame_progress = 1.0

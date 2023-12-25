@@ -1,11 +1,10 @@
 extends Area3D
 
-var map: Node3D
+signal key_collected(type)
 
 @export var key_type: String
 
 func _ready():
-	map = get_tree().get_first_node_in_group('map')
 	match key_type:
 		"ruby":
 			$Sprite3D.texture = Preloads.ruby_key
@@ -23,9 +22,7 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.is_in_group('player'):
-		if key_type and not key_type in map.keys_collected:
-			map.keys_collected.push_back(key_type)
-			
+		key_collected.emit(key_type)
 		match key_type:
 			"ruby":
 				print("Picked up a ruby key.")
@@ -39,7 +36,6 @@ func _on_body_entered(body):
 				print("Picked up an emerald key.")
 			"silver":
 				print("Picked up a shiny silver key.")
-			_:
+			"useless", "useless2", "useless3":
 				print('Congratulations! You just picked up the useless key!')
-		
 		queue_free()

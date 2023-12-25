@@ -6,8 +6,9 @@
 radius = 0.120276
 height = 0.680882
 
-[node name="Key" type="Area3D"]
+[node name="Key" type="Area3D" groups=["key"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0677024, 0)
+collision_layer = 8
 script = ExtResource("1_uba48")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

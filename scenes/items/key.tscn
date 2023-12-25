@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dg47h20poxtdy"]
+
+[ext_resource type="Script" path="res://scenes/items/key.gd" id="1_uba48"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_25uie"]
+radius = 0.120276
+height = 0.680882
+
+[node name="Key" type="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0677024, 0)
+script = ExtResource("1_uba48")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+billboard = 2
+shaded = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_25uie")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

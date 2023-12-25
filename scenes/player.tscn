@@ -8,7 +8,7 @@ height = 1.19463
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
 radius = 0.202198
-height = 0.678998
+height = 0.5
 
 [sub_resource type="Animation" id="Animation_nqp58"]
 length = 0.001
@@ -114,7 +114,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599877, 0)
 shape = SubResource("CapsuleShape3D_gryrd")
 
 [node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.342077, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.249204, 0)
 shape = SubResource("CapsuleShape3D_y831t")
 disabled = true
 

@@ -4,7 +4,6 @@ const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 var player_spawners: Array
-var doors: Array
 var enemies: Array
 var keys_collected: Array
 
@@ -14,10 +13,13 @@ var keys_collected: Array
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	doors = get_tree().get_nodes_in_group("door")
+	var doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
 		door.connect("body_entered",_door_body_entered.bind(door))
 		door.connect("body_exited",_door_body_exited)
+	var keys = get_tree().get_nodes_in_group("key")
+	for key in keys:
+		key.connect("key_collected", _key_body_entered)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
 	add_child(player)
@@ -96,3 +98,14 @@ func _door_body_entered(body, door_area):
 func _door_body_exited(body):
 	if "door_to_open" in body:
 		body.door_to_open = null
+
+
+func _key_body_entered(key_type):
+	if (key_type and key_type not in keys_collected 
+	and key_type != "useless"
+	and key_type != "useless2"
+	and key_type != "useless3"
+	):
+		keys_collected.push_back(key_type)
+	
+	print(keys_collected)

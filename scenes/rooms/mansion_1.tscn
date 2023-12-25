@@ -2377,12 +2377,43 @@ key_type = "silver"
 
 [node name="UselessKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.111, 202.322, 28.0925)
+key_type = "useless"
 
 [node name="UselessKey2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.7573, 202.335, 105.599)
+key_type = "useless2"
 
 [node name="UselessKey3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.6538, 202.327, 106.742)
+key_type = "useless3"
+
+[node name="TestRubyKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.6507, 202.324, -39.238)
+key_type = "ruby"
+
+[node name="TestBrownKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.3375, 202.324, -39.238)
+key_type = "brown"
+
+[node name="TestGoldenKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.914, 202.324, -39.238)
+key_type = "gold"
+
+[node name="TestEmeraldKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.4504, 202.324, -39.238)
+key_type = "emerald"
+
+[node name="TestSilverKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.1189, 202.324, -39.238)
+key_type = "silver"
+
+[node name="TestWeirdKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.7691, 202.324, -39.238)
+key_type = "weird"
+
+[node name="TestUselessKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.237, 202.324, -39.238)
+key_type = "useless"
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

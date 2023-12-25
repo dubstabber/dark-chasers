@@ -1,4 +1,4 @@
-[gd_scene load_steps=423 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=424 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -992,6 +992,9 @@ size = Vector3(1.09283, 2.33245, 0.411117)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jqyrd"]
 size = Vector3(1.42043, 2.4269, 0.489498)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_26e3t"]
+size = Vector3(1.37598, 1, 0.343262)
+
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
 
@@ -1958,6 +1961,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6001, 202.8, -86.1795)
 [node name="Marker3D5" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.2934, 202.8, -86.1795)
 
+[node name="PrankSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners" groups=["void_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 146.572, 203.059, 110.496)
+
+[node name="Marker3D2" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners" groups=["small_room_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 114.519)
+
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Door" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
@@ -2414,6 +2425,16 @@ key_type = "weird"
 [node name="TestUselessKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.237, 202.324, -39.238)
 key_type = "useless"
+
+[node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="Area3D" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0111, 203.062, 93.5693)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Area3D"]
+shape = SubResource("BoxShape3D_26e3t")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Area3D"]
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

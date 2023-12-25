@@ -1,6 +1,6 @@
 extends Area3D
 
-signal key_collected(type)
+signal key_collected(type, body)
 
 @export var key_type: String
 
@@ -22,7 +22,7 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.is_in_group('player'):
-		key_collected.emit(key_type)
+		key_collected.emit(key_type, body)
 		match key_type:
 			"ruby":
 				print("Picked up a ruby key.")

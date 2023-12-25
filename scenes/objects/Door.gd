@@ -5,6 +5,7 @@ extends Area3D
 @export var time_to_close := 1.2
 @export var open_only := false
 @export var key_needed: String
+@export var trigger: String
 
 var closed_position := position.y
 var opened_position: float

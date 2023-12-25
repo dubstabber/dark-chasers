@@ -5,6 +5,8 @@ const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 var player_spawners: Array
 var enemies: Array
+var void_spawn: Marker3D
+var small_room_spawn: Marker3D
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
@@ -21,6 +23,8 @@ func _ready():
 	for key in keys:
 		key.connect("key_collected", _key_body_entered)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
+	void_spawn = get_tree().get_first_node_in_group('void_spawn')
+	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
 	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
 	add_child(player)
 	var hud = HUD_SCENE.instantiate()
@@ -100,12 +104,14 @@ func _door_body_exited(body):
 		body.door_to_open = null
 
 
-func _key_body_entered(key_type):
+func _key_body_entered(key_type, body):
 	if (key_type and key_type not in keys_collected 
 	and key_type != "useless"
 	and key_type != "useless2"
 	and key_type != "useless3"
 	):
 		keys_collected.push_back(key_type)
-	
-	print(keys_collected)
+	if key_type == "useless2":
+		body.position = void_spawn.position
+	if key_type == "useless3":
+		body.position = small_room_spawn.position

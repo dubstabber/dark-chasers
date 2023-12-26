@@ -205,8 +205,10 @@ func _physics_process(delta):
 
 
 func kill(pos):
-	direction = (pos - position).normalized()
-	direction.y = 0
-	killed = true
-	color_rect.modulate.a = 0.7
-	killed_pos = pos
+	if not killed:
+		direction = (pos - position).normalized()
+		direction.y = 0
+		killed = true
+		color_rect.modulate.a = 0.7
+		killed_pos = pos
+		Utils.play_sound(Preloads.kill_player_sound, self)

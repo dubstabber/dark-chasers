@@ -28,13 +28,16 @@ func open():
 			tween.stop()
 		if is_opening:
 			tween = create_tween()
+			Utils.play_sound(Preloads.open_door_sound, self)
 			await tween.tween_property(self, "position:y", opened_position, move_speed).finished
 			if not open_only:
 				await get_tree().create_timer(time_to_close).timeout
 				open()
 		elif not is_opening and not open_only:
 			tween = create_tween()
+			Utils.play_sound(Preloads.close_door_sound, self)
 			await tween.tween_property(self, "position:y", closed_position, move_speed).finished
 	else:
 		print("You need the "+key_needed+" key!")
+		Utils.play_sound(Preloads.door_locked_sound, self)
 

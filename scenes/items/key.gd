@@ -38,4 +38,5 @@ func _on_body_entered(body):
 				print("Picked up a shiny silver key.")
 			"useless", "useless2", "useless3":
 				print('Congratulations! You just picked up the useless key!')
+		Utils.play_sound(Preloads.key_collected_sound, body)
 		queue_free()

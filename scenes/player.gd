@@ -51,6 +51,8 @@ var head_bobbing_vector = Vector2.ZERO
 var head_bobbing_index = 0.0
 var head_bobbing_current_intensity = 0.0
 
+var blocked_movement := false
+
 @onready var nek = $nek
 @onready var head = $nek/head
 @onready var eyes = $nek/head/eyes
@@ -68,7 +70,9 @@ func _ready():
 
 
 func _input(event):
-	if !killed:
+	if blocked_movement:
+		return
+	if not killed:
 		if event is InputEventMouseMotion:
 			rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
@@ -76,7 +80,9 @@ func _input(event):
 			
 
 func _physics_process(delta):
-	if !killed:
+	if blocked_movement:
+		return
+	if not killed:
 		var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
 		if (Input.is_action_pressed("crouch") or sliding) and not clip_mode:
 			current_speed = lerp(current_speed, CROUCHING_SPEED, delta * lerp_speed)

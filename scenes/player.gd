@@ -30,6 +30,7 @@ var death_throw := 10.5
 var clip_mode := false
 var transit_pos: Marker3D = null
 var door_to_open: Area3D = null
+var button_to_press: Area3D = null
 var is_climbing := false
 var killed_pos: Vector3
 var is_crounching := false

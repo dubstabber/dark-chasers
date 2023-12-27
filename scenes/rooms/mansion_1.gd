@@ -4,12 +4,14 @@ const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 var player_spawners: Array
+var player
 var enemies: Array
 var void_spawn: Marker3D
 var small_room_spawn: Marker3D
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
+@onready var exit_camera = $NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/ExitCamera
 
 
 func _ready():
@@ -24,7 +26,7 @@ func _ready():
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	void_spawn = get_tree().get_first_node_in_group('void_spawn')
 	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
-	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
+	player = PLAYER_SCENE.instantiate() as CharacterBody3D
 	add_child(player)
 	var hud = HUD_SCENE.instantiate()
 	add_child(hud)
@@ -104,4 +106,10 @@ func _key_body_entered(key_type, body):
 
 func _handle_button_event(event):
 	if event:
-		prints("Triggered event: ",event)
+		match event:
+			"show open exit":
+				player.blocked_movement = true
+				exit_camera.set_current(true)
+				await get_tree().create_timer(3.0).timeout
+				exit_camera.set_current(false)
+				player.blocked_movement = false

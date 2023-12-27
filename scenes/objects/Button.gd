@@ -31,6 +31,9 @@ func change_sprite():
 		"lever":
 			if is_pressed: sprite_3d.texture = Preloads.button_down_5
 			else: sprite_3d.texture = Preloads.button_up_5
+		"circle":
+			if is_pressed: sprite_3d.texture = Preloads.button_down_1
+			else: sprite_3d.texture = Preloads.button_up_1
 
 
 func _button_body_entered(body):

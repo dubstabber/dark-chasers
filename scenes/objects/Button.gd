@@ -20,11 +20,18 @@ func press():
 	if not is_pressed:
 		button_pressed.emit(event_name)
 		is_pressed = true
-		match button_type:
-			"lever":
-				sprite_3d.texture = Preloads.button_down_5
+		change_sprite()
 		if not one_use:
-			print('TODO: unpress button after some delay')
+			await get_tree().create_timer(1.0).timeout
+			is_pressed = false
+			change_sprite()
+
+func change_sprite():
+	match button_type:
+		"lever":
+			if is_pressed: sprite_3d.texture = Preloads.button_down_5
+			else: sprite_3d.texture = Preloads.button_up_5
+
 
 func _button_body_entered(body):
 	if "button_to_press" in body:

@@ -16,4 +16,5 @@ var close_door_sound := preload("res://sounds/sfx/DSDORCLS.ogg")
 
 var kill_player_sound := preload("res://sounds/sfx/DSSLOP.wav")
 
+var button_up_5 := preload("res://images/textures/BSW05A.png")
 var button_down_5 := preload("res://images/textures/BSW05B.png")

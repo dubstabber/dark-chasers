@@ -15,13 +15,12 @@ var keys_collected: Array
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	var doors = get_tree().get_nodes_in_group("door")
-	for door in doors:
-		door.connect("body_entered",_door_body_entered.bind(door))
-		door.connect("body_exited",_door_body_exited)
 	var keys = get_tree().get_nodes_in_group("key")
 	for key in keys:
 		key.connect("key_collected", _key_body_entered)
+	var buttons = get_tree().get_nodes_in_group("button")
+	for button in buttons:
+		button.connect("button_pressed", _handle_button_event)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	void_spawn = get_tree().get_first_node_in_group('void_spawn')
 	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
@@ -91,19 +90,6 @@ func _on_ladder_body_exited(body):
 		body.is_climbing = false
 
 
-func _door_body_entered(body, door_area):
-	if body.is_in_group("player"):
-		if "door_to_open" in body:
-			body.door_to_open = door_area
-	if body.is_in_group("enemy"):
-		door_area.open()
-
-
-func _door_body_exited(body):
-	if "door_to_open" in body:
-		body.door_to_open = null
-
-
 func _key_body_entered(key_type, body):
 	if (key_type and key_type not in keys_collected 
 	and key_type != "useless"
@@ -115,3 +101,7 @@ func _key_body_entered(key_type, body):
 		body.position = void_spawn.position
 	if key_type == "useless3":
 		body.position = small_room_spawn.position
+
+func _handle_button_event(event):
+	if event:
+		prints("Triggered event: ",event)

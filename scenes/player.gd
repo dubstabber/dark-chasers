@@ -181,6 +181,8 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("use"):
 			if door_to_open:
 				door_to_open.open()
+			if button_to_press:
+				button_to_press.press()
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null

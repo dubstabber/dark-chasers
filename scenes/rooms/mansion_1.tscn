@@ -2232,12 +2232,13 @@ size = Vector3(1.29177, 2.50297, 0.108851)
 transform = Transform3D(1, 0, -7.10543e-15, 0, 1, 0, 7.10543e-15, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_f8wa0")
 
-[node name="Door16" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+[node name="Door16" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" node_paths=PackedStringArray("trigger") groups=["door"]]
 transform = Transform3D(-8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 41.7892, 203.482, 91.8116)
 collision_layer = 8
 collision_mask = 3
 script = ExtResource("142_edvtm")
 open_only = true
+trigger = NodePath("../../Buttons/Button")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door16"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -2429,9 +2430,11 @@ key_type = "useless"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Button" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons"]
+[node name="Button" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.042, 93.7284)
+collision_layer = 8
 script = ExtResource("144_26gxq")
+button_type = "lever"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button"]
 shape = SubResource("BoxShape3D_26e3t")

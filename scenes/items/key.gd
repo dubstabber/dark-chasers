@@ -4,6 +4,7 @@ signal key_collected(type, body)
 
 @export var key_type: String
 
+
 func _ready():
 	match key_type:
 		"ruby":

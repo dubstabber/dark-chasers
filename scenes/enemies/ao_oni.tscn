@@ -122,7 +122,7 @@ collision_mask = 13
 collide_with_areas = true
 
 [node name="Interaction" type="RayCast3D" parent="."]
-target_position = Vector3(0, 0, -0.8)
+target_position = Vector3(0, 0, -1)
 collision_mask = 12
 
 [node name="InteractionTimer" type="Timer" parent="."]

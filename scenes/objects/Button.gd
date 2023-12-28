@@ -5,6 +5,7 @@ signal button_pressed(event_name)
 @export var button_type: String
 @export var event_name: String
 @export var one_use := true
+@export var door_to_open: Node3D
 
 var is_pressed := false
 
@@ -14,6 +15,7 @@ var is_pressed := false
 func press():
 	if not is_pressed:
 		button_pressed.emit(event_name)
+		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()
 		if not one_use:

@@ -139,5 +139,7 @@ func _on_navigation_agent_3d_waypoint_reached(_details):
 
 func _on_interaction_timer_timeout():
 	var collider = interaction.get_collider()
-	if collider and collider.is_in_group("door"):
-		collider.open()
+	if collider:
+		var parent = collider.get_parent()
+		if parent.is_in_group("door") and parent.can_manual_open:
+			parent.open(collider.name)

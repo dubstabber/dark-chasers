@@ -1,11 +1,13 @@
-extends StaticBody3D
+extends Node3D
 
 @export var move_speed := 0.5
 @export var move_range := 2.5
 @export var time_to_close := 1.2
 @export var open_only := false
 @export var key_needed: String
-@export var trigger: Node3D
+@export var can_manual_open := true
+@export var front_locked := false
+@export var back_locked := false
 
 var closed_position := position.y
 var opened_position: float
@@ -16,17 +18,19 @@ var map: Node3D
 
 func _ready():
 	opened_position = closed_position + move_range
-	if trigger:
-		trigger.connect("button_pressed", open)
 	map = get_tree().get_first_node_in_group('map')
 
 
-func open(_button_event = null):
+func open(side = ""):
 	var isUnlocked = true
 	if map and key_needed and key_needed not in map.keys_collected:
 		isUnlocked = false
-
-	if isUnlocked:
+		
+	if side == "FrontSide" and front_locked:
+		Utils.play_sound(Preloads.door_locked_sound, self)
+	elif side == "BackSide" and back_locked:
+		Utils.play_sound(Preloads.door_locked_sound, self)
+	elif isUnlocked:
 		is_opening = not is_opening
 		if tween and tween.is_running() and not open_only:
 			tween.stop()

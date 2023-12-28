@@ -1006,8 +1006,8 @@ size = Vector3(1.42043, 2.4269, 0.489498)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1ufwc"]
 size = Vector3(1.28, 2.55, 0.1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_26e3t"]
-size = Vector3(1.37598, 1, 0.343262)
+[sub_resource type="BoxShape3D" id="BoxShape3D_ve4qp"]
+size = Vector3(0.61, 0.594, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ftyfu"]
 size = Vector3(0.206207, 0.693481, 0.758652)
@@ -2483,23 +2483,25 @@ key_type = "useless"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Button" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.042, 93.7284)
+[node name="Button" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.037, 93.7284)
 collision_layer = 8
+collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button"]
-shape = SubResource("BoxShape3D_26e3t")
+shape = SubResource("BoxShape3D_ve4qp")
 
 [node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button"]
 transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.000144958)
 shaded = true
 texture = ExtResource("62_t8gua")
 
-[node name="Button2" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
+[node name="Button2" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.9514, 200.438, 114.262)
 collision_layer = 8
+collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "circle"
 event_name = "show open exit"

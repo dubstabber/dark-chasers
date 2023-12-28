@@ -4,12 +4,14 @@ extends StaticBody3D
 @export var opened_angle := 82
 @export var time_to_close := 1.2
 @export var open_only := false
+@export var trigger: Node3D
 
 var is_opening := false
 var tween: Tween
 
 func _ready():
-	pass
+	if trigger:
+		trigger.connect("button_pressed", open)
 
 
 func open():

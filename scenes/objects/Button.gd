@@ -1,4 +1,4 @@
-extends Area3D
+extends StaticBody3D
 
 signal button_pressed(event_name)
 
@@ -9,11 +9,6 @@ signal button_pressed(event_name)
 var is_pressed := false
 
 @onready var sprite_3d = $Sprite3D
-
-
-func _ready():
-	connect("body_entered", _button_body_entered)
-	connect("body_exited", _button_body_exited)
 
 
 func press():
@@ -35,12 +30,3 @@ func change_sprite():
 			if is_pressed: sprite_3d.texture = Preloads.button_down_1
 			else: sprite_3d.texture = Preloads.button_up_1
 
-
-func _button_body_entered(body):
-	if "button_to_press" in body:
-		body.button_to_press = self
-
-
-func _button_body_exited(body):
-	if "button_to_press" in body:
-		body.button_to_press = null

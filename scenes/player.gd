@@ -185,9 +185,10 @@ func _physics_process(delta):
 
 		if Input.is_action_just_pressed("use"):
 			var collider = interaction.get_collider()
-			if collider and collider.is_in_group("door"):
+			if collider and collider.is_in_group("door") and not collider.trigger:
 				collider.open()
-
+			if collider and collider.is_in_group("button"):
+				collider.press()
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null

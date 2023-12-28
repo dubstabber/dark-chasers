@@ -1,4 +1,4 @@
-extends Area3D
+extends StaticBody3D
 
 @export var move_speed := 0.5
 @export var move_range := 2.5
@@ -16,8 +16,6 @@ var map: Node3D
 
 func _ready():
 	opened_position = closed_position + move_range
-	connect("body_entered",_door_body_entered)
-	connect("body_exited",_door_body_exited)
 	if trigger:
 		trigger.connect("button_pressed", open)
 	map = get_tree().get_first_node_in_group('map')
@@ -47,17 +45,3 @@ func open(_button_event = null):
 		print("You need the "+key_needed+" key!")
 		Utils.play_sound(Preloads.door_locked_sound, self)
 
-
-func _door_body_entered(body):
-	if not trigger:
-		if body.is_in_group("player"):
-			if "door_to_open" in body:
-				body.door_to_open = self
-		if body.is_in_group("enemy"):
-			open()
-
-
-func _door_body_exited(body):
-	if not trigger:
-		if "door_to_open" in body:
-			body.door_to_open = null

@@ -29,8 +29,6 @@ var killed := false
 var death_throw := 10.5
 var clip_mode := false
 var transit_pos: Marker3D = null
-var door_to_open: Area3D = null
-var button_to_press: Area3D = null
 var is_climbing := false
 var killed_pos: Vector3
 var is_crounching := false
@@ -62,6 +60,7 @@ var blocked_movement := false
 @onready var crounch_col = $CrouchingCollisionShape
 @onready var ray_cast_3d = $RayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
+@onready var interaction = $nek/head/eyes/Camera3D/Interaction
 
 
 func _ready():
@@ -185,10 +184,10 @@ func _physics_process(delta):
 				collision_mask = 14
 
 		if Input.is_action_just_pressed("use"):
-			if door_to_open:
-				door_to_open.open()
-			if button_to_press:
-				button_to_press.press()
+			var collider = interaction.get_collider()
+			if collider and collider.is_in_group("door"):
+				collider.open()
+
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null

@@ -18,6 +18,7 @@ var noticed_target := false
 @onready var find_path_timer = $FindPathTimer
 @onready var animated_sprite_3d = $AnimatedSprite3D
 @onready var sight_raycast = $NoticeRay
+@onready var interaction = $Interaction
 
 
 func _ready():
@@ -27,7 +28,7 @@ func _ready():
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-	
+		
 	if targets.size():
 		if (
 			sight_raycast.is_colliding()
@@ -134,3 +135,9 @@ func _on_navigation_agent_3d_link_reached(details):
 
 func _on_navigation_agent_3d_waypoint_reached(_details):
 	jump_speed = 0
+
+
+func _on_interaction_timer_timeout():
+	var collider = interaction.get_collider()
+	if collider and collider.is_in_group("door"):
+		collider.open()

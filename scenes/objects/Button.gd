@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-signal button_pressed(event_name)
+signal button_pressed(body, event_name)
 
 @export var button_type: String
 @export var event_name: String
@@ -12,9 +12,9 @@ var is_pressed := false
 @onready var sprite_3d = $Sprite3D
 
 
-func press():
+func press(body):
 	if not is_pressed:
-		button_pressed.emit(event_name)
+		button_pressed.emit(body, event_name)
 		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()

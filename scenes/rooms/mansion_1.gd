@@ -92,24 +92,27 @@ func _on_ladder_body_exited(body):
 		body.is_climbing = false
 
 
-func _key_body_entered(key_type, body):
-	if (key_type and key_type not in keys_collected 
-	and key_type != "useless"
-	and key_type != "useless2"
-	and key_type != "useless3"
-	):
+func _key_body_entered(body, key_type, event):
+	if key_type and key_type not in keys_collected:
 		keys_collected.push_back(key_type)
-	if key_type == "useless2":
-		body.position = void_spawn.position
-	if key_type == "useless3":
-		body.position = small_room_spawn.position
+	if event:
+		match event:
+			"spawn ao oni":
+				print('spawn ao oni')
+			"ao oni tries to break bars":
+				print('ao oni tries to break bars')
+			"teleport to void":
+				body.position = void_spawn.position
+			"teleport to white face":
+				body.position = small_room_spawn.position
 
-func _handle_button_event(event):
+
+func _handle_button_event(body, event):
 	if event:
 		match event:
 			"show open exit":
-				player.blocked_movement = true
+				body.blocked_movement = true
 				exit_camera.set_current(true)
 				await get_tree().create_timer(3.0).timeout
 				exit_camera.set_current(false)
-				player.blocked_movement = false
+				body.blocked_movement = false

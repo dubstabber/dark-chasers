@@ -1928,7 +1928,6 @@ script = ExtResource("142_edvtm")
 key_needed = "ruby"
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
@@ -1936,7 +1935,7 @@ size = Vector3(1.292, 2.503, 0.1)
 material = SubResource("StandardMaterial3D_5ehfr")
 
 [node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
@@ -1944,240 +1943,400 @@ size = Vector3(1.292, 2.503, 0.1)
 material = SubResource("StandardMaterial3D_5ehfr")
 
 [node name="Door2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -71.3754, 203.474, -29.775)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.3754, 203.474, -29.775)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door2"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door2"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door3" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -32.9699, 203.474, -27.2123)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9699, 203.474, -27.042)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door3"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door3"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door4" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -29.1055, 203.474, -29.7663)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.9401, 203.474, -29.7663)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door4"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door4"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door5" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -73.2851, 203.49, -17.5925)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.2851, 203.49, -17.5925)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door5"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door5"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door6" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.317431, 206.061, 120.473)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.317431, 206.061, 120.363)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door6"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door6"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door7" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 11.2077, 206.048, 120.47)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2077, 206.048, 120.415)
 script = ExtResource("142_edvtm")
 key_needed = "weird"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door7"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door7"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door8" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4.80143, 206.048, 110.558)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.80143, 206.048, 110.495)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door8"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door8"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door9" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -28.295, 203.477, 116.797)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.3677, 203.477, 116.797)
 script = ExtResource("142_edvtm")
 key_needed = "weird"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door9"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door9"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door10" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, -31.0481, 203.474, 125.588)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0481, 203.474, 125.53)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door10"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door10"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door11" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, -30.4104, 203.492, 136.688)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4104, 203.492, 136.688)
 script = ExtResource("142_edvtm")
 key_needed = "brown"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door11"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door11"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door12" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, 22.074, 203.492, 73.5285)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.074, 203.492, 73.5285)
 script = ExtResource("142_edvtm")
 key_needed = "gold"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door12"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door12"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door13" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, 26.5583, 203.498, 83.2352)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5583, 203.498, 83.2352)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door13"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door13"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door14" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, 8.74227e-08, 0, 1, 0, -8.74227e-08, 0, -1, 52.1624, 203.482, 74.0547)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.1624, 203.482, 74.012)
 script = ExtResource("142_edvtm")
 key_needed = "emerald"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door14"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door14"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door15" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 56.806, 203.477, 91.1931)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 56.7465, 203.477, 91.1931)
 script = ExtResource("142_edvtm")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door15"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door15"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door16" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-8.9407e-08, 0, 1, 0, 1, 0, -1, 0, -8.9407e-08, 41.7892, 203.482, 91.8116)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.8189, 203.482, 91.8116)
 script = ExtResource("142_edvtm")
 open_only = true
 can_manual_open = false
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door16"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door16"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door16"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door17" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-1, 0, -1.33118e-07, 0, 1, 0, 1.33118e-07, 0, -1, 39.3656, 203.495, 93.2772)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3656, 203.495, 93.2148)
 script = ExtResource("142_edvtm")
 open_only = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door17"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door17"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door18" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(-2.38419e-07, 0, 1, 0, 1, 0, -1, 0, -2.38419e-07, 34.7069, 203.497, 97.5866)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.7715, 203.497, 97.5866)
 script = ExtResource("142_edvtm")
 open_only = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door18"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door18"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door19" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(3.25841e-07, 0, -1, 0, 1, 0, 1, 0, 3.25841e-07, 95.9986, 203.502, 91.184)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 95.9986, 203.502, 91.184)
 script = ExtResource("142_edvtm")
 open_only = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door19"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door19"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door20" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -7.68225, 206.046, 108.681)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.68225, 206.046, 109.005)
 script = ExtResource("142_edvtm")
 time_to_close = 4.0
 key_needed = "emerald"
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door20"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door20"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door20"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="Door21" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -10.2397, 206.046, 103.507)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.2397, 206.046, 103.571)
 script = ExtResource("142_edvtm")
 open_only = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door21"]
+[node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door21"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
 collision_layer = 4
 collision_mask = 0
-size = Vector3(1.29177, 2.50297, 0.108851)
+size = Vector3(1.292, 2.503, 0.1)
+
+[node name="BackSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door21"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+material_override = SubResource("StandardMaterial3D_7cfyp")
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.292, 2.503, 0.1)
 
 [node name="MovingWall2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 26.5131, 203.006, 82.4743)

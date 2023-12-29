@@ -4,16 +4,13 @@ const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 var player_spawners: Array
-var player
+var players: Array[CharacterBody3D]
 var enemies: Array
 var void_spawn: Marker3D
 var small_room_spawn: Marker3D
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
-
-@onready var bars_camera = $NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera
-@onready var exit_camera = $NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/ExitCamera
 
 
 func _ready():
@@ -29,18 +26,15 @@ func _ready():
 	for area_event in area_events:
 		area_event.connect("event_triggered", _handle_area_event)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
+	
 	void_spawn = get_tree().get_first_node_in_group('void_spawn')
 	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
-	player = PLAYER_SCENE.instantiate() as CharacterBody3D
-	add_child(player)
-	var hud = HUD_SCENE.instantiate()
-	add_child(hud)
-	player.connect("mode_changed", hud._on_player_mode_changed)
-	respawn(player)
+	
+	spawn_player()
 	enemies = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
 		enemy.camera = get_viewport().get_camera_3d()
-		enemy.targets.append(player)
+		enemy.targets.append(players[0])
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -59,6 +53,16 @@ func _physics_process(_delta):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+
+func spawn_player():
+	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
+	add_child(player)
+	var hud = HUD_SCENE.instantiate()
+	add_child(hud)
+	player.connect("mode_changed", hud._on_player_mode_changed)
+	players.push_back(player)
+	respawn(player)
 
 
 func respawn(p):
@@ -111,23 +115,28 @@ func _key_body_entered(body, key_type, event):
 			body.position = small_room_spawn.position
 
 
-func _handle_button_event(body, event):
+func _handle_button_event(_body, event):
 	match event:
 		"show moving bars":
-			body.blocked_movement = true
-			bars_camera.set_current(true)
-			await get_tree().create_timer(3.0).timeout
-			body.camera_3d.set_current(true)
-			body.blocked_movement = false
+			for player in players:
+				player.blocked_movement = true
+				await get_tree().create_timer(3.0).timeout
+				player.camera_3d.set_current(true)
+				player.blocked_movement = false
 		"show open exit":
-			body.blocked_movement = true
-			exit_camera.set_current(true)
-			await get_tree().create_timer(3.0).timeout
-			body.camera_3d.set_current(true)
-			body.blocked_movement = false
+			for player in players:
+				player.blocked_movement = true
+				await get_tree().create_timer(3.0).timeout
+				player.camera_3d.set_current(true)
+				player.blocked_movement = false
+
 
 func _handle_area_event(event):
 	match event:
 		"monster crawls in library":
-			
-			print('monster crawls in library')
+			for player in players:
+				player.blocked_movement = true
+				await get_tree().create_timer(4.5).timeout
+				player.camera_3d.set_current(true)
+				player.blocked_movement = false
+

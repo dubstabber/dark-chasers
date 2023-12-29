@@ -1,4 +1,4 @@
-[gd_scene load_steps=408 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=410 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -939,6 +939,12 @@ albedo_texture = ExtResource("15_emvb5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkyc3"]
 albedo_texture = ExtResource("14_rgpi8")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0sqt4"]
+size = Vector3(0.61, 0.594, 0.01)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_piqfv"]
+load_path = "res://.godot/imported/BSW05A.png-b841796ba4658eb9bed346857886a763.s3tc.ctex"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ve4qp"]
 size = Vector3(0.61, 0.594, 0.01)
@@ -2338,6 +2344,55 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.292, 2.503, 0.1)
 
+[node name="MovingBars" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -45.5016, 203.475, -20.0763)
+script = ExtResource("142_edvtm")
+move_range = 2.572
+open_only = true
+can_manual_open = false
+
+[node name="Bar1" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
+[node name="Bar2" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.799999, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
+[node name="Bar3" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.200001, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
+[node name="Bar4" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400002, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
+[node name="Bar5" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
+[node name="Bar6" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.31, 2.576, 0.31)
+
 [node name="MovingWall2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 26.5131, 203.006, 82.4743)
 script = ExtResource("142_edvtm")
@@ -2369,6 +2424,7 @@ material = SubResource("StandardMaterial3D_gkyc3")
 [node name="HingeDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.7951)
 script = ExtResource("143_8e0go")
+time_to_close = 4.0
 back_locked = true
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/HingeDoor"]
@@ -2425,7 +2481,23 @@ key_type = "useless3"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Button" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button1" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87.3652, 202.961, 124.448)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("144_26gxq")
+button_type = "lever"
+door_to_open = NodePath("../../Doors/MovingBars")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button1"]
+shape = SubResource("BoxShape3D_0sqt4")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button1"]
+transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.000144958)
+shaded = true
+texture = SubResource("CompressedTexture2D_piqfv")
+
+[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.037, 93.7284)
 collision_layer = 8
 collision_mask = 0
@@ -2433,15 +2505,15 @@ script = ExtResource("144_26gxq")
 button_type = "lever"
 door_to_open = NodePath("../../Doors/Door16")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button3"]
 shape = SubResource("BoxShape3D_ve4qp")
 
-[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button"]
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button3"]
 transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.000144958)
 shaded = true
 texture = ExtResource("62_t8gua")
 
-[node name="Button2" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button4" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5204, 199.958, 114.228)
 collision_layer = 8
 collision_mask = 0
@@ -2450,10 +2522,10 @@ button_type = "circle"
 event_name = "show open exit"
 door_to_open = NodePath("../../Doors/MovingWall3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button2"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button4"]
 shape = SubResource("BoxShape3D_ftyfu")
 
-[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button2"]
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button4"]
 transform = Transform3D(-8.64839e-08, 0, 1, 0, 1.94238, 0, -1.97852, 0, -4.37114e-08, 0, 0, 0)
 shaded = true
 texture = ExtResource("56_lu5ku")

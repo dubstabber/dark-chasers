@@ -1,4 +1,4 @@
-[gd_scene load_steps=412 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=411 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -138,7 +138,6 @@
 [ext_resource type="Texture2D" uid="uid://cry5kuokjv8r0" path="res://images/textures/CGRASO1.png" id="136_r2nur"]
 [ext_resource type="Texture2D" uid="uid://dxfah4ce02m4g" path="res://images/textures/CGRASO2.png" id="137_ix4qq"]
 [ext_resource type="Texture2D" uid="uid://dlwxoi6vnl3kc" path="res://images/textures/HRLAMP.png" id="138_ph1aw"]
-[ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="139_d02at"]
 [ext_resource type="Script" path="res://scenes/rooms/mansion1_transitions.gd" id="139_pau06"]
 [ext_resource type="Texture2D" uid="uid://bnabcb0831ygc" path="res://images/skyboxes/atmosphere1.png" id="139_qn1kj"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
@@ -954,7 +953,7 @@ size = Vector3(0.61, 0.594, 0.01)
 size = Vector3(0.01, 0.576, 0.572)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lougt"]
-size = Vector3(3.82043, 2.50305, 0.237793)
+size = Vector3(1.27832, 2.50305, 0.237793)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -1868,10 +1867,6 @@ shape = SubResource("BoxShape3D_wkois")
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("139_d02at")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.2193, 202.889, -9.87136)
-current_room = "FirstFloor"
-
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
@@ -2452,7 +2447,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.57028, 204.883, 127.381)
 key_type = "ruby"
 
 [node name="WeirdKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.9971, 202.984, -17.7069)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.0557, 202.984, -17.7069)
 key_type = "weird"
 event_name = "spawn ao oni"
 
@@ -2489,7 +2484,7 @@ event_name = "teleport to white face"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Button1" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button1" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open", "temporary_camera") groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87.3652, 202.961, 124.448)
 collision_layer = 8
 collision_mask = 0
@@ -2497,6 +2492,7 @@ script = ExtResource("144_26gxq")
 button_type = "lever"
 event_name = "show moving bars"
 door_to_open = NodePath("../../Doors/MovingBars")
+temporary_camera = NodePath("../../Cameras/BarsCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button1"]
 shape = SubResource("BoxShape3D_0sqt4")
@@ -2522,7 +2518,7 @@ transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.00014495
 shaded = true
 texture = ExtResource("62_t8gua")
 
-[node name="Button4" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button4" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" node_paths=PackedStringArray("door_to_open", "temporary_camera") groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5204, 199.958, 114.228)
 collision_layer = 8
 collision_mask = 0
@@ -2530,6 +2526,7 @@ script = ExtResource("144_26gxq")
 button_type = "circle"
 event_name = "show open exit"
 door_to_open = NodePath("../../Doors/MovingWall3")
+temporary_camera = NodePath("../../Cameras/ExitCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button4"]
 shape = SubResource("BoxShape3D_ftyfu")
@@ -2541,6 +2538,9 @@ texture = ExtResource("56_lu5ku")
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
+[node name="LibraryCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -56.5889, 203.036, -15.2255)
+
 [node name="BarsCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
 transform = Transform3D(-0.866029, -0.000405026, -0.499993, -0.0034906, 0.99998, 0.00523596, 0.499981, 0.00627978, -0.866014, -46.8838, 202.995, -22.8092)
 
@@ -2549,13 +2549,13 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.344
 
 [node name="AreaEvents" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.7323, 189.186, -31.1659)
+[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" node_paths=PackedStringArray("temporary_camera") groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.957, 203.464, -26.0587)
 script = ExtResource("146_vhxkd")
 event_name = "monster crawls in library"
+temporary_camera = NodePath("../../Cameras/LibraryCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.2287, 14.2825, 6.69081)
 shape = SubResource("BoxShape3D_lougt")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]

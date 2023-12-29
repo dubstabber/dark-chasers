@@ -6,6 +6,7 @@ signal button_pressed(body, event_name)
 @export var event_name: String
 @export var one_use := true
 @export var door_to_open: Node3D
+@export var temporary_camera: Camera3D
 
 var is_pressed := false
 
@@ -15,6 +16,7 @@ var is_pressed := false
 func press(body):
 	if not is_pressed:
 		button_pressed.emit(body, event_name)
+		if temporary_camera: temporary_camera.set_current(true)
 		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()

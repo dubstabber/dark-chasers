@@ -2450,6 +2450,7 @@ key_type = "ruby"
 [node name="WeirdKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -54.9971, 202.984, -17.7069)
 key_type = "weird"
+event_name = "spawn ao oni"
 
 [node name="BrownKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.6217, 202.817, -24.9482)
@@ -2462,6 +2463,7 @@ key_type = "gold"
 [node name="EmeraldKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.4638, 202.329, 90.5102)
 key_type = "emerald"
+event_name = "ao oni tries to break bars"
 
 [node name="SilverKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99.9121, 202.328, 65.5734)
@@ -2473,11 +2475,13 @@ key_type = "useless"
 
 [node name="UselessKey2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93.7573, 202.335, 105.599)
-key_type = "useless2"
+key_type = "useless"
+event_name = "teleport to void"
 
 [node name="UselessKey3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.6538, 202.327, 106.742)
-key_type = "useless3"
+key_type = "useless"
+event_name = "teleport to white face"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

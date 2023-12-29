@@ -191,7 +191,7 @@ func _physics_process(delta):
 					parent.open(collider.name)
 				
 				if collider.is_in_group("button"):
-					collider.press()
+					collider.press(self)
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null

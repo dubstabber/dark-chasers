@@ -25,6 +25,9 @@ func _ready():
 	var buttons = get_tree().get_nodes_in_group("button")
 	for button in buttons:
 		button.connect("button_pressed", _handle_button_event)
+	var area_events = get_tree().get_nodes_in_group("area_event")
+	for area_event in area_events:
+		area_event.connect("event_triggered", _handle_area_event)
 	player_spawners = get_tree().get_nodes_in_group("player_spawn")
 	void_spawn = get_tree().get_first_node_in_group('void_spawn')
 	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
@@ -33,7 +36,6 @@ func _ready():
 	var hud = HUD_SCENE.instantiate()
 	add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
-	player.current_room = "FirstFloor"
 	respawn(player)
 	enemies = get_tree().get_nodes_in_group("enemy")
 	for enemy in enemies:
@@ -61,6 +63,7 @@ func _physics_process(_delta):
 
 func respawn(p):
 	p.position = player_spawners.pick_random().global_position
+	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
 
 
@@ -123,3 +126,8 @@ func _handle_button_event(body, event):
 			body.camera_3d.set_current(true)
 			body.blocked_movement = false
 
+func _handle_area_event(event):
+	match event:
+		"monster crawls in library":
+			
+			print('monster crawls in library')

@@ -11,6 +11,8 @@ var small_room_spawn: Marker3D
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
+
+@onready var bars_camera = $NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera
 @onready var exit_camera = $NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/ExitCamera
 
 
@@ -95,24 +97,29 @@ func _on_ladder_body_exited(body):
 func _key_body_entered(body, key_type, event):
 	if key_type and key_type not in keys_collected:
 		keys_collected.push_back(key_type)
-	if event:
-		match event:
-			"spawn ao oni":
-				print('spawn ao oni')
-			"ao oni tries to break bars":
-				print('ao oni tries to break bars')
-			"teleport to void":
-				body.position = void_spawn.position
-			"teleport to white face":
-				body.position = small_room_spawn.position
+	match event:
+		"spawn ao oni":
+			print('spawn ao oni')
+		"ao oni tries to break bars":
+			print('ao oni tries to break bars')
+		"teleport to void":
+			body.position = void_spawn.position
+		"teleport to white face":
+			body.position = small_room_spawn.position
 
 
 func _handle_button_event(body, event):
-	if event:
-		match event:
-			"show open exit":
-				body.blocked_movement = true
-				exit_camera.set_current(true)
-				await get_tree().create_timer(3.0).timeout
-				exit_camera.set_current(false)
-				body.blocked_movement = false
+	match event:
+		"show moving bars":
+			body.blocked_movement = true
+			bars_camera.set_current(true)
+			await get_tree().create_timer(3.0).timeout
+			body.camera_3d.set_current(true)
+			body.blocked_movement = false
+		"show open exit":
+			body.blocked_movement = true
+			exit_camera.set_current(true)
+			await get_tree().create_timer(3.0).timeout
+			body.camera_3d.set_current(true)
+			body.blocked_movement = false
+

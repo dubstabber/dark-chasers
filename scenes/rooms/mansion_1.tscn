@@ -2491,6 +2491,7 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
+event_name = "show moving bars"
 door_to_open = NodePath("../../Doors/MovingBars")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button1"]
@@ -2535,6 +2536,9 @@ shaded = true
 texture = ExtResource("56_lu5ku")
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="BarsCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
+transform = Transform3D(-0.866029, -0.000405026, -0.499993, -0.0034906, 0.99998, 0.00523596, 0.499981, 0.00627978, -0.866014, -46.8838, 202.995, -22.8092)
 
 [node name="ExitCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.344, 203.56, 99.6738)

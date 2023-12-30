@@ -7,7 +7,7 @@ const ACCEL = 10
 
 var transitionsNode: Node3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var targets: Array[CharacterBody3D]
+var targets: Node3D
 var camera: Camera3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
@@ -23,13 +23,14 @@ var noticed_target := false
 
 func _ready():
 	transitionsNode = get_tree().get_first_node_in_group("transitions")
+	camera = get_viewport().get_camera_3d()
 
 
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
-	if targets.size():
+	if targets.get_children().size():
 		if (
 			sight_raycast.is_colliding()
 			and sight_raycast.get_collider().is_in_group("player")
@@ -64,9 +65,9 @@ func animateSprite():
 
 
 func makepath() -> void:
-	if !!targets[0]:
-		if targets[0].current_room == current_room:
-			nav.target_position = targets[0].global_position
+	if targets.get_children().size():
+		if targets.get_child(0).current_room == current_room:
+			nav.target_position = targets.get_child(0).global_position
 		else:
 			var transition_point = find_path_to_player()[0]
 			nav.target_position = transitionsNode.get_node(transition_point).global_position
@@ -80,7 +81,7 @@ func find_path_to_player():
 		var path = queue.pop_front()
 		var c_room = path[-1]
 
-		if c_room == targets[0].current_room:
+		if c_room == targets.get_child(0).current_room:
 			var transitions = []
 			for i in range(1, path.size(), 2):
 				transitions.append(path[i])
@@ -117,8 +118,9 @@ func _on_find_path_timer_timeout():
 
 
 func _on_sight_timer_timeout():
-	if targets[0]:
-		sight_raycast.target_position = targets[0].camera_3d.global_position - global_position
+	camera = get_viewport().get_camera_3d()
+	if targets.get_child(0):
+		sight_raycast.target_position = targets.get_child(0).camera_3d.global_position - global_position
 
 
 func _on_kill_zone_body_entered(body):

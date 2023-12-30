@@ -1,16 +1,13 @@
 extends Node3D
 
-const PLAYER_SCENE := preload("res://scenes/player.tscn")
-const HUD_SCENE := preload("res://scenes/hud.tscn")
-
-var player_spawners: Array
-var players: Array[CharacterBody3D]
-var enemies: Array
-var void_spawn: Marker3D
-var small_room_spawn: Marker3D
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
+@onready var player_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners
+@onready var event_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners
+@onready var prank_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners
+@onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
+@onready var enemies = $NavigationRegion3D/MansionAooni6_0_0Map01/Enemies
 
 
 func _ready():
@@ -25,16 +22,12 @@ func _ready():
 	var area_events = get_tree().get_nodes_in_group("area_event")
 	for area_event in area_events:
 		area_event.connect("event_triggered", _handle_area_event)
-	player_spawners = get_tree().get_nodes_in_group("player_spawn")
-	
-	void_spawn = get_tree().get_first_node_in_group('void_spawn')
-	small_room_spawn = get_tree().get_first_node_in_group('small_room_spawn')
 	
 	spawn_player()
-	enemies = get_tree().get_nodes_in_group("enemy")
-	for enemy in enemies:
-		enemy.camera = get_viewport().get_camera_3d()
-		enemy.targets.append(players[0])
+	
+	#for enemy in enemies.get_children():
+		#enemy.camera = get_viewport().get_camera_3d()
+		#enemy.targets.append(players[0])
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -56,17 +49,16 @@ func _physics_process(_delta):
 
 
 func spawn_player():
-	var player = PLAYER_SCENE.instantiate() as CharacterBody3D
-	add_child(player)
-	var hud = HUD_SCENE.instantiate()
-	add_child(hud)
+	var player = Preloads.PLAYER_SCENE.instantiate() as CharacterBody3D
+	players.add_child(player)
+	var hud = Preloads.HUD_SCENE.instantiate()
+	player.add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
-	players.push_back(player)
 	respawn(player)
 
 
 func respawn(p):
-	p.position = player_spawners.pick_random().global_position
+	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
 
@@ -110,21 +102,25 @@ func _key_body_entered(body, key_type, event):
 		"ao oni tries to break bars":
 			print('ao oni tries to break bars')
 		"teleport to void":
-			body.position = void_spawn.position
+			for spawner in prank_spawners.get_children():
+				if spawner.name == 'VoidSpawn':
+					body.position = spawner.position
 		"teleport to white face":
-			body.position = small_room_spawn.position
+			for spawner in prank_spawners.get_children():
+				if spawner.name == 'SmallRoomSpawn':
+					body.position = spawner.position
 
 
 func _handle_button_event(_body, event):
 	match event:
 		"show moving bars":
-			for player in players:
+			for player in players.get_children():
 				player.blocked_movement = true
 				await get_tree().create_timer(3.0).timeout
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 		"show open exit":
-			for player in players:
+			for player in players.get_children():
 				player.blocked_movement = true
 				await get_tree().create_timer(3.0).timeout
 				player.camera_3d.set_current(true)
@@ -134,7 +130,14 @@ func _handle_button_event(_body, event):
 func _handle_area_event(event):
 	match event:
 		"monster crawls in library":
-			for player in players:
+			for spawner in event_spawners.get_children():
+					if spawner.name == 'AoOniCrawler':
+						var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+						enemies.add_child(aooni)
+						aooni.position = spawner.position
+						aooni.current_room = "FirstFloor"
+						aooni.targets = players
+			for player in players.get_children():
 				player.blocked_movement = true
 				await get_tree().create_timer(4.5).timeout
 				player.camera_3d.set_current(true)

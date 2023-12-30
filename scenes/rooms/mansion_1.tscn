@@ -1865,6 +1865,8 @@ collision_layer = 8
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder"]
 shape = SubResource("BoxShape3D_wkois")
 
+[node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
@@ -1902,28 +1904,36 @@ omni_range = 1063.46
 
 [node name="PlayerSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.034, 202.8, -86.1795)
 
-[node name="Marker3D2" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
+[node name="Marker3D2" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.592, 202.8, -86.1795)
 
-[node name="Marker3D3" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
+[node name="Marker3D3" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.9568, 202.8, -86.1795)
 
-[node name="Marker3D4" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
+[node name="Marker3D4" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6001, 202.8, -86.1795)
 
-[node name="Marker3D5" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners" groups=["player_spawn"]]
+[node name="Marker3D5" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.2934, 202.8, -86.1795)
 
 [node name="PrankSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners" groups=["void_spawn"]]
+[node name="VoidSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 146.572, 203.059, 110.496)
 
-[node name="Marker3D2" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners" groups=["small_room_spawn"]]
+[node name="SmallRoomSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 114.519)
+
+[node name="EventSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="AoOniCrawler" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.57, 202.736, -4.31065)
+
+[node name="FirstAoOniChase" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3097, 202.733, -5.12325)
 
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

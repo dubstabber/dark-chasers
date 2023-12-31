@@ -130,13 +130,16 @@ func _handle_button_event(_body, event):
 func _handle_area_event(event):
 	match event:
 		"monster crawls in library":
+			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+			enemies.add_child(aooni)
 			for spawner in event_spawners.get_children():
 					if spawner.name == 'AoOniCrawler':
-						var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
-						enemies.add_child(aooni)
 						aooni.position = spawner.position
 						aooni.current_room = "FirstFloor"
 						aooni.targets = players
+					if spawner.name == 'AoOniCrawlerEnd':
+						
+						pass
 			for player in players.get_children():
 				player.blocked_movement = true
 				await get_tree().create_timer(4.5).timeout

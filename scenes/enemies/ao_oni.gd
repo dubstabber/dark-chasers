@@ -8,7 +8,6 @@ const ACCEL = 10
 var transitionsNode: Node3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var targets: Node3D
-var camera: Camera3D
 var look_point_dir: Vector3
 var jump_speed: float = 0
 var direction: Vector3
@@ -23,7 +22,6 @@ var noticed_target := false
 
 func _ready():
 	transitionsNode = get_tree().get_first_node_in_group("transitions")
-	camera = get_viewport().get_camera_3d()
 
 
 func _physics_process(delta):
@@ -48,7 +46,7 @@ func _physics_process(delta):
 
 
 func animateSprite():
-	var p_pos = global_position.direction_to(camera.global_position)
+	var p_pos = global_position.direction_to(get_viewport().get_camera_3d().global_position)
 	var vertical_side = global_transform.basis.z
 	var horizontal_side = global_transform.basis.x
 	var h_dot = horizontal_side.dot(p_pos)
@@ -118,7 +116,6 @@ func _on_find_path_timer_timeout():
 
 
 func _on_sight_timer_timeout():
-	camera = get_viewport().get_camera_3d()
 	if targets.get_child(0):
 		sight_raycast.target_position = targets.get_child(0).camera_3d.global_position - global_position
 

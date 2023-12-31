@@ -1932,6 +1932,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 114.519)
 [node name="AoOniCrawler" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.57, 202.736, -4.31065)
 
+[node name="AoOniCrawlerEnd" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.2292, 202.673, -13.7617)
+
 [node name="FirstAoOniChase" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3097, 202.733, -5.12325)
 

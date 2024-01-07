@@ -2462,7 +2462,7 @@ key_type = "ruby"
 [node name="WeirdKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.0557, 202.984, -17.7069)
 key_type = "weird"
-event_name = "spawn ao oni"
+event_name = "spawn ao oni in library"
 
 [node name="BrownKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.6217, 202.817, -24.9482)

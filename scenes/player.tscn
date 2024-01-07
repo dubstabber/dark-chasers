@@ -109,7 +109,7 @@ floor_max_angle = 1.39626
 floor_snap_length = 0.4
 script = ExtResource("1_xs0mp")
 
-[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="." groups=["player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599877, 0)
 shape = SubResource("CapsuleShape3D_gryrd")
 

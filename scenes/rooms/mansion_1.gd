@@ -24,10 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	
-	#for enemy in enemies.get_children():
-		#enemy.camera = get_viewport().get_camera_3d()
-		#enemy.targets.append(players[0])
+	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -97,8 +94,8 @@ func _key_body_entered(body, key_type, event):
 	if key_type and key_type not in keys_collected:
 		keys_collected.push_back(key_type)
 	match event:
-		"spawn ao oni":
-			print('spawn ao oni')
+		"spawn ao oni in library":
+			print('spawn ao oni in library')
 		"ao oni tries to break bars":
 			print('ao oni tries to break bars')
 		"teleport to void":
@@ -136,7 +133,6 @@ func _handle_area_event(event):
 					if spawner.name == 'AoOniCrawler':
 						aooni.position = spawner.position
 						aooni.current_room = "FirstFloor"
-						aooni.targets = players
 					if spawner.name == 'AoOniCrawlerEnd':
 						
 						pass

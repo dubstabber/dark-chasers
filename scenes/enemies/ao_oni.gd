@@ -5,13 +5,12 @@ const ACCEL = 10
 
 @export var current_room: String
 
-var transitionsNode: Node3D
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var targets: Node3D
-var look_point_dir: Vector3
+var map: Node3D
+var current_target: CharacterBody3D
+var waypoints: Array
 var jump_speed: float = 0
 var direction: Vector3
-var noticed_target := false
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $FindPathTimer
@@ -21,26 +20,19 @@ var noticed_target := false
 
 
 func _ready():
-	transitionsNode = get_tree().get_first_node_in_group("transitions")
+	map = get_tree().get_first_node_in_group("map")
 
 
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
-	if targets.get_children().size():
-		if (
-			sight_raycast.is_colliding()
-			and sight_raycast.get_collider().is_in_group("player")
-			and not noticed_target
-		):
-			noticed_target = true
-		if noticed_target:
-			var next_pos = nav.get_next_path_position()
-			if global_position != next_pos and is_on_floor():
-				look_at(next_pos, Vector3(0.01, 0.91, 0.01))
-			direction = (next_pos - global_position).normalized()
-			velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
+	if current_target:
+		var next_pos = nav.get_next_path_position()
+		if global_position != next_pos and is_on_floor():
+			look_at(next_pos, Vector3(0.01, 0.91, 0.01))
+		direction = (next_pos - global_position).normalized()
+		velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
 	animateSprite()
 	move_and_slide()
 
@@ -62,13 +54,26 @@ func animateSprite():
 			animated_sprite_3d.play(state + "-side")
 
 
+func check_targets():
+	if map.players:
+		for target in map.players.get_children():
+			sight_raycast.target_position = target.camera_3d.global_position - global_position
+			sight_raycast.force_raycast_update()
+			if (
+				sight_raycast.is_colliding()
+				and sight_raycast.get_collider().is_in_group("player")
+				and not current_target
+			):
+				current_target = sight_raycast.get_collider()
+
+
 func makepath() -> void:
-	if targets.get_children().size():
-		if targets.get_child(0).current_room == current_room:
-			nav.target_position = targets.get_child(0).global_position
+	if current_target:
+		if current_target.current_room == current_room or not current_room:
+			nav.target_position = current_target.global_position
 		else:
 			var transition_point = find_path_to_player()[0]
-			nav.target_position = transitionsNode.get_node(transition_point).global_position
+			nav.target_position = map.transitions.get_node(transition_point).global_position
 
 
 func find_path_to_player():
@@ -79,17 +84,15 @@ func find_path_to_player():
 		var path = queue.pop_front()
 		var c_room = path[-1]
 
-		if c_room == targets.get_child(0).current_room:
+		if c_room == current_target.current_room:
 			var transitions = []
 			for i in range(1, path.size(), 2):
 				transitions.append(path[i])
 			return transitions
-
 		if c_room not in visitedRooms:
 			visitedRooms.append(c_room)
-
-			for transitionPoint in transitionsNode.map_transitions[c_room].keys():
-				var nextRoom = transitionsNode.map_transitions[c_room][transitionPoint]
+			for transitionPoint in map.transitions.map_transitions[c_room].keys():
+				var nextRoom = map.transitions.map_transitions[c_room][transitionPoint]
 				if transitionPoint == "ThirdFloorAbyss":
 					continue
 				if nextRoom not in visitedRooms:
@@ -105,25 +108,25 @@ func _on_find_path_timer_timeout():
 	if distance_to_target < 10:
 		find_path_timer.wait_time = 0.1
 	elif distance_to_target < 20:
-		find_path_timer.wait_time = 0.3
+		find_path_timer.wait_time = 0.2
 	elif distance_to_target < 35:
-		find_path_timer.wait_time = 0.6
+		find_path_timer.wait_time = 0.5
 	elif distance_to_target < 50:
-		find_path_timer.wait_time = 1.0
+		find_path_timer.wait_time = 0.8
 	else:
-		find_path_timer.wait_time = 2.0
+		find_path_timer.wait_time = 1.7
 	makepath()
 
 
 func _on_sight_timer_timeout():
-	if targets.get_child(0):
-		sight_raycast.target_position = targets.get_child(0).camera_3d.global_position - global_position
+	if not current_target:
+		check_targets()
 
 
 func _on_kill_zone_body_entered(body):
 	if body.is_in_group("player"):
 		body.kill(position)
-		noticed_target = false
+		current_target = null
 		velocity = Vector3.ZERO
 
 

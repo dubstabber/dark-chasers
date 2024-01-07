@@ -1,4 +1,4 @@
-[gd_scene load_steps=412 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=414 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -957,6 +957,12 @@ size = Vector3(1.27832, 2.50305, 0.237793)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_md7ao"]
+size = Vector3(1, 1.60327, 0.402588)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6wcic"]
+size = Vector3(1, 1.41992, 0.208008)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -1941,6 +1947,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.3428, 203.123, -13.6011)
 [node name="FirstAoOniChase" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3097, 202.733, -5.12325)
 
+[node name="AoOniPiano" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.5477, 202.783, 107.185)
+
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Door" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
@@ -2583,6 +2592,22 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/CrawlingAoOniArea"]
 shape = SubResource("BoxShape3D_ti8m0")
+
+[node name="LibraryExitArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9327, 203.354, -27.3782)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea"]
+shape = SubResource("BoxShape3D_md7ao")
+
+[node name="PianoExitArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3314, 203.105, 105.694)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea"]
+shape = SubResource("BoxShape3D_6wcic")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

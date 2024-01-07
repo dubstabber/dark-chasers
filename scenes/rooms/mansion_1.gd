@@ -95,7 +95,13 @@ func _key_body_entered(body, key_type, event):
 		keys_collected.push_back(key_type)
 	match event:
 		"spawn ao oni in library":
-			print('spawn ao oni in library')
+			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+			enemies.add_child(aooni)
+			aooni.current_room = "FirstFloor"
+			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/FirstAoOniChase.position
+			aooni.current_target = body
+			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea)
+			#play sound
 		"ao oni tries to break bars":
 			print('ao oni tries to break bars')
 		"teleport to void":
@@ -127,14 +133,13 @@ func _handle_button_event(_body, event):
 func _handle_area_event(event):
 	match event:
 		"monster crawls in library":
+			for player in players.get_children():
+				player.blocked_movement = true
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/CrawlingAoOniArea)
 			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniCrawler.position
-			aooni.current_room = "FirstFloor"
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniCrawlerEnd.position)
-			for player in players.get_children():
-				player.blocked_movement = true
 			await get_tree().create_timer(4.5).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)

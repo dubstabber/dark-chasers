@@ -4,6 +4,7 @@ const SPEED = 7.0
 const ACCEL = 10
 
 @export var current_room: String
+@export var disappear_zones: Array[Area3D]
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var map: Node3D
@@ -21,13 +22,15 @@ var direction: Vector3
 
 func _ready():
 	map = get_tree().get_first_node_in_group("map")
+	for disappear_zone in disappear_zones:
+		disappear_zone.connect("body_entered", _on_disappear_area)
 
 
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
-	if current_target:
+	if current_target or waypoints:
 		var next_pos = nav.get_next_path_position()
 		if global_position != next_pos and is_on_floor():
 			look_at(next_pos, Vector3(0.01, 0.91, 0.01))
@@ -74,6 +77,9 @@ func makepath() -> void:
 		else:
 			var transition_point = find_path_to_player()[0]
 			nav.target_position = map.transitions.get_node(transition_point).global_position
+	elif waypoints:
+		nav.target_position = waypoints[0]
+
 
 
 func find_path_to_player():
@@ -101,6 +107,10 @@ func find_path_to_player():
 					new_path.append(nextRoom)
 					queue.append(new_path)
 	return null
+
+
+func add_disappear_zone(area):
+	area.connect("body_entered", _on_disappear_area)
 
 
 func _on_find_path_timer_timeout():
@@ -145,3 +155,14 @@ func _on_interaction_timer_timeout():
 		var parent = collider.get_parent()
 		if parent.is_in_group("door") and parent.can_manual_open:
 			parent.open(collider.name)
+
+
+func _on_navigation_agent_3d_target_reached():
+	if waypoints:
+		waypoints.pop_back()
+		velocity = Vector3.ZERO
+		rotation = Vector3.ZERO
+
+
+func _on_disappear_area(_body):
+	queue_free()

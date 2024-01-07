@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	#keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -129,16 +129,14 @@ func _handle_area_event(event):
 		"monster crawls in library":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
-			for spawner in event_spawners.get_children():
-					if spawner.name == 'AoOniCrawler':
-						aooni.position = spawner.position
-						aooni.current_room = "FirstFloor"
-					if spawner.name == 'AoOniCrawlerEnd':
-						
-						pass
+			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/CrawlingAoOniArea)
+			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniCrawler.position
+			aooni.current_room = "FirstFloor"
+			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniCrawlerEnd.position)
 			for player in players.get_children():
 				player.blocked_movement = true
-				await get_tree().create_timer(4.5).timeout
+			await get_tree().create_timer(4.5).timeout
+			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 

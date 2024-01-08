@@ -2517,6 +2517,13 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.28, 2.55, 0.06)
 
+[node name="BlinkWalk" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["destroyable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0758, 203.474, 73.274)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.27173, 2.56445, 0.01)
+
 [node name="Items" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="RubyKey" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]

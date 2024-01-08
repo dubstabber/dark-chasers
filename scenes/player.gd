@@ -196,7 +196,13 @@ func _physics_process(delta):
 				position = transit_pos.global_position
 				transit_pos = null
 			
+		if Input.is_action_just_pressed("hit"):
+			var collider = interaction.get_collider()
+			if collider:
+				if collider.is_in_group("destroyable"):
+					collider.queue_free()
 
+		
 		if direction:
 			velocity.x = direction.x * current_speed
 			velocity.z = direction.z * current_speed

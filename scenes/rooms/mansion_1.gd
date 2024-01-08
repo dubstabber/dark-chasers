@@ -114,18 +114,34 @@ func _key_body_entered(body, key_type, event):
 					body.position = spawner.position
 
 
-func _handle_button_event(_body, event):
+func _handle_button_event(body, event):
 	match event:
+		"play piano":
+			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+			enemies.add_child(aooni)
+			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniPiano.position
+			aooni.current_room = "PianoRoom"
+			aooni.current_target = body
+			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
-				await get_tree().create_timer(3.0).timeout
+			await get_tree().create_timer(3.0).timeout
+			for player in players.get_children():
+				player.camera_3d.set_current(true)
+				player.blocked_movement = false
+		"show secret door":
+			for player in players.get_children():
+				player.blocked_movement = true
+			await get_tree().create_timer(1.0).timeout
+			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
-				await get_tree().create_timer(3.0).timeout
+			await get_tree().create_timer(3.0).timeout
+			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 
@@ -144,4 +160,12 @@ func _handle_area_event(event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+		"piano alarm":
+			if not $NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed:
+				var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+				enemies.add_child(aooni)
+				aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniPiano.position
+				aooni.current_room = "PianoRoom"
+				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
+				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
 

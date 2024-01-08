@@ -10,7 +10,7 @@ signal button_pressed(body, event_name)
 
 var is_pressed := false
 
-@onready var sprite_3d = $Sprite3D
+@onready var sprite_3d = get_node_or_null("Sprite3D")
 
 
 func press(body):

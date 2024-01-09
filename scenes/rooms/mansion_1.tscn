@@ -1962,6 +1962,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3097, 202.733, -5.12325)
 [node name="AoOniPiano" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.5477, 202.728, 107.185)
 
+[node name="AoOniBars" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4698, 202.561, 84.9838)
+
+[node name="AoOniBarsBreak" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.6868, 202.544, 86.8479)
+
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Door" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]

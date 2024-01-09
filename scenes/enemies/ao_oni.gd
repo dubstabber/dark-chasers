@@ -15,9 +15,10 @@ var direction: Vector3
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $FindPathTimer
-@onready var animated_sprite_3d = $AnimatedSprite3D
+@onready var rotation_controller = $RotationController
+@onready var animated_sprite_3d = $RotationController/AnimatedSprite3D
 @onready var sight_raycast = $NoticeRay
-@onready var interaction = $Interaction
+@onready var interaction = $RotationController/Interaction
 
 
 func _ready():
@@ -33,7 +34,9 @@ func _physics_process(delta):
 	if current_target or waypoints:
 		var next_pos = nav.get_next_path_position()
 		if global_position != next_pos and is_on_floor():
-			look_at(next_pos, Vector3(0.01, 0.91, 0.01))
+			#rotation_controller.look_at(next_pos, Vector3(0.01, 0.91, 0.01))
+			rotation_controller.look_at(next_pos)
+
 		direction = (next_pos - global_position).normalized()
 		velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
 	animateSprite()
@@ -41,9 +44,9 @@ func _physics_process(delta):
 
 
 func animateSprite():
-	var p_pos = global_position.direction_to(get_viewport().get_camera_3d().global_position)
-	var vertical_side = global_transform.basis.z
-	var horizontal_side = global_transform.basis.x
+	var p_pos = rotation_controller.global_position.direction_to(get_viewport().get_camera_3d().global_position)
+	var vertical_side = rotation_controller.global_transform.basis.z
+	var horizontal_side = rotation_controller.global_transform.basis.x
 	var h_dot = horizontal_side.dot(p_pos)
 	var v_dot = vertical_side.dot(p_pos)
 	var state = "run" if velocity else "stay"
@@ -79,7 +82,6 @@ func makepath() -> void:
 			nav.target_position = map.transitions.get_node(transition_point).global_position
 	elif waypoints:
 		nav.target_position = waypoints[0]
-
 
 
 func find_path_to_player():
@@ -161,7 +163,7 @@ func _on_navigation_agent_3d_target_reached():
 	if waypoints:
 		waypoints.pop_back()
 		velocity = Vector3.ZERO
-		rotation = Vector3.ZERO
+		#rotation = Vector3.ZERO
 
 
 func _on_disappear_area(_body):

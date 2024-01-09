@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	#keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -103,6 +103,11 @@ func _key_body_entered(body, key_type, event):
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea)
 			#play sound
 		"ao oni tries to break bars":
+			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+			enemies.add_child(aooni)
+			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBars.position
+			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsBreak.position)
+			
 			print('ao oni tries to break bars')
 		"teleport to void":
 			for spawner in prank_spawners.get_children():

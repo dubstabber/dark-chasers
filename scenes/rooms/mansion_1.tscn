@@ -977,6 +977,9 @@ size = Vector3(3.81445, 2.56079, 0.391602)
 [sub_resource type="BoxShape3D" id="BoxShape3D_g24h0"]
 size = Vector3(11.2139, 0.0681152, 3.39258)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_si4am"]
+size = Vector3(140.574, 1, 99.8127)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
 
@@ -991,9 +994,6 @@ size = Vector3(2.70093, 1, 0.279541)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q14qu"]
 size = Vector3(3.34668, 1.1814, 0.279541)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_si4am"]
-size = Vector3(140.574, 1, 99.8127)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -2795,6 +2795,14 @@ event_name = "invisible abyss"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent5"]
 shape = SubResource("BoxShape3D_g24h0")
 
+[node name="AreaEvent6" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9613, 0.100065, 101.429)
+script = ExtResource("146_vhxkd")
+event_name = "kill player"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent6"]
+shape = SubResource("BoxShape3D_si4am")
+
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="CrawlingAoOniArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
@@ -2838,12 +2846,6 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_q14qu")
 
 [node name="DeadZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-
-[node name="Area3D" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DeadZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9613, 0.100065, 101.429)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DeadZones/Area3D"]
-shape = SubResource("BoxShape3D_si4am")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

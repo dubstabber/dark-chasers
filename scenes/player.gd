@@ -222,11 +222,12 @@ func _physics_process(delta):
 			death_throw -= 0.1
 
 
-func kill(pos):
+func kill(pos = null):
 	if not killed:
-		direction = (pos - position).normalized()
-		direction.y = 0
+		if pos:
+			direction = (pos - position).normalized()
+			direction.y = 0
+			killed_pos = pos
 		killed = true
 		color_rect.modulate.a = 0.7
-		killed_pos = pos
 		Utils.play_sound(Preloads.kill_player_sound, self)

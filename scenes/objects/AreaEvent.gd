@@ -1,6 +1,6 @@
 extends Area3D
 
-signal event_triggered(event_name)
+signal event_triggered(body, event_name)
 
 @export var one_trigger_only := true
 @export var event_name: String
@@ -19,5 +19,5 @@ func _body_entered(body):
 		if one_trigger_only: triggered = true
 		if temporary_camera: temporary_camera.set_current(true)
 		if door_to_open: door_to_open.open()
-		event_triggered.emit(event_name)
+		event_triggered.emit(body, event_name)
 

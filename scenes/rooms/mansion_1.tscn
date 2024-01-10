@@ -1,4 +1,4 @@
-[gd_scene load_steps=419 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=423 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -140,6 +140,7 @@
 [ext_resource type="Texture2D" uid="uid://dlwxoi6vnl3kc" path="res://images/textures/HRLAMP.png" id="138_ph1aw"]
 [ext_resource type="Script" path="res://scenes/rooms/mansion1_transitions.gd" id="139_pau06"]
 [ext_resource type="Texture2D" uid="uid://bnabcb0831ygc" path="res://images/skyboxes/atmosphere1.png" id="139_qn1kj"]
+[ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="141_yrprg"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
@@ -967,6 +968,12 @@ size = Vector3(1.27832, 2.50305, 0.237793)
 [sub_resource type="BoxShape3D" id="BoxShape3D_rps76"]
 size = Vector3(3.2666, 0.873047, 4.43945)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ihf32"]
+size = Vector3(8.61621, 3.03149, 0.391602)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2onqm"]
+size = Vector3(3.81445, 2.56079, 0.391602)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
 
@@ -978,6 +985,9 @@ size = Vector3(1, 1.41992, 0.208008)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5dldr"]
 size = Vector3(2.70093, 1, 0.279541)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q14qu"]
+size = Vector3(3.34668, 1.1814, 0.279541)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -1893,6 +1903,11 @@ shape = SubResource("BoxShape3D_wkois")
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
+[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("141_yrprg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
+current_room = "BigHall"
+disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
+
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
@@ -1973,6 +1988,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.2008, 202.544, 86.8479)
 
 [node name="AoOniBarsGiveup" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.584, 79.1308)
+
+[node name="IlopuluSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.071, 202.504, 28.379)
 
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -2495,19 +2513,59 @@ size = Vector3(0.01, 2.561, 1.30273)
 material = SubResource("StandardMaterial3D_gkyc3")
 
 [node name="MovingWall5" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9988, 203.146, 92.7906)
+script = ExtResource("142_edvtm")
+move_speed = 1.0
+move_range = -1.913
+open_only = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall5"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(2.23804, 1.92871, 0.631836)
+
+[node name="MovingWall6" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.361, 203.416, 101.587)
 script = ExtResource("142_edvtm")
 move_range = 2.6
 open_only = true
 can_manual_open = false
 
-[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall5"]
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0.261681)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1.27905, 2.56079, 0.834743)
 material = SubResource("StandardMaterial3D_gkyc3")
+
+[node name="WideDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 31.6326, 203.718, 88.4496)
+script = ExtResource("142_edvtm")
+move_range = 1.96
+open_only = true
+can_manual_open = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WideDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.86426, 2.43774, 0.302734)
+
+[node name="CryptDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9958, 202.993, 93.5405)
+script = ExtResource("142_edvtm")
+move_speed = 1.0
+move_range = 1.53
+open_only = true
+key_needed = "silver"
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/CryptDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.91309, 1.59375, 0.09375)
 
 [node name="HingeDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.7951)
@@ -2637,7 +2695,7 @@ collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "circle"
 event_name = "show open exit"
-door_to_open = NodePath("../../Doors/MovingWall5")
+door_to_open = NodePath("../../Doors/MovingWall6")
 temporary_camera = NodePath("../../Cameras/ExitCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button4"]
@@ -2707,6 +2765,22 @@ event_name = "piano alarm"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent2"]
 shape = SubResource("BoxShape3D_rps76")
 
+[node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.896, 203.717, 83.9186)
+script = ExtResource("146_vhxkd")
+door_to_open = NodePath("../../Doors/WideDoor")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent3"]
+shape = SubResource("BoxShape3D_ihf32")
+
+[node name="AreaEvent4" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0301, 203.485, 63.0483)
+script = ExtResource("146_vhxkd")
+event_name = "spawn ilopulu"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent4"]
+shape = SubResource("BoxShape3D_2onqm")
+
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="CrawlingAoOniArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
@@ -2740,6 +2814,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/BarsAoOniRunAway"]
 shape = SubResource("BoxShape3D_5dldr")
+
+[node name="HiddenDoorAoOni" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.579, 202.885, -25.3755)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
+shape = SubResource("BoxShape3D_q14qu")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

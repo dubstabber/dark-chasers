@@ -1,4 +1,4 @@
-[gd_scene load_steps=418 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=419 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -975,6 +975,9 @@ size = Vector3(1, 1.60327, 0.402588)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6wcic"]
 size = Vector3(1, 1.41992, 0.208008)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5dldr"]
+size = Vector3(2.70093, 1, 0.279541)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -1966,7 +1969,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.5477, 202.728, 107.185)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4698, 202.561, 84.9838)
 
 [node name="AoOniBarsBreak" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.6868, 202.544, 86.8479)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.2008, 202.544, 86.8479)
+
+[node name="AoOniBarsGiveup" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.584, 79.1308)
 
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -2676,6 +2682,9 @@ transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, 89.6725,
 [node name="BarsCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
 transform = Transform3D(-0.866029, -0.000405026, -0.499993, -0.0034906, 0.99998, 0.00523596, 0.499981, 0.00627978, -0.866014, -46.8838, 202.995, -22.8092)
 
+[node name="BarsCamera2" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.1267, 203.676, 89.2708)
+
 [node name="ExitCamera" type="Camera3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Cameras"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 39.344, 203.56, 99.6738)
 
@@ -2723,6 +2732,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea"]
 shape = SubResource("BoxShape3D_6wcic")
+
+[node name="BarsAoOniRunAway" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.5653, 202.708, 79.9639)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/BarsAoOniRunAway"]
+shape = SubResource("BoxShape3D_5dldr")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

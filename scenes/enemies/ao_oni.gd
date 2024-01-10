@@ -168,3 +168,4 @@ func _on_navigation_agent_3d_target_reached():
 
 func _on_disappear_area(_body):
 	queue_free()
+

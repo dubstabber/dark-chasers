@@ -2891,5 +2891,12 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
 shape = SubResource("BoxShape3D_q14qu")
 
+[node name="TextureFixes" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.75, 0, 0, 0, 0.51, 0, 0, 0, 0.75, 63.0377, 203.476, 27.196)
+shaded = true
+texture = ExtResource("92_hr2ml")
+
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

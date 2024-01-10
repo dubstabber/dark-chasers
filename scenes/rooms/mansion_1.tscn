@@ -1,4 +1,4 @@
-[gd_scene load_steps=423 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=425 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -974,6 +974,9 @@ size = Vector3(8.61621, 3.03149, 0.391602)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2onqm"]
 size = Vector3(3.81445, 2.56079, 0.391602)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_g24h0"]
+size = Vector3(11.2139, 0.0681152, 3.39258)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
 
@@ -988,6 +991,9 @@ size = Vector3(2.70093, 1, 0.279541)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q14qu"]
 size = Vector3(3.34668, 1.1814, 0.279541)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_si4am"]
+size = Vector3(140.574, 1, 99.8127)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -2781,6 +2787,14 @@ event_name = "spawn ilopulu"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent4"]
 shape = SubResource("BoxShape3D_2onqm")
 
+[node name="AreaEvent5" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.0149, 202.206, 101.444)
+script = ExtResource("146_vhxkd")
+event_name = "invisible abyss"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent5"]
+shape = SubResource("BoxShape3D_g24h0")
+
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="CrawlingAoOniArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
@@ -2822,6 +2836,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
 shape = SubResource("BoxShape3D_q14qu")
+
+[node name="DeadZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="Area3D" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DeadZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9613, 0.100065, 101.429)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DeadZones/Area3D"]
+shape = SubResource("BoxShape3D_si4am")
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

@@ -197,6 +197,7 @@ func _handle_area_event(body, event):
 		_:
 			prints("unknown event: '",event,"'")
 
+
 func _on_custom_event(event):
 	match event:
 		"ao oni gave up":

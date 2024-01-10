@@ -2891,7 +2891,5 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
 shape = SubResource("BoxShape3D_q14qu")
 
-[node name="DeadZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

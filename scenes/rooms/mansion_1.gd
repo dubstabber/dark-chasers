@@ -106,9 +106,14 @@ func _key_body_entered(body, key_type, event):
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
 			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBars.position
+			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/BarsAoOniRunAway)
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsBreak.position)
-			
-			print('ao oni tries to break bars')
+			aooni.connect("tree_exited", _on_custom_event.bind("ao oni gave up"))
+			for player in players.get_children():
+				player.blocked_movement = true
+			$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera2.set_current(true)
+			await get_tree().create_timer(5.0).timeout
+			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsGiveup.position)
 		"teleport to void":
 			for spawner in prank_spawners.get_children():
 				if spawner.name == 'VoidSpawn':
@@ -174,3 +179,10 @@ func _handle_area_event(event):
 				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
 
+func _on_custom_event(event):
+	match event:
+		"ao oni gave up":
+			print("ao oni gaveup")
+			for player in players.get_children():
+				player.camera_3d.set_current(true)
+				player.blocked_movement = false

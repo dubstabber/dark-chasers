@@ -122,6 +122,8 @@ func _key_body_entered(body, key_type, event):
 			for spawner in prank_spawners.get_children():
 				if spawner.name == 'SmallRoomSpawn':
 					body.position = spawner.position
+		_:
+			prints("unknown event: '",event,"'")
 
 
 func _handle_button_event(body, event):
@@ -154,6 +156,8 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+		_:
+			prints("unknown event: '",event,"'")
 
 
 func _handle_area_event(event):
@@ -180,6 +184,12 @@ func _handle_area_event(event):
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
 		"spawn ilopulu":
 			print("spawn ilopulu")
+		"invisible abyss":
+			$NavigationRegion3D/MansionAooni6_0_0Map01/StaticBody3D.collision_layer = 0
+			await get_tree().create_timer(0.8).timeout
+			$NavigationRegion3D/MansionAooni6_0_0Map01/StaticBody3D.collision_layer = 4
+		_:
+			prints("unknown event: '",event,"'")
 
 func _on_custom_event(event):
 	match event:
@@ -187,3 +197,5 @@ func _on_custom_event(event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+		_:
+			prints("unknown event: '",event,"'")

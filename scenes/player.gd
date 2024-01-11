@@ -177,9 +177,9 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("toggle-clip-mode"):
 			clip_mode = not clip_mode
 			mode_changed.emit("clip_mode", clip_mode)
-			if collision_mask == 14:
+			if clip_mode:
 				collision_mask = 10
-				velocity.y = 0
+				velocity = Vector3.ZERO
 			else:
 				collision_mask = 14
 

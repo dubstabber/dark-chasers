@@ -2460,6 +2460,51 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.292, 2.503, 0.1)
 
+[node name="WardrobeDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.802, 203.723, -14.383)
+script = ExtResource("142_edvtm")
+move_range = 2.0
+
+[node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(2.39941, 2.07501, 0.0505478)
+
+[node name="WardrobeDoor2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16013, 206.278, 126.41)
+script = ExtResource("142_edvtm")
+move_range = 2.0
+
+[node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor2"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(2.39941, 2.07501, 0.0505478)
+
+[node name="WardrobeDoor3" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.1947, 203.724, 135.374)
+script = ExtResource("142_edvtm")
+move_range = 2.0
+
+[node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor3"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(2.39941, 2.07501, 0.0505478)
+
+[node name="WardrobeDoor4" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7995, 203.721, 100.174)
+script = ExtResource("142_edvtm")
+move_range = 2.0
+open_only = true
+
+[node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor4"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(2.39941, 2.07501, 0.0505478)
+
 [node name="MovingBars" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -45.5016, 203.475, -20.0763)
 script = ExtResource("142_edvtm")
@@ -2590,6 +2635,21 @@ collision_mask = 0
 size = Vector3(1.27905, 2.56079, 0.834743)
 material = SubResource("StandardMaterial3D_gkyc3")
 
+[node name="MovingWall7" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.842, 203.473, 100.785)
+script = ExtResource("142_edvtm")
+move_speed = 1.8
+move_range = 2.4
+open_only = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.540733, 0, 0)
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(0.2, 2.561, 1.271)
+material = SubResource("StandardMaterial3D_gkyc3")
+
 [node name="WideDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 31.6326, 203.718, 88.4496)
 script = ExtResource("142_edvtm")
@@ -2598,6 +2658,17 @@ open_only = true
 can_manual_open = false
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WideDoor"]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(1.86426, 2.43774, 0.302734)
+
+[node name="WideDoor2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 38.1201, 203.718, 88.4496)
+script = ExtResource("142_edvtm")
+move_range = 1.96
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WideDoor2"]
 use_collision = true
 collision_layer = 4
 collision_mask = 0

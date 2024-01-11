@@ -163,7 +163,6 @@ func _on_navigation_agent_3d_target_reached():
 	if waypoints:
 		waypoints.pop_back()
 		velocity = Vector3.ZERO
-		#rotation = Vector3.ZERO
 
 
 func _on_disappear_area(_body):

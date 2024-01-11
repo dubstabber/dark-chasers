@@ -1954,7 +1954,7 @@ shape = SubResource("BoxShape3D_ct443")
 
 [node name="StaticBody3D4" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9884, 102.186, 103.355)
-collision_layer = 4
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D4"]
@@ -1962,7 +1962,7 @@ shape = SubResource("BoxShape3D_7y0sg")
 
 [node name="StaticBody3D5" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.988, 99.686, 99.454)
-collision_layer = 4
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D5"]
@@ -1970,7 +1970,7 @@ shape = SubResource("BoxShape3D_vdbf7")
 
 [node name="StaticBody3D6" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.4905, 102.186, 101.365)
-collision_layer = 4
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D6"]
@@ -1978,7 +1978,7 @@ shape = SubResource("BoxShape3D_017b0")
 
 [node name="StaticBody3D7" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.4779, 102.186, 101.365)
-collision_layer = 4
+collision_layer = 8
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D7"]

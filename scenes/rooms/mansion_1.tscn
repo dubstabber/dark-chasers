@@ -1,4 +1,4 @@
-[gd_scene load_steps=429 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=430 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -991,6 +991,9 @@ size = Vector3(11.2139, 0.0681152, 3.39258)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_si4am"]
 size = Vector3(140.574, 1, 99.8127)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nes26"]
+size = Vector3(1.2207, 2.48145, 0.287354)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
@@ -2919,6 +2922,14 @@ event_name = "kill player"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent6"]
 shape = SubResource("BoxShape3D_si4am")
+
+[node name="AreaEvent7" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 103.882)
+script = ExtResource("146_vhxkd")
+event_name = "change to next map"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent7"]
+shape = SubResource("BoxShape3D_nes26")
 
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

@@ -187,11 +187,11 @@ func _handle_area_event(body: CharacterBody3D, event):
 		"spawn ilopulu":
 			print("spawn ilopulu")
 		"invisible abyss":
-			#$NavigationRegion3D/MansionAooni6_0_0Map01/StaticBody3D.collision_layer = 0
 			body.collision_mask = 10
 			await get_tree().create_timer(0.8).timeout
-			#$NavigationRegion3D/MansionAooni6_0_0Map01/StaticBody3D.collision_layer = 4
 			body.collision_mask = 14
+		"change to next map":
+			print("change to next map")
 		"kill player":
 			if "kill" in body:
 				body.kill()

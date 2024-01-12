@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	#keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
 
 	for t in transitions.get_children():
 		for m in t.get_children():

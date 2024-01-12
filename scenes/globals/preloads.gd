@@ -22,6 +22,7 @@ var kill_player_sound := preload("res://sounds/sfx/DSSLOP.wav")
 
 var creep_amb_sound := preload("res://sounds/music/CREEPAMB.wav")
 var aosee_sound := preload("res://sounds/music/AOSEE.wav")
+var d_running_sound := preload("res://sounds/music/D_RUNNIN.ogg")
 
 var button_up_1 := preload("res://images/textures/BSW01A.png")
 var button_down_1 := preload("res://images/textures/BSW01B.png")

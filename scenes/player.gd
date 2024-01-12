@@ -62,6 +62,7 @@ var blocked_movement := false
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
 @onready var footstep_sound = $FootstepSound
+@onready var ambient_music = $AmbientMusic
 
 
 func _ready():

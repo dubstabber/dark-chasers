@@ -4,8 +4,6 @@ var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
 @onready var player_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners
-@onready var event_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners
-@onready var prank_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners
 @onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
 @onready var enemies = $NavigationRegion3D/MansionAooni6_0_0Map01/Enemies
 @onready var playing_sounds = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds
@@ -26,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	#keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -126,13 +124,9 @@ func _key_body_entered(body, key_type, event):
 			await get_tree().create_timer(5.0).timeout
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsGiveup.position)
 		"teleport to void":
-			for spawner in prank_spawners.get_children():
-				if spawner.name == 'VoidSpawn':
-					body.position = spawner.position
+			body.position = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners/VoidSpawn.position
 		"teleport to white face":
-			for spawner in prank_spawners.get_children():
-				if spawner.name == 'SmallRoomSpawn':
-					body.position = spawner.position
+			body.position = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners/SmallRoomSpawn.position
 		"": pass
 		_:
 			prints("unknown event: '",event,"'")

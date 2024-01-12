@@ -20,6 +20,9 @@ var close_door_sound := preload("res://sounds/sfx/DSDORCLS.ogg")
 
 var kill_player_sound := preload("res://sounds/sfx/DSSLOP.wav")
 
+var creep_amb_sound := preload("res://sounds/music/CREEPAMB.wav")
+var aosee_sound := preload("res://sounds/music/AOSEE.wav")
+
 var button_up_1 := preload("res://images/textures/BSW01A.png")
 var button_down_1 := preload("res://images/textures/BSW01B.png")
 var button_up_5 := preload("res://images/textures/BSW05A.png")

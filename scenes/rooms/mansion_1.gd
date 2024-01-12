@@ -8,6 +8,8 @@ var keys_collected: Array
 @onready var prank_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners
 @onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
 @onready var enemies = $NavigationRegion3D/MansionAooni6_0_0Map01/Enemies
+@onready var playing_sounds = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds
+@onready var current_music = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/CurrentMusic
 
 
 func _ready():
@@ -51,13 +53,19 @@ func spawn_player():
 	var hud = Preloads.HUD_SCENE.instantiate()
 	player.add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
-	respawn(player)
+	#respawn(player)
+	test_respawn(player)
 
 
 func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
+
+
+func test_respawn(p):
+	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
+	p.current_room = "FirstFloor"
 
 
 func handle_transition(body, area3dname, marker):
@@ -101,7 +109,10 @@ func _key_body_entered(body, key_type, event):
 			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/FirstAoOniChase.position
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea)
-			#play sound
+			current_music.stream = Preloads.aosee_sound
+			current_music.volume_db = -5
+			current_music.play()
+			aooni.connect("tree_exited", current_music.stop)
 		"ao oni tries to break bars":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
@@ -176,6 +187,9 @@ func _handle_area_event(body: CharacterBody3D, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+			current_music.stream = Preloads.creep_amb_sound
+			current_music.volume_db = -5
+			current_music.play()
 		"piano alarm":
 			if not $NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed:
 				var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D

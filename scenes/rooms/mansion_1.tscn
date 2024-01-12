@@ -1,4 +1,4 @@
-[gd_scene load_steps=431 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=432 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -944,6 +944,9 @@ size = Vector3(0.235, 204.97, 3.93105)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0jv3i"]
 size = Vector3(0.235, 204.97, 3.93105)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_liobl"]
+size = Vector3(91.5967, 0.1, 49.0291)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ehfr"]
 albedo_texture = ExtResource("15_emvb5")
@@ -1994,6 +1997,16 @@ shape = SubResource("BoxShape3D_0jv3i")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.0266, 222.345, -32.82)
 light_energy = 11.021
 omni_range = 1063.46
+
+[node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+
+[node name="DirtArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.5814, 202.256, -64.6076)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/DirtArea"]
+shape = SubResource("BoxShape3D_liobl")
 
 [node name="PlayerSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

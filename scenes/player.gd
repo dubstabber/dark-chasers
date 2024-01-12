@@ -61,6 +61,7 @@ var blocked_movement := false
 @onready var ray_cast_3d = $RayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
+@onready var footstep_sound = $FootstepSound
 
 
 func _ready():

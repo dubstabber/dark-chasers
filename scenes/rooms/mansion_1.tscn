@@ -2983,11 +2983,16 @@ texture = ExtResource("92_hr2ml")
 
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
+[node name="CurrentMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
+
 [node name="PianoSound" type="AudioStreamPlayer3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.8255, 203.588, 114.741)
 stream = ExtResource("147_2ogyi")
 volume_db = -27.0
 autoplay = true
+
+[node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.3692, 202.512, -30.2679)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

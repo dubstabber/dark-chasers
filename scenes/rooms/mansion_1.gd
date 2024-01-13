@@ -143,6 +143,10 @@ func _handle_button_event(body, event):
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
+			current_music.stream = Preloads.aosee_sound
+			current_music.volume_db = -5
+			current_music.play()
+			aooni.connect("tree_exited", current_music.stop)
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -194,6 +198,10 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.current_room = "PianoRoom"
 				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
+				current_music.stream = Preloads.aosee_sound
+				current_music.volume_db = -5
+				current_music.play()
+				aooni.connect("tree_exited", current_music.stop)
 		"spawn ilopulu":
 			print("spawn ilopulu")
 		"invisible abyss":

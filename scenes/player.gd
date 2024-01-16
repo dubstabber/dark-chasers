@@ -32,13 +32,15 @@ var transit_pos: Marker3D = null
 var is_climbing := false
 var killed_pos: Vector3
 var is_crounching := false
-var crouching_depth = -0.5
+var crouching_depth := -0.5
 var last_velocity = Vector2.ZERO
+var ground_type: String
 
-var walking = false
-var sprinting = false
-var crouching = false
-var sliding = false
+var walking := false
+var sprinting := false
+var crouching := false
+var sliding := false
+var can_step := true
 
 var slide_timer = 0.0
 var slide_timer_max = 1.0
@@ -61,7 +63,6 @@ var blocked_movement := false
 @onready var ray_cast_3d = $RayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
-@onready var footstep_sound = $FootstepSound
 @onready var ambient_music = $AmbientMusic
 
 
@@ -135,6 +136,12 @@ func _physics_process(delta):
 		if is_on_floor() and not sliding and input_dir != Vector2.ZERO:
 			head_bobbing_vector.y = sin(head_bobbing_index)
 			head_bobbing_vector.x = sin(head_bobbing_index/2)+0.5
+			
+			if head_bobbing_vector.y > -head_bobbing_current_intensity:
+				can_step = true
+			if head_bobbing_vector.y < -head_bobbing_current_intensity and can_step:
+				can_step = false
+				handle_footstep()
 			
 			eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y*(head_bobbing_current_intensity/2.0),delta * lerp_speed)
 			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x*head_bobbing_current_intensity,delta * lerp_speed)
@@ -222,6 +229,13 @@ func _physics_process(delta):
 			transform = transform.interpolate_with(transform.looking_at(killed_pos), lerp_speed * delta)
 			move_and_slide()
 			death_throw -= 0.1
+
+func handle_footstep():
+	match ground_type:
+		"dirt":
+			Utils.play_footstep_sound(Preloads.dirt_footsteps.pick_random(), self)
+		"floor":
+			Utils.play_footstep_sound(Preloads.floor_footsteps.pick_random(), self)
 
 
 func kill(pos = null):

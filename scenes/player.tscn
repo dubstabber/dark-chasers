@@ -151,7 +151,5 @@ libraries = {
 "": SubResource("AnimationLibrary_scfly")
 }
 
-[node name="FootstepSound" type="AudioStreamPlayer3D" parent="."]
-
 [node name="AmbientMusic" type="AudioStreamPlayer3D" parent="."]
 volume_db = -34.0

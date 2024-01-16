@@ -1,4 +1,4 @@
-[gd_scene load_steps=433 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=535 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -948,6 +948,312 @@ size = Vector3(0.235, 204.97, 3.93105)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_liobl"]
 size = Vector3(91.5967, 0.1, 49.0291)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u7pcn"]
+size = Vector3(38.6455, 0.1, 2.88892)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5hvdc"]
+size = Vector3(38.6455, 0.1, 2.88892)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aqdy3"]
+size = Vector3(86.0449, 0.1, 3.57129)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vxgub"]
+size = Vector3(78.0154, 0.1, 15.8311)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7crfn"]
+size = Vector3(33.1506, 0.1, 15.8311)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fwyot"]
+size = Vector3(41.5996, 0.1, 15.8311)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f4ukk"]
+size = Vector3(8.79102, 0.1, 0.892578)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y5vt1"]
+size = Vector3(8.79102, 0.1, 0.892578)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fiism"]
+size = Vector3(1.29517, 0.1, 1.21582)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lmp4f"]
+size = Vector3(88.731, 0.1, 10.1641)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_akd3a"]
+size = Vector3(10.2012, 0.1, 11.8184)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j7s37"]
+size = Vector3(7.85547, 0.1, 3.34863)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_453yc"]
+size = Vector3(40.9393, 0.1, 4.40784)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l7ujw"]
+size = Vector3(8.80664, 0.1, 8.83643)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bkgjj"]
+size = Vector3(2.60059, 0.1, 3.29785)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lfd5n"]
+size = Vector3(8.2666, 0.1, 3.89429)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mgfbq"]
+size = Vector3(7.48743, 0.1, 5.73975)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bssa4"]
+size = Vector3(2.43555, 0.1, 1.10059)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j3cij"]
+size = Vector3(5.00098, 0.1, 1.19531)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dyaw4"]
+size = Vector3(1.2041, 0.1, 0.566162)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g5g5s"]
+size = Vector3(3.14258, 0.1, 5.20312)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m8qko"]
+size = Vector3(5.07031, 0.1, 1.24805)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_shyhg"]
+size = Vector3(2.83148, 0.1, 2.83783)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mk0bt"]
+size = Vector3(1.07031, 0.1, 2.56616)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qcyv5"]
+size = Vector3(2.44958, 0.1, 0.990417)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fvea6"]
+size = Vector3(0.530273, 0.1, 1.13306)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nefbi"]
+size = Vector3(1.22461, 0.1, 1.22119)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t4gs7"]
+size = Vector3(4.57043, 0.1, 8.80096)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r7nkg"]
+size = Vector3(2.20692, 0.1, 8.50877)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qb5wl"]
+size = Vector3(15.254, 0.1, 20.3967)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ekvn0"]
+size = Vector3(3.77828, 0.1, 2.47565)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yeoac"]
+size = Vector3(2.96679, 0.1, 1.53983)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gfvo8"]
+size = Vector3(0.595275, 0.1, 5.65763)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7udw8"]
+size = Vector3(4.75093, 0.1, 0.615701)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v1pt3"]
+size = Vector3(3.71361, 0.1, 6.27562)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7rlhm"]
+size = Vector3(0.710753, 0.1, 0.743736)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x51cb"]
+size = Vector3(4.41915, 0.1, 3.47219)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fwrns"]
+size = Vector3(1.34819, 0.1, 3.09376)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n78hj"]
+size = Vector3(1.05985, 0.1, 3.15283)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nkxcr"]
+size = Vector3(5.23288, 0.1, 3.70252)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jn2lu"]
+size = Vector3(5.03783, 0.1, 3.70252)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5741t"]
+size = Vector3(1.30743, 0.1, 0.873444)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pjpio"]
+size = Vector3(0.298194, 0.1, 1.13364)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_afv75"]
+size = Vector3(2.35623, 0.1, 0.766431)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6eh8w"]
+size = Vector3(1.6565, 0.1, 0.766431)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8b65w"]
+size = Vector3(2.45276, 0.1, 10.2915)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cbkjb"]
+size = Vector3(4.40754, 0.1, 5.70927)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ju17i"]
+size = Vector3(18.9339, 0.1, 4.32961)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_42qus"]
+size = Vector3(13.8761, 0.1, 3.07105)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hnpam"]
+size = Vector3(10.4798, 0.1, 6.01099)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hg2v6"]
+size = Vector3(10.4798, 0.1, 6.42535)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sfy3n"]
+size = Vector3(2.28553, 0.1, 1.10493)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o4ml2"]
+size = Vector3(1.58457, 0.1, 0.444187)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b7xt8"]
+size = Vector3(2.12374, 0.1, 0.561078)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_igslr"]
+size = Vector3(2.35802, 0.1, 1.06013)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wi3bm"]
+size = Vector3(1.7167, 0.1, 2.41054)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_skyi8"]
+size = Vector3(1.7167, 0.1, 2.41054)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s7h4o"]
+size = Vector3(4.32432, 0.1, 4.87607)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rfhmj"]
+size = Vector3(1.23855, 0.1, 7.56173)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3k6iw"]
+size = Vector3(2.46647, 0.1, 2.71164)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8edmr"]
+size = Vector3(6.36782, 0.1, 6.05357)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sjd25"]
+size = Vector3(1.69498, 0.1, 2.43612)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28anl"]
+size = Vector3(2.35825, 0.1, 5.31484)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mfvuf"]
+size = Vector3(2.30071, 0.1, 13.647)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mxos5"]
+size = Vector3(10.2289, 0.1, 11.9766)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cfmrk"]
+size = Vector3(2.28167, 0.1, 0.960879)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a2afv"]
+size = Vector3(2.50868, 0.1, 0.917733)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fetqy"]
+size = Vector3(1.19162, 0.1, 0.836918)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8mpwy"]
+size = Vector3(8.82696, 0.1, 7.51141)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6nkcp"]
+size = Vector3(13.385, 0.1, 5.63982)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8vrq5"]
+size = Vector3(4.33887, 0.1, 7.59098)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h68bg"]
+size = Vector3(1.83411, 0.1, 2.42815)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4a4w"]
+size = Vector3(1.83411, 0.1, 2.42815)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kg7re"]
+size = Vector3(24.1558, 0.1, 18.545)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d3w82"]
+size = Vector3(2.48981, 0.1, 0.890731)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_amytq"]
+size = Vector3(0.426713, 0.1, 0.450771)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dpc1s"]
+size = Vector3(0.202942, 0.1, 1.95072)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vk0w3"]
+size = Vector3(1.29321, 0.1, 1.95072)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v5a6x"]
+size = Vector3(1.54935, 0.1, 0.858125)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n3j2r"]
+size = Vector3(0.364143, 0.1, 0.321763)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hw54l"]
+size = Vector3(0.314884, 0.1, 0.160881)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8xygg"]
+size = Vector3(0.081841, 0.1, 0.471496)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_16pgn"]
+size = Vector3(0.081841, 0.1, 1.99538)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y78fj"]
+size = Vector3(37.7049, 0.1, 7.58991)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tqch8"]
+size = Vector3(11.4453, 0.1, 8.53761)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vb217"]
+size = Vector3(8.79247, 0.1, 9.21149)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_litc5"]
+size = Vector3(1.81093, 0.1, 2.43161)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p7p3x"]
+size = Vector3(3.78525, 0.1, 1.50201)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d17qk"]
+size = Vector3(1.251, 0.1, 0.950697)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uvnkn"]
+size = Vector3(8.56168, 0.1, 14.6334)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_amosn"]
+size = Vector3(4.05114, 0.1, 1.77056)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dswx6"]
+size = Vector3(4.05114, 0.1, 1.77056)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r1s8b"]
+size = Vector3(13.3595, 0.1, 18.493)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_byvva"]
+size = Vector3(7.63749, 0.1, 1.7607)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3dbhn"]
+size = Vector3(7.63749, 0.1, 2.16856)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iipya"]
+size = Vector3(1.53852, 0.1, 5.14985)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2ciwp"]
+size = Vector3(1.53852, 0.1, 5.14985)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kjeww"]
+size = Vector3(4.39513, 0.1, 3.14196)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s0rf1"]
+size = Vector3(1.55734, 0.1, 1.21762)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_06hdn"]
+size = Vector3(7.3023, 0.1, 7.66078)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8pwur"]
+size = Vector3(2.36057, 0.1, 1.08589)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o52am"]
+size = Vector3(3.80554, 0.1, 3.74859)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ehfr"]
 albedo_texture = ExtResource("15_emvb5")
@@ -2010,6 +2316,1006 @@ type = "dirt"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D"]
 shape = SubResource("BoxShape3D_liobl")
+
+[node name="Area3D2" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.4736, 202.256, -38.5818)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D2"]
+shape = SubResource("BoxShape3D_u7pcn")
+
+[node name="Area3D3" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72.1085, 202.256, -38.5818)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D3"]
+shape = SubResource("BoxShape3D_5hvdc")
+
+[node name="Area3D4" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.746, 202.256, -90.6671)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D4"]
+shape = SubResource("BoxShape3D_aqdy3")
+
+[node name="Area3D5" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126.469, 202.256, -98.0065)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D5"]
+shape = SubResource("BoxShape3D_vxgub")
+
+[node name="Area3D6" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.3784, 202.256, -110.795)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D6"]
+shape = SubResource("BoxShape3D_7crfn")
+
+[node name="Area3D7" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.5335, 202.256, -110.772)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D7"]
+shape = SubResource("BoxShape3D_fwyot")
+
+[node name="Area3D8" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3665, 202.256, -36.6444)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D8"]
+shape = SubResource("BoxShape3D_f4ukk")
+
+[node name="Area3D9" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.6982, 202.256, -36.6444)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D9"]
+shape = SubResource("BoxShape3D_y5vt1")
+
+[node name="Area3D10" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0436, 202.256, -39.457)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "dirt"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D10"]
+shape = SubResource("BoxShape3D_fiism")
+
+[node name="Area3D11" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.9405, 202.256, -97.6159)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "hard"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D11"]
+shape = SubResource("BoxShape3D_lmp4f")
+
+[node name="Area3D12" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.5719, 202.256, -109.494)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "hard"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D12"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.827148)
+shape = SubResource("BoxShape3D_akd3a")
+
+[node name="Area3D13" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0446, 202.256, -35.6543)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D13"]
+shape = SubResource("BoxShape3D_j7s37")
+
+[node name="Area3D14" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.2858, 202.256, -30.1205)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D14"]
+shape = SubResource("BoxShape3D_453yc")
+
+[node name="Area3D15" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.5495, 202.256, -25.9345)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D15"]
+shape = SubResource("BoxShape3D_l7ujw")
+
+[node name="Area3D16" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.257, 202.256, -19.7986)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D16"]
+shape = SubResource("BoxShape3D_bkgjj")
+
+[node name="Area3D17" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -71.6811, 202.256, -15.7258)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0146484, 0, 0.721558)
+shape = SubResource("BoxShape3D_lfd5n")
+
+[node name="Area3D18" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.7863, 202.256, -19.8166)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "floor"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D18"]
+shape = SubResource("BoxShape3D_mgfbq")
+
+[node name="Area3D19" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.7694, 202.256, -33.2931)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D19"]
+shape = SubResource("BoxShape3D_mgfbq")
+
+[node name="Area3D20" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.7836, 202.737, -13.7892)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D20"]
+shape = SubResource("BoxShape3D_bssa4")
+
+[node name="Area3D21" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72.6341, 202.907, -13.757)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D21"]
+shape = SubResource("BoxShape3D_j3cij")
+
+[node name="Area3D22" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.2183, 203.205, -16.6455)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D22"]
+shape = SubResource("BoxShape3D_dyaw4")
+
+[node name="Area3D23" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.83, 202.891, -24.5926)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D23"]
+shape = SubResource("BoxShape3D_g5g5s")
+
+[node name="Area3D24" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4372, 202.891, -21.1499)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D24"]
+shape = SubResource("BoxShape3D_m8qko")
+
+[node name="Area3D25" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.1807, 202.683, -33.2883)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D25"]
+shape = SubResource("BoxShape3D_shyhg")
+
+[node name="Area3D26" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.1236, 203.068, -33.2883)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D26"]
+transform = Transform3D(0.895113, 0.445839, 0, -0.445839, 0.895113, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("BoxShape3D_mk0bt")
+
+[node name="Area3D27" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.2683, 203.057, -35.631)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D27"]
+transform = Transform3D(1, 0, 0, 0, 0.899207, -0.437524, 0, 0.437524, 0.899207, 0, 0, 0)
+shape = SubResource("BoxShape3D_qcyv5")
+
+[node name="Area3D28" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72.3755, 203.684, -33.2949)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D28"]
+shape = SubResource("BoxShape3D_fvea6")
+
+[node name="Area3D29" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0242, 202.25, -38.0368)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D29"]
+shape = SubResource("BoxShape3D_nefbi")
+
+[node name="Area3D30" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.1325, 202.244, -23.5132)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D30"]
+shape = SubResource("BoxShape3D_t4gs7")
+
+[node name="Area3D31" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.8176, 203.362, -23.6025)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D31"]
+transform = Transform3D(1, 0, 0, 0, 0.963649, 0.267171, 0, -0.267171, 0.963649, 0, 0, 0)
+shape = SubResource("BoxShape3D_r7nkg")
+
+[node name="Area3D32" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.1888, 202.242, -13.115)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D32"]
+shape = SubResource("BoxShape3D_qb5wl")
+
+[node name="Area3D33" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9373, 202.236, -24.6251)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D33"]
+shape = SubResource("BoxShape3D_ekvn0")
+
+[node name="Area3D34" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.4786, 202.737, -17.761)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D34"]
+shape = SubResource("BoxShape3D_yeoac")
+
+[node name="Area3D35" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.191, 203.509, -17.7509)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D35"]
+shape = SubResource("BoxShape3D_gfvo8")
+
+[node name="Area3D36" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61.2791, 203.464, -15.2127)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D36"]
+shape = SubResource("BoxShape3D_7udw8")
+
+[node name="Area3D37" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.409, 202.878, -17.6356)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D37"]
+shape = SubResource("BoxShape3D_v1pt3")
+
+[node name="Area3D38" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.3202, 202.691, -21.2086)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D38"]
+shape = SubResource("BoxShape3D_7rlhm")
+
+[node name="Area3D39" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2794, 202.237, -25.1044)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D39"]
+shape = SubResource("BoxShape3D_x51cb")
+
+[node name="Area3D40" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3198, 202.232, -24.9791)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "floor"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D40"]
+shape = SubResource("BoxShape3D_fwrns")
+
+[node name="Area3D41" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.0443, 202.705, -24.9673)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D41"]
+shape = SubResource("BoxShape3D_n78hj")
+
+[node name="Area3D42" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.0483, 202.239, -30.3695)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D42"]
+shape = SubResource("BoxShape3D_nkxcr")
+
+[node name="Area3D43" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.9349, 202.239, -34.2311)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "floor"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D43"]
+shape = SubResource("BoxShape3D_jn2lu")
+
+[node name="Area3D44" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.1477, 202.869, -28.9677)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D44"]
+shape = SubResource("BoxShape3D_5741t")
+
+[node name="Area3D45" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.3351, 203.187, -35.1996)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D45"]
+shape = SubResource("BoxShape3D_pjpio")
+
+[node name="Area3D46" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.2786, 203.001, -23.8767)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D46"]
+shape = SubResource("BoxShape3D_afv75")
+
+[node name="Area3D47" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.7363, 202.873, -18.719)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D47"]
+shape = SubResource("BoxShape3D_6eh8w")
+
+[node name="Area3D48" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21171, 202.672, 111.967)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D48"]
+transform = Transform3D(1, 0, 0, 0, 0.891252, 0.453508, 0, -0.453508, 0.891252, 0, 0, 0)
+shape = SubResource("BoxShape3D_8b65w")
+
+[node name="Area3D49" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.78171, 204.804, 114.025)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D49"]
+shape = SubResource("BoxShape3D_cbkjb")
+
+[node name="Area3D50" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.92184, 204.804, 108.789)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D50"]
+shape = SubResource("BoxShape3D_ju17i")
+
+[node name="Area3D51" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.48398, 204.804, 118.391)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D51"]
+shape = SubResource("BoxShape3D_42qus")
+
+[node name="Area3D52" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.1977, 204.804, 124.031)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D52"]
+shape = SubResource("BoxShape3D_hnpam")
+
+[node name="Area3D53" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.366599, 204.804, 124.373)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D53"]
+shape = SubResource("BoxShape3D_hg2v6")
+
+[node name="Area3D54" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.61535, 205.741, 127.027)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D54"]
+shape = SubResource("BoxShape3D_sfy3n")
+
+[node name="Area3D55" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.92758, 206.23, 127.383)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D55"]
+shape = SubResource("BoxShape3D_o4ml2")
+
+[node name="Area3D56" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2692, 206.533, 127.346)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D56"]
+shape = SubResource("BoxShape3D_b7xt8")
+
+[node name="Area3D57" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.14198, 205.229, 127.015)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D57"]
+shape = SubResource("BoxShape3D_igslr")
+
+[node name="Area3D58" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.83661, 205.27, 122.204)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D58"]
+shape = SubResource("BoxShape3D_wi3bm")
+
+[node name="Area3D59" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.234, 205.27, 122.231)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D59"]
+shape = SubResource("BoxShape3D_skyi8")
+
+[node name="Area3D60" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.82319, 204.779, 113.43)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D60"]
+shape = SubResource("BoxShape3D_s7h4o")
+
+[node name="Area3D61" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.68852, 204.807, 108.854)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D61"]
+shape = SubResource("BoxShape3D_rfhmj")
+
+[node name="Area3D62" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.61405, 204.807, 104.835)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D62"]
+shape = SubResource("BoxShape3D_3k6iw")
+
+[node name="Area3D63" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.2468, 205.155, 100.011)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D63"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00549603, 0, -0.023735)
+shape = SubResource("BoxShape3D_8edmr")
+
+[node name="Area3D64" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.51258, 205.272, 114.624)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D64"]
+shape = SubResource("BoxShape3D_sjd25")
+
+[node name="Area3D65" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0305, 201.448, 108.659)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D65"]
+transform = Transform3D(1, 0, 0, 0, 0.965295, 0.261162, 0, -0.261162, 0.965295, 0, 0, 0)
+shape = SubResource("BoxShape3D_28anl")
+
+[node name="Area3D66" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0609, 202.246, 118.504)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D66"]
+shape = SubResource("BoxShape3D_mfvuf")
+
+[node name="Area3D67" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0065, 202.199, 132.186)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D67"]
+shape = SubResource("BoxShape3D_mxos5")
+
+[node name="Area3D68" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.1631, 202.705, 135.986)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D68"]
+shape = SubResource("BoxShape3D_cfmrk")
+
+[node name="Area3D69" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.9131, 202.848, 136.215)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D69"]
+shape = SubResource("BoxShape3D_a2afv")
+
+[node name="Area3D70" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.3766, 202.866, 127.179)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D70"]
+shape = SubResource("BoxShape3D_fetqy")
+
+[node name="Area3D71" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.8914, 202.194, 119.964)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D71"]
+shape = SubResource("BoxShape3D_8mpwy")
+
+[node name="Area3D72" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1396, 202.235, 113.223)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D72"]
+shape = SubResource("BoxShape3D_6nkcp")
+
+[node name="Area3D73" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.5833, 202.235, 119.943)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D73"]
+shape = SubResource("BoxShape3D_8vrq5")
+
+[node name="Area3D74" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.7636, 202.664, 111.681)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D74"]
+shape = SubResource("BoxShape3D_h68bg")
+
+[node name="Area3D75" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6286, 202.664, 111.646)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D75"]
+shape = SubResource("BoxShape3D_g4a4w")
+
+[node name="Area3D76" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.2749, 202.208, 115.064)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D76"]
+shape = SubResource("BoxShape3D_kg7re")
+
+[node name="Area3D77" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -69.4049, 202.845, 122.057)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D77"]
+shape = SubResource("BoxShape3D_d3w82")
+
+[node name="Area3D78" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.7349, 202.663, 114.698)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D78"]
+shape = SubResource("BoxShape3D_amytq")
+
+[node name="Area3D79" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4176, 202.867, 114.764)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D79"]
+shape = SubResource("BoxShape3D_dpc1s")
+
+[node name="Area3D80" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.2687, 203.154, 114.811)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D80"]
+shape = SubResource("BoxShape3D_vk0w3")
+
+[node name="Area3D81" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.4896, 203.154, 115.349)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D81"]
+shape = SubResource("BoxShape3D_v5a6x")
+
+[node name="Area3D82" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.0628, 203.154, 114.759)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D82"]
+shape = SubResource("BoxShape3D_n3j2r")
+
+[node name="Area3D83" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3107, 203.154, 114.835)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D83"]
+shape = SubResource("BoxShape3D_hw54l")
+
+[node name="Area3D84" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.9556, 203.154, 114.357)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D84"]
+shape = SubResource("BoxShape3D_8xygg")
+
+[node name="Area3D85" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.5926, 203.164, 114.797)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D85"]
+shape = SubResource("BoxShape3D_16pgn")
+
+[node name="Area3D86" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.143, 202.217, 69.4268)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D86"]
+shape = SubResource("BoxShape3D_y78fj")
+
+[node name="Area3D87" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0726, 202.242, 78.5116)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D87"]
+shape = SubResource("BoxShape3D_tqch8")
+
+[node name="Area3D88" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.332, 202.204, 88.4463)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D88"]
+shape = SubResource("BoxShape3D_vb217")
+
+[node name="Area3D89" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.4328, 202.678, 81.6211)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D89"]
+shape = SubResource("BoxShape3D_litc5")
+
+[node name="Area3D90" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.2077, 202.86, 75.0322)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D90"]
+shape = SubResource("BoxShape3D_p7p3x")
+
+[node name="Area3D91" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0677, 202.726, 77.7625)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D91"]
+shape = SubResource("BoxShape3D_d17qk")
+
+[node name="Area3D92" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.1803, 202.238, 81.0212)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D92"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.296345, 0, -0.378021)
+shape = SubResource("BoxShape3D_uvnkn")
+
+[node name="Area3D93" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.1628, 202.56, 89.6091)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D93"]
+shape = SubResource("BoxShape3D_amosn")
+
+[node name="Area3D94" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.591, 202.56, 89.584)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D94"]
+shape = SubResource("BoxShape3D_dswx6")
+
+[node name="Area3D95" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.2832, 202.23, 83.6896)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D95"]
+shape = SubResource("BoxShape3D_r1s8b")
+
+[node name="Area3D96" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3834, 202.234, 95.0752)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D96"]
+shape = SubResource("BoxShape3D_byvva")
+
+[node name="Area3D97" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3834, 202.234, 100.319)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D97"]
+shape = SubResource("BoxShape3D_3dbhn")
+
+[node name="Area3D98" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.4168, 202.234, 96.6299)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D98"]
+shape = SubResource("BoxShape3D_iipya")
+
+[node name="Area3D99" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.3197, 202.234, 96.6299)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D99"]
+shape = SubResource("BoxShape3D_2ciwp")
+
+[node name="Area3D100" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3864, 202.234, 97.6022)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "carpet"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D100"]
+shape = SubResource("BoxShape3D_kjeww")
+
+[node name="Area3D101" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.7323, 202.234, 97.6022)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D101"]
+shape = SubResource("BoxShape3D_s0rf1")
+
+[node name="Area3D102" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2577, 202.234, 99.4407)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D102"]
+shape = SubResource("BoxShape3D_06hdn")
+
+[node name="Area3D103" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7971, 202.726, 100.777)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "wood"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D103"]
+shape = SubResource("BoxShape3D_8pwur")
+
+[node name="Area3D104" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.4178, 202.082, 100.777)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+type = "hard"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D104"]
+shape = SubResource("BoxShape3D_o52am")
 
 [node name="PlayerSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

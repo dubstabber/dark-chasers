@@ -92,3 +92,7 @@ hit={
 3d_physics/layer_3="Walls"
 3d_physics/layer_4="Objects"
 3d_physics/layer_6="Walls for enemies"
+
+[rendering]
+
+anti_aliasing/quality/msaa_3d=1

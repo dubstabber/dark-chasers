@@ -4412,7 +4412,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.4335, 203.559, -98.6044)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.0839, 202.972, 78.4463)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

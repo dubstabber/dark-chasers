@@ -65,7 +65,7 @@ func respawn(p):
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
-	p.current_room = "FirstFloor"
+	p.current_room = "BigHall"
 
 
 func handle_transition(body, area3dname, marker):
@@ -123,7 +123,17 @@ func _key_body_entered(body, key_type, event):
 			for player in players.get_children():
 				player.blocked_movement = true
 			$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera2.set_current(true)
-			await get_tree().create_timer(5.0).timeout
+			await get_tree().create_timer(3.0).timeout
+			Utils.play_sound(Preloads.bar_shake, aooni)
+			await get_tree().create_timer(0.6).timeout
+			Utils.play_sound(Preloads.bar_shake, aooni)
+			await get_tree().create_timer(0.25).timeout
+			Utils.play_sound(Preloads.bar_shake, aooni)
+			await get_tree().create_timer(0.25).timeout
+			Utils.play_sound(Preloads.bar_shake, aooni)
+			await get_tree().create_timer(0.5).timeout
+			Utils.play_sound(Preloads.bar_shake, aooni)
+			await get_tree().create_timer(2.5).timeout
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsGiveup.position)
 		"teleport to void":
 			body.position = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners/VoidSpawn.position

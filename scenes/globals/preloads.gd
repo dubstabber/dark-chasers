@@ -29,6 +29,8 @@ var button_down_1 := preload("res://images/textures/BSW01B.png")
 var button_up_5 := preload("res://images/textures/BSW05A.png")
 var button_down_5 := preload("res://images/textures/BSW05B.png")
 
+var water_splash := preload("res://sounds/footsteps/water/DSSPLSML.wav")
+
 var carpet_footsteps: Array
 var dirt_footsteps: Array
 var floor_footsteps: Array

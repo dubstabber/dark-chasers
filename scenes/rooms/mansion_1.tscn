@@ -1,4 +1,4 @@
-[gd_scene load_steps=535 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=538 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -144,6 +144,7 @@
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/footstepArea.gd" id="142_itnox"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
+[ext_resource type="Script" path="res://scenes/objects/waterSplash.gd" id="143_jfxlu"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
 [ext_resource type="Script" path="res://scenes/objects/Button.gd" id="144_26gxq"]
 [ext_resource type="Script" path="res://scenes/objects/AreaEvent.gd" id="146_vhxkd"]
@@ -1255,6 +1256,12 @@ size = Vector3(2.36057, 0.1, 1.08589)
 [sub_resource type="BoxShape3D" id="BoxShape3D_o52am"]
 size = Vector3(3.80554, 0.1, 3.74859)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_6wobo"]
+size = Vector3(17.7165, 0.1, 8.03834)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f4ndm"]
+size = Vector3(14.0607, 0.1, 7.70124)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ehfr"]
 albedo_texture = ExtResource("15_emvb5")
 
@@ -1323,6 +1330,8 @@ size = Vector3(3.34668, 1.1814, 0.279541)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_byjnb")
@@ -3317,6 +3326,64 @@ type = "hard"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D104"]
 shape = SubResource("BoxShape3D_o52am")
 
+[node name="Area3D105" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.5629, 202.859, 114.376)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D105"]
+shape = SubResource("BoxShape3D_6wobo")
+
+[node name="Area3D106" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.4156, 199.888, 114.217)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("142_itnox")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D106"]
+shape = SubResource("BoxShape3D_f4ndm")
+
+[node name="Area3D107" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.5866, 201.718, 80.3412)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("143_jfxlu")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D107"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(-7.06405, 1.19638, -4.34332, -0.374435, -2.03983, -0.93541, 2.08206, -0.990044, 4.00035, -0.684334, 5.46706, -0.228043, 6.77435, 0.63295, 7.37076, 1.2467, -7.33894, 1.23621)
+
+[node name="Area3D108" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 101.052, 201.744, 80.7943)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("143_jfxlu")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D108"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(-1.73368, 0.9375, -1.09949, -0.357468, -0.436295, -0.819717, 0.67334, -1.48612, 1.29431, -2.05412, 1.2806, 0.961899)
+
+[node name="Area3D109" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99.6763, 201.722, 74.1497)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("143_jfxlu")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D109"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(-1.44596, -1.8532, -0.13192, -2.45521, 0.972404, -1.87946, 1.47829, -0.233574, 0.847153, 1.55785, 0.266731, 2.11168, -1.45835, 2.59246)
+
+[node name="Area3D110" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 101.397, 201.716, 68.9985)
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("143_jfxlu")
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D110"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+polygon = PackedVector2Array(0.778633, 2.83841, -0.392319, 1.54995, -0.973915, 0.512444, -0.344582, -0.836266, -0.929123, -1.47028, -0.387802, -2.60468, 0.796188, -3.18118)
+
 [node name="PlayerSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
@@ -4324,7 +4391,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.3692, 202.512, -30.2679)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89.3572, 203.04, 79.4232)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

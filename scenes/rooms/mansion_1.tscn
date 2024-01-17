@@ -3339,7 +3339,7 @@ shape = SubResource("BoxShape3D_6wobo")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.4156, 199.888, 114.217)
 collision_layer = 8
 collision_mask = 3
-script = ExtResource("142_itnox")
+script = ExtResource("143_jfxlu")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/FootstepAreas/Area3D106"]
 shape = SubResource("BoxShape3D_f4ndm")

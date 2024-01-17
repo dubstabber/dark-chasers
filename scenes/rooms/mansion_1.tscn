@@ -1,4 +1,4 @@
-[gd_scene load_steps=538 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=539 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -947,6 +947,9 @@ size = Vector3(0.235, 204.97, 3.93105)
 [sub_resource type="BoxShape3D" id="BoxShape3D_0jv3i"]
 size = Vector3(0.235, 204.97, 3.93105)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_wfras"]
+size = Vector3(0.235, 3.06616, 0.990234)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_liobl"]
 size = Vector3(91.5967, 0.1, 49.0291)
 
@@ -1330,8 +1333,8 @@ size = Vector3(3.34668, 1.1814, 0.279541)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
-metadata/_edit_group_ = true
 metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_byjnb")
@@ -2306,6 +2309,24 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D7"]
 shape = SubResource("BoxShape3D_0jv3i")
+
+[node name="StaticBody3D8" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.9962, 204.277, -107.555)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionPolygon3D" type="CollisionPolygon3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D8"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.31657, 0.523743, -0.0499802)
+depth = 5.0
+polygon = PackedVector2Array(-7.71265, 2.24102, -3.83021, 3.50928, 4.38507, 3.74816, 14.2463, 3.65178)
+
+[node name="StaticBody3D9" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.4272, 203.754, -104.256)
+collision_layer = 8
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers/StaticBody3D9"]
+shape = SubResource("BoxShape3D_wfras")
 
 [node name="Lights" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -4391,7 +4412,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89.3572, 203.04, 79.4232)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.4335, 203.559, -98.6044)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

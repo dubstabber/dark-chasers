@@ -65,7 +65,7 @@ func respawn(p):
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
-	p.current_room = "FirstFloor"
+	p.current_room = "BigHall"
 
 
 func handle_transition(body, area3dname, marker):

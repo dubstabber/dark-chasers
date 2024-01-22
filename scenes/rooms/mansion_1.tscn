@@ -2256,11 +2256,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
 
-[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.9947, 202.741, -29.7449)
-current_room = "FirstFloor"
-is_wandering = true
-
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
@@ -4312,6 +4307,7 @@ shape = SubResource("BoxShape3D_rps76")
 [node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.896, 203.717, 83.9186)
 script = ExtResource("146_vhxkd")
+event_name = "open ao oni behind wide door"
 door_to_open = NodePath("../../Doors/WideDoor")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent3"]

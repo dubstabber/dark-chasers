@@ -122,6 +122,7 @@ func _key_body_entered(body, key_type, event):
 			aooni.connect("tree_exited", _on_custom_event.bind("ao oni gave up"))
 			for player in players.get_children():
 				player.blocked_movement = true
+			aooni.makepath()
 			$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera2.set_current(true)
 			await get_tree().create_timer(3.0).timeout
 			Utils.play_sound(Preloads.bar_shake, aooni)
@@ -212,6 +213,10 @@ func _handle_area_event(body: CharacterBody3D, event):
 				current_music.volume_db = -5
 				current_music.play()
 				aooni.connect("tree_exited", current_music.stop)
+		"open ao oni behind wide door":
+			current_music.stream = Preloads.aosee_sound
+			current_music.volume_db = -5
+			current_music.play()
 		"spawn ilopulu":
 			print("spawn ilopulu")
 		"invisible abyss":

@@ -18,7 +18,6 @@ var direction: Vector3
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var rotation_controller = $RotationController
 @onready var animated_sprite_3d = $RotationController/AnimatedSprite3D
-@onready var sight_raycast = $NoticeRay
 @onready var interaction_ray = $RotationController/Interaction
 @onready var wandering_timer = $Timers/WanderingTimer
 
@@ -33,11 +32,13 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 		
+	if not current_target:
+		check_targets()
 	if current_target or waypoints:
 		var next_pos = nav.get_next_path_position()
 		if global_position != next_pos and is_on_floor():
-			#rotation_controller.look_at(next_pos, Vector3(0.01, 0.91, 0.01))
 			rotation_controller.look_at(next_pos)
+			#rotation_controller.look_at(next_pos, Vector3(0.01, 0.91, 0.01))
 		direction = (next_pos - global_position).normalized()
 		velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
 	elif is_wandering:
@@ -66,17 +67,22 @@ func animateSprite():
 
 
 func check_targets():
+	var space_state = get_world_3d().direct_space_state
 	if map.players:
 		for target in map.players.get_children():
-			sight_raycast.target_position = target.camera_3d.global_position - global_position
-			sight_raycast.force_raycast_update()
+			var params = PhysicsRayQueryParameters3D.new()
+			params.from = global_position
+			params.to = target.camera_3d.global_position
+			params.exclude = [self]
+			params.collision_mask = collision_mask
+			var result = space_state.intersect_ray(params)
 			if (
-				sight_raycast.is_colliding()
-				and sight_raycast.get_collider().is_in_group("player")
+				result
+				and result.collider.is_in_group("player")
 				and not current_target
 				and not target.killed
 			):
-				current_target = sight_raycast.get_collider()
+				current_target = result.collider
 
 
 func makepath() -> void:
@@ -124,7 +130,7 @@ func add_disappear_zone(area):
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
 	if distance_to_target < 10:
-		find_path_timer.wait_time = 0.1
+		makepath()
 	elif distance_to_target < 20:
 		find_path_timer.wait_time = 0.2
 	elif distance_to_target < 35:
@@ -134,11 +140,6 @@ func _on_find_path_timer_timeout():
 	else:
 		find_path_timer.wait_time = 1.7
 	makepath()
-
-
-func _on_sight_timer_timeout():
-	if not current_target:
-		check_targets()
 
 
 func _on_kill_zone_body_entered(body):
@@ -165,14 +166,14 @@ func _on_interaction_timer_timeout():
 			parent.open(collider.name)
 		elif is_wandering:
 			direction = Vector3(-direction.x, 0, -direction.z)
-			if global_position != (transform.origin + velocity) and is_on_floor():
+			if global_position != global_position + direction and is_on_floor():
 				rotation_controller.look_at(global_position + direction)
 
 
 func _on_wandering_timer_timeout():
 	wandering_timer.wait_time = randf_range(0.5, 3)
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
-	if global_position != (transform.origin + velocity) and is_on_floor():
+	if global_position != global_position + direction and is_on_floor():
 		rotation_controller.look_at(global_position + direction)
 
 

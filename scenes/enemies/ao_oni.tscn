@@ -109,15 +109,12 @@ animation = &"stay-back"
 frame_progress = 1.0
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 12
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_dl8o4")
-
-[node name="FindPathTimer" type="Timer" parent="."]
-wait_time = 0.3
-autostart = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_postprocessing = 1
@@ -126,24 +123,34 @@ path_postprocessing = 1
 target_position = Vector3(0, 0, 200)
 collision_mask = 13
 
-[node name="InteractionTimer" type="Timer" parent="."]
-wait_time = 0.6
-autostart = true
-
-[node name="sightTimer" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
-
 [node name="KillZone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.456569, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
 shape = SubResource("CapsuleShape3D_qvs6v")
 
-[connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]
+[node name="Timers" type="Node" parent="."]
+
+[node name="sightTimer" type="Timer" parent="Timers"]
+wait_time = 0.5
+autostart = true
+
+[node name="InteractionTimer" type="Timer" parent="Timers"]
+wait_time = 0.6
+autostart = true
+
+[node name="FindPathTimer" type="Timer" parent="Timers"]
+wait_time = 0.3
+autostart = true
+
+[node name="WanderingTimer" type="Timer" parent="Timers"]
+one_shot = true
+
 [connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
 [connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
-[connection signal="timeout" from="InteractionTimer" to="." method="_on_interaction_timer_timeout"]
-[connection signal="timeout" from="sightTimer" to="." method="_on_sight_timer_timeout"]
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
+[connection signal="timeout" from="Timers/sightTimer" to="." method="_on_sight_timer_timeout"]
+[connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
+[connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]
+[connection signal="timeout" from="Timers/WanderingTimer" to="." method="_on_wandering_timer_timeout"]

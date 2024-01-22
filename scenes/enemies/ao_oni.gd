@@ -5,6 +5,7 @@ const ACCEL = 10
 
 @export var current_room: String
 @export var disappear_zones: Array[Area3D]
+@export var is_wandering: bool = false
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var map: Node3D
@@ -14,11 +15,12 @@ var jump_speed: float = 0
 var direction: Vector3
 
 @onready var nav = $NavigationAgent3D
-@onready var find_path_timer = $FindPathTimer
+@onready var find_path_timer = $Timers/FindPathTimer
 @onready var rotation_controller = $RotationController
 @onready var animated_sprite_3d = $RotationController/AnimatedSprite3D
 @onready var sight_raycast = $NoticeRay
-@onready var interaction = $RotationController/Interaction
+@onready var interaction_ray = $RotationController/Interaction
+@onready var wandering_timer = $Timers/WanderingTimer
 
 
 func _ready():
@@ -36,8 +38,11 @@ func _physics_process(delta):
 		if global_position != next_pos and is_on_floor():
 			#rotation_controller.look_at(next_pos, Vector3(0.01, 0.91, 0.01))
 			rotation_controller.look_at(next_pos)
-
 		direction = (next_pos - global_position).normalized()
+		velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
+	elif is_wandering:
+		if wandering_timer.is_stopped():
+			wandering_timer.start()
 		velocity = velocity.lerp(direction * (SPEED + jump_speed), ACCEL * delta)
 	animateSprite()
 	move_and_slide()
@@ -69,6 +74,7 @@ func check_targets():
 				sight_raycast.is_colliding()
 				and sight_raycast.get_collider().is_in_group("player")
 				and not current_target
+				and not target.killed
 			):
 				current_target = sight_raycast.get_collider()
 
@@ -152,11 +158,22 @@ func _on_navigation_agent_3d_waypoint_reached(_details):
 
 
 func _on_interaction_timer_timeout():
-	var collider = interaction.get_collider()
+	var collider = interaction_ray.get_collider()
 	if collider:
 		var parent = collider.get_parent()
 		if parent.is_in_group("door") and parent.can_manual_open:
 			parent.open(collider.name)
+		elif is_wandering:
+			direction = Vector3(-direction.x, 0, -direction.z)
+			if global_position != (transform.origin + velocity) and is_on_floor():
+				rotation_controller.look_at(global_position + direction)
+
+
+func _on_wandering_timer_timeout():
+	wandering_timer.wait_time = randf_range(0.5, 3)
+	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
+	if global_position != (transform.origin + velocity) and is_on_floor():
+		rotation_controller.look_at(global_position + direction)
 
 
 func _on_navigation_agent_3d_target_reached():

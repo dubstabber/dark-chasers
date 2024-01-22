@@ -1,4 +1,4 @@
-[gd_scene load_steps=539 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=541 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -1316,6 +1316,9 @@ size = Vector3(140.574, 1, 99.8127)
 [sub_resource type="BoxShape3D" id="BoxShape3D_nes26"]
 size = Vector3(1.2207, 2.48145, 0.287354)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_3d1tp"]
+size = Vector3(7.66479, 2.48145, 0.287354)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
 
@@ -1331,10 +1334,11 @@ size = Vector3(2.70093, 1, 0.279541)
 [sub_resource type="BoxShape3D" id="BoxShape3D_q14qu"]
 size = Vector3(3.34668, 1.1814, 0.279541)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_xwmtc"]
+size = Vector3(1.255, 1.88648, 0.279541)
+
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
-metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_byjnb")
@@ -2251,6 +2255,11 @@ shape = SubResource("BoxShape3D_wkois")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
+
+[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.9947, 202.741, -29.7449)
+current_room = "FirstFloor"
+is_wandering = true
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -4342,6 +4351,14 @@ event_name = "change to next map"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent7"]
 shape = SubResource("BoxShape3D_nes26")
 
+[node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 94.5008)
+script = ExtResource("146_vhxkd")
+door_to_open = NodePath("../../Doors/WardrobeDoor4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent8"]
+shape = SubResource("BoxShape3D_3d1tp")
+
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="CrawlingAoOniArea" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
@@ -4384,6 +4401,14 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
 shape = SubResource("BoxShape3D_q14qu")
 
+[node name="SmallHallway" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3699, 203.195, 93.7171)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/SmallHallway"]
+shape = SubResource("BoxShape3D_xwmtc")
+
 [node name="TextureFixes" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
@@ -4412,7 +4437,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.0839, 202.972, 78.4463)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.8607, 202.953, -48.2521)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

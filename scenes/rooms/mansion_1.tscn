@@ -2256,6 +2256,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
 
+[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0981, 202.907, -65.7228)
+
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
@@ -4111,6 +4114,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.7951)
 script = ExtResource("143_8e0go")
 time_to_close = 4.0
 back_locked = true
+can_interrupt = false
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/HingeDoor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.64, 0, 0)
@@ -4433,7 +4437,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.8607, 202.953, -48.2521)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.8607, 202.953, -30.6319)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

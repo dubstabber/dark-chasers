@@ -7,6 +7,7 @@ extends Node3D
 @export var can_manual_open := true
 @export var front_locked := false
 @export var back_locked := false
+@export var can_interrupt := true
 
 var is_opening := false
 var tween: Tween
@@ -17,17 +18,22 @@ func open(side = ""):
 		Utils.play_sound(Preloads.door_locked_sound, self)
 	elif side == "BackSide" and back_locked:
 		Utils.play_sound(Preloads.door_locked_sound, self)
-	else:
-		is_opening = not is_opening
-		if tween and tween.is_running() and not open_only:
-			tween.stop()
-		if is_opening:
+	elif not is_opening:
+			is_opening = true
+			if tween and tween.is_running() and not open_only:
+				tween.stop()
 			tween = create_tween()
 			await tween.tween_property(self, "rotation_degrees:y", opened_angle, move_speed).finished
 			if not open_only:
 				await get_tree().create_timer(time_to_close).timeout
-				open()
-		elif not is_opening and not open_only:
-			tween = create_tween()
-			await tween.tween_property(self, "rotation_degrees:y", 0.0, move_speed).finished
+				if is_opening:
+					tween = create_tween()
+					await tween.tween_property(self, "rotation_degrees:y", 0.0, move_speed).finished
+					is_opening = false
+	elif can_interrupt and is_opening and not open_only:
+		if tween and tween.is_running():
+			tween.stop()
+		tween = create_tween()
+		await tween.tween_property(self, "rotation_degrees:y", 0.0, move_speed).finished
+		is_opening = false
 

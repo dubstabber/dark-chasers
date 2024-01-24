@@ -2247,7 +2247,7 @@ collision_layer = 8
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder"]
 shape = SubResource("BoxShape3D_wkois")
 
-[node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+[node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["players"]]
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -2258,6 +2258,7 @@ disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
 
 [node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0981, 202.907, -65.7228)
+current_room = "FirstFloor"
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

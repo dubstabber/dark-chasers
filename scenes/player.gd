@@ -18,7 +18,6 @@ const HEAD_BOBBING_CROUNCHING_INTENSITY = 0.05
 var mouse_sens := 0.25
 var current_speed := 5.0
 var current_room: String
-var map: Node3D
 var direction := Vector3.ZERO
 var fov := false
 var lerp_speed := 10.0
@@ -67,7 +66,6 @@ var blocked_movement := false
 
 
 func _ready():
-	map = get_tree().get_first_node_in_group("map")
 	camera_3d.fov = 85
 
 

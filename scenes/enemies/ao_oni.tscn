@@ -106,7 +106,6 @@ billboard = 2
 shaded = true
 sprite_frames = SubResource("SpriteFrames_7k82f")
 animation = &"stay-back"
-frame_progress = 1.0
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)

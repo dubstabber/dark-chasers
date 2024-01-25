@@ -1,4 +1,4 @@
-[gd_scene load_steps=541 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=542 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -143,6 +143,7 @@
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="141_yrprg"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/footstepArea.gd" id="142_itnox"]
+[ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemies/image_enemy.tscn" id="142_m4gs3"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
 [ext_resource type="Script" path="res://scenes/objects/waterSplash.gd" id="143_jfxlu"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
@@ -2251,16 +2252,17 @@ shape = SubResource("BoxShape3D_wkois")
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("141_yrprg")]
+[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
-disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
-is_wandering = null
 
 [node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.4698, 202.907, -30.5652)
 current_room = "FirstFloor"
 is_wandering = true
+
+[node name="ImageEnemy" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("142_m4gs3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.7813, 203.226, -69.548)
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

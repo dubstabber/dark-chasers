@@ -8,10 +8,11 @@ var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
 var current_target: CharacterBody3D
 var waypoints: Array
-var jump_speed: float = 0
+var jump_speed := 0.0
 var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
+var is_flyting := false
 
 var speed: float
 var accel: float
@@ -45,6 +46,9 @@ func _physics_process(delta):
 				rotation_controller.look_at(next_pos)
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+			if current_target.killed:
+				current_target = null
+				velocity = Vector3.ZERO
 	elif is_wandering:
 		if wandering_timer.is_stopped():
 			wandering_timer.start()
@@ -160,6 +164,9 @@ func _on_navigation_agent_3d_target_reached():
 
 
 func _on_navigation_agent_3d_link_reached(details):
+	if details.owner.is_in_group("jump-up"):
+		velocity.y = 12
+		jump_speed = gravity
 	if details.owner.is_in_group("jump-down"):
 		jump_speed = gravity
 

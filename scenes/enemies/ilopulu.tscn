@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3 uid="uid://curr1hvhg2u61"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_0h1jq"]
+[ext_resource type="Script" path="res://scenes/enemies/ilopulu.gd" id="2_ci2av"]
+[ext_resource type="Texture2D" uid="uid://d28181lghvf1g" path="res://images/enemies/ilopulu/ILOPA0.png" id="3_gw83j"]
+[ext_resource type="Texture2D" uid="uid://2tagxmyilbhx" path="res://images/enemies/ilopulu/ILOPB0.png" id="4_o86ge"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rpvyw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_gw83j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_o86ge")
+}],
+"loop": true,
+"name": &"run",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_gw83j")
+}],
+"loop": false,
+"name": &"stay",
+"speed": 1.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6sv5x"]
+radius = 0.470444
+height = 1.74107
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dby8h"]
+radius = 0.621584
+height = 1.96106
+
+[node name="Ilopulu" instance=ExtResource("1_0h1jq")]
+script = ExtResource("2_ci2av")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20774, 0)
+billboard = 2
+shaded = true
+sprite_frames = SubResource("SpriteFrames_rpvyw")
+animation = &"stay"
+frame_progress = 1.0
+
+[node name="CollisionShape3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.992761, 0)
+shape = SubResource("CapsuleShape3D_6sv5x")
+
+[node name="NavigationAgent3D" parent="." index="2"]
+path_postprocessing = 1
+
+[node name="KillZone" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06513, 0)
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+shape = SubResource("CapsuleShape3D_dby8h")

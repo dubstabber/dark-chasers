@@ -1,4 +1,4 @@
-[gd_scene load_steps=542 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=541 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -143,7 +143,6 @@
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="141_yrprg"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/footstepArea.gd" id="142_itnox"]
-[ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemies/image_enemy.tscn" id="142_m4gs3"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
 [ext_resource type="Script" path="res://scenes/objects/waterSplash.gd" id="143_jfxlu"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
@@ -2256,14 +2255,6 @@ shape = SubResource("BoxShape3D_wkois")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
 
-[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.4698, 202.907, -30.5652)
-current_room = "FirstFloor"
-is_wandering = true
-
-[node name="ImageEnemy" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("142_m4gs3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.7813, 203.226, -69.548)
-
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]
@@ -3466,7 +3457,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.2008, 202.544, 86.861)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.584, 79.1308)
 
 [node name="IlopuluSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.071, 202.504, 28.379)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.071, 202.253, 28.379)
 
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -4135,7 +4126,7 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.28, 2.55, 0.06)
 
-[node name="BlinkWalk" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["destroyable"]]
+[node name="BlinkWall" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["destroyable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0758, 203.474, 73.274)
 use_collision = true
 collision_layer = 4

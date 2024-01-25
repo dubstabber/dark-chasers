@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	#keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	open_all_doors()
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -242,3 +242,10 @@ func _on_custom_event(event):
 		"": pass
 		_:
 			prints("unknown event: '",event,"'")
+
+func open_all_doors():
+	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	var doors = get_tree().get_nodes_in_group("door")
+	for door in doors:
+		door.open()
+

@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb0ja5up2c6ny"]
+
+[ext_resource type="Script" path="res://scenes/enemies/image_enemy.gd" id="1_fvloq"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nli0v"]
+radius = 0.360225
+height = 1.195
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yv763"]
+radius = 0.392898
+height = 1.495
+
+[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 2
+collision_mask = 13
+slide_on_ceiling = false
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.26187
+floor_snap_length = 0.31
+script = ExtResource("1_fvloq")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+billboard = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_nli0v")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_postprocessing = 1
+
+[node name="FindPathTimer" type="Timer" parent="."]
+wait_time = 0.3
+autostart = true
+
+[node name="SoundMusic" type="AudioStreamPlayer3D" parent="."]
+volume_db = -20.322
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CapsuleShape3D_yv763")
+
+[connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
+[connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
+[connection signal="timeout" from="FindPathTimer" to="." method="_on_find_path_timer_timeout"]
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

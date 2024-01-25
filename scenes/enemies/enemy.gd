@@ -12,7 +12,7 @@ var jump_speed := 0.0
 var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
-var is_flyting := false
+var is_flying := false
 
 var speed: float
 var accel: float
@@ -32,7 +32,7 @@ func _ready():
 
 
 func _physics_process(delta):
-	if not is_on_floor():
+	if not is_on_floor() and not is_flying:
 		velocity.y -= gravity * delta
 	if not current_target:
 		check_targets()
@@ -42,7 +42,7 @@ func _physics_process(delta):
 			velocity = Vector3.ZERO
 		else:
 			var next_pos = nav.get_next_path_position()
-			if global_position != next_pos and is_on_floor():
+			if global_position != next_pos and (is_on_floor() or is_flying):
 				rotation_controller.look_at(next_pos)
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
@@ -146,14 +146,14 @@ func _on_interaction_timer_timeout():
 			parent.open(collider.name)
 		elif is_wandering:
 			direction = Vector3(-direction.x, 0, -direction.z)
-			if global_position != global_position + direction and is_on_floor():
+			if global_position != global_position + direction and (is_on_floor() or is_flying):
 				rotation_controller.look_at(global_position + direction)
 
 
 func _on_wandering_timer_timeout():
 	wandering_timer.wait_time = randf_range(0.5, 3)
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
-	if global_position != global_position + direction and is_on_floor():
+	if global_position != global_position + direction and (is_on_floor() or is_flying):
 		rotation_controller.look_at(global_position + direction)
 
 

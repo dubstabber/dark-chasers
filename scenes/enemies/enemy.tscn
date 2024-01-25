@@ -3,17 +3,26 @@
 [ext_resource type="Script" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 2
+collision_mask = 45
+slide_on_ceiling = false
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_snap_length = 0.31
 script = ExtResource("1_fvloq")
 
 [node name="RotationController" type="Node3D" parent="."]
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
+target_position = Vector3(0, 0, -1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 
 [node name="KillZone" type="Area3D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
 

@@ -6,7 +6,7 @@ enum GAME_MODE {
 }
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
-const ENEMY_SCENE := preload("res://scenes/enemies/enemy.tscn")
+const ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
 
 var min_respawn_time := 1 * 10
 var max_respawn_time := 1 * 30

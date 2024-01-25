@@ -35,6 +35,6 @@ func play_footstep_sound(soundType: AudioStream, parentNode:Node = self):
 	parentNode.add_child(sound)
 	sound.stream = soundType
 	sound.attenuation_model = AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC
-	sound.volume_db = -25
+	sound.volume_db = -20
 	sound.connect("finished", sound.queue_free)
 	sound.play()

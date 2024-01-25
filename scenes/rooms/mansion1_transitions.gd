@@ -27,3 +27,5 @@ var map_transitions := {
 		"BasementLadder": "BigHall",
 	},
 }
+
+var enemy_exceptions := ["ThirdFloorAbyss"]

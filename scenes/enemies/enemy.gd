@@ -102,7 +102,7 @@ func find_path_to_player():
 			visitedRooms.append(c_room)
 			for transitionPoint in map_transitions.map_transitions[c_room].keys():
 				var nextRoom = map_transitions.map_transitions[c_room][transitionPoint]
-				if transitionPoint == "ThirdFloorAbyss":
+				if "enemy_exceptions" in map_transitions and transitionPoint in map_transitions.enemy_exceptions:
 					continue
 				if nextRoom not in visitedRooms:
 					var new_path = path.duplicate()

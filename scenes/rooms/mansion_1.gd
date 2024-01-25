@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	open_all_doors()
+	#open_all_doors()
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -218,6 +218,12 @@ func _handle_area_event(body: CharacterBody3D, event):
 			current_music.volume_db = -5
 			current_music.play()
 		"spawn ilopulu":
+			var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
+			enemies.add_child(ilopulu)
+			ilopulu.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/IlopuluSpawn.position
+			ilopulu.current_room = "BigHall"
+			ilopulu.current_target = body
+			
 			print("spawn ilopulu")
 		"invisible abyss":
 			body.collision_mask = 10

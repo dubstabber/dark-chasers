@@ -3,6 +3,7 @@ extends Node
 const PLAYER_SCENE := preload("res://scenes/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
+const IMAGE_ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
 const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
 
 var ruby_key := preload("res://images/items/REDKA0.png")

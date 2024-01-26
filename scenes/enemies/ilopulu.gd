@@ -5,7 +5,7 @@ extends Enemy
 
 func _ready():
 	super._ready()
-	speed = 9.0
+	if not speed: speed = 9.0
 	accel = 10
 
 func _physics_process(delta):

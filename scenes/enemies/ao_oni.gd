@@ -6,7 +6,7 @@ extends Enemy
 
 func _ready():
 	super._ready()
-	speed = 7.0
+	if not speed: speed = 7.0
 	accel = 10
 	animation_player.speed_scale = speed / 7.0
 
@@ -32,20 +32,3 @@ func animateSprite():
 		if abs(v_dot) < 0.3 and not animation_player.current_animation.contains(state+'-side'):
 			animation_player.play(state + "-side")
 
-
-func handle_footstep():
-	match ground_type:
-		"dirt":
-			Utils.play_footstep_sound(Preloads.dirt_footsteps.pick_random(), self)
-		"hard":
-			Utils.play_footstep_sound(Preloads.hard_footsteps.pick_random(), self)
-		"carpet":
-			Utils.play_footstep_sound(Preloads.carpet_footsteps.pick_random(), self)
-		"floor":
-			Utils.play_footstep_sound(Preloads.floor_footsteps.pick_random(), self)
-		"wood":
-			Utils.play_footstep_sound(Preloads.wood_footsteps.pick_random(), self)
-		"metal1":
-			Utils.play_footstep_sound(Preloads.metal1_footsteps.pick_random(), self)
-		"metal2":
-			Utils.play_footstep_sound(Preloads.metal2_footsteps.pick_random(), self)

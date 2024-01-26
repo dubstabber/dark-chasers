@@ -11,23 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://b3q8cfyh37g3u" path="res://images/enemies/ao-oni/AONIC3C7.png" id="5_k2h66"]
 [ext_resource type="Texture2D" uid="uid://vgfc4lpa8uoh" path="res://images/enemies/ao-oni/AONIB3B7.png" id="7_aoo63"]
 
-[sub_resource type="Animation" id="Animation_7ib5g"]
-resource_name = "stay-front"
-length = 0.1
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_iaafa")]
-}
-
 [sub_resource type="Animation" id="Animation_2yldm"]
 length = 0.001
 tracks/0/type = "value"
@@ -43,25 +26,8 @@ tracks/0/keys = {
 "values": [ExtResource("2_iaafa")]
 }
 
-[sub_resource type="Animation" id="Animation_ct5r0"]
-resource_name = "stay-back"
-length = 0.1
-loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_bgw0k")]
-}
-
-[sub_resource type="Animation" id="Animation_r4ike"]
-resource_name = "run-front"
+[sub_resource type="Animation" id="Animation_utq5j"]
+resource_name = "run-back"
 length = 0.4
 loop_mode = 1
 tracks/0/type = "value"
@@ -74,7 +40,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_xkk46"), ExtResource("2_iaafa"), ExtResource("4_y64dm"), ExtResource("2_iaafa")]
+"values": [ExtResource("2_u6v1l"), ExtResource("2_bgw0k"), ExtResource("4_c3h1a"), ExtResource("2_bgw0k")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -94,8 +60,8 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_utq5j"]
-resource_name = "run-back"
+[sub_resource type="Animation" id="Animation_r4ike"]
+resource_name = "run-front"
 length = 0.4
 loop_mode = 1
 tracks/0/type = "value"
@@ -108,7 +74,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_u6v1l"), ExtResource("2_bgw0k"), ExtResource("4_c3h1a"), ExtResource("2_bgw0k")]
+"values": [ExtResource("2_xkk46"), ExtResource("2_iaafa"), ExtResource("4_y64dm"), ExtResource("2_iaafa")]
 }
 tracks/1/type = "method"
 tracks/1/imported = false
@@ -160,6 +126,40 @@ tracks/1/keys = {
 "args": [],
 "method": &"handle_footstep"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_ct5r0"]
+resource_name = "stay-back"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_bgw0k")]
+}
+
+[sub_resource type="Animation" id="Animation_7ib5g"]
+resource_name = "stay-front"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_iaafa")]
 }
 
 [sub_resource type="Animation" id="Animation_myl4e"]

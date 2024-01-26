@@ -24,7 +24,7 @@ func _ready():
 		area_event.connect("event_triggered", _handle_area_event)
 	
 	spawn_player()
-	#open_all_doors()
+	open_all_doors()
 
 	for t in transitions.get_children():
 		for m in t.get_children():
@@ -65,7 +65,7 @@ func respawn(p):
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
-	p.current_room = "FirstFloor"
+	p.current_room = "BigHall"
 
 
 func handle_transition(body, area3dname, marker):

@@ -140,6 +140,8 @@ func _on_kill_zone_body_entered(body):
 
 func _on_interaction_timer_timeout():
 	var collider = interaction_ray.get_collider()
+	#if name == "Ilopulu":
+		#print(rotation_controller.rotation_degrees)
 	if collider:
 		var parent = collider.get_parent()
 		if parent.is_in_group("door") and parent.can_manual_open:

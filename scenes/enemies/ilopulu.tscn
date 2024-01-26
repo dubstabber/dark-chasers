@@ -38,8 +38,11 @@ height = 1.96106
 [node name="Ilopulu" instance=ExtResource("1_0h1jq")]
 script = ExtResource("2_ci2av")
 
+[node name="Interaction" parent="RotationController" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.456782, 0)
+
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20774, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 billboard = 2
 shaded = true
 sprite_frames = SubResource("SpriteFrames_rpvyw")
@@ -47,14 +50,13 @@ animation = &"stay"
 frame_progress = 1.0
 
 [node name="CollisionShape3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.992761, 0)
 shape = SubResource("CapsuleShape3D_6sv5x")
 
 [node name="NavigationAgent3D" parent="." index="2"]
 path_postprocessing = 1
 
 [node name="KillZone" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06513, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.110802, 0)
 
 [node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_dby8h")

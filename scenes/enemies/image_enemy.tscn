@@ -23,16 +23,15 @@ script = ExtResource("1_fvloq")
 [node name="RotationController" type="Node3D" parent="."]
 
 [node name="Sprite3D" type="Sprite3D" parent="RotationController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4121, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.478793, 0)
 billboard = 2
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.281964, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 12
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.61604, 0)
 shape = SubResource("CapsuleShape3D_nli0v")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
@@ -42,7 +41,7 @@ path_postprocessing = 1
 volume_db = -20.322
 
 [node name="KillZone" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.767365, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.141669, 0)
 collision_layer = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]

@@ -2,7 +2,7 @@ class_name Enemy extends CharacterBody3D
 
 @export var current_room: String
 @export var disappear_zones: Array[Area3D]
-@export var is_wandering: bool = false
+@export var is_wandering := false
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D

@@ -8,9 +8,11 @@ func _ready():
 	if not speed: speed = 9.0
 	accel = 10
 
+
 func _physics_process(delta):
 	super._physics_process(delta)
 	animateSprite()
+
 
 func animateSprite():
 	if velocity and not animated_sprite_3d.animation.contains('run'):

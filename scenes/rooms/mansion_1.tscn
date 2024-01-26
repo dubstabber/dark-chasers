@@ -1,4 +1,4 @@
-[gd_scene load_steps=541 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=543 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -141,6 +141,7 @@
 [ext_resource type="Script" path="res://scenes/rooms/mansion1_transitions.gd" id="139_pau06"]
 [ext_resource type="Texture2D" uid="uid://bnabcb0831ygc" path="res://images/skyboxes/atmosphere1.png" id="139_qn1kj"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="141_yrprg"]
+[ext_resource type="PackedScene" uid="uid://davh7h62aalnn" path="res://scenes/enemies/ao_mika.tscn" id="142_dc1jo"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/footstepArea.gd" id="142_itnox"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
@@ -1334,6 +1335,9 @@ size = Vector3(2.70093, 1, 0.279541)
 [sub_resource type="BoxShape3D" id="BoxShape3D_q14qu"]
 size = Vector3(3.34668, 1.1814, 0.279541)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_8mvc6"]
+size = Vector3(0.28, 1.886, 2.19434)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwmtc"]
 size = Vector3(1.255, 1.88648, 0.279541)
 
@@ -2251,9 +2255,15 @@ shape = SubResource("BoxShape3D_wkois")
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
+[node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
+disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
+
+[node name="Ao mika" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_dc1jo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 203.34, 100.782)
+current_room = "BigHall"
+disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 
 [node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.8654, 202.892, -23.7731)
@@ -3920,6 +3930,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7995, 203.721, 100.174)
 script = ExtResource("142_edvtm")
 move_range = 2.0
 open_only = true
+can_manual_open = false
 
 [node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor4"]
 use_collision = true
@@ -4401,6 +4412,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/HiddenDoorAoOni"]
 shape = SubResource("BoxShape3D_q14qu")
+
+[node name="ExitBigHallway" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.1232, 203.195, 89.7027)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/ExitBigHallway"]
+shape = SubResource("BoxShape3D_8mvc6")
 
 [node name="SmallHallway" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3699, 203.195, 93.7171)

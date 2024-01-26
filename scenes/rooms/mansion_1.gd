@@ -223,8 +223,8 @@ func _handle_area_event(body: CharacterBody3D, event):
 			ilopulu.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/IlopuluSpawn.position
 			ilopulu.current_room = "BigHall"
 			ilopulu.current_target = body
+			ilopulu.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/ExitBigHallway)
 			
-			print("spawn ilopulu")
 		"invisible abyss":
 			body.collision_mask = 10
 			await get_tree().create_timer(0.8).timeout

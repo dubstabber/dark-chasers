@@ -1,0 +1,175 @@
+[gd_scene load_steps=22 format=3 uid="uid://davh7h62aalnn"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_l71hh"]
+[ext_resource type="Script" path="res://scenes/enemies/ao_mika.gd" id="2_sn0v8"]
+[ext_resource type="Texture2D" uid="uid://bgfdncy6gshge" path="res://images/enemies/ao-mika/AOMIA5.png" id="3_ahxem"]
+[ext_resource type="Texture2D" uid="uid://bw5mruf565as2" path="res://images/enemies/ao-mika/AOMIA1.png" id="3_ycvft"]
+[ext_resource type="Texture2D" uid="uid://b2gvdxdn72x1x" path="res://images/enemies/ao-mika/AOMIA3A7.png" id="4_hjked"]
+[ext_resource type="Texture2D" uid="uid://bikymnjvx52gk" path="res://images/enemies/ao-mika/AOMIB1.png" id="5_fjgap"]
+[ext_resource type="Texture2D" uid="uid://d1g287hicfy1e" path="res://images/enemies/ao-mika/AOMIC1.png" id="7_0pubc"]
+[ext_resource type="Texture2D" uid="uid://37i4uwehvsiw" path="res://images/enemies/ao-mika/AOMIB4B6.png" id="8_dgrcy"]
+[ext_resource type="Texture2D" uid="uid://dbbbv3v7xya45" path="res://images/enemies/ao-mika/AOMIC4C6.png" id="9_888js"]
+[ext_resource type="Texture2D" uid="uid://cok1isfwkhs2c" path="res://images/enemies/ao-mika/AOMIB3B7.png" id="10_gc0ay"]
+[ext_resource type="Texture2D" uid="uid://btydsyc1dh8g3" path="res://images/enemies/ao-mika/AOMIC3C7.png" id="11_mix1r"]
+
+[sub_resource type="Animation" id="Animation_dh83x"]
+resource_name = "stay-front"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_ycvft")]
+}
+
+[sub_resource type="Animation" id="Animation_r383k"]
+resource_name = "stay-back"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_ahxem")]
+}
+
+[sub_resource type="Animation" id="Animation_i1tw0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_ahxem")]
+}
+
+[sub_resource type="Animation" id="Animation_wmm86"]
+resource_name = "stay-side"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("4_hjked")]
+}
+
+[sub_resource type="Animation" id="Animation_km8wx"]
+resource_name = "run-front"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_fjgap"), ExtResource("3_ycvft"), ExtResource("7_0pubc"), ExtResource("3_ycvft")]
+}
+
+[sub_resource type="Animation" id="Animation_ts116"]
+resource_name = "run-back"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_dgrcy"), ExtResource("3_ahxem"), ExtResource("9_888js"), ExtResource("3_ahxem")]
+}
+
+[sub_resource type="Animation" id="Animation_2rx8n"]
+resource_name = "run-side"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_gc0ay"), ExtResource("4_hjked"), ExtResource("11_mix1r"), ExtResource("4_hjked")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yhobe"]
+_data = {
+"RESET": SubResource("Animation_i1tw0"),
+"run-back": SubResource("Animation_ts116"),
+"run-front": SubResource("Animation_km8wx"),
+"run-side": SubResource("Animation_2rx8n"),
+"stay-back": SubResource("Animation_r383k"),
+"stay-front": SubResource("Animation_dh83x"),
+"stay-side": SubResource("Animation_wmm86")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jjbyh"]
+radius = 0.390932
+height = 1.30229
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gxwi0"]
+radius = 0.55932
+height = 2.15466
+
+[node name="Ao mika" instance=ExtResource("1_l71hh")]
+script = ExtResource("2_sn0v8")
+
+[node name="Sprite3D" type="Sprite3D" parent="RotationController" index="1"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.4, 0)
+billboard = 2
+shaded = true
+texture = ExtResource("3_ahxem")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RotationController" index="2"]
+libraries = {
+"": SubResource("AnimationLibrary_yhobe")
+}
+
+[node name="CollisionShape3D" parent="." index="1"]
+shape = SubResource("CapsuleShape3D_jjbyh")
+
+[node name="NavigationAgent3D" parent="." index="2"]
+path_postprocessing = 1
+
+[node name="KillZone" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+shape = SubResource("CapsuleShape3D_gxwi0")

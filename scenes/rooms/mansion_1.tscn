@@ -1,4 +1,4 @@
-[gd_scene load_steps=542 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=541 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -141,7 +141,6 @@
 [ext_resource type="Script" path="res://scenes/rooms/mansion1_transitions.gd" id="139_pau06"]
 [ext_resource type="Texture2D" uid="uid://bnabcb0831ygc" path="res://images/skyboxes/atmosphere1.png" id="139_qn1kj"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="141_yrprg"]
-[ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemies/image_enemy.tscn" id="142_c5foe"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/footstepArea.gd" id="142_itnox"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
@@ -2256,9 +2255,10 @@ shape = SubResource("BoxShape3D_wkois")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
 current_room = "BigHall"
 
-[node name="ImageEnemy" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("142_c5foe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68.4276, 202.62, 81.797)
-current_room = "BigHall"
+[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.8654, 202.892, -23.7731)
+current_room = "FirstFloor"
+is_wandering = true
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -4438,7 +4438,7 @@ volume_db = -27.0
 autoplay = true
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.6338, 202.953, 84.9348)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0261, 202.54, -43.885)
 
 [connection signal="body_entered" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder" to="." method="_on_ladder_body_exited"]

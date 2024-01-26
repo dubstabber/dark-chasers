@@ -46,8 +46,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
 billboard = 2
 shaded = true
 sprite_frames = SubResource("SpriteFrames_rpvyw")
-animation = &"stay"
-frame_progress = 1.0
+animation = &"run"
 
 [node name="CollisionShape3D" parent="." index="1"]
 shape = SubResource("CapsuleShape3D_6sv5x")

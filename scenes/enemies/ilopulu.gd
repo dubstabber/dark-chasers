@@ -13,8 +13,8 @@ func _physics_process(delta):
 	animateSprite()
 
 func animateSprite():
-	if velocity:
+	if velocity and not animated_sprite_3d.animation.contains('run'):
 		animated_sprite_3d.play('run')
-	else:
+	elif not velocity and not animated_sprite_3d.animation.contains('stay'):
 		animated_sprite_3d.play('stay')
 

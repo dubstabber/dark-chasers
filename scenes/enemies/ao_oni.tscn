@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1vimowqmce5w"]
+[gd_scene load_steps=21 format=3 uid="uid://b1vimowqmce5w"]
 
 [ext_resource type="Script" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
 [ext_resource type="Texture2D" uid="uid://bhgrkq04i5nfs" path="res://images/enemies/ao-oni/AONIA4A6.png" id="2_bgw0k"]
@@ -11,74 +11,184 @@
 [ext_resource type="Texture2D" uid="uid://b3q8cfyh37g3u" path="res://images/enemies/ao-oni/AONIC3C7.png" id="5_k2h66"]
 [ext_resource type="Texture2D" uid="uid://vgfc4lpa8uoh" path="res://images/enemies/ao-oni/AONIB3B7.png" id="7_aoo63"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_7k82f"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_u6v1l")
+[sub_resource type="Animation" id="Animation_7ib5g"]
+resource_name = "stay-front"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_iaafa")]
+}
+
+[sub_resource type="Animation" id="Animation_2yldm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_iaafa")]
+}
+
+[sub_resource type="Animation" id="Animation_ct5r0"]
+resource_name = "stay-back"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_bgw0k")]
+}
+
+[sub_resource type="Animation" id="Animation_r4ike"]
+resource_name = "run-front"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_xkk46"), ExtResource("2_iaafa"), ExtResource("4_y64dm"), ExtResource("2_iaafa")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"handle_footstep"
 }, {
-"duration": 1.0,
-"texture": ExtResource("2_bgw0k")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_c3h1a")
-}],
-"loop": true,
-"name": &"run-back",
-"speed": 12.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_xkk46")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_iaafa")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_y64dm")
-}],
-"loop": true,
-"name": &"run-front",
-"speed": 12.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("5_k2h66")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_bu3lp")
-}, {
-"duration": 1.0,
-"texture": ExtResource("7_aoo63")
-}],
-"loop": true,
-"name": &"run-side",
-"speed": 12.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_bgw0k")
-}],
-"loop": false,
-"name": &"stay-back",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_iaafa")
-}],
-"loop": false,
-"name": &"stay-front",
-"speed": 1.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_bu3lp")
-}],
-"loop": false,
-"name": &"stay-side",
-"speed": 1.0
+"args": [],
+"method": &"handle_footstep"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_utq5j"]
+resource_name = "run-back"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_u6v1l"), ExtResource("2_bgw0k"), ExtResource("4_c3h1a"), ExtResource("2_bgw0k")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"handle_footstep"
+}, {
+"args": [],
+"method": &"handle_footstep"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_sqno1"]
+resource_name = "run-side"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("7_aoo63"), ExtResource("3_bu3lp"), ExtResource("5_k2h66"), ExtResource("3_bu3lp")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"handle_footstep"
+}, {
+"args": [],
+"method": &"handle_footstep"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_myl4e"]
+resource_name = "stay-side"
+length = 0.1
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("3_bu3lp")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ali5n"]
+_data = {
+"RESET": SubResource("Animation_2yldm"),
+"run-back": SubResource("Animation_utq5j"),
+"run-front": SubResource("Animation_r4ike"),
+"run-side": SubResource("Animation_sqno1"),
+"stay-back": SubResource("Animation_ct5r0"),
+"stay-front": SubResource("Animation_7ib5g"),
+"stay-side": SubResource("Animation_myl4e")
+}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl8o4"]
 radius = 0.296362
@@ -100,17 +210,21 @@ script = ExtResource("1_xmjcu")
 
 [node name="RotationController" type="Node3D" parent="."]
 
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.498549, 0)
-billboard = 2
-shaded = true
-sprite_frames = SubResource("SpriteFrames_7k82f")
-animation = &"stay-back"
-
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 12
+
+[node name="Sprite3D" type="Sprite3D" parent="RotationController"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.4, 0)
+billboard = 2
+shaded = true
+texture = ExtResource("2_iaafa")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RotationController"]
+libraries = {
+"": SubResource("AnimationLibrary_ali5n")
+}
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_dl8o4")

@@ -21,6 +21,15 @@ EnemyDb="*res://scenes/globals/enemyDB.gd"
 Utils="*res://scenes/globals/utils.gd"
 Preloads="*res://scenes/globals/preloads.gd"
 
+[file_customization]
+
+folder_colors={
+"res://images/": "red",
+"res://models/": "blue",
+"res://scenes/": "green",
+"res://sounds/": "yellow"
+}
+
 [input]
 
 sprint={

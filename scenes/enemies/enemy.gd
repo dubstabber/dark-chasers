@@ -46,7 +46,7 @@ func _physics_process(delta):
 				rotation_controller.look_at(next_pos)
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-			if current_target.killed:
+			if current_target and current_target.killed:
 				current_target = null
 				velocity = Vector3.ZERO
 	elif is_wandering:

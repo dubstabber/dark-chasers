@@ -97,8 +97,6 @@ floor_stop_on_slope = false
 floor_block_on_wall = false
 floor_snap_length = 0.31
 script = ExtResource("1_xmjcu")
-current_room = null
-is_wandering = null
 
 [node name="RotationController" type="Node3D" parent="."]
 

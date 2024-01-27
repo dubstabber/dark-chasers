@@ -3445,9 +3445,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.2934, 202.8, -86.1795)
 [node name="VoidSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 146.572, 203.059, 110.496)
 
-[node name="SmallRoomSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 114.519)
-
 [node name="EventSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="AoOniCrawler" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
@@ -3473,6 +3470,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.584, 79.1308)
 
 [node name="IlopuluSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.071, 202.253, 28.379)
+
+[node name="WhiteFaceSpawn" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 110.171)
 
 [node name="Doors" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -4189,7 +4189,7 @@ event_name = "teleport to void"
 [node name="UselessKey3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Items" instance=ExtResource("143_ui4j0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.6538, 202.327, 106.742)
 key_type = "useless"
-event_name = "teleport to white face"
+event_name = "spawn white face"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

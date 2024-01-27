@@ -7,6 +7,7 @@ const IMAGE_ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
 const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
 
 const ILOPULU_SCENE := preload("res://scenes/enemies/ilopulu.tscn")
+const WHITEFACE_SCENE := preload("res://scenes/enemies/white_face.tscn")
 
 var ruby_key := preload("res://images/items/REDKA0.png")
 var weird_key := preload("res://images/items/WEIRA0.png")

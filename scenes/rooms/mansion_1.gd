@@ -138,8 +138,11 @@ func _key_body_entered(body, key_type, event):
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsGiveup.position)
 		"teleport to void":
 			body.position = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners/VoidSpawn.position
-		"teleport to white face":
-			body.position = $NavigationRegion3D/MansionAooni6_0_0Map01/PrankSpawners/SmallRoomSpawn.position
+		"spawn white face":
+			var whiteface = Preloads.WHITEFACE_SCENE.instantiate()
+			enemies.add_child(whiteface)
+			whiteface.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/WhiteFaceSpawn.position
+			whiteface.current_target = body
 		"": pass
 		_:
 			prints("unknown event: '",event,"'")

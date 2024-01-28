@@ -7,7 +7,8 @@ var keys_collected: Array
 @onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
 @onready var enemies = $NavigationRegion3D/MansionAooni6_0_0Map01/Enemies
 @onready var playing_sounds = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds
-@onready var current_music = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/CurrentMusic
+@onready var global_music = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/GlobalMusic
+@onready var global_sound = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/GlobalSound
 
 
 func _ready():
@@ -111,10 +112,10 @@ func _key_body_entered(body, key_type, event):
 			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/FirstAoOniChase.position
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea)
-			current_music.stream = Preloads.aosee_sound
-			current_music.volume_db = -5
-			current_music.play()
-			aooni.connect("tree_exited", current_music.stop)
+			global_music.stream = Preloads.aosee_sound
+			global_music.volume_db = -5
+			global_music.play()
+			aooni.connect("tree_exited", global_music.stop)
 		"ao oni tries to break bars":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
@@ -159,14 +160,15 @@ func _handle_button_event(body, event):
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
-			current_music.stream = Preloads.aosee_sound
-			current_music.volume_db = -5
-			current_music.play()
-			aooni.connect("tree_exited", current_music.stop)
+			global_music.stream = Preloads.aosee_sound
+			global_music.volume_db = -5
+			global_music.play()
+			aooni.connect("tree_exited", global_music.stop)
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
-			Utils.play_sound(Preloads.event_sound,$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera)
+			global_sound.stream = Preloads.event_sound
+			global_sound.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
@@ -183,7 +185,9 @@ func _handle_button_event(body, event):
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
-			await get_tree().create_timer(3.0).timeout
+			global_sound.stream = Preloads.event_sound
+			global_sound.play()
+			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
@@ -206,9 +210,9 @@ func _handle_area_event(body: CharacterBody3D, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			current_music.stream = Preloads.creep_amb_sound
-			current_music.volume_db = -5
-			current_music.play()
+			global_music.stream = Preloads.creep_amb_sound
+			global_music.volume_db = -5
+			global_music.play()
 		"piano alarm":
 			if not $NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed:
 				var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
@@ -217,26 +221,33 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.current_room = "PianoRoom"
 				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
-				current_music.stream = Preloads.aosee_sound
-				current_music.volume_db = -5
-				current_music.play()
-				aooni.connect("tree_exited", current_music.stop)
+				global_music.stream = Preloads.aosee_sound
+				global_music.volume_db = -5
+				global_music.play()
+				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
-			current_music.stream = Preloads.aosee_sound
-			current_music.volume_db = -5
-			current_music.play()
+			global_music.stream = Preloads.aosee_sound
+			global_music.volume_db = -5
+			global_music.play()
 		"spawn ilopulu":
+			global_sound.stream = Preloads.event_sound
+			global_sound.play()
+			await get_tree().create_timer(1.0).timeout
 			var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
 			enemies.add_child(ilopulu)
 			ilopulu.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/IlopuluSpawn.position
 			ilopulu.current_room = "BigHall"
 			ilopulu.current_target = body
 			ilopulu.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/ExitBigHallway)
-			
 		"invisible abyss":
 			body.collision_mask = 10
 			await get_tree().create_timer(0.8).timeout
 			body.collision_mask = 14
+		"open ao mika wardrobe":
+				global_music.stream = Preloads.aosee_sound
+				global_music.volume_db = -5
+				global_music.play()
+				$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", global_music.stop)
 		"change to next map":
 			print("change to next map")
 		"kill player":

@@ -4053,6 +4053,8 @@ script = ExtResource("142_edvtm")
 move_speed = 1.0
 move_range = -1.913
 open_only = true
+open_sound = ExtResource("146_xas26")
+stop_sound = ExtResource("147_o2y02")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall5"]
 use_collision = true
@@ -4063,9 +4065,11 @@ size = Vector3(2.23804, 1.92871, 0.631836)
 [node name="MovingWall6" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.361, 203.416, 101.587)
 script = ExtResource("142_edvtm")
+move_speed = 1.8
 move_range = 2.6
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_xas26")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0.261681)
@@ -4242,6 +4246,7 @@ collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
 door_to_open = NodePath("../../Doors/Door16")
+press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/Button3"]
 shape = SubResource("BoxShape3D_ve4qp")
@@ -4374,6 +4379,7 @@ shape = SubResource("BoxShape3D_nes26")
 [node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 94.5008)
 script = ExtResource("146_vhxkd")
+event_name = "open ao mika wardrobe"
 door_to_open = NodePath("../../Doors/WardrobeDoor4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent8"]
@@ -4456,7 +4462,9 @@ texture = ExtResource("54_vpwii")
 
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
-[node name="CurrentMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
+[node name="GlobalMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
+
+[node name="GlobalSound" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
 
 [node name="PianoSound" type="AudioStreamPlayer3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.8255, 203.588, 114.741)

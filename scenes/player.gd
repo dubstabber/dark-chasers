@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 signal mode_changed(mode, value)
 
-const JUMP_VELOCITY := 4.5
+const JUMP_VELOCITY := 6.0
 const WALKING_SPEED := 5.0
 const SPRINTING_SPEED := 8.0
 const CROUCHING_SPEED := 3.0

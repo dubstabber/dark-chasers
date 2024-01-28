@@ -102,6 +102,10 @@ hit={
 3d_physics/layer_4="Objects"
 3d_physics/layer_6="Walls for enemies"
 
+[physics]
+
+3d/default_gravity=25.5
+
 [rendering]
 
 anti_aliasing/quality/msaa_3d=1

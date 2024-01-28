@@ -2265,11 +2265,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 203.34, 100.782)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 
-[node name="Test Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.8654, 202.892, -23.7731)
-current_room = "FirstFloor"
-is_wandering = true
-
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Blockers"]

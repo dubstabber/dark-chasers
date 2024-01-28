@@ -29,6 +29,7 @@ func play_sound(soundType: AudioStream, parentNode:Node = self):
 	sound.volume_db = -25
 	sound.connect("finished", sound.queue_free)
 	sound.play()
+	return sound
 
 func play_footstep_sound(soundType: AudioStream, parentNode:Node = self):
 	var sound = AudioStreamPlayer3D.new()

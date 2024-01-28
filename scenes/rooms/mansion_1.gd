@@ -166,10 +166,12 @@ func _handle_button_event(body, event):
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
-			await get_tree().create_timer(3.0).timeout
+			Utils.play_sound(Preloads.event_sound,$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera)
+			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+			print("You: I should head to the 1st floor and check that out...")
 		"show secret door":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -177,6 +179,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+			print("You: Hmm... I wonder where that passage leads to?")
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true

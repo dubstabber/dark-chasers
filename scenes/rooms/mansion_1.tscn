@@ -3941,6 +3941,7 @@ script = ExtResource("142_edvtm")
 move_range = 2.572
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_xas26")
 
 [node name="Bar1" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0)
@@ -4003,6 +4004,8 @@ script = ExtResource("142_edvtm")
 move_speed = 1.5
 move_range = -2.548
 open_only = true
+open_sound = ExtResource("146_xas26")
+stop_sound = ExtResource("147_o2y02")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall2"]
 use_collision = true
@@ -4016,7 +4019,7 @@ script = ExtResource("142_edvtm")
 move_speed = 1.6
 move_range = -2.417
 open_only = true
-open_door_sound = ExtResource("146_xas26")
+open_sound = ExtResource("146_xas26")
 stop_sound = ExtResource("147_o2y02")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall3"]
@@ -4032,6 +4035,7 @@ script = ExtResource("142_edvtm")
 move_range = 2.6
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_xas26")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall4"]
 use_collision = true

@@ -8,8 +8,8 @@ extends Node3D
 @export var can_manual_open := true
 @export var front_locked := false
 @export var back_locked := false
-@export var open_door_sound: AudioStream = Preloads.open_door_sound
-@export var close_door_sound := Preloads.close_door_sound
+@export var open_sound: AudioStream = Preloads.open_door_sound
+@export var close_sound: AudioStream = Preloads.close_door_sound
 @export var stop_sound: AudioStream
 
 var closed_position := position.y
@@ -39,17 +39,16 @@ func open(side = ""):
 			tween.stop()
 		if is_opening:
 			tween = create_tween()
-			var sound = Utils.play_sound(open_door_sound, self)
+			var sound = Utils.play_sound(open_sound, self)
 			await tween.tween_property(self, "position:y", opened_position, move_speed).finished
-			sound.stop()
-			if stop_sound:
-				Utils.play_sound(stop_sound, self)
+			if is_instance_valid(sound): sound.stop()
+			if stop_sound: Utils.play_sound(stop_sound, self)
 			if not open_only:
 				await get_tree().create_timer(time_to_close).timeout
 				open()
 		elif not is_opening and not open_only:
 			tween = create_tween()
-			Utils.play_sound(close_door_sound, self)
+			Utils.play_sound(close_sound, self)
 			await tween.tween_property(self, "position:y", closed_position, move_speed).finished
 	else:
 		print("You need the "+key_needed+" key!")

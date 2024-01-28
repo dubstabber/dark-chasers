@@ -7,6 +7,7 @@ signal button_pressed(body, event_name)
 @export var one_use := true
 @export var door_to_open: Node3D
 @export var temporary_camera: Camera3D
+@export var press_sound: AudioStream
 
 var is_pressed := false
 
@@ -20,6 +21,7 @@ func press(body):
 		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()
+		if press_sound: Utils.play_sound(press_sound, self)
 		if not one_use:
 			await get_tree().create_timer(1.0).timeout
 			is_pressed = false

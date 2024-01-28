@@ -61,11 +61,13 @@ func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
+	Utils.play_sound(Preloads.spawn_sound, p)
 
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
 	p.current_room = "FirstFloor"
+	Utils.play_sound(Preloads.spawn_sound, p)
 
 
 func handle_transition(body, area3dname, marker):

@@ -229,6 +229,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
+			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
 			global_sound.stream = Preloads.event_sound
 			global_sound.play()

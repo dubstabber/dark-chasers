@@ -212,7 +212,7 @@ script = ExtResource("1_xmjcu")
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
-target_position = Vector3(0, 0, -1)
+target_position = Vector3(0, 0, -1.1)
 collision_mask = 12
 
 [node name="Sprite3D" type="Sprite3D" parent="RotationController"]

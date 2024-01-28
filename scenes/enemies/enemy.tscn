@@ -15,7 +15,7 @@ script = ExtResource("1_fvloq")
 [node name="RotationController" type="Node3D" parent="."]
 
 [node name="Interaction" type="RayCast3D" parent="RotationController"]
-target_position = Vector3(0, 0, -1)
+target_position = Vector3(0, 0, -1.1)
 collision_mask = 12
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

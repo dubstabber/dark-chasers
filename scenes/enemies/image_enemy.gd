@@ -10,7 +10,7 @@ var enemy_data: Dictionary
 
 func _ready():
 	super._ready()
-	speed = 8.0
+	if not speed: speed = 8.0
 	accel = 10
 	if specific_enemy:
 		for enemy in EnemyDb.ENEMIES:

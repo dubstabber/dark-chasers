@@ -26,6 +26,7 @@ func press(body):
 			await get_tree().create_timer(1.0).timeout
 			is_pressed = false
 			change_sprite()
+			if press_sound: Utils.play_sound(press_sound, self)
 
 func change_sprite():
 	match button_type:

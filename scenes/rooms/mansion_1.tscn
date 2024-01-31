@@ -4460,6 +4460,16 @@ transform = Transform3D(-6.63303e-08, 0, 1, 0, 0.508203, 0, -1.51746, 0, -4.3711
 shaded = true
 texture = ExtResource("54_vpwii")
 
+[node name="Sprite3D4" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -58.5922, 202.826, -2.88926)
+shaded = true
+texture = ExtResource("4_sl7bf")
+
+[node name="Sprite3D5" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 18.877, 202.826, 84.7038)
+shaded = true
+texture = ExtResource("4_sl7bf")
+
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="GlobalMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]

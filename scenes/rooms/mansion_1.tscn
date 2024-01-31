@@ -1,4 +1,4 @@
-[gd_scene load_steps=547 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=549 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -148,10 +148,12 @@
 [ext_resource type="Script" path="res://scenes/objects/waterSplash.gd" id="143_jfxlu"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
 [ext_resource type="Script" path="res://scenes/objects/Button.gd" id="144_26gxq"]
+[ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="146_cfh8b"]
 [ext_resource type="Script" path="res://scenes/objects/AreaEvent.gd" id="146_vhxkd"]
 [ext_resource type="AudioStream" uid="uid://bryw155gw6q1g" path="res://sounds/sfx/DSSTNMOV.wav" id="146_xas26"]
 [ext_resource type="AudioStream" uid="uid://knehp6atgm53" path="res://sounds/music/PIANOSND.wav" id="147_2ogyi"]
 [ext_resource type="AudioStream" uid="uid://brej2lxffj27" path="res://sounds/sfx/DSPSTOP.wav" id="147_o2y02"]
+[ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="147_wb10i"]
 [ext_resource type="AudioStream" uid="uid://dbc3tw5sjo681" path="res://sounds/sfx/DSSWTCHN.wav" id="151_l53tj"]
 [ext_resource type="AudioStream" uid="uid://faecohalkskt" path="res://sounds/sfx/CLOCK.wav" id="154_adgyx"]
 
@@ -3479,6 +3481,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.526, 110.171)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9625, 203.474, -27.0733)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door"]
 use_collision = true
@@ -3498,6 +3502,8 @@ material = SubResource("StandardMaterial3D_5ehfr")
 [node name="Door2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.3754, 203.474, -29.775)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door2"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3518,6 +3524,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9699, 203.474, -27.042)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door3"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3538,6 +3546,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.9401, 203.474, -29.7663)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door4"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3557,6 +3567,8 @@ size = Vector3(1.292, 2.503, 0.1)
 [node name="Door5" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.2851, 203.49, -17.5925)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door5"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3576,6 +3588,8 @@ size = Vector3(1.292, 2.503, 0.1)
 [node name="Door6" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.317431, 206.061, 120.363)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door6"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3596,6 +3610,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2077, 206.048, 120.415)
 script = ExtResource("142_edvtm")
 key_needed = "weird"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door7"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3615,6 +3631,8 @@ size = Vector3(1.292, 2.503, 0.1)
 [node name="Door8" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.80143, 206.048, 110.495)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door8"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3635,6 +3653,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.3677, 203.477, 116.797)
 script = ExtResource("142_edvtm")
 key_needed = "weird"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door9"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3655,6 +3675,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0481, 203.474, 125.53)
 script = ExtResource("142_edvtm")
 key_needed = "ruby"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door10"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3675,6 +3697,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4104, 203.492, 136.688)
 script = ExtResource("142_edvtm")
 key_needed = "brown"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door11"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3695,6 +3719,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.074, 203.492, 73.5285)
 script = ExtResource("142_edvtm")
 key_needed = "gold"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door12"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3714,6 +3740,8 @@ size = Vector3(1.292, 2.503, 0.1)
 [node name="Door13" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5583, 203.498, 83.2352)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door13"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3734,6 +3762,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.1624, 203.482, 74.012)
 script = ExtResource("142_edvtm")
 key_needed = "emerald"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door14"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3753,6 +3783,8 @@ size = Vector3(1.292, 2.503, 0.1)
 [node name="Door15" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 56.7465, 203.477, 91.1931)
 script = ExtResource("142_edvtm")
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door15"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3774,6 +3806,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.818
 script = ExtResource("142_edvtm")
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door16"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3794,6 +3828,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3656, 203.495, 93.2148)
 script = ExtResource("142_edvtm")
 open_only = true
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door17"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3814,6 +3850,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.7715, 203.497, 97.5866)
 script = ExtResource("142_edvtm")
 open_only = true
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door18"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3834,6 +3872,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 95.9986, 203.502, 91.184)
 script = ExtResource("142_edvtm")
 open_only = true
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door19"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3855,6 +3895,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.682
 script = ExtResource("142_edvtm")
 time_to_close = 4.0
 key_needed = "emerald"
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door20"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3875,6 +3917,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.2397, 206.046, 103.571)
 script = ExtResource("142_edvtm")
 open_only = true
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="FrontSide" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/Door21"]
 material_override = SubResource("StandardMaterial3D_7cfyp")
@@ -3895,6 +3939,8 @@ size = Vector3(1.292, 2.503, 0.1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.802, 203.723, -14.383)
 script = ExtResource("142_edvtm")
 move_range = 2.0
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor"]
 use_collision = true
@@ -3906,6 +3952,8 @@ size = Vector3(2.39941, 2.07501, 0.0505478)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16013, 206.278, 126.41)
 script = ExtResource("142_edvtm")
 move_range = 2.0
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor2"]
 use_collision = true
@@ -3917,6 +3965,8 @@ size = Vector3(2.39941, 2.07501, 0.0505478)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.1947, 203.724, 135.374)
 script = ExtResource("142_edvtm")
 move_range = 2.0
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor3"]
 use_collision = true
@@ -3930,6 +3980,8 @@ script = ExtResource("142_edvtm")
 move_range = 2.0
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WardrobeDoor4"]
 use_collision = true
@@ -3993,6 +4045,7 @@ transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 8.13254,
 script = ExtResource("142_edvtm")
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_cfh8b")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.130421, 0.00799561, 0)
@@ -4085,6 +4138,7 @@ script = ExtResource("142_edvtm")
 move_speed = 1.8
 move_range = 2.4
 open_only = true
+open_sound = ExtResource("146_cfh8b")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingWall7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.540733, 0, 0)
@@ -4100,6 +4154,8 @@ script = ExtResource("142_edvtm")
 move_range = 1.96
 open_only = true
 can_manual_open = false
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WideDoor"]
 use_collision = true
@@ -4111,6 +4167,8 @@ size = Vector3(1.86426, 2.43774, 0.302734)
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 38.1201, 203.718, 88.4496)
 script = ExtResource("142_edvtm")
 move_range = 1.96
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/WideDoor2"]
 use_collision = true
@@ -4125,6 +4183,7 @@ move_speed = 1.0
 move_range = 1.53
 open_only = true
 key_needed = "silver"
+open_sound = ExtResource("146_cfh8b")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/CryptDoor"]
 use_collision = true

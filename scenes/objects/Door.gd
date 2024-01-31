@@ -8,8 +8,8 @@ extends Node3D
 @export var can_manual_open := true
 @export var front_locked := false
 @export var back_locked := false
-@export var open_sound: AudioStream = Preloads.open_door_sound
-@export var close_sound: AudioStream = Preloads.close_door_sound
+@export var open_sound: AudioStream
+@export var close_sound: AudioStream
 @export var stop_sound: AudioStream
 
 var closed_position := position.y

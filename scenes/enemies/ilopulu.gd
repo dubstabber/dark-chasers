@@ -11,10 +11,10 @@ func _ready():
 
 func _physics_process(delta):
 	super._physics_process(delta)
-	animateSprite()
+	animate_sprite()
 
 
-func animateSprite():
+func animate_sprite():
 	if velocity and not animated_sprite_3d.animation.contains('run'):
 		animated_sprite_3d.play('run')
 	elif not velocity and not animated_sprite_3d.animation.contains('stay'):

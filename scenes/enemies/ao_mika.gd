@@ -3,6 +3,7 @@ extends Enemy
 @onready var animation_player = $RotationController/AnimationPlayer
 @onready var sprite_3d = $RotationController/Sprite3D
 
+
 func _ready():
 	super._ready()
 	if not speed: speed = 8.0
@@ -12,10 +13,10 @@ func _ready():
 
 func _physics_process(delta):
 	super._physics_process(delta)
-	animateSprite()
+	animate_sprite()
 
 
-func animateSprite():
+func animate_sprite():
 	var p_pos = rotation_controller.global_position.direction_to(get_viewport().get_camera_3d().global_position)
 	var vertical_side = rotation_controller.global_transform.basis.z
 	var horizontal_side = rotation_controller.global_transform.basis.x

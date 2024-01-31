@@ -584,6 +584,7 @@ albedo_texture = ExtResource("42_i8fnb")
 albedo_texture = ExtResource("43_i70mm")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_37f2j"]
+render_priority = 1
 transparency = 1
 albedo_texture = ExtResource("44_ang3d")
 
@@ -4506,26 +4507,31 @@ shape = SubResource("BoxShape3D_xwmtc")
 
 [node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(0.75, 0, 0, 0, 0.51, 0, 0, 0, 0.75, 63.0377, 203.476, 27.196)
+transparent = false
 shaded = true
 texture = ExtResource("92_hr2ml")
 
 [node name="Sprite3D2" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(1.51746, 0, 0, 0, 0.508203, 0, 0, 0, 1, -90.5672, 202.84, 105.912)
+transparent = false
 shaded = true
 texture = ExtResource("54_vpwii")
 
 [node name="Sprite3D3" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(-6.63303e-08, 0, 1, 0, 0.508203, 0, -1.51746, 0, -4.37114e-08, -92.4849, 202.84, 107.844)
+transparent = false
 shaded = true
 texture = ExtResource("54_vpwii")
 
 [node name="Sprite3D4" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -58.5922, 202.826, -2.88926)
+transparent = false
 shaded = true
 texture = ExtResource("4_sl7bf")
 
 [node name="Sprite3D5" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 18.877, 202.826, 84.7038)
+transparent = false
 shaded = true
 texture = ExtResource("4_sl7bf")
 

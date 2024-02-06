@@ -1,22 +1,43 @@
 extends CanvasLayer
 
-@onready var label = $MarginContainer/Label
+var tween: Tween
+
+@onready var mode_label = $MarginContainer/VBoxContainer/ModeText
+@onready var event_label = $MarginContainer/VBoxContainer/EventText
+@onready var black_screen = $BlackScreen
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass  # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
 	pass
+
+
+func show_black_screen():
+	black_screen.color.a = 1.0
+
+
+func fade_black_screen():
+	tween = create_tween()
+	tween.tween_property(black_screen, "color:a", 0, 2.0)
+
+
+func show_event_text(text: String):
+	if event_label.text:
+		tween = create_tween()
+		await tween.tween_property(event_label, "theme_override_colors/font_color:a", 0, 1.0).finished
+	event_label.text = text
+	tween = create_tween()
+	await tween.tween_property(event_label, "theme_override_colors/font_color:a", 1, 0.4).finished
+
+
+func hide_event_text():
+	tween = create_tween()
+	tween.tween_property(event_label, "theme_override_colors/font_color:a", 0, 1.0)
 
 
 func _on_player_mode_changed(mode, value):
 	match mode:
 		"clip_mode":
 			if value:
-				label.text = "Clip mode enabled"
+				mode_label.text = "Clip mode enabled"
 			else:
-				label.text = ""
+				mode_label.text = ""

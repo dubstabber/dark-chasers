@@ -47,16 +47,25 @@ func _physics_process(_delta):
 
 
 func spawn_player():
-	var player = Preloads.PLAYER_SCENE.instantiate() as CharacterBody3D
+	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
+	player.blocked_movement = true
 	var hud = Preloads.HUD_SCENE.instantiate()
 	player.add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
+	hud.show_black_screen()
 	player.ambient_music.stream = Preloads.d_running_sound
 	player.ambient_music.play()
 	#respawn(player)
 	test_respawn(player)
-
+	hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
+	await get_tree().create_timer(6.0).timeout
+	hud.show_event_text("They say there is a monster that lives there...")
+	await get_tree().create_timer(4.5).timeout
+	hud.hide_event_text()
+	player.blocked_movement = false
+	hud.fade_black_screen()
+	
 
 func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position

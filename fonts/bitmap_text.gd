@@ -1,0 +1,104 @@
+extends Label
+
+var letter_images := {
+	"A": preload("res://images/fonts/AOMFN065.png"),
+	"a": preload("res://images/fonts/AOMFN065.png"),
+	"B": preload("res://images/fonts/AOMFN066.png"),
+	"b": preload("res://images/fonts/AOMFN066.png"),
+	"C": preload("res://images/fonts/AOMFN067.png"),
+	"c": preload("res://images/fonts/AOMFN067.png"),
+	"D": preload("res://images/fonts/AOMFN068.png"),
+	"d": preload("res://images/fonts/AOMFN068.png"),
+	"E": preload("res://images/fonts/AOMFN069.png"),
+	"e": preload("res://images/fonts/AOMFN069.png"),
+	"F": preload("res://images/fonts/AOMFN070.png"),
+	"f": preload("res://images/fonts/AOMFN070.png"),
+	"G": preload("res://images/fonts/AOMFN071.png"),
+	"g": preload("res://images/fonts/AOMFN071.png"),
+	"H": preload("res://images/fonts/AOMFN072.png"),
+	"h": preload("res://images/fonts/AOMFN072.png"),
+	"I": preload("res://images/fonts/AOMFN073.png"),
+	"i": preload("res://images/fonts/AOMFN073.png"),
+	"J": preload("res://images/fonts/AOMFN074.png"),
+	"j": preload("res://images/fonts/AOMFN074.png"),
+	"K": preload("res://images/fonts/AOMFN075.png"),
+	"k": preload("res://images/fonts/AOMFN075.png"),
+	"L": preload("res://images/fonts/AOMFN076.png"),
+	"l": preload("res://images/fonts/AOMFN076.png"),
+	"M": preload("res://images/fonts/AOMFN077.png"),
+	"m": preload("res://images/fonts/AOMFN077.png"),
+	"N": preload("res://images/fonts/AOMFN078.png"),
+	"n": preload("res://images/fonts/AOMFN078.png"),
+	"O": preload("res://images/fonts/AOMFN079.png"),
+	"o": preload("res://images/fonts/AOMFN079.png"),
+	"P": preload("res://images/fonts/AOMFN080.png"),
+	"p": preload("res://images/fonts/AOMFN080.png"),
+	"Q": preload("res://images/fonts/AOMFN081.png"),
+	"q": preload("res://images/fonts/AOMFN081.png"),
+	"R": preload("res://images/fonts/AOMFN082.png"),
+	"r": preload("res://images/fonts/AOMFN082.png"),
+	"S": preload("res://images/fonts/AOMFN083.png"),
+	"s": preload("res://images/fonts/AOMFN083.png"),
+	"T": preload("res://images/fonts/AOMFN084.png"),
+	"t": preload("res://images/fonts/AOMFN084.png"),
+	"U": preload("res://images/fonts/AOMFN085.png"),
+	"u": preload("res://images/fonts/AOMFN085.png"),
+	"V": preload("res://images/fonts/AOMFN086.png"),
+	"v": preload("res://images/fonts/AOMFN086.png"),
+	"W": preload("res://images/fonts/AOMFN087.png"),
+	"w": preload("res://images/fonts/AOMFN087.png"),
+	"X": preload("res://images/fonts/AOMFN088.png"),
+	"x": preload("res://images/fonts/AOMFN088.png"),
+	"Y": preload("res://images/fonts/AOMFN089.png"),
+	"y": preload("res://images/fonts/AOMFN089.png"),
+	"Z": preload("res://images/fonts/AOMFN090.png"),
+	"z": preload("res://images/fonts/AOMFN090.png"),
+	".": preload("res://images/fonts/AOMFN043.png"),
+	"_": preload("res://images/fonts/AOMFN045.png"),
+	"-": preload("res://images/fonts/AOMFN046.png"),
+}
+
+var special_character_offsets := {
+	'.': 12, 
+	',': 0,
+	'_': 13,
+}
+
+
+func _ready():
+	pass 
+
+
+func _process(_delta):
+	pass
+	
+	
+func set_text_with_custom_font(new_text: String) -> void:
+	for node in get_children():
+		remove_child(node)
+		node.queue_free()
+	
+	var character_spacing = 15
+	var character_size = 5
+	var current_x = 0
+	var y = 0
+	var y_offset = 0
+	
+	for character in new_text:
+		if character in letter_images:
+			var image_path = letter_images[character]
+			
+			var character_sprite = Sprite2D.new()
+			character_sprite.texture = image_path
+			character_sprite.scale = Vector2(0.4,0.4)
+			if character in special_character_offsets:
+				y_offset = special_character_offsets[character]
+			else:
+				y_offset = 0
+			character_sprite.position.x = current_x
+			character_sprite.position.y = y_offset
+			
+			add_child(character_sprite)
+		current_x += character_spacing
+
+	custom_minimum_size = Vector2(current_x, character_size)

@@ -60,7 +60,7 @@ func spawn_player():
 	test_respawn(player)
 	hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
 	await get_tree().create_timer(6.0).timeout
-	hud.show_event_text("They say there is a monster that lives there...")
+	hud.show_event_text("They say there is a monster that lives there_")
 	await get_tree().create_timer(4.5).timeout
 	hud.hide_event_text()
 	player.blocked_movement = false

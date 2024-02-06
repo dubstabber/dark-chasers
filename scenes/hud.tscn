@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cojpeusa1t4t6"]
+[gd_scene load_steps=3 format=3 uid="uid://cojpeusa1t4t6"]
 
 [ext_resource type="Script" path="res://scenes/hud.gd" id="1_nn4nw"]
+[ext_resource type="Script" path="res://fonts/bitmap_text.gd" id="2_rp3nn"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_nn4nw")
@@ -31,4 +32,4 @@ size_flags_horizontal = 0
 [node name="EventText" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+script = ExtResource("2_rp3nn")

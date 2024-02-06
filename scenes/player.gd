@@ -1,4 +1,4 @@
-extends CharacterBody3D
+class_name Player extends CharacterBody3D
 
 signal mode_changed(mode, value)
 
@@ -56,7 +56,7 @@ var blocked_movement := false
 @onready var head = $nek/head
 @onready var eyes = $nek/head/eyes
 @onready var camera_3d = $nek/head/eyes/Camera3D
-@onready var color_rect = $nek/head/eyes/Camera3D/ColorRect
+@onready var color_rect = $nek/head/eyes/Camera3D/DeathRect
 @onready var stay_col = $StandingCollisionShape
 @onready var crounch_col = $CrouchingCollisionShape
 @onready var ray_cast_3d = $RayCast3D
@@ -80,6 +80,8 @@ func _input(event):
 			
 
 func _physics_process(delta):
+	if not is_on_floor() and not clip_mode:
+		velocity.y -= gravity * delta
 	if blocked_movement:
 		return
 	if not killed:
@@ -147,8 +149,7 @@ func _physics_process(delta):
 			eyes.position.y = lerp(eyes.position.y, 0.0,delta * lerp_speed)
 			eyes.position.x = lerp(eyes.position.x, 0.0,delta * lerp_speed)
 		
-		if not is_on_floor() and not clip_mode:
-			velocity.y -= gravity * delta
+		
 			
 		if Input.is_action_just_pressed("jump") and clip_mode:
 			velocity.y = current_speed

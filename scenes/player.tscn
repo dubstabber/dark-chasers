@@ -133,7 +133,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 current = true
 fov = 85.0
 
-[node name="ColorRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]
+[node name="DeathRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0

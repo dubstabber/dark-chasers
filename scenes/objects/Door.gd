@@ -1,5 +1,7 @@
 extends Node3D
 
+signal door_locked(text)
+
 @export var move_speed := 0.5
 @export var move_range := 2.5
 @export var time_to_close := 1.2
@@ -28,7 +30,7 @@ func open(side = ""):
 	var isUnlocked = true
 	if map and key_needed and key_needed not in map.keys_collected:
 		isUnlocked = false
-		
+	
 	if side == "FrontSide" and front_locked:
 		Utils.play_sound(Preloads.door_locked_sound, self)
 	elif side == "BackSide" and back_locked:
@@ -51,6 +53,6 @@ func open(side = ""):
 			Utils.play_sound(close_sound, self)
 			await tween.tween_property(self, "position:y", closed_position, move_speed).finished
 	else:
-		print("You need the "+key_needed+" key!")
+		door_locked.emit("You need the "+key_needed+" key!")
 		Utils.play_sound(Preloads.door_locked_sound, self)
 

@@ -1,6 +1,6 @@
 extends Area3D
 
-signal key_collected(body, type, event_name)
+signal key_collected(body, type, event_name, message_text)
 
 @export var key_type: String
 @export var event_name: String
@@ -23,23 +23,24 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.is_in_group('player'):
-		key_collected.emit(body, key_type, event_name)
+		var message_text: String
 		match key_type:
 			"ruby":
-				print("Picked up a ruby key.")
+				message_text = "Picked up a ruby key."
 			"weird":
-				print("Picked up some odd looking key.")
+				message_text = "Picked up some odd looking key."
 			"brown":
-				print("Picked up a rusty brown key.")
+				message_text = "Picked up a rusty brown key."
 			"gold":
-				print("Picked up a fancy gold key.")
+				message_text = "Picked up a fancy gold key."
 			"emerald":
-				print("Picked up an emerald key.")
+				message_text = "Picked up an emerald key."
 			"silver":
-				print("Picked up a shiny silver key.")
+				message_text = "Picked up a shiny silver key."
 			"useless":
-				print('Congratulations! You just picked up the useless key!')
+				message_text = 'Congratulations! You just picked up the useless key!'
 			_:
-				print("Picked up a key.")
+				message_text = "Picked up a key."
+		key_collected.emit(body, key_type, event_name, message_text)
 		Utils.play_sound(Preloads.key_collected_sound, body)
 		queue_free()

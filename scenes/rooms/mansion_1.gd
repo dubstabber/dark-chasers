@@ -1,5 +1,6 @@
 extends Node3D
 
+var hud
 var keys_collected: Array
 
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
@@ -14,6 +15,10 @@ var keys_collected: Array
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	var doors = get_tree().get_nodes_in_group("door")
+	for door in doors:
+		if "door_locked" in door: door.connect("door_locked", _door_locked)
 	var keys = get_tree().get_nodes_in_group("key")
 	for key in keys:
 		key.connect("key_collected", _key_body_entered)
@@ -50,7 +55,7 @@ func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
 	player.blocked_movement = true
-	var hud = Preloads.HUD_SCENE.instantiate()
+	hud = Preloads.HUD_SCENE.instantiate()
 	player.add_child(hud)
 	player.connect("mode_changed", hud._on_player_mode_changed)
 	hud.show_black_screen()
@@ -65,7 +70,7 @@ func spawn_player():
 	hud.hide_event_text()
 	player.blocked_movement = false
 	hud.fade_black_screen()
-	
+
 
 func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
@@ -110,7 +115,8 @@ func _on_ladder_body_exited(body):
 		body.is_climbing = false
 
 
-func _key_body_entered(body, key_type, event):
+func _key_body_entered(body, key_type, event, message_text):
+	hud.add_log(message_text)
 	if key_type and key_type not in keys_collected:
 		keys_collected.push_back(key_type)
 	match event:
@@ -162,6 +168,8 @@ func _key_body_entered(body, key_type, event):
 
 func _handle_button_event(body, event):
 	match event:
+		"check tv":
+			hud.show_event_text("You: The television doesn't appear to turn on. It's probably broken.", false, 3.0)
 		"play piano":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
@@ -182,7 +190,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			print("You: I should head to the 1st floor and check that out...")
+			hud.show_event_text("You: I should head to the 1st floor and check that out...", false, 3.0)
 		"show secret door":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -190,7 +198,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			print("You: Hmm... I wonder where that passage leads to?")
+			hud.show_event_text("You: Hmm... I wonder where that passage leads to?", false, 3.0)
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -207,6 +215,8 @@ func _handle_button_event(body, event):
 
 func _handle_area_event(body: CharacterBody3D, event):
 	match event:
+		"entered the mansion text":
+			hud.show_event_text("You enter carefully into the mansion.", false, 3.0)
 		"monster crawls in library":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -278,6 +288,9 @@ func _on_custom_event(event):
 		_:
 			prints("unknown event: '",event,"'")
 
+
+func _door_locked(text):
+	hud.show_event_text(text, false, 3.0)
 
 # For testing purposes
 func open_all_doors():

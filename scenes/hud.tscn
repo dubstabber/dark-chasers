@@ -14,22 +14,66 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
+[node name="TopLeft" type="MarginContainer" parent="."]
+offset_right = 1.0
+offset_bottom = 77.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopLeft"]
+layout_mode = 2
+
+[node name="MiddleLeft" type="MarginContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -20.0
+offset_right = 40.0
+offset_bottom = 20.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MiddleLeft"]
+layout_mode = 2
+
+[node name="ModeText" type="Label" parent="MiddleLeft/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+vertical_alignment = 1
+
+[node name="BottomLeft" type="MarginContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomLeft"]
+layout_mode = 2
+
+[node name="Center" type="MarginContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-alignment = 1
 
-[node name="ModeText" type="Label" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="EventText" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="EventText" type="Label" parent="Center/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+vertical_alignment = 1
 script = ExtResource("2_rp3nn")
+
+[node name="TopRight" type="MarginContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TopRight"]
+layout_mode = 2

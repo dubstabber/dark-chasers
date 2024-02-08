@@ -73,10 +73,12 @@ func _process(_delta):
 	pass
 	
 	
-func set_text_with_custom_font(new_text: String) -> void:
+func set_text_with_aooni_font(new_text: String) -> void:
 	for node in get_children():
 		remove_child(node)
 		node.queue_free()
+	if not new_text:
+		return
 	
 	var character_spacing = 15
 	var character_size = 5

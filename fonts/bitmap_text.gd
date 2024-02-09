@@ -59,20 +59,12 @@ var letter_images := {
 }
 
 var special_character_offsets := {
-	'.': 12, 
+	'.': 8, 
 	',': 0,
-	'_': 13,
+	'_': 8,
 }
 
 
-func _ready():
-	pass 
-
-
-func _process(_delta):
-	pass
-	
-	
 func set_text_with_aooni_font(new_text: String) -> void:
 	for node in get_children():
 		remove_child(node)
@@ -80,7 +72,7 @@ func set_text_with_aooni_font(new_text: String) -> void:
 	if not new_text:
 		return
 	
-	var character_spacing = 15
+	var character_spacing = 10
 	var character_size = 5
 	var current_x = 0
 	var y = 0
@@ -92,7 +84,7 @@ func set_text_with_aooni_font(new_text: String) -> void:
 			
 			var character_sprite = Sprite2D.new()
 			character_sprite.texture = image_path
-			character_sprite.scale = Vector2(0.4,0.4)
+			character_sprite.scale = Vector2(0.25,0.25)
 			if character in special_character_offsets:
 				y_offset = special_character_offsets[character]
 			else:

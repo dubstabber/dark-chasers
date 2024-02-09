@@ -56,12 +56,15 @@ var letter_images := {
 	".": preload("res://images/fonts/AOMFN043.png"),
 	"_": preload("res://images/fonts/AOMFN045.png"),
 	"-": preload("res://images/fonts/AOMFN046.png"),
+	"'": preload("res://images/fonts/AOMFN039.png"),
+	":": preload("res://images/fonts/AOMFN058.png")
 }
 
 var special_character_offsets := {
 	'.': 8, 
 	',': 0,
 	'_': 8,
+	"'": -6,
 }
 
 

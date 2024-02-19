@@ -1,6 +1,16 @@
 extends Label
 
 var letter_images := {
+	"0": preload("res://images/fonts/AOMFN048.png"),
+	"1": preload("res://images/fonts/AOMFN049.png"),
+	"2": preload("res://images/fonts/AOMFN050.png"),
+	"3": preload("res://images/fonts/AOMFN051.png"),
+	"4": preload("res://images/fonts/AOMFN052.png"),
+	"5": preload("res://images/fonts/AOMFN053.png"),
+	"6": preload("res://images/fonts/AOMFN054.png"),
+	"7": preload("res://images/fonts/AOMFN055.png"),
+	"8": preload("res://images/fonts/AOMFN056.png"),
+	"9": preload("res://images/fonts/AOMFN057.png"),
 	"A": preload("res://images/fonts/AOMFN065.png"),
 	"a": preload("res://images/fonts/AOMFN065.png"),
 	"B": preload("res://images/fonts/AOMFN066.png"),

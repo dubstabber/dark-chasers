@@ -60,11 +60,13 @@ var letter_images := {
 	":": preload("res://images/fonts/AOMFN058.png")
 }
 
+var font_scale := 0.25
+
 var special_character_offsets := {
-	'.': 8, 
-	',': 0,
-	'_': 8,
-	"'": -6,
+	'.': 32-(32*(1-font_scale)), 
+	',': 0*0.3,
+	'_': 32-(32*(1-font_scale)),
+	"'": -24+(24*(1-font_scale)),
 }
 
 
@@ -75,7 +77,7 @@ func set_text_with_aooni_font(new_text: String) -> void:
 	if not new_text:
 		return
 	
-	var character_spacing = 10
+	var character_spacing = 40 * font_scale
 	var character_size = 5
 	var current_x = 0
 	var y = 0
@@ -84,10 +86,9 @@ func set_text_with_aooni_font(new_text: String) -> void:
 	for character in new_text:
 		if character in letter_images:
 			var image_path = letter_images[character]
-			
 			var character_sprite = Sprite2D.new()
 			character_sprite.texture = image_path
-			character_sprite.scale = Vector2(0.25,0.25)
+			character_sprite.scale = Vector2(font_scale,font_scale)
 			if character in special_character_offsets:
 				y_offset = special_character_offsets[character]
 			else:

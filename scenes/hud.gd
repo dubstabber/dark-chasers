@@ -6,7 +6,7 @@ var tween: Tween
 @onready var top_left_container = $TopLeft/VBoxContainer
 @onready var mode_label = $MiddleLeft/VBoxContainer/ModeText
 @onready var event_label = $Center/VBoxContainer/EventText
-@onready var log_label_scene = load("res://scenes/ui/log_label.tscn")
+@onready var log_label_scene = preload("res://scenes/ui/log_label.tscn")
 
 
 func _ready():
@@ -28,7 +28,7 @@ func add_log(text: String):
 	log_label.create(text, 5.0)
 
 
-func show_event_text(text: String, faded := true, text_time := 0.0):
+func show_event_text(text: String, faded: bool = true, text_time: float = 0.0):
 	if faded:
 		if event_label.get_child_count():
 			tween = create_tween()

@@ -67,11 +67,12 @@ var letter_images := {
 	"_": preload("res://images/fonts/AOMFN045.png"),
 	"-": preload("res://images/fonts/AOMFN046.png"),
 	"'": preload("res://images/fonts/AOMFN039.png"),
-	":": preload("res://images/fonts/AOMFN058.png")
+	":": preload("res://images/fonts/AOMFN058.png"),
+	"!": preload("res://images/fonts/AOMFN033.png"),
+	"?": preload("res://images/fonts/AOMFN063.png"),
 }
 
 var font_scale := 0.4
-
 var special_character_offsets: Dictionary
 
 
@@ -96,7 +97,7 @@ func set_text_with_aooni_font(new_text: String) -> void:
 	if not new_text:
 		return
 	
-	var character_spacing = 40 * font_scale
+	var character_spacing = 25 * font_scale
 	var character_size = 5
 	var current_x = 0
 	var y = 0
@@ -116,6 +117,7 @@ func set_text_with_aooni_font(new_text: String) -> void:
 			character_sprite.position.y = y_offset
 			
 			add_child(character_sprite)
-		current_x += character_spacing
-
+			current_x += character_sprite.texture.get_width() * font_scale
+		else:
+			current_x += character_spacing
 	custom_minimum_size = Vector2(current_x, character_size)

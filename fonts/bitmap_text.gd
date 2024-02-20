@@ -67,6 +67,7 @@ var letter_images := {
 	"_": preload("res://images/fonts/AOMFN045.png"),
 	"-": preload("res://images/fonts/AOMFN046.png"),
 	"'": preload("res://images/fonts/AOMFN039.png"),
+	",": preload("res://images/fonts/AOMFN044.png"),
 	":": preload("res://images/fonts/AOMFN058.png"),
 	"!": preload("res://images/fonts/AOMFN033.png"),
 	"?": preload("res://images/fonts/AOMFN063.png"),
@@ -84,7 +85,7 @@ func set_font_scale(sc: float):
 	font_scale = sc
 	special_character_offsets = {
 		'.': 30*font_scale, 
-		',': 30*font_scale,
+		',': 25*font_scale,
 		'_': 33*font_scale,
 		':': 5*font_scale,
 	}

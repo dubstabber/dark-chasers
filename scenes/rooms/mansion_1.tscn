@@ -1,4 +1,4 @@
-[gd_scene load_steps=551 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=553 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -1305,6 +1305,12 @@ size = Vector3(0.01, 0.148682, 0.269287)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_woq7s"]
 size = Vector3(0.01, 0.78891, 1.25446)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l3gx8"]
+size = Vector3(1.57267, 2.04089, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yotdi"]
+size = Vector3(1.57267, 2.04089, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lougt"]
 size = Vector3(1.27832, 2.50305, 0.237793)
@@ -4385,6 +4391,28 @@ one_use = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/TelevisionCheck"]
 shape = SubResource("BoxShape3D_woq7s")
+
+[node name="MapCheck" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.80193, 205.934, 119.958)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("144_26gxq")
+event_name = "check map"
+one_use = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/MapCheck"]
+shape = SubResource("BoxShape3D_l3gx8")
+
+[node name="MapCheck2" type="StaticBody3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons" groups=["button"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.0479, 203.348, 103.317)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("144_26gxq")
+event_name = "check map 2"
+one_use = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/MapCheck2"]
+shape = SubResource("BoxShape3D_yotdi")
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

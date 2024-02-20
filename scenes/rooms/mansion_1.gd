@@ -130,6 +130,8 @@ func _key_body_entered(body, key_type, event, message_text):
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
+			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
+			aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 			aooni.connect("tree_exited", global_music.stop)
 		"ao oni tries to break bars":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
@@ -170,6 +172,8 @@ func _handle_button_event(body, event):
 	match event:
 		"check tv":
 			hud.show_event_text("You: The television doesn't appear to turn on. It's probably broken.", false, 3.0)
+		"check map":
+			hud.show_event_text("You: The resort map of the Mansion. Nuff said...", false, 3.0)
 		"play piano":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
@@ -177,6 +181,8 @@ func _handle_button_event(body, event):
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
+			aooni.connect("tree_exited", _on_custom_event.bind("piano aooni disappeared"))
+			hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
@@ -199,6 +205,8 @@ func _handle_button_event(body, event):
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 			hud.show_event_text("You: Hmm... I wonder where that passage leads to?", false, 3.0)
+		"check map 2":
+			hud.show_event_text("You: This map says that there's a hidden passage nearby.", false, 3.0)
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -208,6 +216,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+			hud.show_event_text("You: I activated the switch. I better get out of here quickly!", false, 3.0)
 		"": pass
 		_:
 			prints("unknown event: '",event,"'")
@@ -229,7 +238,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			hud.show_event_text("You: What the eff was that!?", false, 5.0)
+			hud.show_event_text("You: What the eff was that!?", false, 3.0)
 			global_music.stream = Preloads.creep_amb_sound
 			global_music.volume_db = -5
 			global_music.play()
@@ -241,14 +250,18 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.current_room = "PianoRoom"
 				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
+				hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
 				global_music.stream = Preloads.aosee_sound
 				global_music.volume_db = -5
 				global_music.play()
+				aooni.connect("tree_exited", _on_custom_event.bind("piano aooni disappeared"))
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
+			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
+			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("wide door aooni disappeared"))
 			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
 			global_sound.stream = Preloads.event_sound
@@ -268,6 +281,8 @@ func _handle_area_event(body: CharacterBody3D, event):
 				global_music.stream = Preloads.aosee_sound
 				global_music.volume_db = -5
 				global_music.play()
+				hud.show_event_text("You: WHAT THE?!?", false, 3.0)
+				$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
 				$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", global_music.stop)
 		"change to next map":
 			print("change to next map")
@@ -281,10 +296,23 @@ func _handle_area_event(body: CharacterBody3D, event):
 
 func _on_custom_event(event):
 	match event:
+		"monster disappeared":
+			var random_text_idx = randi_range(0,1)
+			match random_text_idx:
+				0:
+					hud.show_event_text("You: I think he dissapeared..", false, 3.0)
+				1:
+					hud.show_event_text("You: I have the feeling it's gone...", false, 3.0)
+		"piano aooni disappeared":
+			hud.show_event_text("You: Phew, that was close...", false, 3.0)
+		"wide door aooni disappeared":
+			hud.show_event_text("You: I think that thing is gone...", false, 3.0)
 		"ao oni gave up":
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+		"aomika disappeared":
+			hud.show_event_text("You: Whatever that THING was... it's gone...", false, 3.0)
 		"": pass
 		_:
 			prints("unknown event: '",event,"'")
@@ -292,6 +320,7 @@ func _on_custom_event(event):
 
 func _door_locked(text):
 	hud.show_event_text(text, false, 3.0)
+
 
 # For testing purposes
 func open_all_doors():

@@ -1,4 +1,4 @@
-extends Label
+extends Control
 
 var letter_images := {
 	"0": preload("res://images/fonts/AOMFN048.png"),
@@ -70,14 +70,23 @@ var letter_images := {
 	":": preload("res://images/fonts/AOMFN058.png")
 }
 
-var font_scale := 0.25
+var font_scale := 0.4
 
-var special_character_offsets := {
-	'.': 32-(32*(1-font_scale)), 
-	',': 0*0.3,
-	'_': 32-(32*(1-font_scale)),
-	"'": -24+(24*(1-font_scale)),
-}
+var special_character_offsets: Dictionary
+
+
+func _ready():
+	set_font_scale(font_scale)
+
+
+func set_font_scale(sc: float):
+	font_scale = sc
+	special_character_offsets = {
+		'.': 30*font_scale, 
+		',': 56*font_scale,
+		'_': 33*font_scale,
+		':': 5*font_scale,
+	}
 
 
 func set_text_with_aooni_font(new_text: String) -> void:
@@ -96,9 +105,9 @@ func set_text_with_aooni_font(new_text: String) -> void:
 	for character in new_text:
 		if character in letter_images:
 			var image_path = letter_images[character]
-			var character_sprite = Sprite2D.new()
+			var character_sprite = TextureRect.new()
 			character_sprite.texture = image_path
-			character_sprite.scale = Vector2(font_scale,font_scale)
+			character_sprite.scale = Vector2(font_scale,font_scale/2.0)
 			if character in special_character_offsets:
 				y_offset = special_character_offsets[character]
 			else:

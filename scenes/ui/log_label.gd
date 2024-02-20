@@ -5,7 +5,7 @@ extends Control
 
 func _ready():
 	log_text.set_font_scale(0.3)
-	custom_minimum_size = Vector2(500,10)
+	custom_minimum_size = Vector2(1000,10)
 
 
 func create(log_msg: String, wait_time: float):

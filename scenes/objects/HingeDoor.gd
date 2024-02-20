@@ -1,5 +1,7 @@
 extends Node3D
 
+signal door_locked(text)
+
 @export var move_speed := 0.8
 @export var opened_angle := 82
 @export var time_to_close := 1.2
@@ -15,8 +17,10 @@ var tween: Tween
 
 func open(side = ""):
 	if side == "FrontSide" and front_locked:
+		door_locked.emit("The door is locked.")
 		Utils.play_sound(Preloads.door_locked_sound, self)
 	elif side == "BackSide" and back_locked:
+		door_locked.emit("The door is locked.")
 		Utils.play_sound(Preloads.door_locked_sound, self)
 	elif not is_opening:
 			is_opening = true

@@ -229,6 +229,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
+			hud.show_event_text("You: What the eff was that!?", false, 5.0)
 			global_music.stream = Preloads.creep_amb_sound
 			global_music.volume_db = -5
 			global_music.play()

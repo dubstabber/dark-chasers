@@ -83,7 +83,7 @@ func set_font_scale(sc: float):
 	font_scale = sc
 	special_character_offsets = {
 		'.': 30*font_scale, 
-		',': 56*font_scale,
+		',': 30*font_scale,
 		'_': 33*font_scale,
 		':': 5*font_scale,
 	}

@@ -11,7 +11,6 @@ var faded: bool
 @onready var timer = $Timer
 
 
-
 func _ready():
 	timer.connect("timeout", hide_event_text)
 

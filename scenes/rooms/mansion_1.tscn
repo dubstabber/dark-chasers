@@ -2366,8 +2366,8 @@ shape = SubResource("BoxShape3D_wfras")
 [node name="Lights" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.0266, 222.345, -32.82)
-light_energy = 11.021
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.972, 222.345, 30.6272)
+light_energy = 10.0
 omni_range = 1063.46
 
 [node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]

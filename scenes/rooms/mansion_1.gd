@@ -181,11 +181,11 @@ func _handle_button_event(body, event):
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
-			aooni.connect("tree_exited", _on_custom_event.bind("piano aooni disappeared"))
 			hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
+			aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 			aooni.connect("tree_exited", global_music.stop)
 		"show moving bars":
 			for player in players.get_children():
@@ -254,14 +254,14 @@ func _handle_area_event(body: CharacterBody3D, event):
 				global_music.stream = Preloads.aosee_sound
 				global_music.volume_db = -5
 				global_music.play()
-				aooni.connect("tree_exited", _on_custom_event.bind("piano aooni disappeared"))
+				aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
 			global_music.stream = Preloads.aosee_sound
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
-			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("wide door aooni disappeared"))
+			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
 			global_sound.stream = Preloads.event_sound
@@ -278,12 +278,14 @@ func _handle_area_event(body: CharacterBody3D, event):
 			await get_tree().create_timer(0.8).timeout
 			body.collision_mask = 14
 		"open ao mika wardrobe":
-				global_music.stream = Preloads.aosee_sound
-				global_music.volume_db = -5
-				global_music.play()
-				hud.show_event_text("You: WHAT THE?!?", false, 3.0)
-				$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
-				$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", global_music.stop)
+			global_music.stream = Preloads.aosee_sound
+			global_music.volume_db = -5
+			global_music.play()
+			hud.show_event_text("You: WHAT THE?!?", false, 3.0)
+			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
+			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao mika".connect("tree_exited", global_music.stop)
+		"underground secret info":
+			hud.show_event_text("You need to find the switch, to open a hidden passage.", false, 3.0)
 		"change to next map":
 			print("change to next map")
 		"kill player":
@@ -297,16 +299,18 @@ func _handle_area_event(body: CharacterBody3D, event):
 func _on_custom_event(event):
 	match event:
 		"monster disappeared":
-			var random_text_idx = randi_range(0,1)
+			var random_text_idx = randi_range(0,4)
 			match random_text_idx:
 				0:
 					hud.show_event_text("You: I think he dissapeared..", false, 3.0)
 				1:
 					hud.show_event_text("You: I have the feeling it's gone...", false, 3.0)
-		"piano aooni disappeared":
-			hud.show_event_text("You: Phew, that was close...", false, 3.0)
-		"wide door aooni disappeared":
-			hud.show_event_text("You: I think that thing is gone...", false, 3.0)
+				2:
+					hud.show_event_text("You: Phew, that was close...", false, 3.0)
+				3:
+					hud.show_event_text("You: I think he's away.", false, 3.0)
+				4:
+					hud.show_event_text("You: I think that thing is gone...", false, 3.0)
 		"ao oni gave up":
 			for player in players.get_children():
 				player.camera_3d.set_current(true)

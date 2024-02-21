@@ -1,4 +1,4 @@
-[gd_scene load_steps=553 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=554 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -1338,6 +1338,9 @@ size = Vector3(7.66479, 2.48145, 0.287354)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_asr7d"]
 size = Vector3(8.54474, 2.48145, 0.287354)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_15tt7"]
+size = Vector3(0.126678, 1.91034, 7.59689)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ti8m0"]
 size = Vector3(0.379883, 1, 1)
@@ -4509,6 +4512,14 @@ event_name = "entered the mansion text"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent9"]
 shape = SubResource("BoxShape3D_asr7d")
+
+[node name="AreaEvent10" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents" groups=["area_event"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.1956, 203.791, 114.204)
+script = ExtResource("146_vhxkd")
+event_name = "underground secret info"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/AreaEvents/AreaEvent10"]
+shape = SubResource("BoxShape3D_15tt7")
 
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

@@ -1,16 +1,19 @@
 extends CanvasLayer
 
 var tween: Tween
+var faded: bool
 
 @onready var black_screen = $BlackScreen
 @onready var top_left_container = $TopLeft/VBoxContainer
 @onready var mode_label = $MiddleLeft/VBoxContainer/ModeText
 @onready var event_label = $Center/VBoxContainer/EventText
 @onready var log_label_scene = preload("res://scenes/ui/log_label.tscn")
+@onready var timer = $Timer
+
 
 
 func _ready():
-	pass
+	timer.connect("timeout", hide_event_text)
 
 
 func show_black_screen():
@@ -28,7 +31,8 @@ func add_log(text: String):
 	log_label.create(text, 5.0)
 
 
-func show_event_text(text: String, faded: bool = true, text_time: float = 0.0):
+func show_event_text(text: String, _faded: bool = true, text_time: float = 0.0):
+	faded = _faded
 	if faded:
 		if event_label.get_child_count():
 			tween = create_tween()
@@ -40,10 +44,12 @@ func show_event_text(text: String, faded: bool = true, text_time: float = 0.0):
 		event_label.set_text_with_aooni_font(text)
 		event_label.modulate.a = 1
 	if text_time:
-		await get_tree().create_timer(text_time).timeout
-		hide_event_text(faded)
+		if not timer.is_stopped():
+			timer.stop()
+		timer.wait_time = text_time
+		timer.start()
 
-func hide_event_text(faded := true):
+func hide_event_text():
 	if faded:
 		tween = create_tween()
 		await tween.tween_property(event_label, "modulate:a", 0, 1.0).finished
@@ -59,4 +65,4 @@ func _on_player_mode_changed(mode, value):
 				mode_label.text = "Clip mode enabled"
 			else:
 				mode_label.text = ""
-
+				

@@ -28,6 +28,19 @@ func _ready():
 	var area_events = get_tree().get_nodes_in_group("area_event")
 	for area_event in area_events:
 		area_event.connect("event_triggered", _handle_area_event)
+	var destroyables = get_tree().get_nodes_in_group("destroyable")
+	for destroyable in destroyables:
+		if destroyable.name == 'BlinkWall':
+			destroyable.connect("tree_exiting", func ():
+				var sound = AudioStreamPlayer3D.new()
+				add_child(sound)
+				sound.position = destroyable.position
+				sound.stream = Preloads.wallcut_sound
+				sound.attenuation_model = AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC
+				sound.volume_db = -20
+				sound.connect("finished", sound.queue_free)
+				sound.play()
+				)
 	
 	spawn_player()
 	#open_all_doors()

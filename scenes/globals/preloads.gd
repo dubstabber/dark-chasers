@@ -30,6 +30,7 @@ var d_running_sound := preload("res://sounds/music/D_RUNNIN.ogg")
 var bar_shake := preload("res://sounds/sfx/BARSHAKE.ogg")
 var spawn_sound := preload("res://sounds/sfx/DSTELEPT.ogg")
 var event_sound := preload("res://sounds/sfx/CREVENT.wav")
+var wallcut_sound := preload("res://sounds/sfx/WALLCUT.wav")
 
 var pistol_shoot_sound := preload("res://sounds/sfx/HIRSHOT.wav")
 

@@ -1,6 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=16 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_xs0mp"]
+[ext_resource type="Texture2D" uid="uid://d27ty7pf8btbo" path="res://images/player_wieldables/HFSTE0.png" id="2_mtx4k"]
+[ext_resource type="Texture2D" uid="uid://cr2vq3lcp6hbd" path="res://images/player_wieldables/HFSTA0.png" id="3_8vtbg"]
+[ext_resource type="Texture2D" uid="uid://cajq72at54mod" path="res://images/player_wieldables/HSPSA0.png" id="4_aye6a"]
+[ext_resource type="Texture2D" uid="uid://dafc1hswoor1k" path="res://images/player_wieldables/HSPSB0.png" id="5_ifb3f"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
@@ -9,6 +13,115 @@ height = 1.19463
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
 radius = 0.202198
 height = 0.5
+
+[sub_resource type="Animation" id="Animation_ntln4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RightHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(464, 102)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftHand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-458, 100)]
+}
+
+[sub_resource type="Animation" id="Animation_ka18p"]
+resource_name = "fist-attack"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-458, 100), Vector2(-458, 100), Vector2(-390, -19), Vector2(-307, -100), Vector2(-131, 100), Vector2(-460, 101)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightHand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(464, 102), Vector2(385, -54), Vector2(294, -98), Vector2(110, 101), Vector2(466, 104)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../../../..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [5],
+"method": &"hit"
+}, {
+"args": [5],
+"method": &"hit"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0wqi2"]
+resource_name = "pistol-shoot"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("4_aye6a"), ExtResource("5_ifb3f"), ExtResource("4_aye6a")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [20],
+"method": &"shoot"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v83x5"]
+_data = {
+"RESET": SubResource("Animation_ntln4"),
+"fist-attack": SubResource("Animation_ka18p"),
+"pistol-shoot": SubResource("Animation_0wqi2")
+}
 
 [sub_resource type="Animation" id="Animation_nqp58"]
 length = 0.001
@@ -144,7 +257,43 @@ color = Color(1, 0, 0, 1)
 
 [node name="Interaction" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
 target_position = Vector3(0, 0, -1)
-collision_mask = 12
+collision_mask = 15
+
+[node name="HitScan" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 15
+
+[node name="GunBase" type="Control" parent="nek/head/eyes/Camera3D"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="LeftHand" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(-458, 100)
+scale = Vector2(3, 3)
+texture = ExtResource("2_mtx4k")
+
+[node name="RightHand" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(464, 102)
+scale = Vector2(3, 3)
+texture = ExtResource("3_8vtbg")
+
+[node name="Pistol" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(364, -132)
+scale = Vector2(3, 3)
+texture = ExtResource("4_aye6a")
+
+[node name="InteractPlayer" type="AnimationPlayer" parent="nek/head/eyes/Camera3D/GunBase"]
+libraries = {
+"": SubResource("AnimationLibrary_v83x5")
+}
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="nek/head/eyes"]
 libraries = {
@@ -153,3 +302,7 @@ libraries = {
 
 [node name="AmbientMusic" type="AudioStreamPlayer3D" parent="."]
 volume_db = -34.0
+
+[node name="InteractSound" type="AudioStreamPlayer3D" parent="."]
+attenuation_model = 2
+volume_db = -28.235

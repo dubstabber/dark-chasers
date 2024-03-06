@@ -1,4 +1,4 @@
-[gd_scene load_steps=554 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=555 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -118,6 +118,7 @@
 [ext_resource type="Texture2D" uid="uid://bx31yuj42psy3" path="res://images/textures/BTHRTILE.png" id="116_5qjnr"]
 [ext_resource type="Texture2D" uid="uid://cyvnqi5depfh7" path="res://images/textures/OSASPHLT.png" id="117_wkxgp"]
 [ext_resource type="Texture2D" uid="uid://clveoydxngb0c" path="res://images/textures/HRWATR02.png" id="118_dkpvn"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="118_vl2m2"]
 [ext_resource type="Texture2D" uid="uid://buyekstdo5mva" path="res://images/textures/SSRFLR02.png" id="119_bj7ju"]
 [ext_resource type="Texture2D" uid="uid://c5v6pd3m6q06j" path="res://images/textures/SSRCELIN.png" id="120_onk41"]
 [ext_resource type="Texture2D" uid="uid://ir8fp4gs3lde" path="res://images/textures/SSRFLR01.png" id="121_rch43"]
@@ -814,8 +815,21 @@ albedo_texture = ExtResource("3_8jrnm")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yc2se"]
 albedo_texture = ExtResource("117_wkxgp")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3v52"]
-albedo_texture = ExtResource("118_dkpvn")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_du4tf"]
+render_priority = 1
+shader = ExtResource("118_vl2m2")
+shader_parameter/albedo = Color(1, 1, 1, 0.768627)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/time_scale = 6.75
+shader_parameter/texture_albedo = ExtResource("118_dkpvn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r248g"]
 albedo_texture = ExtResource("119_bj7ju")
@@ -2081,7 +2095,7 @@ surface_material_override/112 = SubResource("StandardMaterial3D_p1qc8")
 surface_material_override/113 = SubResource("StandardMaterial3D_sxb4t")
 surface_material_override/114 = SubResource("StandardMaterial3D_nprfo")
 surface_material_override/115 = SubResource("StandardMaterial3D_yc2se")
-surface_material_override/116 = SubResource("StandardMaterial3D_t3v52")
+surface_material_override/116 = SubResource("ShaderMaterial_du4tf")
 surface_material_override/117 = SubResource("StandardMaterial3D_r248g")
 surface_material_override/118 = SubResource("StandardMaterial3D_pu12o")
 surface_material_override/119 = SubResource("StandardMaterial3D_i3bca")

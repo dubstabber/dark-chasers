@@ -56,8 +56,8 @@ func spawn_player():
 	players.add_child(player)
 	player.blocked_movement = true
 	hud = Preloads.HUD_SCENE.instantiate()
-	player.add_child(hud)
-	player.connect("mode_changed", hud._on_player_mode_changed)
+	add_child(hud)
+	player.hud = hud
 	hud.show_black_screen()
 	player.ambient_music.stream = Preloads.d_running_sound
 	player.ambient_music.play()

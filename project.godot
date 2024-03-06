@@ -21,6 +21,10 @@ EnemyDb="*res://scenes/globals/enemyDB.gd"
 Utils="*res://scenes/globals/utils.gd"
 Preloads="*res://scenes/globals/preloads.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [file_customization]
 
 folder_colors={

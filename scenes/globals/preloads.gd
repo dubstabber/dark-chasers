@@ -31,6 +31,8 @@ var bar_shake := preload("res://sounds/sfx/BARSHAKE.ogg")
 var spawn_sound := preload("res://sounds/sfx/DSTELEPT.ogg")
 var event_sound := preload("res://sounds/sfx/CREVENT.wav")
 
+var pistol_shoot_sound := preload("res://sounds/sfx/HIRSHOT.wav")
+
 var button_up_1 := preload("res://images/textures/BSW01A.png")
 var button_down_1 := preload("res://images/textures/BSW01B.png")
 var button_up_5 := preload("res://images/textures/BSW05A.png")

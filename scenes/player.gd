@@ -1,6 +1,10 @@
 class_name Player extends CharacterBody3D
 
-signal mode_changed(mode, value)
+enum WEAPON_TYPE {
+	FISTS,
+	PISTOL,
+	LIGHTER
+}
 
 const JUMP_VELOCITY := 6.0
 const WALKING_SPEED := 5.0
@@ -34,6 +38,7 @@ var is_crounching := false
 var crouching_depth := -0.5
 var last_velocity = Vector2.ZERO
 var ground_type: String
+var current_weapon: int
 
 var walking := false
 var sprinting := false
@@ -52,6 +57,8 @@ var head_bobbing_current_intensity = 0.0
 
 var blocked_movement := false
 
+var hud: CanvasLayer
+
 @onready var nek = $nek
 @onready var head = $nek/head
 @onready var eyes = $nek/head/eyes
@@ -61,12 +68,16 @@ var blocked_movement := false
 @onready var crounch_col = $CrouchingCollisionShape
 @onready var ray_cast_3d = $RayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
+@onready var interact_player = $nek/head/eyes/Camera3D/GunBase/InteractPlayer
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
+@onready var hit_scan = $nek/head/eyes/Camera3D/HitScan
 @onready var ambient_music = $AmbientMusic
+@onready var interact_sound = $InteractSound
 
 
 func _ready():
 	camera_3d.fov = 85
+	switch_weapon(WEAPON_TYPE.PISTOL)
 
 
 func _input(event):
@@ -184,7 +195,7 @@ func _physics_process(delta):
 
 		if Input.is_action_just_pressed("toggle-clip-mode"):
 			clip_mode = not clip_mode
-			mode_changed.emit("clip_mode", clip_mode)
+			if hud: hud._on_player_mode_changed("clip_mode",clip_mode)
 			if clip_mode:
 				collision_mask = 10
 				velocity = Vector3.ZERO
@@ -204,11 +215,13 @@ func _physics_process(delta):
 				position = transit_pos.global_position
 				transit_pos = null
 			
-		if Input.is_action_just_pressed("hit"):
-			var collider = interaction.get_collider()
-			if collider:
-				if collider.is_in_group("destroyable"):
-					collider.queue_free()
+		if Input.is_action_pressed("hit"):
+			if not interact_player.is_playing():
+				match current_weapon:
+					WEAPON_TYPE.FISTS:
+						interact_player.play("fist-attack")
+					WEAPON_TYPE.PISTOL:
+						interact_player.play("pistol-shoot")
 
 		
 		if direction:
@@ -246,6 +259,26 @@ func handle_footstep():
 		"metal2":
 			Utils.play_footstep_sound(Preloads.metal2_footsteps.pick_random(), self)
 
+
+func switch_weapon(new_weapon: int):
+	current_weapon = new_weapon
+	match current_weapon:
+		WEAPON_TYPE.PISTOL:
+			interact_sound.stream = Preloads.pistol_shoot_sound
+
+
+func hit(damage: int):
+	var collider = interaction.get_collider()
+	if collider:
+		if collider.is_in_group("destroyable"):
+			collider.queue_free()
+
+func shoot(damage: int):
+	interact_sound.play()
+	var collider = hit_scan.get_collider()
+	if collider:
+		if collider.is_in_group("destroyable"):
+			collider.queue_free()
 
 func kill(pos = null):
 	if not killed:

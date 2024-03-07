@@ -31,16 +31,8 @@ func _ready():
 	var destroyables = get_tree().get_nodes_in_group("destroyable")
 	for destroyable in destroyables:
 		if destroyable.name == 'BlinkWall':
-			destroyable.connect("tree_exiting", func ():
-				var sound = AudioStreamPlayer3D.new()
-				add_child(sound)
-				sound.position = destroyable.position
-				sound.stream = Preloads.wallcut_sound
-				sound.attenuation_model = AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC
-				sound.volume_db = -20
-				sound.connect("finished", sound.queue_free)
-				sound.play()
-				)
+			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.wallcut_sound, self, destroyable.position, -15))
+	
 	
 	spawn_player()
 	#open_all_doors()

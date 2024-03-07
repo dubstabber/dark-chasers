@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfgb65s3n1gk2"
-path="res://.godot/imported/swag_hacker.jpg-a5af4dbd977ae1d041f3c30ecc38ffba.ctex"
+uid="uid://cdv3em6qx0kb"
+path="res://.godot/imported/obunga.webp-fc1acc28cae2db90d6002ca7dfc14368.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/enemies/swag_hacker.jpg"
-dest_files=["res://.godot/imported/swag_hacker.jpg-a5af4dbd977ae1d041f3c30ecc38ffba.ctex"]
+source_file="res://images/enemies/static-images/obunga.webp"
+dest_files=["res://.godot/imported/obunga.webp-fc1acc28cae2db90d6002ca7dfc14368.ctex"]
 
 [params]
 

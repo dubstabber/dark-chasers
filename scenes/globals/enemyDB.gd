@@ -3,24 +3,24 @@ extends Node
 var ENEMIES = [
 	{
 		"name": "swag hacker",
-		"image": load("res://images/enemies/swag_hacker.jpg"),
+		"image": load("res://images/enemies/static-images/swag_hacker.jpg"),
 	},
 	{
 		"name": "botanicula onion",
-		"image": load("res://images/enemies/botanicula_onion.png"),
+		"image": load("res://images/enemies/static-images/botanicula_onion.png"),
 	},
 	{
 		"name": "giga chad",
-		"image": load("res://images/enemies/gigachad.webp"),
+		"image": load("res://images/enemies/static-images/gigachad.webp"),
 		"music": load("res://sounds/music/gigachad.mp3"),
 	},
 	{
 		"name": "obunga",
-		"image": load("res://images/enemies/obunga.webp"),
+		"image": load("res://images/enemies/static-images/obunga.webp"),
 	},
 	{
 		"name": "angry german kid",
-		"image": load("res://images/enemies/angry-german-kid.png"),
+		"image": load("res://images/enemies/static-images/angry-german-kid.png"),
 		"musics": load_musics("res://sounds/music/angrygermankid/angry-german-kid-", 25, ".ogg")
 	},
 ]

@@ -286,6 +286,8 @@ func hit(damage: int):
 	if interact_sound.stream: interact_sound.play()
 	var collider = interaction.get_collider()
 	if collider:
+		if "take_damage" in collider:
+			collider.take_damage(damage)
 		if collider.is_in_group("destroyable"):
 			collider.queue_free()
 

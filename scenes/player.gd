@@ -77,7 +77,7 @@ var hud: CanvasLayer
 
 func _ready():
 	camera_3d.fov = 85
-	switch_weapon(WEAPON_TYPE.PISTOL)
+	switch_weapon(WEAPON_TYPE.FISTS)
 
 
 func _input(event):
@@ -220,9 +220,15 @@ func _physics_process(delta):
 				match current_weapon:
 					WEAPON_TYPE.FISTS:
 						interact_player.play("fist-attack")
+		if Input.is_action_just_pressed("hit"):
+			if not interact_player.is_playing():
+				match current_weapon:
 					WEAPON_TYPE.PISTOL:
 						interact_player.play("pistol-shoot")
-
+		if Input.is_action_just_pressed("Weapon 1"):
+			switch_weapon(WEAPON_TYPE.FISTS)
+		if Input.is_action_just_pressed("Weapon 2"):
+			switch_weapon(WEAPON_TYPE.PISTOL)
 		
 		if direction:
 			velocity.x = direction.x * current_speed
@@ -261,9 +267,17 @@ func handle_footstep():
 
 
 func switch_weapon(new_weapon: int):
+	if current_weapon == new_weapon: return
+	if interact_player.is_playing():
+		await interact_player.animation_finished
+	match current_weapon:
+		WEAPON_TYPE.PISTOL:
+			interact_player.play_backwards("pistol-switch")
+
 	current_weapon = new_weapon
 	match current_weapon:
 		WEAPON_TYPE.PISTOL:
+			interact_player.play("pistol-switch")
 			interact_sound.stream = Preloads.pistol_shoot_sound
 
 

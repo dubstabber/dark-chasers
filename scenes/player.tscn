@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=17 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" path="res://scenes/player.gd" id="1_xs0mp"]
 [ext_resource type="Texture2D" uid="uid://d27ty7pf8btbo" path="res://images/player_wieldables/HFSTE0.png" id="2_mtx4k"]
@@ -116,11 +116,28 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_2g6tr"]
+resource_name = "pistol-switch"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(217, 137), Vector2(217, -69)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_v83x5"]
 _data = {
 "RESET": SubResource("Animation_ntln4"),
 "fist-attack": SubResource("Animation_ka18p"),
-"pistol-shoot": SubResource("Animation_0wqi2")
+"pistol-shoot": SubResource("Animation_0wqi2"),
+"pistol-switch": SubResource("Animation_2g6tr")
 }
 
 [sub_resource type="Animation" id="Animation_nqp58"]
@@ -286,7 +303,7 @@ scale = Vector2(3, 3)
 texture = ExtResource("3_8vtbg")
 
 [node name="Pistol" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
-position = Vector2(364, -132)
+position = Vector2(217, 137)
 scale = Vector2(3, 3)
 texture = ExtResource("4_aye6a")
 

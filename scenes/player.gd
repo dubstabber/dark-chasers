@@ -273,26 +273,22 @@ func switch_weapon(new_weapon: int):
 	match current_weapon:
 		WEAPON_TYPE.PISTOL:
 			interact_player.play_backwards("pistol-switch")
-
 	current_weapon = new_weapon
 	match current_weapon:
+		WEAPON_TYPE.FISTS:
+			interact_sound.stream = null
 		WEAPON_TYPE.PISTOL:
 			interact_player.play("pistol-switch")
 			interact_sound.stream = Preloads.pistol_shoot_sound
 
 
 func hit(damage: int):
+	if interact_sound.stream: interact_sound.play()
 	var collider = interaction.get_collider()
 	if collider:
 		if collider.is_in_group("destroyable"):
 			collider.queue_free()
 
-func shoot(damage: int):
-	interact_sound.play()
-	var collider = hit_scan.get_collider()
-	if collider:
-		if collider.is_in_group("destroyable"):
-			collider.queue_free()
 
 func kill(pos = null):
 	if not killed:

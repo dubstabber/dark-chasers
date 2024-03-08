@@ -1,8 +1,96 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4vbbj8tneui0"]
+[gd_scene load_steps=12 format=3 uid="uid://b4vbbj8tneui0"]
+
+[ext_resource type="Script" path="res://scenes/objects/white_chair.gd" id="1_kxg7w"]
+[ext_resource type="Texture2D" uid="uid://cs6agq77a5e47" path="res://images/objects/white-chair/CHAIA6.png" id="2_5c3hp"]
+[ext_resource type="Texture2D" uid="uid://ce2fi1kclj4fi" path="res://images/objects/white-chair/CHAIA5.png" id="2_efaqc"]
+[ext_resource type="Texture2D" uid="uid://ikjh4thjjrky" path="res://images/objects/white-chair/CHAIA1.png" id="2_tb4ur"]
+[ext_resource type="Texture2D" uid="uid://dkr1aj5yv8tle" path="res://images/objects/white-chair/CHAIA4.png" id="3_kn3vu"]
+[ext_resource type="Texture2D" uid="uid://cecvwt6l2wskp" path="res://images/objects/white-chair/CHAIA8.png" id="3_og6l0"]
+[ext_resource type="Texture2D" uid="uid://dwhdy10wcvdd1" path="res://images/objects/white-chair/CHAIA7.png" id="4_xw2ru"]
+[ext_resource type="Texture2D" uid="uid://gd40vw8nqlwe" path="res://images/objects/white-chair/CHAIA2.png" id="6_o7i6e"]
+[ext_resource type="Texture2D" uid="uid://cri26ovdhn3nf" path="res://images/objects/white-chair/CHAIA3.png" id="7_yxnmu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sl8if"]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_64spv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_efaqc")
+}],
+"loop": false,
+"name": &"back",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_kn3vu")
+}],
+"loop": false,
+"name": &"back-left",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_5c3hp")
+}],
+"loop": false,
+"name": &"back-right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_tb4ur")
+}],
+"loop": false,
+"name": &"front",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_o7i6e")
+}],
+"loop": false,
+"name": &"front-left",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_og6l0")
+}],
+"loop": false,
+"name": &"front-right",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_yxnmu")
+}],
+"loop": false,
+"name": &"left",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_xw2ru")
+}],
+"loop": false,
+"name": &"right",
+"speed": 1.0
+}]
+
 [node name="WhiteChair" type="RigidBody3D"]
+collision_layer = 8
+collision_mask = 7
+script = ExtResource("1_kxg7w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_sl8if")
+
+[node name="RotationController" type="Node3D" parent="."]
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController"]
+billboard = 2
+shaded = true
+sprite_frames = SubResource("SpriteFrames_64spv")
+animation = &"front-left"

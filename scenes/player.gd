@@ -284,12 +284,27 @@ func switch_weapon(new_weapon: int):
 
 func hit(damage: int):
 	if interact_sound.stream: interact_sound.play()
-	var collider = interaction.get_collider()
+	var collider
+	match current_weapon:
+		WEAPON_TYPE.FISTS:
+			collider = interaction.get_collider()
+		WEAPON_TYPE.PISTOL:
+			collider = hit_scan.get_collider()
 	if collider:
+		var hit_particle
+		match current_weapon:
+			WEAPON_TYPE.FISTS:
+				hit_particle = Preloads.POOF_SCENE.instantiate()
+			WEAPON_TYPE.PISTOL:
+				hit_particle = Preloads.PUFF_SCENE.instantiate()
+		get_tree().root.add_child(hit_particle)
+		hit_particle.global_position = hit_scan.get_collision_point()
+		hit_particle.connect("animation_finished", hit_particle.queue_free)
 		if "take_damage" in collider:
 			collider.take_damage(damage)
 		if collider.is_in_group("destroyable"):
 			collider.queue_free()
+	
 
 
 func kill(pos = null):

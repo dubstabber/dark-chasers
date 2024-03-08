@@ -1,0 +1,82 @@
+[gd_scene load_steps=18 format=3 uid="uid://dfjtdxrmqnudo"]
+
+[ext_resource type="Texture2D" uid="uid://coodjmr8hp2si" path="res://images/particles/POOFA0.png" id="1_npjvs"]
+[ext_resource type="Texture2D" uid="uid://bqgf7rxn6bcyc" path="res://images/particles/POOFB0.png" id="2_0day2"]
+[ext_resource type="Texture2D" uid="uid://2pgw5wmyuuwy" path="res://images/particles/POOFC0.png" id="3_lfe8a"]
+[ext_resource type="Texture2D" uid="uid://b41bkcgjxbo4w" path="res://images/particles/POOFD0.png" id="4_uj1nj"]
+[ext_resource type="Texture2D" uid="uid://kpq77ql3efrs" path="res://images/particles/POOFE0.png" id="5_lqbwy"]
+[ext_resource type="Texture2D" uid="uid://dfefl2jjik0eu" path="res://images/particles/POOFF0.png" id="6_n7k2l"]
+[ext_resource type="Texture2D" uid="uid://diqj1ofustnyj" path="res://images/particles/POOFG0.png" id="7_m1djb"]
+[ext_resource type="Texture2D" uid="uid://djrcyidym31r2" path="res://images/particles/POOFH0.png" id="8_tspa5"]
+[ext_resource type="Texture2D" uid="uid://ccjcmfqh0pp0b" path="res://images/particles/POOFI0.png" id="9_k6vbj"]
+[ext_resource type="Texture2D" uid="uid://d4cqjr8ysw80n" path="res://images/particles/POOFJ0.png" id="10_rdelp"]
+[ext_resource type="Texture2D" uid="uid://cuh6uwuoq7hhu" path="res://images/particles/POOFK0.png" id="11_ufoq6"]
+[ext_resource type="Texture2D" uid="uid://bn8nksqe65pd4" path="res://images/particles/POOFL0.png" id="12_fppjp"]
+[ext_resource type="Texture2D" uid="uid://c1ytrmy2da2xo" path="res://images/particles/POOFM0.png" id="13_yb6sg"]
+[ext_resource type="Texture2D" uid="uid://cul8oq2cxrcm4" path="res://images/particles/POOFN0.png" id="14_4l5m7"]
+[ext_resource type="Texture2D" uid="uid://b5ke25k0by72o" path="res://images/particles/POOFO0.png" id="15_mgsyc"]
+[ext_resource type="Texture2D" uid="uid://rx6s2g50bg83" path="res://images/particles/POOFP0.png" id="16_i6pkg"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4v206"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_npjvs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_0day2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lfe8a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_uj1nj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_lqbwy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_n7k2l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_m1djb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tspa5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_k6vbj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_rdelp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ufoq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_fppjp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_yb6sg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_4l5m7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_mgsyc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_i6pkg")
+}],
+"loop": false,
+"name": &"default",
+"speed": 30.0
+}]
+
+[node name="Poof" type="AnimatedSprite3D"]
+modulate = Color(1, 1, 1, 0.290196)
+billboard = 1
+sprite_frames = SubResource("SpriteFrames_4v206")
+autoplay = "default"
+frame = 15
+frame_progress = 1.0

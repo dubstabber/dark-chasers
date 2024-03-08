@@ -5,7 +5,6 @@ const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 const IMAGE_ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
 const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
-
 const ILOPULU_SCENE := preload("res://scenes/enemies/ilopulu.tscn")
 const WHITEFACE_SCENE := preload("res://scenes/enemies/white_face.tscn")
 
@@ -38,6 +37,9 @@ var button_up_1 := preload("res://images/textures/BSW01A.png")
 var button_down_1 := preload("res://images/textures/BSW01B.png")
 var button_up_5 := preload("res://images/textures/BSW05A.png")
 var button_down_5 := preload("res://images/textures/BSW05B.png")
+
+const PUFF_SCENE := preload("res://scenes/particles/puff.tscn")
+const POOF_SCENE := preload("res://scenes/particles/poof.tscn")
 
 var water_splash := preload("res://sounds/footsteps/water/DSSPLSML.wav")
 

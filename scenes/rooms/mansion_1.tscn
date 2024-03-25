@@ -1,4 +1,4 @@
-[gd_scene load_steps=556 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=557 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -149,6 +149,7 @@
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
 [ext_resource type="Script" path="res://scenes/objects/waterSplash.gd" id="143_jfxlu"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
+[ext_resource type="PackedScene" uid="uid://b78wse81qlgqi" path="res://scenes/objects/flower_pot.tscn" id="143_w8saf"]
 [ext_resource type="Script" path="res://scenes/objects/Button.gd" id="144_26gxq"]
 [ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="146_cfh8b"]
 [ext_resource type="Script" path="res://scenes/objects/AreaEvent.gd" id="146_vhxkd"]
@@ -2310,6 +2311,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.6506, 202.796, 75.8458)
 
 [node name="WhiteChair10" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 115.521, 189.991, 106.621)
+
+[node name="FlowerPot" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.8036, 202.648, -43.9718)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

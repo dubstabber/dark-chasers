@@ -119,19 +119,19 @@ func add_disappear_zone(area):
 func handle_footstep():
 	match ground_type:
 		"dirt":
-			Utils.play_footstep_sound(Preloads.dirt_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.dirt_footstep_sounds.pick_random(), self)
 		"hard":
-			Utils.play_footstep_sound(Preloads.hard_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.hard_footstep_sounds.pick_random(), self)
 		"carpet":
-			Utils.play_footstep_sound(Preloads.carpet_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.carpet_footstep_sounds.pick_random(), self)
 		"floor":
-			Utils.play_footstep_sound(Preloads.floor_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.floor_footstep_sounds.pick_random(), self)
 		"wood":
-			Utils.play_footstep_sound(Preloads.wood_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.wood_footstep_sounds.pick_random(), self)
 		"metal1":
-			Utils.play_footstep_sound(Preloads.metal1_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.metal1_footstep_sounds.pick_random(), self)
 		"metal2":
-			Utils.play_footstep_sound(Preloads.metal2_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.metal2_footstep_sounds.pick_random(), self)
 
 
 func _on_find_path_timer_timeout():

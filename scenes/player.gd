@@ -77,7 +77,7 @@ var hud: CanvasLayer
 
 func _ready():
 	camera_3d.fov = 85
-	switch_weapon(WEAPON_TYPE.FISTS)
+	switch_weapon(WEAPON_TYPE.PISTOL)
 
 
 func _input(event):

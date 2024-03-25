@@ -30,6 +30,7 @@ var bar_shake := preload("res://sounds/sfx/BARSHAKE.ogg")
 var spawn_sound := preload("res://sounds/sfx/DSTELEPT.ogg")
 var event_sound := preload("res://sounds/sfx/CREVENT.wav")
 var wallcut_sound := preload("res://sounds/sfx/WALLCUT.wav")
+const WOOD_BREAK_SOUND := preload("res://sounds/sfx/SND1028.wav")
 
 var pistol_shoot_sound := preload("res://sounds/sfx/HIRSHOT.wav")
 
@@ -42,6 +43,35 @@ const PUFF_SCENE := preload("res://scenes/particles/puff.tscn")
 const POOF_SCENE := preload("res://scenes/particles/poof.tscn")
 
 var water_splash := preload("res://sounds/footsteps/water/DSSPLSML.wav")
+
+const SMALL_WOODS := [
+	preload("res://images/particles/1045A0.png"),
+	preload("res://images/particles/1045B0.png"),
+	preload("res://images/particles/1045C0.png"),
+	preload("res://images/particles/1045D0.png"),
+	preload("res://images/particles/1045E0.png"),
+	preload("res://images/particles/1045F0.png")
+]
+
+const BIG_WOODS := [
+	preload("res://images/particles/1046A0.png"),
+	preload("res://images/particles/1046B0.png"),
+	preload("res://images/particles/1046C0.png"),
+	preload("res://images/particles/1046D0.png"),
+	preload("res://images/particles/1046E0.png"),
+	preload("res://images/particles/1046F0.png"),
+	preload("res://images/particles/1046G0.png"),
+	preload("res://images/particles/1046H0.png")
+]
+
+const WHITE_SCRAPS := [
+	preload("res://images/particles/1047A0.png"),
+	preload("res://images/particles/1047B0.png"),
+	preload("res://images/particles/1047C0.png"),
+	preload("res://images/particles/1047D0.png")
+]
+
+const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")
 
 var carpet_footsteps: Array
 var dirt_footsteps: Array

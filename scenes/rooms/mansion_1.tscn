@@ -2282,7 +2282,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -0.877014, -0.78
 [node name="Decorations" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="WhiteChair" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.9637, 202.818, -61.8205)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -74.5144, 202.8, -26.0547)
+
+[node name="WhiteChair2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -74.4766, 202.801, -23.0837)
+
+[node name="WhiteChair3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -79.1794, 202.802, -23.7262)
+
+[node name="WhiteChair4" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(1.19249e-08, 0, -1, 0, 1, 0, 1, 0, 1.19249e-08, -79.1879, 202.786, -25.5902)
+
+[node name="WhiteChair5" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -1.57321, 205.35, 125.692)
+
+[node name="WhiteChair6" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.8615, 205.35, 126.326)
+
+[node name="WhiteChair7" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -34.0475, 202.788, 126.706)
+
+[node name="WhiteChair8" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.9841, 202.796, 76.4629)
+
+[node name="WhiteChair9" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.6506, 202.796, 75.8458)
+
+[node name="WhiteChair10" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("142_1au2x")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 115.521, 189.991, 106.621)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

@@ -44,7 +44,7 @@ func spawn_player():
 	var hud = Preloads.HUD_SCENE.instantiate()
 	add_child(hud)
 	player.hud = hud
-	player.ambient_music.stream = Preloads.d_running_sound
+	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
 	player.ambient_music.play()
 	respawn(player)
 

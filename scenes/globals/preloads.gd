@@ -8,43 +8,43 @@ const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
 const ILOPULU_SCENE := preload("res://scenes/enemies/ilopulu.tscn")
 const WHITEFACE_SCENE := preload("res://scenes/enemies/white_face.tscn")
 
-var ruby_key := preload("res://images/items/REDKA0.png")
-var weird_key := preload("res://images/items/WEIRA0.png")
-var brown_key := preload("res://images/items/BROWA0.png")
-var gold_key := preload("res://images/items/YKGOA0.png")
-var emerald_key := preload("res://images/items/EMERA0.png")
-var silver_key := preload("res://images/items/SILVA0.png")
+const RUBY_KEY_IMAGE := preload("res://images/items/REDKA0.png")
+const WEIRD_KEY_IMAGE := preload("res://images/items/WEIRA0.png")
+const BROWN_KEY_IMAGE := preload("res://images/items/BROWA0.png")
+const GOLD_KEY_IMAGE := preload("res://images/items/YKGOA0.png")
+const EMERALD_KEY_IMAGE := preload("res://images/items/EMERA0.png")
+const SILVER_KEY_IMAGE := preload("res://images/items/SILVA0.png")
 
-var door_locked_sound := preload("res://sounds/sfx/DOORLOCK.ogg")
-var key_collected_sound := preload("res://sounds/sfx/DSKEYPIC.wav")
+const DOOR_LOCKED_SOUND := preload("res://sounds/sfx/DOORLOCK.ogg")
+const KEY_COLLECTED_SOUND := preload("res://sounds/sfx/DSKEYPIC.wav")
 
-var open_door_sound := preload("res://sounds/sfx/DSDOROPN.ogg")
-var close_door_sound := preload("res://sounds/sfx/DSDORCLS.ogg")
+const OPEN_DOOR_SOUND := preload("res://sounds/sfx/DSDOROPN.ogg")
+const CLOSE_DOOR_SOUND := preload("res://sounds/sfx/DSDORCLS.ogg")
 
-var kill_player_sound := preload("res://sounds/sfx/DSSLOP.wav")
+const KILL_PLAYER_SOUND := preload("res://sounds/sfx/DSSLOP.wav")
 
-var creep_amb_sound := preload("res://sounds/music/CREEPAMB.wav")
-var aosee_sound := preload("res://sounds/music/AOSEE.wav")
-var d_running_sound := preload("res://sounds/music/D_RUNNIN.ogg")
-var bar_shake := preload("res://sounds/sfx/BARSHAKE.ogg")
-var spawn_sound := preload("res://sounds/sfx/DSTELEPT.ogg")
-var event_sound := preload("res://sounds/sfx/CREVENT.wav")
-var wallcut_sound := preload("res://sounds/sfx/WALLCUT.wav")
+const CREEP_AMB_SOUND := preload("res://sounds/music/CREEPAMB.wav")
+const AOSEE_SOUND := preload("res://sounds/music/AOSEE.wav")
+const D_RUNNING_SOUND := preload("res://sounds/music/D_RUNNIN.ogg")
+const BAR_SHAKE_SOUND := preload("res://sounds/sfx/BARSHAKE.ogg")
+const SPAWN_SOUND := preload("res://sounds/sfx/DSTELEPT.ogg")
+const EVENT_SOUND := preload("res://sounds/sfx/CREVENT.wav")
+const WALLCUT_SOUND := preload("res://sounds/sfx/WALLCUT.wav")
 const WOOD_BREAK_SOUND := preload("res://sounds/sfx/SND1028.wav")
 
-var pistol_shoot_sound := preload("res://sounds/sfx/HIRSHOT.wav")
+const PISTOL_SHOOT_SOUND := preload("res://sounds/sfx/HIRSHOT.wav")
 
-var button_up_1 := preload("res://images/textures/BSW01A.png")
-var button_down_1 := preload("res://images/textures/BSW01B.png")
-var button_up_5 := preload("res://images/textures/BSW05A.png")
-var button_down_5 := preload("res://images/textures/BSW05B.png")
+const BUTTON_UP_1_IMAGE := preload("res://images/textures/BSW01A.png")
+const BUTTON_DOWN_1_IMAGE := preload("res://images/textures/BSW01B.png")
+const BUTTON_UP_5_IMAGE := preload("res://images/textures/BSW05A.png")
+const BUTTON_DOWN_5_IMAGE := preload("res://images/textures/BSW05B.png")
 
 const PUFF_SCENE := preload("res://scenes/particles/puff.tscn")
 const POOF_SCENE := preload("res://scenes/particles/poof.tscn")
 
-var water_splash := preload("res://sounds/footsteps/water/DSSPLSML.wav")
+const WATER_SPLASH_SOUND := preload("res://sounds/footsteps/water/DSSPLSML.wav")
 
-const SMALL_WOODS := [
+const SMALL_WOOD_IMAGES := [
 	preload("res://images/particles/1045A0.png"),
 	preload("res://images/particles/1045B0.png"),
 	preload("res://images/particles/1045C0.png"),
@@ -53,7 +53,7 @@ const SMALL_WOODS := [
 	preload("res://images/particles/1045F0.png")
 ]
 
-const BIG_WOODS := [
+const BIG_WOOD_IMAGES := [
 	preload("res://images/particles/1046A0.png"),
 	preload("res://images/particles/1046B0.png"),
 	preload("res://images/particles/1046C0.png"),
@@ -64,7 +64,7 @@ const BIG_WOODS := [
 	preload("res://images/particles/1046H0.png")
 ]
 
-const WHITE_SCRAPS := [
+const WHITE_SCRAP_IMAGES := [
 	preload("res://images/particles/1047A0.png"),
 	preload("res://images/particles/1047B0.png"),
 	preload("res://images/particles/1047C0.png"),
@@ -73,22 +73,22 @@ const WHITE_SCRAPS := [
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")
 
-var carpet_footsteps: Array
-var dirt_footsteps: Array
-var floor_footsteps: Array
-var hard_footsteps: Array
-var metal1_footsteps: Array
-var metal2_footsteps: Array
-var wood_footsteps: Array
+var carpet_footstep_sounds := []
+var dirt_footstep_sounds := []
+var floor_footstep_sounds := []
+var hard_footstep_sounds := []
+var metal1_footstep_sounds := []
+var metal2_footstep_sounds := []
+var wood_footstep_sounds := []
 
 func _ready():
-	load_footsteps(3, "carpet", "DSCARP", carpet_footsteps, false)
-	load_footsteps(6, "dirt1", "DSDIRT", dirt_footsteps, false)
-	load_footsteps(6, "floor1", "DSTILE", floor_footsteps, true)
-	load_footsteps(6, "hard1", "DSHARD", hard_footsteps, false)
-	load_footsteps(6, "metal1", "DSMET", metal1_footsteps, true)
-	load_footsteps(4, "metal2", "DSMET2", metal2_footsteps, true)
-	load_footsteps(3, "wood", "DSWOOD", wood_footsteps, false)
+	load_footsteps(3, "carpet", "DSCARP", carpet_footstep_sounds, false)
+	load_footsteps(6, "dirt1", "DSDIRT", dirt_footstep_sounds, false)
+	load_footsteps(6, "floor1", "DSTILE", floor_footstep_sounds, true)
+	load_footsteps(6, "hard1", "DSHARD", hard_footstep_sounds, false)
+	load_footsteps(6, "metal1", "DSMET", metal1_footstep_sounds, true)
+	load_footsteps(4, "metal2", "DSMET2", metal2_footstep_sounds, true)
+	load_footsteps(3, "wood", "DSWOOD", wood_footstep_sounds, false)
 
 func load_footsteps(steps: int, type: String, file_prefix: String, arr: Array, zero_padding: bool):
 	for i in range(1,steps):

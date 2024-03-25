@@ -31,7 +31,7 @@ func _ready():
 	var destroyables = get_tree().get_nodes_in_group("destroyable")
 	for destroyable in destroyables:
 		if destroyable.name == 'BlinkWall':
-			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.wallcut_sound, self, destroyable.position, -15))
+			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 	
 	
 	spawn_player()
@@ -64,7 +64,7 @@ func spawn_player():
 	add_child(hud)
 	player.hud = hud
 	hud.show_black_screen()
-	player.ambient_music.stream = Preloads.d_running_sound
+	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
 	player.ambient_music.play()
 	#respawn(player)
 	test_respawn(player)
@@ -81,13 +81,13 @@ func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
-	Utils.play_sound(Preloads.spawn_sound, p)
+	Utils.play_sound(Preloads.SPAWN_SOUND, p)
 
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
 	p.current_room = "FirstFloor"
-	Utils.play_sound(Preloads.spawn_sound, p)
+	Utils.play_sound(Preloads.SPAWN_SOUND, p)
 
 
 func handle_transition(body, area3dname, marker):
@@ -132,7 +132,7 @@ func _key_body_entered(body, key_type, event, message_text):
 			aooni.position = $NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/FirstAoOniChase.position
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/LibraryExitArea)
-			global_music.stream = Preloads.aosee_sound
+			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
@@ -150,15 +150,15 @@ func _key_body_entered(body, key_type, event, message_text):
 			aooni.makepath()
 			$NavigationRegion3D/MansionAooni6_0_0Map01/Cameras/BarsCamera2.set_current(true)
 			await get_tree().create_timer(3.0).timeout
-			Utils.play_sound(Preloads.bar_shake, aooni)
+			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(0.6).timeout
-			Utils.play_sound(Preloads.bar_shake, aooni)
+			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(0.25).timeout
-			Utils.play_sound(Preloads.bar_shake, aooni)
+			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(0.25).timeout
-			Utils.play_sound(Preloads.bar_shake, aooni)
+			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(0.5).timeout
-			Utils.play_sound(Preloads.bar_shake, aooni)
+			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(2.5).timeout
 			aooni.waypoints.push_back($NavigationRegion3D/MansionAooni6_0_0Map01/EventSpawners/AoOniBarsGiveup.position)
 		"teleport to void":
@@ -188,7 +188,7 @@ func _handle_button_event(body, event):
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 			hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
-			global_music.stream = Preloads.aosee_sound
+			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
 			aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
@@ -196,7 +196,7 @@ func _handle_button_event(body, event):
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
-			global_sound.stream = Preloads.event_sound
+			global_sound.stream = Preloads.EVENT_SOUND
 			global_sound.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
@@ -216,7 +216,7 @@ func _handle_button_event(body, event):
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
-			global_sound.stream = Preloads.event_sound
+			global_sound.stream = Preloads.EVENT_SOUND
 			global_sound.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
@@ -245,7 +245,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 			hud.show_event_text("You: What the eff was that!?", false, 3.0)
-			global_music.stream = Preloads.creep_amb_sound
+			global_music.stream = Preloads.CREEP_AMB_SOUND
 			global_music.volume_db = -5
 			global_music.play()
 		"piano alarm":
@@ -257,20 +257,20 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.add_disappear_zone($NavigationRegion3D/MansionAooni6_0_0Map01/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/MansionAooni6_0_0Map01/Buttons/PianoButton.is_pressed = true
 				hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
-				global_music.stream = Preloads.aosee_sound
+				global_music.stream = Preloads.AOSEE_SOUND
 				global_music.volume_db = -5
 				global_music.play()
 				aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
-			global_music.stream = Preloads.aosee_sound
+			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
 			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 			$"NavigationRegion3D/MansionAooni6_0_0Map01/Enemies/Ao oni".connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
-			global_sound.stream = Preloads.event_sound
+			global_sound.stream = Preloads.EVENT_SOUND
 			global_sound.play()
 			await get_tree().create_timer(1.0).timeout
 			var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
@@ -284,7 +284,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			await get_tree().create_timer(0.8).timeout
 			body.collision_mask = 14
 		"open ao mika wardrobe":
-			global_music.stream = Preloads.aosee_sound
+			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("You: WHAT THE?!?", false, 3.0)

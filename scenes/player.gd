@@ -251,19 +251,19 @@ func _physics_process(delta):
 func handle_footstep():
 	match ground_type:
 		"dirt":
-			Utils.play_footstep_sound(Preloads.dirt_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.dirt_footstep_sounds.pick_random(), self)
 		"hard":
-			Utils.play_footstep_sound(Preloads.hard_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.hard_footstep_sounds.pick_random(), self)
 		"carpet":
-			Utils.play_footstep_sound(Preloads.carpet_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.carpet_footstep_sounds.pick_random(), self)
 		"floor":
-			Utils.play_footstep_sound(Preloads.floor_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.floor_footstep_sounds.pick_random(), self)
 		"wood":
-			Utils.play_footstep_sound(Preloads.wood_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.wood_footstep_sounds.pick_random(), self)
 		"metal1":
-			Utils.play_footstep_sound(Preloads.metal1_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.metal1_footstep_sounds.pick_random(), self)
 		"metal2":
-			Utils.play_footstep_sound(Preloads.metal2_footsteps.pick_random(), self)
+			Utils.play_footstep_sound(Preloads.metal2_footstep_sounds.pick_random(), self)
 
 
 func switch_weapon(new_weapon: int):
@@ -279,7 +279,7 @@ func switch_weapon(new_weapon: int):
 			interact_sound.stream = null
 		WEAPON_TYPE.PISTOL:
 			interact_player.play("pistol-switch")
-			interact_sound.stream = Preloads.pistol_shoot_sound
+			interact_sound.stream = Preloads.PISTOL_SHOOT_SOUND
 
 
 func hit(damage: int):
@@ -315,4 +315,4 @@ func kill(pos = null):
 			killed_pos = pos
 		killed = true
 		color_rect.modulate.a = 0.7
-		Utils.play_sound(Preloads.kill_player_sound, self)
+		Utils.play_sound(Preloads.KILL_PLAYER_SOUND, self)

@@ -10,19 +10,19 @@ func _process(_delta):
 	match scrap_type:
 		"small wood scrap":
 			if abs(linear_velocity.x) > 0.06 or abs(linear_velocity.y) > 0.06 or abs(linear_velocity.z) > 0.06:
-				sprite_3d.texture = Preloads.SMALL_WOODS.pick_random()
-			elif sprite_3d.texture != Preloads.SMALL_WOODS[grounded_frame]:
-				sprite_3d.texture = Preloads.SMALL_WOODS[grounded_frame]
+				sprite_3d.texture = Preloads.SMALL_WOOD_IMAGES.pick_random()
+			elif sprite_3d.texture != Preloads.SMALL_WOOD_IMAGES[grounded_frame]:
+				sprite_3d.texture = Preloads.SMALL_WOOD_IMAGES[grounded_frame]
 		"big wood scrap":
 			if abs(linear_velocity.x) > 0.06 or abs(linear_velocity.y) > 0.06 or abs(linear_velocity.z) > 0.06:
-				sprite_3d.texture = Preloads.BIG_WOODS.pick_random()
-			elif sprite_3d.texture != Preloads.BIG_WOODS[grounded_frame]:
-				sprite_3d.texture = Preloads.BIG_WOODS[grounded_frame]
+				sprite_3d.texture = Preloads.BIG_WOOD_IMAGES.pick_random()
+			elif sprite_3d.texture != Preloads.BIG_WOOD_IMAGES[grounded_frame]:
+				sprite_3d.texture = Preloads.BIG_WOOD_IMAGES[grounded_frame]
 		"white scrap":
 			if abs(linear_velocity.x) > 0.06 or abs(linear_velocity.y) > 0.06 or abs(linear_velocity.z) > 0.06:
-				sprite_3d.texture = Preloads.WHITE_SCRAPS.pick_random()
-			elif sprite_3d.texture != Preloads.WHITE_SCRAPS[grounded_frame]:
-				sprite_3d.texture = Preloads.WHITE_SCRAPS[grounded_frame]
+				sprite_3d.texture = Preloads.WHITE_SCRAP_IMAGES.pick_random()
+			elif sprite_3d.texture != Preloads.WHITE_SCRAP_IMAGES[grounded_frame]:
+				sprite_3d.texture = Preloads.WHITE_SCRAP_IMAGES[grounded_frame]
 
 
 func set_scrap_type(t):

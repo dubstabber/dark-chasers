@@ -32,9 +32,9 @@ func open(side = ""):
 		isUnlocked = false
 	
 	if side == "FrontSide" and front_locked:
-		Utils.play_sound(Preloads.door_locked_sound, self)
+		Utils.play_sound(Preloads.DOOR_LOCKED_SOUND, self)
 	elif side == "BackSide" and back_locked:
-		Utils.play_sound(Preloads.door_locked_sound, self)
+		Utils.play_sound(Preloads.DOOR_LOCKED_SOUND, self)
 	elif isUnlocked:
 		is_opening = not is_opening
 		if tween and tween.is_running() and not open_only:
@@ -54,5 +54,5 @@ func open(side = ""):
 			await tween.tween_property(self, "position:y", closed_position, move_speed).finished
 	else:
 		door_locked.emit("You need the "+key_needed+" key!")
-		Utils.play_sound(Preloads.door_locked_sound, self)
+		Utils.play_sound(Preloads.DOOR_LOCKED_SOUND, self)
 

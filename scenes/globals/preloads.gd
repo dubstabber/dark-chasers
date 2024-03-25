@@ -31,6 +31,7 @@ const SPAWN_SOUND := preload("res://sounds/sfx/DSTELEPT.ogg")
 const EVENT_SOUND := preload("res://sounds/sfx/CREVENT.wav")
 const WALLCUT_SOUND := preload("res://sounds/sfx/WALLCUT.wav")
 const WOOD_BREAK_SOUND := preload("res://sounds/sfx/SND1028.wav")
+const POT_BREAK_SOUND := preload("res://sounds/sfx/SND1048.wav")
 
 const PISTOL_SHOOT_SOUND := preload("res://sounds/sfx/HIRSHOT.wav")
 
@@ -69,6 +70,17 @@ const WHITE_SCRAP_IMAGES := [
 	preload("res://images/particles/1047B0.png"),
 	preload("res://images/particles/1047C0.png"),
 	preload("res://images/particles/1047D0.png")
+]
+
+const POT_SCRAP_IMAGES := [
+	preload("res://images/particles/1075C0.png"),
+	preload("res://images/particles/1075D0.png"),
+	preload("res://images/particles/1075E0.png"),
+	preload("res://images/particles/1075F0.png"),
+	preload("res://images/particles/1075G0.png"),
+	preload("res://images/particles/1075H0.png"),
+	preload("res://images/particles/1075I0.png"),
+	preload("res://images/particles/1075J0.png")
 ]
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")

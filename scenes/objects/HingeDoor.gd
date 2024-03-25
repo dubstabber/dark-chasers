@@ -18,10 +18,10 @@ var tween: Tween
 func open(side = ""):
 	if side == "FrontSide" and front_locked:
 		door_locked.emit("The door is locked.")
-		Utils.play_sound(Preloads.door_locked_sound, self)
+		Utils.play_sound(Preloads.DOOR_LOCKED_SOUND, self)
 	elif side == "BackSide" and back_locked:
 		door_locked.emit("The door is locked.")
-		Utils.play_sound(Preloads.door_locked_sound, self)
+		Utils.play_sound(Preloads.DOOR_LOCKED_SOUND, self)
 	elif not is_opening:
 			is_opening = true
 			if tween and tween.is_running() and not open_only:

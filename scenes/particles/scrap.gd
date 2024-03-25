@@ -23,7 +23,12 @@ func _process(_delta):
 				sprite_3d.texture = Preloads.WHITE_SCRAP_IMAGES.pick_random()
 			elif sprite_3d.texture != Preloads.WHITE_SCRAP_IMAGES[grounded_frame]:
 				sprite_3d.texture = Preloads.WHITE_SCRAP_IMAGES[grounded_frame]
-
+		"pot scrap":
+			if abs(linear_velocity.x) > 0.06 or abs(linear_velocity.y) > 0.06 or abs(linear_velocity.z) > 0.06:
+				sprite_3d.texture = Preloads.POT_SCRAP_IMAGES.pick_random()
+			elif sprite_3d.texture != Preloads.POT_SCRAP_IMAGES[grounded_frame]:
+				sprite_3d.texture = Preloads.POT_SCRAP_IMAGES[grounded_frame]
+				
 
 func set_scrap_type(t):
 	scrap_type = t
@@ -36,3 +41,6 @@ func set_scrap_type(t):
 		"white scrap":
 			grounded_frame = 0
 			sprite_3d.position.y = -0.06
+		"pot scrap":
+			grounded_frame = 6
+			sprite_3d.position.y = -0.08

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://diiuvppg4ykmv"]
+
+[ext_resource type="Script" path="res://scenes/particles/scrap.gd" id="1_cf3mc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gk3ro"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="Scrap" type="RigidBody3D"]
+collision_layer = 0
+collision_mask = 12
+linear_damp = 2.0
+script = ExtResource("1_cf3mc")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+shaded = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_gk3ro")

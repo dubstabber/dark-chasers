@@ -28,7 +28,23 @@ func _process(_delta):
 				sprite_3d.texture = Preloads.POT_SCRAP_IMAGES.pick_random()
 			elif sprite_3d.texture != Preloads.POT_SCRAP_IMAGES[grounded_frame]:
 				sprite_3d.texture = Preloads.POT_SCRAP_IMAGES[grounded_frame]
-				
+		"circle ground scrap":
+			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
+				if sprite_3d.texture != Preloads.CIRCLE_GROUND_SCRAP_IMAGE:
+					sprite_3d.texture = Preloads.CIRCLE_GROUND_SCRAP_IMAGE
+			else:
+				queue_free()
+		"small ground scrap":
+			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
+				if sprite_3d.texture != Preloads.SMALL_GROUND_SCRAP_IMAGE:
+					sprite_3d.texture = Preloads.SMALL_GROUND_SCRAP_IMAGE
+			else:
+				queue_free()
+		"grass scrap":
+			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
+				sprite_3d.texture = Preloads.GRASS_SCRAP_IMAGES.pick_random()
+			else:
+				queue_free()
 
 func set_scrap_type(t):
 	scrap_type = t
@@ -44,3 +60,8 @@ func set_scrap_type(t):
 		"pot scrap":
 			grounded_frame = 6
 			sprite_3d.position.y = -0.08
+		"circle ground scrap", "small ground scrap":
+			sprite_3d.scale = Vector3(3,3,3)
+		"grass scrap":
+			sprite_3d.scale = Vector3(2.5,2.5,2.5)
+			gravity_scale = 0.5

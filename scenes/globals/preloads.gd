@@ -53,7 +53,6 @@ const SMALL_WOOD_IMAGES := [
 	preload("res://images/particles/1045E0.png"),
 	preload("res://images/particles/1045F0.png")
 ]
-
 const BIG_WOOD_IMAGES := [
 	preload("res://images/particles/1046A0.png"),
 	preload("res://images/particles/1046B0.png"),
@@ -64,14 +63,12 @@ const BIG_WOOD_IMAGES := [
 	preload("res://images/particles/1046G0.png"),
 	preload("res://images/particles/1046H0.png")
 ]
-
 const WHITE_SCRAP_IMAGES := [
 	preload("res://images/particles/1047A0.png"),
 	preload("res://images/particles/1047B0.png"),
 	preload("res://images/particles/1047C0.png"),
 	preload("res://images/particles/1047D0.png")
 ]
-
 const POT_SCRAP_IMAGES := [
 	preload("res://images/particles/1075C0.png"),
 	preload("res://images/particles/1075D0.png"),
@@ -81,6 +78,14 @@ const POT_SCRAP_IMAGES := [
 	preload("res://images/particles/1075H0.png"),
 	preload("res://images/particles/1075I0.png"),
 	preload("res://images/particles/1075J0.png")
+]
+const CIRCLE_GROUND_SCRAP_IMAGE := preload("res://images/particles/1075K0.png")
+const SMALL_GROUND_SCRAP_IMAGE := preload("res://images/particles/1075L0.png")
+const GRASS_SCRAP_IMAGES := [
+	preload("res://images/particles/1075M0.png"),
+	preload("res://images/particles/1075N0.png"),
+	preload("res://images/particles/1075O0.png"),
+	preload("res://images/particles/1075P0.png")
 ]
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ga3gwr1a2f0q"]
+
+[ext_resource type="Script" path="res://scenes/rooms/backrooms_maze.gd" id="1_dqm2f"]
+[ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player.tscn" id="1_okkft"]
+
+[sub_resource type="Environment" id="Environment_3b4gm"]
+
+[node name="BackroomsMaze" type="Node3D"]
+script = ExtResource("1_dqm2f")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+use_collision = true
+collision_layer = 4
+collision_mask = 0
+size = Vector3(100, 0.1, 100)
+
+[node name="Player" parent="." instance=ExtResource("1_okkft")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.66665, 1.02662, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3b4gm")

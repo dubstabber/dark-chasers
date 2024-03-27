@@ -7,7 +7,7 @@ size = Vector3(0.2, 0.2, 0.2)
 
 [node name="Scrap" type="RigidBody3D"]
 collision_layer = 0
-collision_mask = 12
+collision_mask = 4
 linear_damp = 2.0
 script = ExtResource("1_cf3mc")
 

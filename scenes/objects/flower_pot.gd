@@ -13,7 +13,7 @@ func take_damage(dmg: int):
 			Utils.play_sound(Preloads.POT_BREAK_SOUND,get_parent(),position)
 			is_destroyed = true
 			animated_sprite_3d.play()
-			animated_sprite_3d.position.y = -0.40
+			animated_sprite_3d.position.y = -0.50
 			$CollisionShape3D.disabled = true
 			$CollisionShape3D2.disabled = false
 			for i in 10:

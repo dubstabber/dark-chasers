@@ -2313,7 +2313,85 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.6506, 202.796, 75.8458)
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 115.521, 189.991, 106.621)
 
 [node name="FlowerPot" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.8036, 202.648, -43.9718)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.3658, 202.607, -37.0671)
+
+[node name="FlowerPot2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.7704, 202.607, -37.0671)
+
+[node name="FlowerPot3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.8353, 202.772, -35.9088)
+
+[node name="FlowerPot4" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.1394, 202.776, -31.629)
+
+[node name="FlowerPot5" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -72.3045, 202.775, -18.5909)
+
+[node name="FlowerPot6" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1102, 205.333, 121.234)
+
+[node name="FlowerPot7" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.46469, 205.334, 127.364)
+
+[node name="FlowerPot8" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1522, 205.336, 117.103)
+
+[node name="FlowerPot9" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.30606, 205.331, 117.094)
+
+[node name="FlowerPot10" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.43993, 205.335, 106.88)
+
+[node name="FlowerPot11" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.73716, 205.334, 111.685)
+
+[node name="FlowerPot12" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.8207, 202.768, -3.1968)
+
+[node name="FlowerPot13" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.581, 202.768, -25.6214)
+
+[node name="FlowerPot14" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.3714, 202.768, -25.618)
+
+[node name="FlowerPot15" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.9862, 205.333, 121.26)
+
+[node name="FlowerPot16" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.05725, 205.327, 122.862)
+
+[node name="FlowerPot17" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.7111, 202.767, -28.8185)
+
+[node name="FlowerPot18" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.2502, 202.763, -26.2523)
+
+[node name="FlowerPot19" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.6514, 202.768, 116.19)
+
+[node name="FlowerPot20" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1475, 205.324, 106.856)
+
+[node name="FlowerPot21" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.41451, 205.331, 127.327)
+
+[node name="FlowerPot22" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.2179, 202.768, 111.033)
+
+[node name="FlowerPot23" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.739, 202.768, 110.696)
+
+[node name="FlowerPot24" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6818, 202.765, 123.155)
+
+[node name="FlowerPot25" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.6244, 202.752, 74.8913)
+
+[node name="FlowerPot26" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.6824, 202.752, 92.7571)
+
+[node name="FlowerPot27" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("143_w8saf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.8896, 202.752, 100.791)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

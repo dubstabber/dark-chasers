@@ -5,10 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://ksj20e4ggmsj" path="res://images/objects/flower-pot/1075B0.png" id="2_6khna"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w1ps"]
-size = Vector3(0.3, 0.536743, 0.3)
+size = Vector3(0.34668, 0.671997, 0.345459)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jare5"]
-size = Vector3(0.3, 0.15, 0.3)
+size = Vector3(0.34375, 0.15, 0.354492)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_sbim7"]
 animations = [{
@@ -30,15 +30,16 @@ collision_mask = 7
 script = ExtResource("1_2hyoh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.162781, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.232605, 0)
 shape = SubResource("BoxShape3D_6w1ps")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3555, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.490405, 0)
 shape = SubResource("BoxShape3D_jare5")
 disabled = true
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
 billboard = 2
 shaded = true
 sprite_frames = SubResource("SpriteFrames_sbim7")

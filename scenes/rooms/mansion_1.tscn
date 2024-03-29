@@ -2395,7 +2395,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.6824, 202.752, 92.7571)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.8896, 202.752, 100.791)
 
 [node name="DarkBook" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.1143, 202.251, -47.4804)
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -3.3284, 206.231, 127.312)
+
+[node name="DarkBook2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -54.9829, 202.887, -18.364)
+
+[node name="DarkBook3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -63.0095, 202.753, -18.3464)
+
+[node name="DarkBook4" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -62.6219, 202.753, -18.13)
+
+[node name="DarkBook5" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -69.7236, 202.874, 121.764)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

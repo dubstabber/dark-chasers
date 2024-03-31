@@ -1,4 +1,4 @@
-[gd_scene load_steps=558 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=561 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -152,10 +152,13 @@
 [ext_resource type="PackedScene" uid="uid://b78wse81qlgqi" path="res://scenes/objects/flower_pot.tscn" id="143_w8saf"]
 [ext_resource type="Script" path="res://scenes/objects/Button.gd" id="144_26gxq"]
 [ext_resource type="PackedScene" uid="uid://2qiuthtyghl1" path="res://scenes/objects/dark_book.tscn" id="144_qpfiv"]
+[ext_resource type="PackedScene" uid="uid://b2u5yuxhqntsa" path="res://scenes/objects/glass_1.tscn" id="145_yixmk"]
+[ext_resource type="PackedScene" uid="uid://cb47gif1io5ab" path="res://scenes/objects/glass_2.tscn" id="146_5oowe"]
 [ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="146_cfh8b"]
 [ext_resource type="Script" path="res://scenes/objects/AreaEvent.gd" id="146_vhxkd"]
 [ext_resource type="AudioStream" uid="uid://bryw155gw6q1g" path="res://sounds/sfx/DSSTNMOV.wav" id="146_xas26"]
 [ext_resource type="AudioStream" uid="uid://knehp6atgm53" path="res://sounds/music/PIANOSND.wav" id="147_2ogyi"]
+[ext_resource type="PackedScene" uid="uid://nnix111hmhh4" path="res://scenes/objects/glass_3.tscn" id="147_n8lwa"]
 [ext_resource type="AudioStream" uid="uid://brej2lxffj27" path="res://sounds/sfx/DSPSTOP.wav" id="147_o2y02"]
 [ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="147_wb10i"]
 [ext_resource type="AudioStream" uid="uid://dbc3tw5sjo681" path="res://sounds/sfx/DSSWTCHN.wav" id="151_l53tj"]
@@ -2408,6 +2411,15 @@ transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -62.6219, 202.753, -18.
 
 [node name="DarkBook5" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("144_qpfiv")]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -69.7236, 202.874, 121.764)
+
+[node name="Glass1" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("145_yixmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.7454, 202.896, -20.7809)
+
+[node name="Glass2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("146_5oowe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.1756, 202.879, -20.8656)
+
+[node name="Glass3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("147_n8lwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.4782, 202.913, -21.0393)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

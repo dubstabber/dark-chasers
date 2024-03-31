@@ -1,4 +1,4 @@
-[gd_scene load_steps=564 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=565 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -165,6 +165,7 @@
 [ext_resource type="PackedScene" uid="uid://dq2kpwv33qpa3" path="res://scenes/objects/glass_5.tscn" id="149_0t414"]
 [ext_resource type="PackedScene" uid="uid://bw6ee1jlymmpn" path="res://scenes/objects/glass_6.tscn" id="150_080qd"]
 [ext_resource type="AudioStream" uid="uid://dbc3tw5sjo681" path="res://sounds/sfx/DSSWTCHN.wav" id="151_l53tj"]
+[ext_resource type="PackedScene" uid="uid://duir6h2mh6711" path="res://scenes/objects/bucket_of_bottles.tscn" id="151_q1hx4"]
 [ext_resource type="AudioStream" uid="uid://faecohalkskt" path="res://sounds/sfx/CLOCK.wav" id="154_adgyx"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_byjnb"]
@@ -2432,6 +2433,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4248, 202.96, -21.2016)
 
 [node name="Glass6" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("150_080qd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.5863, 202.864, -20.8028)
+
+[node name="BucketOfBottles" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("151_q1hx4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.8504, 202.959, -24.3433)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

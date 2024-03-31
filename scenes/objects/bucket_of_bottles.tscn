@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://duir6h2mh6711"]
+
+[ext_resource type="Texture2D" uid="uid://cdpru38x57qny" path="res://images/objects/static/1183A0.png" id="1_kykxc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jp74v"]
+size = Vector3(0.401367, 0.141602, 0.448975)
+
+[node name="BucketOfBottles" type="StaticBody3D"]
+collision_layer = 4
+collision_mask = 7
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+shaded = true
+texture = ExtResource("1_kykxc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_jp74v")

@@ -33,6 +33,7 @@ const WALLCUT_SOUND := preload("res://sounds/sfx/WALLCUT.wav")
 const WOOD_BREAK_SOUND := preload("res://sounds/sfx/SND1028.wav")
 const POT_BREAK_SOUND := preload("res://sounds/sfx/SND1048.wav")
 const PAPER_BREAK_SOUND := preload("res://sounds/sfx/SND1023.wav")
+const GLASS_BREAK_SOUND := preload("res://sounds/sfx/GLASSBRK.wav")
 
 const PISTOL_SHOOT_SOUND := preload("res://sounds/sfx/HIRSHOT.wav")
 
@@ -95,6 +96,18 @@ const PAPER_SCRAP_IMAGES := [
 	preload("res://images/particles/1035C0.png"),
 	preload("res://images/particles/1035D0.png"),
 	preload("res://images/particles/1035E0.png")
+]
+
+const GLASS_SCRAP_IMAGES := [
+	preload("res://images/particles/GLACA0.png"),
+	preload("res://images/particles/GLACB0.png"),
+	preload("res://images/particles/GLACC0.png"),
+	preload("res://images/particles/GLACD0.png"),
+	preload("res://images/particles/GLACE0.png"),
+	preload("res://images/particles/GLACF0.png"),
+	preload("res://images/particles/GLACG0.png"),
+	preload("res://images/particles/GLACH0.png"),
+	preload("res://images/particles/GLACI0.png")
 ]
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")

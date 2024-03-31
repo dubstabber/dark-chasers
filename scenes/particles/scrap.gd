@@ -51,6 +51,12 @@ func _process(_delta):
 					sprite_3d.texture = Preloads.PAPER_SCRAP_IMAGES.pick_random()
 			else:
 				queue_free()
+		"glass scrap":
+			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
+				if not sprite_3d.texture:
+					sprite_3d.texture = Preloads.GLASS_SCRAP_IMAGES.pick_random()
+			else:
+				queue_free()
 
 func set_scrap_type(t):
 	scrap_type = t

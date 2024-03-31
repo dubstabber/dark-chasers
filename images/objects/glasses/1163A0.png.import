@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8f7t6i66ph70"
-path.s3tc="res://.godot/imported/1164A0.png-0901bca541ed42e2729e93d840c18266.s3tc.ctex"
+uid="uid://be82t8d7ajb5t"
+path.s3tc="res://.godot/imported/1163A0.png-463ebbf5fdb31690fdc9857dd216f38e.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://images/objects/glasses/1164A0.png"
-dest_files=["res://.godot/imported/1164A0.png-0901bca541ed42e2729e93d840c18266.s3tc.ctex"]
+source_file="res://images/objects/glasses/1163A0.png"
+dest_files=["res://.godot/imported/1163A0.png-463ebbf5fdb31690fdc9857dd216f38e.s3tc.ctex"]
 
 [params]
 

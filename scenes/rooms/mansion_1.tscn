@@ -1,4 +1,4 @@
-[gd_scene load_steps=561 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=564 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -161,6 +161,9 @@
 [ext_resource type="PackedScene" uid="uid://nnix111hmhh4" path="res://scenes/objects/glass_3.tscn" id="147_n8lwa"]
 [ext_resource type="AudioStream" uid="uid://brej2lxffj27" path="res://sounds/sfx/DSPSTOP.wav" id="147_o2y02"]
 [ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="147_wb10i"]
+[ext_resource type="PackedScene" uid="uid://c8ewg3wlp1sw3" path="res://scenes/objects/glass_4.tscn" id="148_lbmbt"]
+[ext_resource type="PackedScene" uid="uid://dq2kpwv33qpa3" path="res://scenes/objects/glass_5.tscn" id="149_0t414"]
+[ext_resource type="PackedScene" uid="uid://bw6ee1jlymmpn" path="res://scenes/objects/glass_6.tscn" id="150_080qd"]
 [ext_resource type="AudioStream" uid="uid://dbc3tw5sjo681" path="res://sounds/sfx/DSSWTCHN.wav" id="151_l53tj"]
 [ext_resource type="AudioStream" uid="uid://faecohalkskt" path="res://sounds/sfx/CLOCK.wav" id="154_adgyx"]
 
@@ -2420,6 +2423,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.1756, 202.879, -20.8656)
 
 [node name="Glass3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("147_n8lwa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.4782, 202.913, -21.0393)
+
+[node name="Glass4" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("148_lbmbt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.5041, 202.879, -21.5789)
+
+[node name="Glass5" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("149_0t414")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4248, 202.96, -21.2016)
+
+[node name="Glass6" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("150_080qd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.5863, 202.864, -20.8028)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

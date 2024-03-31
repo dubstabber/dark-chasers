@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://b44kkdcncmedq"]
+
+[ext_resource type="Texture2D" uid="uid://bbw04du2d0l4o" path="res://images/objects/static/1152A0.png" id="1_wb6jr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y14fb"]
+size = Vector3(0.245117, 0.0576172, 0.211182)
+
+[node name="Dish2" type="StaticBody3D"]
+collision_layer = 4
+collision_mask = 7
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+shaded = true
+texture = ExtResource("1_wb6jr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_y14fb")

@@ -1,8 +1,9 @@
 extends Node3D
 
-var hud
+
 var keys_collected: Array
 
+@onready var hud = $HUD
 @onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
 @onready var player_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners
 @onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
@@ -22,6 +23,9 @@ func _ready():
 	var keys = get_tree().get_nodes_in_group("key")
 	for key in keys:
 		key.connect("key_collected", _key_body_entered)
+	var items = get_tree().get_nodes_in_group("item")
+	for item in items:
+		item.connect("item_pickedup", hud.add_log)
 	var buttons = get_tree().get_nodes_in_group("button")
 	for button in buttons:
 		button.connect("button_pressed", _handle_button_event)
@@ -60,14 +64,14 @@ func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
 	player.blocked_movement = true
-	hud = Preloads.HUD_SCENE.instantiate()
-	add_child(hud)
 	player.hud = hud
 	hud.show_black_screen()
 	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
 	player.ambient_music.play()
+	
 	#respawn(player)
 	test_respawn(player)
+	
 	hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
 	await get_tree().create_timer(6.0).timeout
 	hud.show_event_text("They say there is a monster that lives there_")

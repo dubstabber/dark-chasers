@@ -7,7 +7,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_7y171"]
 size = Vector3(0.522461, 0.220703, 0.501953)
 
-[node name="Sushi" type="Area3D"]
+[node name="Sushi" type="Area3D" groups=["item"]]
 collision_layer = 8
 script = ExtResource("1_bbw8y")
 event_string = "Ate sushi!"

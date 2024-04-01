@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://blrk5cmrsprvt"]
+
+[ext_resource type="Script" path="res://scenes/objects/break_glass.gd" id="1_6rchd"]
+[ext_resource type="Texture2D" uid="uid://b6yhq7mqteicn" path="res://images/objects/glasses/1186A0.png" id="2_deuu2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_eokek"]
+size = Vector3(0.060791, 0.177979, 0.0576172)
+
+[node name="Glass9" type="StaticBody3D"]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_6rchd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_eokek")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+shaded = true
+alpha_cut = 1
+texture = ExtResource("2_deuu2")

@@ -94,5 +94,6 @@ shape = SubResource("BoxShape3D_xpsgd")
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController"]
 billboard = 2
 shaded = true
+alpha_cut = 1
 sprite_frames = SubResource("SpriteFrames_64spv")
 animation = &"front-left"

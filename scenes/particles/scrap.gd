@@ -77,3 +77,5 @@ func set_scrap_type(t):
 		"grass scrap":
 			sprite_3d.scale = Vector3(2.5,2.5,2.5)
 			gravity_scale = 0.5
+		"glass scrap":
+			sprite_3d.scale = Vector3(0.6,0.6,0.6)

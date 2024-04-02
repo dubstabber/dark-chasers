@@ -1,4 +1,4 @@
-[gd_scene load_steps=583 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=584 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -183,6 +183,7 @@
 [ext_resource type="PackedScene" uid="uid://bxcoqwwtje00u" path="res://scenes/objects/glass_12.tscn" id="165_w3xux"]
 [ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
 [ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
+[ext_resource type="PackedScene" uid="uid://bo5dwiemer8k4" path="res://scenes/objects/candle.tscn" id="168_mswtm"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 
@@ -2514,6 +2515,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4347, 206.618, 127.358)
 
 [node name="BoxStatic3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("167_rih4a")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1234, 206.618, 127.358)
+
+[node name="Candle" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("168_mswtm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0754, 202.862, 77.7647)
+
+[node name="Candle2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("168_mswtm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.7689, 202.862, 101.433)
+
+[node name="Candle3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("168_mswtm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 105.265, 187.498, 105.259)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=598 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=609 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -1495,6 +1495,50 @@ size = Vector3(0.28, 1.886, 2.19434)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwmtc"]
 size = Vector3(1.255, 1.88648, 0.279541)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xw26s"]
+albedo_texture = ExtResource("25_mne6o")
+uv1_scale = Vector3(6, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jh7oq"]
+material = SubResource("StandardMaterial3D_xw26s")
+size = Vector2(10, 0.7)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3ukdd"]
+material = SubResource("StandardMaterial3D_xw26s")
+size = Vector2(16, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_suwg7"]
+albedo_texture = ExtResource("25_mne6o")
+uv1_scale = Vector3(2, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vjryh"]
+material = SubResource("StandardMaterial3D_suwg7")
+size = Vector2(2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spffe"]
+albedo_texture = ExtResource("25_mne6o")
+uv1_scale = Vector3(8, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fjjs7"]
+material = SubResource("StandardMaterial3D_spffe")
+size = Vector2(10, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sb0l7"]
+albedo_texture = ExtResource("25_mne6o")
+uv1_scale = Vector3(8, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_abvji"]
+material = SubResource("StandardMaterial3D_sb0l7")
+size = Vector2(2, 0.2)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_j0sbv"]
+material = SubResource("StandardMaterial3D_sb0l7")
+size = Vector2(10, 0.8)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fnxh1"]
+material = SubResource("StandardMaterial3D_sb0l7")
+size = Vector2(8, 0.5)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -4969,6 +5013,34 @@ transform = Transform3D(-1.31134e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.31134e-08, 
 transparent = false
 shaded = true
 texture = ExtResource("4_sl7bf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.945162, 0.279346, -0.169221, 0.0319012, 0.436684, 0.899049, 0.325041, -0.855145, 0.403826, -8.71081, 202.293, -32.9855)
+mesh = SubResource("PlaneMesh_jh7oq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.180466, -0.982048, 0.0548943, -0.0861726, 0.0398095, 0.995484, -0.9798, -0.184382, -0.0774412, -4.64631, 202.525, -31.1965)
+mesh = SubResource("PlaneMesh_3ukdd")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.170965, -0.0526875, 0.983867, -0.0225418, 0.998098, 0.0573663, -0.98502, -0.031986, 0.169452, -4.21391, 202.099, -35.2599)
+mesh = SubResource("PlaneMesh_vjryh")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(-0.000548971, 0.446029, 0.895018, -0.163956, 0.882867, -0.440074, -0.986468, -0.146986, 0.0726446, -11.5051, 203.366, -28.993)
+mesh = SubResource("PlaneMesh_fjjs7")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(-0.943419, 0.227759, 0.241013, -0.0293755, 0.666549, -0.744882, -0.330301, -0.709815, -0.622144, -12.167, 202.453, -33.9732)
+mesh = SubResource("PlaneMesh_abvji")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(-0.961178, 0.275147, 0.0207615, 0.0658698, 0.301868, -0.951071, -0.267952, -0.912781, -0.308272, -85.769, 202.152, -32.6705)
+mesh = SubResource("PlaneMesh_j0sbv")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(0.0118928, -0.881365, -0.472285, 0.306627, 0.452779, -0.83724, 0.951756, -0.134858, 0.275635, -82.6513, 202.621, -29.9251)
+mesh = SubResource("PlaneMesh_fnxh1")
 
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

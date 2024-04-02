@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://bo5dwiemer8k4"]
+
+[ext_resource type="Texture2D" uid="uid://d0um36i1qsk8e" path="res://images/objects/static/CDLEA0.png" id="1_mrytx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_me74p"]
+size = Vector3(0.0830078, 0.180542, 0.101318)
+
+[node name="Candle" type="StaticBody3D"]
+collision_layer = 4
+collision_mask = 7
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+alpha_cut = 1
+texture = ExtResource("1_mrytx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0523071, 0)
+shape = SubResource("BoxShape3D_me74p")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.192383, 0)
+light_energy = 0.1
+shadow_enabled = true
+omni_range = 1.68256

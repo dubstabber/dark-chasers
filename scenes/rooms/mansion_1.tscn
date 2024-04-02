@@ -1,4 +1,4 @@
-[gd_scene load_steps=581 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=583 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -181,6 +181,8 @@
 [ext_resource type="PackedScene" uid="uid://bv5ktpmwow0o7" path="res://scenes/objects/glass_10.tscn" id="163_j7t44"]
 [ext_resource type="PackedScene" uid="uid://sghn46iuhcvs" path="res://scenes/objects/glass_11.tscn" id="164_702xm"]
 [ext_resource type="PackedScene" uid="uid://bxcoqwwtje00u" path="res://scenes/objects/glass_12.tscn" id="165_w3xux"]
+[ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
+[ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 
@@ -2500,6 +2502,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.3413, 203.39, -18.5673)
 
 [node name="Glass12" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("165_w3xux")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.6567, 203.712, -18.5602)
+
+[node name="FlowerPotStatic" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("166_tdbpd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66.5678, 202.546, -3.1907)
+
+[node name="BoxStatic" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("167_rih4a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5796, 206.618, 127.358)
+
+[node name="BoxStatic2" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("167_rih4a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4347, 206.618, 127.358)
+
+[node name="BoxStatic3" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Decorations" instance=ExtResource("167_rih4a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1234, 206.618, 127.358)
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["ladder"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.4438, 207.143, 114.148)

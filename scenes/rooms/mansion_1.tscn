@@ -1,4 +1,4 @@
-[gd_scene load_steps=587 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=598 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -184,6 +184,7 @@
 [ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
 [ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
 [ext_resource type="PackedScene" uid="uid://bo5dwiemer8k4" path="res://scenes/objects/candle.tscn" id="168_mswtm"]
+[ext_resource type="Texture2D" uid="uid://bukqoux87u3bp" path="res://images/textures/HRBLKPLE.png" id="177_c4kb2"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="Shader" path="res://shaders/invert_y.gdshader" id="179_6qbc7"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
@@ -1328,6 +1329,58 @@ albedo_texture = ExtResource("15_emvb5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cfyp"]
 albedo_texture = ExtResource("15_emvb5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0j3w"]
+albedo_texture = ExtResource("10_ls102")
+uv1_scale = Vector3(1.65, 1.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emxvj"]
+albedo_texture = ExtResource("10_ls102")
+uv1_scale = Vector3(1.65, 1.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33lod"]
+albedo_texture = ExtResource("10_ls102")
+uv1_scale = Vector3(1.65, 1.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kjtp1"]
+albedo_texture = ExtResource("10_ls102")
+uv1_scale = Vector3(1.65, 1.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_df7in"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qfblb"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_64128"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_62wbk"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sc47u"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i30gm"]
+albedo_texture = ExtResource("177_c4kb2")
+uv1_scale = Vector3(0.9, 0.8, 1)
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkyc3"]
 albedo_texture = ExtResource("14_rgpi8")
@@ -4254,6 +4307,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.39941, 2.07501, 0.0505478)
+material = SubResource("StandardMaterial3D_n0j3w")
 
 [node name="WardrobeDoor2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16013, 206.278, 126.41)
@@ -4267,6 +4321,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.39941, 2.07501, 0.0505478)
+material = SubResource("StandardMaterial3D_emxvj")
 
 [node name="WardrobeDoor3" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.1947, 203.724, 135.374)
@@ -4280,6 +4335,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.39941, 2.07501, 0.0505478)
+material = SubResource("StandardMaterial3D_33lod")
 
 [node name="WardrobeDoor4" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7995, 203.721, 100.174)
@@ -4295,6 +4351,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.39941, 2.07501, 0.0505478)
+material = SubResource("StandardMaterial3D_kjtp1")
 
 [node name="MovingBars" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -45.5016, 203.475, -20.0763)
@@ -4311,6 +4368,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_df7in")
 
 [node name="Bar2" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.799999, 0, 0)
@@ -4318,6 +4376,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_qfblb")
 
 [node name="Bar3" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.200001, 0, 0)
@@ -4325,6 +4384,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_64128")
 
 [node name="Bar4" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400002, 0, 0)
@@ -4332,6 +4392,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_62wbk")
 
 [node name="Bar5" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
@@ -4339,6 +4400,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_sc47u")
 
 [node name="Bar6" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors/MovingBars"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 0, 0)
@@ -4346,6 +4408,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(0.31, 2.576, 0.31)
+material = SubResource("StandardMaterial3D_i30gm")
 
 [node name="MovingWall" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 8.13254, 206.034, 108.155)

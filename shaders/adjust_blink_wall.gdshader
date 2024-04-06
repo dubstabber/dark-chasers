@@ -21,17 +21,6 @@ void vertex() {
 	UV=UV*uv1_scale.xy+uv1_offset.xy;
 }
 
-vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
-    float sine = sin(rotation);
-    float cosine = cos(rotation);
-    
-    uv -= pivot;
-    uv.x = uv.x * cosine - uv.y * sine;
-    uv.y = uv.x * sine + uv.y * cosine;
-    uv += pivot;
-
-    return uv;
-}
 vec2 rotate(vec2 uv, vec2 pivot, float angle)
 {
 	mat2 rotation = mat2(vec2(sin(angle), -cos(angle)),
@@ -53,10 +42,8 @@ vec2 scale(vec2 uv, float x, float y)
 }
 void fragment() {
 	vec2 base_uv = UV;
-	base_uv = scale(base_uv,0.8,2);
-	base_uv = rotate(base_uv, vec2(0.8), 6.2835);
-	base_uv += 0.099;
-	//base_uv.x = -base_uv.y;
+	base_uv = scale(base_uv,1,0.8);
+	base_uv = rotate(base_uv,vec2(0.551),-PI/2.0);
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
 	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);

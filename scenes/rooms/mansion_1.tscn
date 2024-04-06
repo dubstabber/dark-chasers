@@ -1,4 +1,4 @@
-[gd_scene load_steps=620 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=625 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -189,6 +189,7 @@
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="Shader" path="res://shaders/adjust_mansion_wall.gdshader" id="178_1x7r2"]
 [ext_resource type="Shader" path="res://shaders/invert_y.gdshader" id="179_6qbc7"]
+[ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 [ext_resource type="Shader" path="res://shaders/adjust_blink_wall.gdshader" id="183_veal5"]
 [ext_resource type="Shader" path="res://shaders/adjust_mansion_hidden_wall.gdshader" id="188_qg8ik"]
@@ -1419,11 +1420,17 @@ albedo_texture = ExtResource("102_iyaks")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkyc3"]
 albedo_texture = ExtResource("14_rgpi8")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ghc2"]
+albedo_texture = ExtResource("57_ldj56")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8l7s3"]
 albedo_texture = ExtResource("36_n1n0t")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s46jb"]
 albedo_texture = ExtResource("41_7xeps")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d2ngu"]
+albedo_texture = ExtResource("181_jptga")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yuj2i"]
 render_priority = 0
@@ -1611,6 +1618,14 @@ shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/texture_albedo = ExtResource("4_sl7bf")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h5w1g"]
+albedo_texture = ExtResource("14_rgpi8")
+uv1_scale = Vector3(7, 2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dhjh7"]
+material = SubResource("StandardMaterial3D_h5w1g")
+size = Vector3(2.26, 1, 0.4)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
@@ -4602,6 +4617,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.23804, 1.92871, 0.631836)
+material = SubResource("StandardMaterial3D_1ghc2")
 
 [node name="MovingWall6" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.361, 203.416, 101.587)
@@ -4680,6 +4696,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1.91309, 1.59375, 0.09375)
+material = SubResource("StandardMaterial3D_d2ngu")
 
 [node name="HingeDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.7951)
@@ -5123,6 +5140,10 @@ mesh = SubResource("PlaneMesh_fnxh1")
 transform = Transform3D(2.77028e-08, 1, -5.64313e-08, 0.633766, -4.37114e-08, 0, -2.42186e-15, -8.74228e-08, -0.645499, -7.04413, 205.412, 111.983)
 mesh = SubResource("PlaneMesh_jot04")
 surface_material_override/0 = SubResource("ShaderMaterial_5nnai")
+
+[node name="MeshInstance3D9" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.995, 204.299, 93.308)
+mesh = SubResource("BoxMesh_dhjh7")
 
 [node name="Sprite3D6" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
 transform = Transform3D(92.9378, 0, 0, 0, 40.5047, 0, 0, 0, 1, 31.6368, 204.84, 87.9933)

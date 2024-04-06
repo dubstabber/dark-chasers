@@ -44,6 +44,7 @@ void fragment() {
 	vec2 base_uv = UV;
 	base_uv = scale(base_uv,1,0.8);
 	base_uv = rotate(base_uv,vec2(0.551),-PI/2.0);
+	base_uv.x += 0.495;
 	vec4 albedo_tex = texture(texture_albedo,base_uv);
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
 	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);

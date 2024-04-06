@@ -1,4 +1,4 @@
-[gd_scene load_steps=615 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=620 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -190,6 +190,7 @@
 [ext_resource type="Shader" path="res://shaders/adjust_mansion_wall.gdshader" id="178_1x7r2"]
 [ext_resource type="Shader" path="res://shaders/invert_y.gdshader" id="179_6qbc7"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
+[ext_resource type="Shader" path="res://shaders/adjust_blink_wall.gdshader" id="183_veal5"]
 [ext_resource type="Shader" path="res://shaders/adjust_mansion_hidden_wall.gdshader" id="188_qg8ik"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_byjnb"]
@@ -1412,8 +1413,17 @@ shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/texture_albedo = ExtResource("4_sl7bf")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkqpe"]
+albedo_texture = ExtResource("102_iyaks")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkyc3"]
 albedo_texture = ExtResource("14_rgpi8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8l7s3"]
+albedo_texture = ExtResource("36_n1n0t")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s46jb"]
+albedo_texture = ExtResource("41_7xeps")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yuj2i"]
 render_priority = 0
@@ -1444,6 +1454,21 @@ shader_parameter/uv1_offset = Vector3(0, 0, 0)
 shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/texture_albedo = ExtResource("70_0i33l")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0sywq"]
+render_priority = 0
+shader = ExtResource("183_veal5")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = null
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = ExtResource("4_sl7bf")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0sqt4"]
 size = Vector3(0.61, 0.594, 0.01)
@@ -4530,6 +4555,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(2.57715, 2.556, 0.630859)
+material = SubResource("StandardMaterial3D_dkqpe")
 
 [node name="MovingWall3" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 26.5131, 203.006, 82.4743)
@@ -4624,6 +4650,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1.86426, 2.43774, 0.302734)
+material = SubResource("StandardMaterial3D_8l7s3")
 
 [node name="WideDoor2" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 38.1201, 203.718, 88.4496)
@@ -4637,6 +4664,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1.86426, 2.43774, 0.302734)
+material = SubResource("StandardMaterial3D_s46jb")
 
 [node name="CryptDoor" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Doors" groups=["door"]]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9958, 202.993, 93.5405)
@@ -4682,6 +4710,7 @@ use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1.27173, 2.56445, 0.01)
+material = SubResource("ShaderMaterial_0sywq")
 
 [node name="Items" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
@@ -5094,6 +5123,16 @@ mesh = SubResource("PlaneMesh_fnxh1")
 transform = Transform3D(2.77028e-08, 1, -5.64313e-08, 0.633766, -4.37114e-08, 0, -2.42186e-15, -8.74228e-08, -0.645499, -7.04413, 205.412, 111.983)
 mesh = SubResource("PlaneMesh_jot04")
 surface_material_override/0 = SubResource("ShaderMaterial_5nnai")
+
+[node name="Sprite3D6" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(92.9378, 0, 0, 0, 40.5047, 0, 0, 0, 1, 31.6368, 204.84, 87.9933)
+shaded = true
+texture = ExtResource("9_87pg3")
+
+[node name="Sprite3D7" type="Sprite3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(92.9378, 0, 0, 0, 16.0887, 0, 0, 0, 1, 31.6368, 202.357, 87.9903)
+shaded = true
+texture = ExtResource("9_87pg3")
 
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

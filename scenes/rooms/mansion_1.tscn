@@ -5257,7 +5257,7 @@ transform = Transform3D(0.0118928, -0.881365, -0.472285, 0.306627, 0.452779, -0.
 mesh = SubResource("PlaneMesh_fnxh1")
 
 [node name="MeshInstance3D8" type="MeshInstance3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
-transform = Transform3D(2.77028e-08, 1, -5.64313e-08, 0.633766, -4.37114e-08, 0, -2.42186e-15, -8.74228e-08, -0.645499, -7.04413, 205.412, 111.983)
+transform = Transform3D(2.77028e-08, 1, 5.64313e-08, -0.633766, 4.37114e-08, 5.64313e-08, 5.54056e-08, -8.74228e-08, 0.645499, -7.041, 205.412, 111.983)
 mesh = SubResource("PlaneMesh_jot04")
 surface_material_override/0 = SubResource("ShaderMaterial_5nnai")
 

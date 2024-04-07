@@ -2875,10 +2875,106 @@ shape = SubResource("BoxShape3D_wfras")
 [node name="Lights" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.972, 222.345, 30.6272)
-visible = false
-light_energy = 10.0
-omni_range = 1063.46
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.3975, 203.777, -30.0967)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46.0963, 203.777, -30.0854)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.6846, 203.777, -30.0945)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.6551, 203.777, -30.0945)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.441, 203.777, -29.446)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.74253, 206.296, 114.555)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D7" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1558, 206.296, 124.153)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D8" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00313377, 206.296, 124.153)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D9" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.8224, 203.752, 133.742)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D10" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.8224, 203.752, 129.279)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D11" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2771, 203.752, 129.279)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D12" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2771, 203.752, 133.757)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D13" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.1487, 203.752, 118.378)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D14" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.8439, 203.752, 69.7473)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D15" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.4947, 203.752, 69.7473)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D16" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2021, 203.752, 69.7473)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
+
+[node name="OmniLight3D17" type="OmniLight3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.3007, 203.738, 69.7473)
+light_energy = 0.35
+omni_range = 4.11547
+omni_attenuation = 0.0915055
 
 [node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 

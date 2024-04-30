@@ -2800,7 +2800,7 @@ collision_layer = 8
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Ladder"]
 shape = SubResource("BoxShape3D_wkois")
 
-[node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["players"]]
+[node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]

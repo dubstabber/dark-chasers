@@ -25,8 +25,8 @@ var accel: float
 
 
 func _ready():
-	players = get_tree().get_first_node_in_group("players")
-	map_transitions = get_tree().get_first_node_in_group("transitions")
+	players = get_parent().get_node("%Players")
+	map_transitions = get_node_or_null("%Transitions")
 	for disappear_zone in disappear_zones:
 		disappear_zone.connect("body_entered", _on_disappear_area)
 

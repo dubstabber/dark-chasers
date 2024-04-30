@@ -12,6 +12,30 @@ class_name Level extends Node3D
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	var doors = get_tree().get_nodes_in_group("door")
+	for door in doors:
+		if "door_locked" in door: door.connect("door_locked", _door_locked)
+	var keys = get_tree().get_nodes_in_group("key")
+	for key in keys:
+		key.connect("key_collected", _key_body_entered)
+	var items = get_tree().get_nodes_in_group("item")
+	for item in items:
+		item.connect("item_pickedup", hud.add_log)
+	var buttons = get_tree().get_nodes_in_group("button")
+	for button in buttons:
+		button.connect("button_pressed", _handle_button_event)
+	var area_events = get_tree().get_nodes_in_group("area_event")
+	for area_event in area_events:
+		area_event.connect("event_triggered", _handle_area_event)
+	
+	if transitions:
+		for t in transitions.get_children():
+			for m in t.get_children():
+				if m.is_in_group("spawn_point"):
+					t.connect("body_entered", handle_transition.bind(t.name, m))
+				if m.is_in_group("manual_spawn_point"):
+					t.connect("body_entered", _on_transition_entered.bind(m))
+					t.connect("body_exited", _on_transition_exited)
 	
 
 func _physics_process(_delta):
@@ -22,3 +46,29 @@ func _physics_process(_delta):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+
+func handle_transition(body, area3dname, marker):
+	body.current_room = transitions.map_transitions[body.current_room][area3dname]
+	body.position = marker.global_position
+	if "find_path_timer" in body:
+		body.find_path_timer.wait_time = 0.1
+		body.find_path_timer.start()
+
+
+func _on_transition_entered(body, transitor):
+	if body.is_in_group("player") and transitor:
+		if "transit_pos" in body:
+			body.transit_pos = transitor
+
+
+func _on_transition_exited(body):
+	if body.is_in_group("player"):
+		if "transit_pos" in body:
+			body.transit_pos = null
+
+
+func _key_body_entered(_body, _key_type, _event, _message_text): pass
+func _handle_button_event(_body, _event): pass
+func _handle_area_event(_body: CharacterBody3D, _event): pass
+func _door_locked(_text): pass

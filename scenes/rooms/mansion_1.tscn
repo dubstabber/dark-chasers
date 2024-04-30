@@ -1,4 +1,4 @@
-[gd_scene load_steps=631 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=632 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="ArrayMesh" uid="uid://ch0plqmpafdf4" path="res://models/Mansion_AOONI_6.0.0_MAP01.obj" id="2_bd77w"]
@@ -574,8 +574,9 @@ albedo_texture = ExtResource("22_f8rls")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_satyf"]
 transparency = 1
-albedo_color = Color(1, 1, 1, 0.0313726)
+albedo_color = Color(1, 1, 1, 0.0823529)
 albedo_texture = ExtResource("23_5kixl")
+refraction_scale = -0.44
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nc7bn"]
 albedo_texture = ExtResource("24_uraeo")
@@ -1672,6 +1673,12 @@ shader_parameter/uv2_scale = Vector3(1, 1, 1)
 shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/texture_albedo = ExtResource("4_sl7bf")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jeknc"]
+transparency = 1
+disable_ambient_light = true
+metallic = 1.0
+roughness = 0.0
+
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
 
@@ -2423,6 +2430,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_lldh5")
 
 [node name="Transitions" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["transitions"]]
+unique_name_in_owner = true
 script = ExtResource("139_pau06")
 
 [node name="FirstFloorUpstairs" type="Area3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Transitions"]
@@ -2793,8 +2801,10 @@ collision_layer = 8
 shape = SubResource("BoxShape3D_wkois")
 
 [node name="Players" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01" groups=["players"]]
+unique_name_in_owner = true
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+unique_name_in_owner = true
 
 [node name="Ao oni" parent="NavigationRegion3D/MansionAooni6_0_0Map01/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
@@ -4057,6 +4067,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 polygon = PackedVector2Array(0.778633, 2.83841, -0.392319, 1.54995, -0.973915, 0.512444, -0.344582, -0.836266, -0.929123, -1.47028, -0.387802, -2.60468, 0.796188, -3.18118)
 
 [node name="PlayerSpawners" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
+unique_name_in_owner = true
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.034, 202.8, -86.1795)
@@ -5298,11 +5309,28 @@ transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -58.56
 size = Vector3(1.2818, 1.28001, 0.01)
 material = SubResource("ShaderMaterial_rahrc")
 
+[node name="CSGBox3D3" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.161, 203.32, -28.4463)
+size = Vector3(0.805759, 0.965576, 0.01)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.8779, 203.325, -23.3317)
+layers = 2
+size = Vector3(0.805759, 0.965576, 0.01)
+material = SubResource("StandardMaterial3D_jeknc")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.3167, 203.246, -23.3317)
+layers = 4
+size = Vector3(0.668603, 0.83667, 0.01)
+
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01"]
 
 [node name="GlobalMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
+unique_name_in_owner = true
 
 [node name="GlobalSound" type="AudioStreamPlayer" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
+unique_name_in_owner = true
 
 [node name="PianoSound" type="AudioStreamPlayer3D" parent="NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.8255, 203.588, 114.741)

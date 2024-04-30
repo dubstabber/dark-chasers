@@ -25,10 +25,6 @@ Preloads="*res://scenes/globals/preloads.gd"
 
 window/stretch/mode="canvas_items"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/godotgpt/plugin.cfg")
-
 [file_customization]
 
 folder_colors={
@@ -38,6 +34,31 @@ folder_colors={
 "res://scenes/": "green",
 "res://shaders/": "pink",
 "res://sounds/": "yellow"
+}
+
+[importer_defaults]
+
+bsp={
+"culling_textures_exclude": Array[StringName]([]),
+"entity_offsets_quake_units": {
+"example_offset_entity": Vector3(16, 16, 0)
+},
+"entity_remap": {
+"trigger_example": "res://triggers/trigger_example.tres"
+},
+"generate_occlusion_culling": true,
+"import_lights": true,
+"inverse_scale_factor": 32.0,
+"lava_scene_template": "res://addons/bsp_importer/lava_example_template.tscn",
+"material_path_pattern": "res://materials/{texture_name}_material.tres",
+"mesh_separation_grid_size": 256.0,
+"post_import_script": "",
+"separate_mesh_on_grid": false,
+"slime_scene_template": "res://addons/bsp_importer/slime_example_template.tscn",
+"texture_material_rename": {
+"texture_name1": "res://material/texture_name1_material.tres"
+},
+"water_scene_template": "res://addons/bsp_importer/water_example_template.tscn"
 }
 
 [input]

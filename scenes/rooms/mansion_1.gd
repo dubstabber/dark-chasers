@@ -1,22 +1,9 @@
-extends Node3D
-
+extends Level
 
 var keys_collected: Array
 
-@onready var hud = $HUD
-@onready var transitions = $NavigationRegion3D/MansionAooni6_0_0Map01/Transitions
-@onready var player_spawners = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayerSpawners
-@onready var players = $NavigationRegion3D/MansionAooni6_0_0Map01/Players
-@onready var enemies = $NavigationRegion3D/MansionAooni6_0_0Map01/Enemies
-@onready var playing_sounds = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds
-@onready var global_music = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/GlobalMusic
-@onready var global_sound = $NavigationRegion3D/MansionAooni6_0_0Map01/PlayingSounds/GlobalSound
-
-
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
+	super._ready()
 	var doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
 		if "door_locked" in door: door.connect("door_locked", _door_locked)
@@ -48,16 +35,6 @@ func _ready():
 			if m.is_in_group("manual_spawn_point"):
 				t.connect("body_entered", _on_transition_entered.bind(m))
 				t.connect("body_exited", _on_transition_exited)
-
-
-func _physics_process(_delta):
-	if Input.is_action_just_pressed("menu"):
-		get_tree().quit()
-	if Input.is_action_just_pressed("toggle-window-mode"):
-		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 
 
 func spawn_player():

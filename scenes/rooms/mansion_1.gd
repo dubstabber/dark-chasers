@@ -4,58 +4,34 @@ var keys_collected: Array
 
 func _ready():
 	super._ready()
-	var doors = get_tree().get_nodes_in_group("door")
-	for door in doors:
-		if "door_locked" in door: door.connect("door_locked", _door_locked)
-	var keys = get_tree().get_nodes_in_group("key")
-	for key in keys:
-		key.connect("key_collected", _key_body_entered)
-	var items = get_tree().get_nodes_in_group("item")
-	for item in items:
-		item.connect("item_pickedup", hud.add_log)
-	var buttons = get_tree().get_nodes_in_group("button")
-	for button in buttons:
-		button.connect("button_pressed", _handle_button_event)
-	var area_events = get_tree().get_nodes_in_group("area_event")
-	for area_event in area_events:
-		area_event.connect("event_triggered", _handle_area_event)
 	var destroyables = get_tree().get_nodes_in_group("destroyable")
 	for destroyable in destroyables:
 		if destroyable.name == 'BlinkWall':
 			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
-	
-	
+			
 	spawn_player()
 	#open_all_doors()
-
-	for t in transitions.get_children():
-		for m in t.get_children():
-			if m.is_in_group("spawn_point"):
-				t.connect("body_entered", handle_transition.bind(t.name, m))
-			if m.is_in_group("manual_spawn_point"):
-				t.connect("body_entered", _on_transition_entered.bind(m))
-				t.connect("body_exited", _on_transition_exited)
 
 
 func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
-	player.blocked_movement = true
+	#player.blocked_movement = true
 	player.hud = hud
-	hud.show_black_screen()
+	#hud.show_black_screen()
 	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
 	player.ambient_music.play()
 	
 	#respawn(player)
 	test_respawn(player)
 	
-	hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
-	await get_tree().create_timer(6.0).timeout
-	hud.show_event_text("They say there is a monster that lives there_")
-	await get_tree().create_timer(4.5).timeout
-	hud.hide_event_text()
-	player.blocked_movement = false
-	hud.fade_black_screen()
+	#hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
+	#await get_tree().create_timer(6.0).timeout
+	#hud.show_event_text("They say there is a monster that lives there_")
+	#await get_tree().create_timer(4.5).timeout
+	#hud.hide_event_text()
+	#player.blocked_movement = false
+	#hud.fade_black_screen()
 
 
 func respawn(p):
@@ -69,26 +45,6 @@ func test_respawn(p):
 	p.position = $NavigationRegion3D/MansionAooni6_0_0Map01/TestSpawn.position
 	p.current_room = "FirstFloor"
 	Utils.play_sound(Preloads.SPAWN_SOUND, p)
-
-
-func handle_transition(body, area3dname, marker):
-	body.current_room = transitions.map_transitions[body.current_room][area3dname]
-	body.position = marker.global_position
-	if "find_path_timer" in body:
-		body.find_path_timer.wait_time = 0.1
-		body.find_path_timer.start()
-
-
-func _on_transition_entered(body, transitor):
-	if body.is_in_group("player") and transitor:
-		if "transit_pos" in body:
-			body.transit_pos = transitor
-
-
-func _on_transition_exited(body):
-	if body.is_in_group("player"):
-		if "transit_pos" in body:
-			body.transit_pos = null
 
 
 func _on_ladder_body_entered(body):

@@ -9753,6 +9753,7 @@ unique_name_in_owner = true
 
 [node name="Ao oni" parent="Enemies" instance=ExtResource("5_yjp8p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.0486, 3.19912, -7.6986)
+is_wandering = true
 
 [node name="PlayerSpawners" type="Node3D" parent="."]
 unique_name_in_owner = true

@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://wnlgsuhygh3f"]
+
+[ext_resource type="Shader" path="res://addons/Mirror/Mirror/Mirror.gdshader" id="1_647ym"]
+
+[sub_resource type="QuadMesh" id="11"]
+size = Vector2(0.81, 0.97)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_guvh6"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2l8wt"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_647ym")
+shader_parameter/tint = Color(0.98, 0.98, 0.98, 1)
+shader_parameter/distort_strength = null
+shader_parameter/mirror_tex = SubResource("ViewportTexture_guvh6")
+
+[node name="MirrorContainer" type="Node3D"]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(100, 100)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.406672, 1.21628, 8.51171)
+keep_aspect = 0
+cull_mask = 1048571
+projection = 2
+size = 3.0
+frustum_offset = Vector2(-0.406672, -1.21628)
+near = 8.51171
+far = 10000.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 2.38419e-07, 0, 1, 0, -2.38419e-07, 0, 1, 0, 0, 0)
+layers = 4
+mesh = SubResource("11")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_2l8wt")

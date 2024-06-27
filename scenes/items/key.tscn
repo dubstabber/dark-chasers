@@ -15,7 +15,6 @@ script = ExtResource("1_uba48")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 billboard = 2
 shaded = true
-alpha_cut = 1
 alpha_scissor_threshold = 0.575
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

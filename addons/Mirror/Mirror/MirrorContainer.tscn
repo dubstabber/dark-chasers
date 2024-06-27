@@ -14,6 +14,7 @@ render_priority = 0
 shader = ExtResource("1_647ym")
 shader_parameter/tint = Color(0.98, 0.98, 0.98, 1)
 shader_parameter/distort_strength = null
+shader_parameter/albedo = null
 shader_parameter/mirror_tex = SubResource("ViewportTexture_guvh6")
 
 [node name="MirrorContainer" type="Node3D"]

@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dtxsb3wpd3ls7"]
+
+[ext_resource type="Shader" path="res://shaders/see-through.gdshader" id="1_8v0ye"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_8v0ye")
+shader_parameter/transparency = 0.7

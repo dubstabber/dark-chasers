@@ -17,5 +17,4 @@ shape = SubResource("BoxShape3D_eokek")
 [node name="Sprite3D" type="Sprite3D" parent="."]
 billboard = 2
 shaded = true
-alpha_cut = 1
 texture = ExtResource("2_deuu2")

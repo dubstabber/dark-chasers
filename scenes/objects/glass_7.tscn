@@ -14,7 +14,6 @@ script = ExtResource("1_yxiil")
 [node name="Sprite3D" type="Sprite3D" parent="."]
 billboard = 2
 shaded = true
-alpha_cut = 1
 texture = ExtResource("1_ugx8k")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

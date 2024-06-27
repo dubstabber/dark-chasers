@@ -5,6 +5,7 @@ uniform vec4 tint : source_color = vec4(vec3(0.98),1.0);
 uniform sampler2D mirror_tex;
 uniform sampler2D distort_tex : source_color;
 uniform float distort_strength : hint_range(0, 30);
+uniform vec4 albedo : source_color;
 
 void vertex() {
 	UV.x = 1.0 - UV.x;
@@ -37,4 +38,7 @@ void fragment() {
 	vec4 mirror_sample = texture(mirror_tex,base_uv);
 	
 	ALBEDO = tint.rgb * mirror_sample.rgb;
+	
+	
+	ALPHA *= albedo.a;
 }

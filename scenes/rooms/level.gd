@@ -15,6 +15,7 @@ func _ready():
 	var doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
 		if "door_locked" in door: door.connect("door_locked", _door_locked)
+		
 	var keys = get_tree().get_nodes_in_group("key")
 	for key in keys:
 		key.connect("key_collected", _key_body_entered)
@@ -36,6 +37,11 @@ func _ready():
 				if m.is_in_group("manual_spawn_point"):
 					t.connect("body_entered", _on_transition_entered.bind(m))
 					t.connect("body_exited", _on_transition_exited)
+	for mesh in %Map.get_children():
+		var material = mesh.get_active_material(0)
+		if material and material.transparency == 0:
+			material.transparency = 1
+			material.depth_draw_mode = 1
 	
 
 func _physics_process(_delta):

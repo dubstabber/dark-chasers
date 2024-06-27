@@ -40,6 +40,8 @@ vec2 scale(vec2 uv, float x, float y)
 	uv += 0.5;
 	return uv;
 }
+
+
 void fragment() {
 	vec2 base_uv = UV;
 	base_uv = scale(base_uv,1,0.8);
@@ -53,4 +55,5 @@ void fragment() {
 	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
 	ROUGHNESS = roughness_tex * roughness;
 	SPECULAR = specular;
+	ALPHA *= albedo.a * albedo_tex.a;
 }

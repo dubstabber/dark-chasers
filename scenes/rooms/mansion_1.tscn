@@ -9327,6 +9327,7 @@ albedo_texture = ExtResource("15_emvb5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cfyp"]
 transparency = 1
+depth_draw_mode = 1
 albedo_texture = ExtResource("15_emvb5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0j3w"]

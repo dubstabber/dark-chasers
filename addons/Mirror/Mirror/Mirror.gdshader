@@ -9,16 +9,8 @@ uniform vec4 albedo : source_color;
 
 void vertex() {
 	UV.x = 1.0 - UV.x;
-	//UV.y = 1.0 + UV.y;
 }
 
-//vec3 lin_to_srgb(vec3 col) {
-//	return mix(
-//		pow((col + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),
-//		col * (1.0 / 12.92),
-//		lessThan(col,vec3(0.04045))
-//		);
-//}
 
 void fragment() {
 	vec2 m_UV = UV;

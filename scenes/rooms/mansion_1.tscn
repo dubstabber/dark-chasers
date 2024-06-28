@@ -13130,6 +13130,16 @@ light_negative = true
 distance_fade_length = 0.0
 omni_attenuation = 1.93187
 
+[node name="OmniLight3D5" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.815, 203.304, 113.624)
+visible = false
+light_energy = 5.0
+light_negative = true
+shadow_enabled = true
+distance_fade_length = 0.0
+omni_range = 39.5133
+omni_attenuation = 0.00153238
+
 [node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D"]
 visible = false
 
@@ -15380,6 +15390,13 @@ script = ExtResource("194_0vynp")
 size = Vector2(0.81, 0.97)
 ResolutionPerUnit = 400
 MirrorColor = Color(0.854902, 0.847059, 0.839216, 1)
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="NavigationRegion3D/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.123, 203.539, 112.294)
+size = Vector3(51.9927, 3.16193, 52.1382)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.0235294, 0.0235294, 0.0235294, 1)
 
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D"]
 

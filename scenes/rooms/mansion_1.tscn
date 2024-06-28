@@ -1,4 +1,4 @@
-[gd_scene load_steps=1274 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1276 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -81,6 +81,7 @@
 [ext_resource type="Texture2D" uid="uid://dpn7n2bfbq2dc" path="res://images/textures/HRFRDOOR.png" id="69_228et"]
 [ext_resource type="Texture2D" uid="uid://cl2a8kmekn451" path="res://images/textures/HRFRDRMR.png" id="70_0i33l"]
 [ext_resource type="Texture2D" uid="uid://yp4jlhwtbrut" path="res://models/mansion1/mansion1_CSTAYOUT.png" id="70_kqsak"]
+[ext_resource type="Shader" path="res://shaders/imtrtx.gdshader" id="71_du04h"]
 [ext_resource type="Texture2D" uid="uid://qmnabicu868j" path="res://models/mansion1/mansion1_IMTRTX.png" id="71_jic2e"]
 [ext_resource type="Texture2D" uid="uid://bsofwoiqn3bh0" path="res://models/mansion1/mansion1_BPICT06.png" id="72_scwxl"]
 [ext_resource type="Texture2D" uid="uid://lk2o3o6fxqso" path="res://models/mansion1/mansion1_CMFRIDGE.png" id="73_i1cyh"]
@@ -148,6 +149,7 @@
 [ext_resource type="Texture2D" uid="uid://dhkjvba5hk5o4" path="res://models/mansion1/mansion1_CGRASO1.png" id="133_qltbx"]
 [ext_resource type="Texture2D" uid="uid://bymrshytljfkx" path="res://models/mansion1/mansion1_CGRASO2.png" id="134_t7ufm"]
 [ext_resource type="Texture2D" uid="uid://bc6qc7mfemjcw" path="res://models/mansion1/mansion1_SNCATION.png" id="135_w4rgp"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="136_blg5a"]
 [ext_resource type="Script" path="res://scenes/rooms/mansion1_transitions.gd" id="139_pau06"]
 [ext_resource type="Texture2D" uid="uid://blj03g2ye018q" path="res://images/skyboxes/SKYMP01.png" id="140_iteta"]
 [ext_resource type="Shader" path="res://shaders/skybox1.gdshader" id="141_csgl3"]
@@ -3039,10 +3041,13 @@ shadow_mesh = SubResource("ArrayMesh_agkw6")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_3v1fj"]
 data = PackedVector3Array(74.48, 203.3, 81.57, 75.46, 203.92, 81.57, 74.48, 203.92, 81.57, 74.48, 203.3, 81.57, 75.46, 203.3, 81.57, 75.46, 203.92, 81.57, 68.3143, 203.302, 77.77, 67.3424, 203.913, 77.77, 68.3143, 203.913, 77.77, 68.3143, 203.302, 77.77, 67.3424, 203.302, 77.77, 67.3424, 203.913, 77.77)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hmbwr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2omc3"]
 resource_name = "IMTRTX"
-cull_mode = 2
-albedo_texture = ExtResource("71_jic2e")
+render_priority = 0
+shader = ExtResource("71_du04h")
+shader_parameter/distortion = 0.337
+shader_parameter/time_scale = Vector2(0.6, 0.6)
+shader_parameter/albedo = ExtResource("71_jic2e")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2iagp"]
 _surfaces = [{
@@ -3066,7 +3071,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 36,
 "index_data": PackedByteArray(2, 0, 8, 0, 5, 0, 2, 0, 11, 0, 8, 0, 9, 0, 12, 0, 6, 0, 9, 0, 15, 0, 12, 0, 17, 0, 20, 0, 14, 0, 17, 0, 23, 0, 20, 0, 21, 0, 3, 0, 18, 0, 21, 0, 0, 0, 3, 0, 1, 0, 16, 0, 10, 0, 22, 0, 16, 0, 1, 0, 4, 0, 7, 0, 13, 0, 19, 0, 4, 0, 13, 0),
-"material": SubResource("StandardMaterial3D_hmbwr"),
+"material": SubResource("ShaderMaterial_2omc3"),
 "name": "IMTRTX",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -8569,10 +8574,13 @@ shadow_mesh = SubResource("ArrayMesh_e76nu")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4n5l8"]
 data = PackedVector3Array(55.04, 202.2, 115.51, 55.04, 201.641, 112.95, 55.04, 201.641, 115.51, 55.04, 202.2, 115.51, 55.04, 202.2, 112.95, 55.04, 201.641, 112.95)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i72dv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ig41r"]
 resource_name = "HRWATR02.001"
-cull_mode = 2
-albedo_texture = ExtResource("115_3rxcq")
+render_priority = 0
+shader = ExtResource("136_blg5a")
+shader_parameter/distortion = 0.302
+shader_parameter/time_scale = Vector2(1, 1.4)
+shader_parameter/albedo = ExtResource("115_3rxcq")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_3i2rj"]
 _surfaces = [{
@@ -8596,7 +8604,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 33,
 "index_data": PackedByteArray(8, 0, 10, 0, 9, 0, 10, 0, 12, 0, 11, 0, 12, 0, 3, 0, 2, 0, 12, 0, 1, 0, 3, 0, 8, 0, 12, 0, 10, 0, 6, 0, 8, 0, 7, 0, 4, 0, 6, 0, 5, 0, 12, 0, 0, 0, 1, 0, 0, 0, 6, 0, 4, 0, 6, 0, 12, 0, 8, 0, 12, 0, 6, 0, 0, 0),
-"material": SubResource("StandardMaterial3D_i72dv"),
+"material": SubResource("ShaderMaterial_ig41r"),
 "name": "HRWATR02.001",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -13093,6 +13101,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.3007, 203.738, 69.7473)
 light_energy = 0.35
 omni_range = 4.11547
 omni_attenuation = 0.0915055
+
+[node name="Shadows" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.2246, 203.304, 80.1873)
+light_negative = true
+light_specular = 4.571
+omni_range = 8.0
+omni_attenuation = 0.31864
 
 [node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D"]
 visible = false

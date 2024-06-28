@@ -9331,6 +9331,8 @@ size = Vector3(14.0607, 0.1, 7.70124)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ehfr"]
 transparency = 1
+cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = ExtResource("15_emvb5")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cfyp"]
@@ -9567,6 +9569,7 @@ size = Vector3(1.255, 1.88648, 0.279541)
 
 [node name="mansion1" type="Node3D" groups=["map"]]
 script = ExtResource("1_0bnm5")
+metadata/_edit_lock_ = true
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_byjnb")
@@ -9574,6 +9577,8 @@ metadata/_edit_lock_ = true
 
 [node name="Map" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
 
 [node name="MAP01" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_b26wr")
@@ -13115,7 +13120,7 @@ omni_attenuation = 1.03526
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.8298, 203.304, 80.3278)
 light_negative = true
 light_specular = 2.0
-omni_range = 13.194
+omni_range = 9.651
 omni_attenuation = 0.0824691
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
@@ -13125,10 +13130,10 @@ omni_range = 10.0
 omni_attenuation = 0.965935
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.022, 203.304, 62.3722)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.022, 203.304, 62.5904)
 light_negative = true
 distance_fade_length = 0.0
-omni_attenuation = 1.93187
+omni_attenuation = 1.23114
 
 [node name="OmniLight3D5" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 147.815, 203.304, 113.624)
@@ -15398,6 +15403,18 @@ interior = true
 ambient_mode = 2
 ambient_color = Color(0.0235294, 0.0235294, 0.0235294, 1)
 
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="NavigationRegion3D/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0786, 203.437, 78.5852)
+size = Vector3(11.7017, 2.8125, 9.85316)
+interior = true
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="NavigationRegion3D/TextureFixes"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.1851, 203.439, -14.9607)
+size = Vector3(15.4953, 2.86639, 24.4049)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.109804, 0.109804, 0.109804, 1)
+
 [node name="PlayingSounds" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="GlobalMusic" type="AudioStreamPlayer" parent="NavigationRegion3D/PlayingSounds"]
@@ -15427,7 +15444,7 @@ autoplay = true
 max_distance = 7.0
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.8649, 203.153, 84.5372)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.5768, 203.653, -48.3454)
 
 [node name="HUD" parent="." instance=ExtResource("183_ainjx")]
 

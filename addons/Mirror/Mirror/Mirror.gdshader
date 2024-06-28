@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode cull_disabled, unshaded;
+render_mode cull_disabled;
 
 uniform vec4 tint : source_color = vec4(vec3(0.98),1.0);
 uniform sampler2D mirror_tex;

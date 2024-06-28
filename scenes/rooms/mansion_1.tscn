@@ -13105,11 +13105,30 @@ omni_attenuation = 0.0915055
 [node name="Shadows" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.2246, 203.304, 80.1873)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.0649, 203.304, 79.8947)
 light_negative = true
-light_specular = 4.571
-omni_range = 8.0
-omni_attenuation = 0.31864
+distance_fade_length = 0.0
+omni_range = 4.249
+omni_attenuation = 1.03526
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.8298, 203.304, 80.3278)
+light_negative = true
+light_specular = 2.0
+omni_range = 13.194
+omni_attenuation = 0.0824691
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.356, 203.304, 78.911)
+light_negative = true
+omni_range = 10.0
+omni_attenuation = 0.965935
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="NavigationRegion3D/Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100.022, 203.304, 62.3722)
+light_negative = true
+distance_fade_length = 0.0
+omni_attenuation = 1.93187
 
 [node name="FootstepAreas" type="Node3D" parent="NavigationRegion3D"]
 visible = false
@@ -15391,7 +15410,7 @@ autoplay = true
 max_distance = 7.0
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0261, 202.54, -43.885)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.8649, 203.153, 84.5372)
 
 [node name="HUD" parent="." instance=ExtResource("183_ainjx")]
 

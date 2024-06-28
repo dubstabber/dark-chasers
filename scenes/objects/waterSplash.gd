@@ -7,4 +7,4 @@ func _ready():
 
 func _on_body_entered(body):
 	Utils.play_footstep_sound(Preloads.WATER_SPLASH_SOUND, body)
-
+	

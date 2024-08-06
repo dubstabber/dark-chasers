@@ -1,0 +1,14 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=4 format=3 uid="uid://bp1d52pe1rcj8"]
+
+[ext_resource type="AudioStream" uid="uid://q2w2tkg6q8kb" path="res://sounds/sfx/footsteps/carpet/DSCARP1.wav" id="1_xgucq"]
+[ext_resource type="AudioStream" uid="uid://st4ckng8bs83" path="res://sounds/sfx/footsteps/carpet/DSCARP2.wav" id="2_38yqn"]
+[ext_resource type="AudioStream" uid="uid://87iu75ckgp7r" path="res://sounds/sfx/footsteps/carpet/DSCARP3.wav" id="3_m2ijg"]
+
+[resource]
+streams_count = 3
+stream_0/stream = ExtResource("1_xgucq")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_38yqn")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_m2ijg")
+stream_2/weight = 1.0

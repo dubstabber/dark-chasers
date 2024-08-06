@@ -1,6 +1,6 @@
 extends Node
 
-const PLAYER_SCENE := preload("res://scenes/player.tscn")
+const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
 const IMAGE_ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
@@ -45,7 +45,7 @@ const BUTTON_DOWN_5_IMAGE := preload("res://images/textures/BSW05B.png")
 const PUFF_SCENE := preload("res://scenes/particles/puff.tscn")
 const POOF_SCENE := preload("res://scenes/particles/poof.tscn")
 
-const WATER_SPLASH_SOUND := preload("res://sounds/footsteps/water/DSSPLSML.wav")
+const WATER_SPLASH_SOUND := preload("res://sounds/sfx/footsteps/water/DSSPLSML.wav")
 
 const SMALL_WOOD_IMAGES := [
 	preload("res://images/particles/1045A0.png"),
@@ -112,29 +112,3 @@ const GLASS_SCRAP_IMAGES := [
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")
 
-var carpet_footstep_sounds := []
-var dirt_footstep_sounds := []
-var floor_footstep_sounds := []
-var hard_footstep_sounds := []
-var metal1_footstep_sounds := []
-var metal2_footstep_sounds := []
-var wood_footstep_sounds := []
-
-func _ready():
-	load_footsteps(3, "carpet", "DSCARP", carpet_footstep_sounds, false)
-	load_footsteps(6, "dirt1", "DSDIRT", dirt_footstep_sounds, false)
-	load_footsteps(6, "floor1", "DSTILE", floor_footstep_sounds, true)
-	load_footsteps(6, "hard1", "DSHARD", hard_footstep_sounds, false)
-	load_footsteps(6, "metal1", "DSMET", metal1_footstep_sounds, true)
-	load_footsteps(4, "metal2", "DSMET2", metal2_footstep_sounds, true)
-	load_footsteps(3, "wood", "DSWOOD", wood_footstep_sounds, false)
-
-func load_footsteps(steps: int, type: String, file_prefix: String, arr: Array, zero_padding: bool):
-	for i in range(1,steps):
-		var res: String 
-		if i < 10 and zero_padding:
-			res = "res://sounds/footsteps/"+type+"/"+file_prefix+"0"+str(i)+".wav"
-		else:
-			res = "res://sounds/footsteps/"+type+"/"+file_prefix+str(i)+".wav"
-		var footstep := load(res)
-		arr.push_back(footstep)

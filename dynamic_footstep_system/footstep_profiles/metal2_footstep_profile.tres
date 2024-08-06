@@ -1,0 +1,17 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=5 format=3 uid="uid://0fjjgkc6qihx"]
+
+[ext_resource type="AudioStream" uid="uid://k2fjejprygfh" path="res://sounds/sfx/footsteps/metal2/DSMET201.wav" id="1_4i1a5"]
+[ext_resource type="AudioStream" uid="uid://dgdjbpxotmfwu" path="res://sounds/sfx/footsteps/metal2/DSMET202.wav" id="2_tul7i"]
+[ext_resource type="AudioStream" uid="uid://bbx6raij2t15c" path="res://sounds/sfx/footsteps/metal2/DSMET203.wav" id="3_jjpf8"]
+[ext_resource type="AudioStream" uid="uid://lo243d4i1sua" path="res://sounds/sfx/footsteps/metal2/DSMET204.wav" id="4_dw206"]
+
+[resource]
+streams_count = 4
+stream_0/stream = ExtResource("1_4i1a5")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_tul7i")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_jjpf8")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("4_dw206")
+stream_3/weight = 1.0

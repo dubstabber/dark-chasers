@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="FootstepMaterialLibrary" load_steps=13 format=3 uid="uid://dvab7my8m4tta"]
+
+[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_material_profile.gd" id="1_5idub"]
+[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_material_library.gd" id="1_7qjs8"]
+[ext_resource type="AudioStream" uid="uid://d2hey83rv3vj7" path="res://dynamic_footstep_system/footstep_profiles/dirt1_footstep_profile.tres" id="1_5528t"]
+[ext_resource type="AudioStream" uid="uid://bp1d52pe1rcj8" path="res://dynamic_footstep_system/footstep_profiles/carpet_footstep_profile.tres" id="3_kuofs"]
+[ext_resource type="AudioStream" uid="uid://cftv5iqr7ndei" path="res://dynamic_footstep_system/footstep_profiles/wood_footstep_profile.tres" id="4_3alrb"]
+[ext_resource type="AudioStream" uid="uid://dno4wqqy1x71y" path="res://dynamic_footstep_system/footstep_profiles/floor1_footstep_profile.tres" id="4_ds5w1"]
+[ext_resource type="AudioStream" uid="uid://biar3an55lcmd" path="res://dynamic_footstep_system/footstep_profiles/hard1_footstep_profile.tres" id="5_owgbv"]
+
+[sub_resource type="Resource" id="Resource_x5xqi"]
+script = ExtResource("1_5idub")
+material_names = Array[String](["COMGRAS2", "COMGRAS1", "CGRASO1", "CGRASO2"])
+footstep_profile = ExtResource("1_5528t")
+
+[sub_resource type="Resource" id="Resource_gvg06"]
+script = ExtResource("1_5idub")
+material_names = Array[String](["CCFLOOR", "HL2CRPT1", "HRBED", "HL2CRPT3", "BTEPPI07", "HRPLLOW"])
+footstep_profile = ExtResource("3_kuofs")
+
+[sub_resource type="Resource" id="Resource_ihibf"]
+script = ExtResource("1_5idub")
+material_names = Array[String](["HRWDFLR", "HRWDPLN", "CMTVWOOD", "HRWOOD01", "HRWOOD02", "CHRWOOD", "PNRFLOOR", "PNRWOOD"])
+footstep_profile = ExtResource("4_3alrb")
+
+[sub_resource type="Resource" id="Resource_2futc"]
+script = ExtResource("1_5idub")
+material_names = Array[String](["OSASPHLT", "HL2CNCR2"])
+footstep_profile = ExtResource("5_owgbv")
+
+[sub_resource type="Resource" id="Resource_fdg5s"]
+script = ExtResource("1_5idub")
+material_names = Array[String](["CHCKTILE", "BTHRTILE", "CRATOP22"])
+footstep_profile = ExtResource("4_ds5w1")
+
+[resource]
+script = ExtResource("1_7qjs8")
+footstep_material_library = Array[ExtResource("1_5idub")]([SubResource("Resource_x5xqi"), SubResource("Resource_gvg06"), SubResource("Resource_ihibf"), SubResource("Resource_2futc"), SubResource("Resource_fdg5s")])

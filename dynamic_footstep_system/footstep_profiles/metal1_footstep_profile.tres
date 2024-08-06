@@ -1,0 +1,23 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=7 format=3 uid="uid://bqjruf4n15m31"]
+
+[ext_resource type="AudioStream" uid="uid://cwykmf5gcq180" path="res://sounds/sfx/footsteps/metal1/DSMET01.wav" id="1_w7o3w"]
+[ext_resource type="AudioStream" uid="uid://beufdgg1wd2ip" path="res://sounds/sfx/footsteps/metal1/DSMET02.wav" id="2_4s5rj"]
+[ext_resource type="AudioStream" uid="uid://cipe7dnobk13g" path="res://sounds/sfx/footsteps/metal1/DSMET03.wav" id="3_b0i7f"]
+[ext_resource type="AudioStream" uid="uid://dwr4vmnqcim48" path="res://sounds/sfx/footsteps/metal1/DSMET04.wav" id="4_8euto"]
+[ext_resource type="AudioStream" uid="uid://y6oaq1yab2ao" path="res://sounds/sfx/footsteps/metal1/DSMET05.wav" id="5_qycbj"]
+[ext_resource type="AudioStream" uid="uid://bntnmaf4llyro" path="res://sounds/sfx/footsteps/metal1/DSMET06.wav" id="6_b5hhs"]
+
+[resource]
+streams_count = 6
+stream_0/stream = ExtResource("1_w7o3w")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_4s5rj")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_b0i7f")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("4_8euto")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("5_qycbj")
+stream_4/weight = 1.0
+stream_5/stream = ExtResource("6_b5hhs")
+stream_5/weight = 1.0

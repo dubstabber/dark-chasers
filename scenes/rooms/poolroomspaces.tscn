@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scenes/rooms/poolroomspaces.gd" id="1_3id8a"]
 [ext_resource type="PackedScene" uid="uid://cx5esi65nfv71" path="res://models/poolroomspaces/poolroomspaces.glb" id="2_tgdgh"]
-[ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player.tscn" id="3_4ge6v"]
+[ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player/player.tscn" id="3_4ge6v"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_l6txu"]
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_chvfr"]

@@ -1,0 +1,23 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=7 format=3 uid="uid://dno4wqqy1x71y"]
+
+[ext_resource type="AudioStream" uid="uid://c486ysp3dhmb7" path="res://sounds/sfx/footsteps/floor1/DSTILE01.wav" id="1_sjnqi"]
+[ext_resource type="AudioStream" uid="uid://cu8w1p1eb1prq" path="res://sounds/sfx/footsteps/floor1/DSTILE02.wav" id="2_qrb31"]
+[ext_resource type="AudioStream" uid="uid://c1dr0c73g7ngh" path="res://sounds/sfx/footsteps/floor1/DSTILE03.wav" id="3_5kd6q"]
+[ext_resource type="AudioStream" uid="uid://oy73fwubvupe" path="res://sounds/sfx/footsteps/floor1/DSTILE04.wav" id="4_sjrrf"]
+[ext_resource type="AudioStream" uid="uid://b74g0o7l3eaha" path="res://sounds/sfx/footsteps/floor1/DSTILE05.wav" id="5_fgyp3"]
+[ext_resource type="AudioStream" uid="uid://ni0rujyl1xj3" path="res://sounds/sfx/footsteps/floor1/DSTILE06.wav" id="6_ph1bd"]
+
+[resource]
+streams_count = 6
+stream_0/stream = ExtResource("1_sjnqi")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_qrb31")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_5kd6q")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("4_sjrrf")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("5_fgyp3")
+stream_4/weight = 1.0
+stream_5/stream = ExtResource("6_ph1bd")
+stream_5/weight = 1.0

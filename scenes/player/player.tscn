@@ -1,0 +1,338 @@
+[gd_scene load_steps=19 format=3 uid="uid://by6immycqwkt5"]
+
+[ext_resource type="Script" path="res://scenes/player/player.gd" id="1_bqxx6"]
+[ext_resource type="Texture2D" uid="uid://d27ty7pf8btbo" path="res://images/player_wieldables/HFSTE0.png" id="3_mf2rp"]
+[ext_resource type="Texture2D" uid="uid://cr2vq3lcp6hbd" path="res://images/player_wieldables/HFSTA0.png" id="4_2tqiy"]
+[ext_resource type="Texture2D" uid="uid://cajq72at54mod" path="res://images/player_wieldables/HSPSA0.png" id="5_xfc2u"]
+[ext_resource type="Texture2D" uid="uid://dafc1hswoor1k" path="res://images/player_wieldables/HSPSB0.png" id="6_3rfy2"]
+[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="7_epsiy"]
+[ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://dynamic_footstep_system/dark_chasers_material_library.tres" id="8_aki86"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
+radius = 0.231423
+height = 1.19463
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
+radius = 0.202198
+height = 0.5
+
+[sub_resource type="Animation" id="Animation_ntln4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RightHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(464, 102)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftHand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-458, 100)]
+}
+
+[sub_resource type="Animation" id="Animation_ka18p"]
+resource_name = "fist-attack"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-458, 100), Vector2(-458, 100), Vector2(-390, -19), Vector2(-307, -100), Vector2(-131, 100), Vector2(-460, 101)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightHand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(464, 102), Vector2(385, -54), Vector2(294, -98), Vector2(110, 101), Vector2(466, 104)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../../../..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [5],
+"method": &"hit"
+}, {
+"args": [5],
+"method": &"hit"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_0wqi2"]
+resource_name = "pistol-shoot"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_xfc2u"), ExtResource("6_3rfy2"), ExtResource("5_xfc2u")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../../..")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [20],
+"method": &"hit"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_2g6tr"]
+resource_name = "pistol-switch"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(217, 137), Vector2(217, -69)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v83x5"]
+_data = {
+"RESET": SubResource("Animation_ntln4"),
+"fist-attack": SubResource("Animation_ka18p"),
+"pistol-shoot": SubResource("Animation_0wqi2"),
+"pistol-switch": SubResource("Animation_2g6tr")
+}
+
+[sub_resource type="Animation" id="Animation_nqp58"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_j6b8x"]
+resource_name = "jump"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0523599, 0, 0.0349066), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_wf0y5"]
+resource_name = "landing"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.0523599, 0, 0.0349066), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -0.1, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_scfly"]
+_data = {
+"RESET": SubResource("Animation_nqp58"),
+"jump": SubResource("Animation_j6b8x"),
+"landing": SubResource("Animation_wf0y5")
+}
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_mask = 14
+wall_min_slide_angle = 0.0
+floor_stop_on_slope = false
+floor_block_on_wall = false
+floor_max_angle = 1.39626
+floor_snap_length = 0.4
+script = ExtResource("1_bqxx6")
+
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599877, 0)
+shape = SubResource("CapsuleShape3D_gryrd")
+
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.249204, 0)
+shape = SubResource("CapsuleShape3D_y831t")
+disabled = true
+
+[node name="CrounchRayCast3D" type="RayCast3D" parent="."]
+target_position = Vector3(0, 1.22, 0)
+collision_mask = 12
+
+[node name="nek" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="head" type="Node3D" parent="nek"]
+
+[node name="eyes" type="Node3D" parent="nek/head"]
+
+[node name="Camera3D" type="Camera3D" parent="nek/head/eyes"]
+current = true
+fov = 85.0
+
+[node name="DeathRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 1)
+
+[node name="Interaction" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
+target_position = Vector3(0, 0, -1)
+collision_mask = 15
+
+[node name="HitScan" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collision_mask = 7
+
+[node name="GunBase" type="Control" parent="nek/head/eyes/Camera3D"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="LeftHand" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(-458, 100)
+scale = Vector2(3, 3)
+texture = ExtResource("3_mf2rp")
+
+[node name="RightHand" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(464, 102)
+scale = Vector2(3, 3)
+texture = ExtResource("4_2tqiy")
+
+[node name="Pistol" type="Sprite2D" parent="nek/head/eyes/Camera3D/GunBase"]
+position = Vector2(217, 137)
+scale = Vector2(3, 3)
+texture = ExtResource("5_xfc2u")
+
+[node name="InteractPlayer" type="AnimationPlayer" parent="nek/head/eyes/Camera3D/GunBase"]
+libraries = {
+"": SubResource("AnimationLibrary_v83x5")
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="nek/head/eyes"]
+libraries = {
+"": SubResource("AnimationLibrary_scfly")
+}
+
+[node name="AmbientMusic" type="AudioStreamPlayer3D" parent="."]
+volume_db = -34.0
+
+[node name="InteractSound" type="AudioStreamPlayer3D" parent="."]
+attenuation_model = 2
+volume_db = -28.235
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.677557, 0)
+light_energy = 0.06
+omni_range = 3.4597
+omni_attenuation = 0.196146
+
+[node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.376429, 0)
+script = ExtResource("7_epsiy")
+footstep_material_library = ExtResource("8_aki86")

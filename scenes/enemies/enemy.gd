@@ -43,7 +43,7 @@ func _physics_process(delta):
 		else:
 			var next_pos = nav.get_next_path_position()
 			if global_position != next_pos and (is_on_floor() or is_flying):
-				rotation_controller.look_at(next_pos)
+				rotation_controller.look_at(next_pos,Vector3(0.001, 0.95, 0.001))
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
 			if current_target and current_target.killed:

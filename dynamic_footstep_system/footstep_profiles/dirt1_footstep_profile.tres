@@ -1,0 +1,23 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=7 format=3 uid="uid://d2hey83rv3vj7"]
+
+[ext_resource type="AudioStream" uid="uid://cmpgduvkrsmas" path="res://sounds/sfx/footsteps/dirt1/DSDIRT1.wav" id="1_e24pc"]
+[ext_resource type="AudioStream" uid="uid://8heh4imkwxyu" path="res://sounds/sfx/footsteps/dirt1/DSDIRT2.wav" id="2_g0dlk"]
+[ext_resource type="AudioStream" uid="uid://s4g36yd8vdpo" path="res://sounds/sfx/footsteps/dirt1/DSDIRT3.wav" id="3_icsev"]
+[ext_resource type="AudioStream" uid="uid://cead1wdwdu83y" path="res://sounds/sfx/footsteps/dirt1/DSDIRT4.wav" id="4_j7bgt"]
+[ext_resource type="AudioStream" uid="uid://d0vj3ifrrl2v0" path="res://sounds/sfx/footsteps/dirt1/DSDIRT5.wav" id="5_jc132"]
+[ext_resource type="AudioStream" uid="uid://bulycwinpj7lb" path="res://sounds/sfx/footsteps/dirt1/DSDIRT6.wav" id="6_e6s1y"]
+
+[resource]
+streams_count = 6
+stream_0/stream = ExtResource("1_e24pc")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("2_g0dlk")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("3_icsev")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("4_j7bgt")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("5_jc132")
+stream_4/weight = 1.0
+stream_5/stream = ExtResource("6_e6s1y")
+stream_5/weight = 1.0

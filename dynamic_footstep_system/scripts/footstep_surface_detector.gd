@@ -6,9 +6,6 @@ class_name FootstepSurfaceDetector
 @export var footstep_material_library : FootstepMaterialLibrary
 var last_result
 
-func _ready():
-	if not generic_fallback_footstep_profile:
-		printerr("FootstepSurfaceDetector - No generic fallback footstep profile is assigned")
 
 func play_footstep():
 	var query = PhysicsRayQueryParameters3D.create(global_position, global_position + Vector3(0, -1, 0))
@@ -106,7 +103,7 @@ func _get_surface_material(collider : Node3D) -> Material:
 			
 			var coord = null
 			
-			for i in range(len(faces) / 3):
+			for i in range(len(faces) / 3.0):
 				# first, figure out what face we're standing on
 				var face_idx = i * 3
 				var a = mesh_instance.to_global(faces[face_idx])

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b1vimowqmce5w"]
+[gd_scene load_steps=23 format=3 uid="uid://b1vimowqmce5w"]
 
 [ext_resource type="Script" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
 [ext_resource type="Texture2D" uid="uid://bhgrkq04i5nfs" path="res://images/enemies/ao-oni/AONIA4A6.png" id="2_bgw0k"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://beijksyrqiunb" path="res://images/enemies/ao-oni/AONIC1.png" id="4_y64dm"]
 [ext_resource type="Texture2D" uid="uid://b3q8cfyh37g3u" path="res://images/enemies/ao-oni/AONIC3C7.png" id="5_k2h66"]
 [ext_resource type="Texture2D" uid="uid://vgfc4lpa8uoh" path="res://images/enemies/ao-oni/AONIB3B7.png" id="7_aoo63"]
+[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="11_di6fq"]
+[ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://dynamic_footstep_system/dark_chasers_material_library.tres" id="12_hau6t"]
 
 [sub_resource type="Animation" id="Animation_2yldm"]
 length = 0.001
@@ -45,7 +47,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("..")
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -53,10 +55,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }, {
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }]
 }
 
@@ -79,7 +81,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("..")
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -87,10 +89,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }, {
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }]
 }
 
@@ -113,7 +115,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("..")
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -121,10 +123,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }, {
 "args": [],
-"method": &"handle_footstep"
+"method": &"play_footstep"
 }]
 }
 
@@ -252,6 +254,11 @@ autostart = true
 
 [node name="WanderingTimer" type="Timer" parent="Timers"]
 one_shot = true
+
+[node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.27579, 0)
+script = ExtResource("11_di6fq")
+footstep_material_library = ExtResource("12_hau6t")
 
 [connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

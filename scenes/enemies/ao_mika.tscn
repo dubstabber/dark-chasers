@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://davh7h62aalnn"]
+[gd_scene load_steps=24 format=3 uid="uid://davh7h62aalnn"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_l71hh"]
 [ext_resource type="Script" path="res://scenes/enemies/ao_mika.gd" id="2_sn0v8"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://dbbbv3v7xya45" path="res://images/enemies/ao-mika/AOMIC4C6.png" id="9_888js"]
 [ext_resource type="Texture2D" uid="uid://cok1isfwkhs2c" path="res://images/enemies/ao-mika/AOMIB3B7.png" id="10_gc0ay"]
 [ext_resource type="Texture2D" uid="uid://btydsyc1dh8g3" path="res://images/enemies/ao-mika/AOMIC3C7.png" id="11_mix1r"]
+[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="12_v87qk"]
+[ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://dynamic_footstep_system/dark_chasers_material_library.tres" id="13_g5b7d"]
 
 [sub_resource type="Animation" id="Animation_i1tw0"]
 length = 0.001
@@ -43,6 +45,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("8_dgrcy"), ExtResource("3_ahxem"), ExtResource("9_888js"), ExtResource("3_ahxem")]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_km8wx"]
 resource_name = "run-front"
@@ -60,6 +79,23 @@ tracks/0/keys = {
 "update": 1,
 "values": [ExtResource("5_fjgap"), ExtResource("3_ycvft"), ExtResource("7_0pubc"), ExtResource("3_ycvft")]
 }
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_2rx8n"]
 resource_name = "run-side"
@@ -76,6 +112,23 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [ExtResource("10_gc0ay"), ExtResource("4_hjked"), ExtResource("11_mix1r"), ExtResource("4_hjked")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_r383k"]
@@ -174,3 +227,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 
 [node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_gxwi0")
+
+[node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="5"]
+script = ExtResource("12_v87qk")
+footstep_material_library = ExtResource("13_g5b7d")

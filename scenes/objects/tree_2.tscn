@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://615vmwtlm2a4"]
+
+[ext_resource type="Texture2D" uid="uid://bh2hnpq13lfpf" path="res://images/objects/static/HT03A0.png" id="1_56xwc"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6ytf2"]
+height = 3.0919
+radius = 0.242133
+
+[node name="Tree2" type="StaticBody3D"]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+collision_layer = 4
+collision_mask = 7
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+offset = Vector2(62, 0)
+billboard = 2
+shaded = true
+render_priority = 1
+texture = ExtResource("1_56xwc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.57482, 0)
+shape = SubResource("CylinderShape3D_6ytf2")

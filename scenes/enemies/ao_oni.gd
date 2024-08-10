@@ -26,6 +26,7 @@ func animate_sprite():
 		var v_dot = vertical_side.dot(p_pos)
 		var state = "run" if velocity else "stay"
 		if v_dot < -0.5 and not animation_player.current_animation.contains(state+'-front'):
+			print(state+'-front')
 			animation_player.play(state + "-front")
 		elif v_dot > 0.5 and not animation_player.current_animation.contains(state+'-back'):
 			animation_player.play(state + "-back")

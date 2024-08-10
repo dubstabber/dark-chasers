@@ -10,7 +10,7 @@ func _ready():
 			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 			
 	spawn_player()
-	#open_all_doors()
+	open_all_doors()
 
 
 func spawn_player():
@@ -105,6 +105,9 @@ func _key_body_entered(body, key_type, event, message_text):
 			var whiteface = Preloads.WHITEFACE_SCENE.instantiate()
 			enemies.add_child(whiteface)
 			whiteface.current_room = "BigHall"
+			
+			whiteface.debug_prints = true
+			
 			whiteface.position = $NavigationRegion3D/EventSpawners/WhiteFaceSpawn.position
 			whiteface.current_target = body
 		"": pass
@@ -222,8 +225,10 @@ func _handle_area_event(body: CharacterBody3D, event):
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("You: WHAT THE?!?", false, 3.0)
-			$"NavigationRegion3D/Enemies/Ao mika".connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
-			$"NavigationRegion3D/Enemies/Ao mika".connect("tree_exited", global_music.stop)
+			var aomika = get_node_or_null("NavigationRegion3D/Enemies/Ao mika")
+			if aomika:
+				aomika.connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
+				aomika.connect("tree_exited", global_music.stop)
 		"underground secret info":
 			hud.show_event_text("You need to find the switch, to open a hidden passage.", false, 3.0)
 		"change to next map":

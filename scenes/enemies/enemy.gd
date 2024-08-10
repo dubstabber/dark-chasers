@@ -5,6 +5,8 @@ class_name Enemy extends CharacterBody3D
 @export var is_wandering := false
 @export var chase_player := true
 
+@export var debug_prints := false
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
 var current_target: CharacterBody3D
@@ -27,7 +29,7 @@ var accel: float
 
 func _ready():
 	players = get_parent().get_node("%Players")
-	map_transitions = get_node_or_null("%Transitions")
+	map_transitions = get_parent().get_node_or_null("%Transitions")
 	for disappear_zone in disappear_zones:
 		disappear_zone.connect("body_entered", _on_disappear_area)
 
@@ -39,25 +41,23 @@ func _physics_process(delta):
 		check_targets()
 	if current_target or waypoints:
 		var distance_to_target = nav.distance_to_target()
-		if distance_to_target < 0.2:
+		
+		var next_pos = nav.get_next_path_position()
+		direction = (next_pos - global_position).normalized()
+		velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+		if current_target and current_target.killed:
+			current_target = null
 			velocity = Vector3.ZERO
-		else:
-			var next_pos = nav.get_next_path_position()
-			direction = (next_pos - global_position).normalized()
-			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-			if current_target and current_target.killed:
-				current_target = null
-				velocity = Vector3.ZERO
 		if is_on_floor() or is_flying:
 			look_forward()
 	elif is_wandering:
 		if wandering_timer.is_stopped():
 			wandering_timer.start()
 		velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-	else:
-		velocity = Vector3.ZERO
 		if is_on_floor() or is_flying:
 			look_forward()
+	else:
+		velocity = Vector3.ZERO
 	move_and_slide()
 
 
@@ -155,15 +155,11 @@ func _on_interaction_timer_timeout():
 			parent.open(collider.name)
 		elif is_wandering:
 			direction = Vector3(-direction.x, 0, -direction.z)
-			if is_on_floor() or is_flying:
-				look_forward()
 
 
 func _on_wandering_timer_timeout():
 	wandering_timer.wait_time = randf_range(0.5, 3)
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
-	if is_on_floor() or is_flying:
-		look_forward()
 
 
 func _on_navigation_agent_3d_target_reached():

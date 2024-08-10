@@ -81,6 +81,7 @@ func _key_body_entered(body, key_type, event, message_text):
 			aooni.position = $NavigationRegion3D/EventSpawners/AoOniBars.position
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/BarsAoOniRunAway)
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak.position)
+			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak2.position)
 			aooni.connect("tree_exited", _on_custom_event.bind("ao oni gave up"))
 			for player in players.get_children():
 				player.blocked_movement = true

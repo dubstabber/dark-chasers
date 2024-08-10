@@ -1827,6 +1827,7 @@ data = PackedVector3Array(-45.12, 207.84, -39.87, -43.84, 209.12, -39.87, -45.12
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lck0n"]
 resource_name = "BMIDG09"
+render_priority = 1
 transparency = 1
 albedo_texture = ExtResource("41_bdxgr")
 
@@ -1867,6 +1868,7 @@ data = PackedVector3Array(18.88, 202.2, 87.19, 25.28, 204.76, 87.19, 18.88, 204.
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_th07a"]
 resource_name = "BMIDG10"
+render_priority = 1
 transparency = 1
 albedo_texture = ExtResource("42_ee2a4")
 
@@ -1907,6 +1909,7 @@ data = PackedVector3Array(25.28, 202.2, 87.19, 26.56, 204.76, 87.19, 25.28, 204.
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncwgw"]
 resource_name = "BMIDG10B"
+render_priority = 1
 transparency = 1
 cull_mode = 2
 albedo_texture = ExtResource("43_vflsl")
@@ -8127,6 +8130,7 @@ data = PackedVector3Array(30.64, 204.6, 73.59, 34.8, 204.12, 73.59, 30.64, 204.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tuii5"]
 resource_name = "BMIDG09.001"
+render_priority = 1
 transparency = 1
 cull_mode = 2
 albedo_texture = ExtResource("41_bdxgr")
@@ -12390,17 +12394,18 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="Ao oni" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 203.047, 89.2973)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 202.506, 89.2973)
 current_room = "BigHall"
 
 [node name="Ao mika" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_dc1jo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 203.34, 100.782)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 202.677, 100.782)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 
 [node name="Ao oni2" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.8307, 202.616, -30.7985)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.8307, 202.186, -30.7985)
 current_room = "FirstFloor"
+chase_player = false
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 
@@ -12648,13 +12653,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58.3097, 202.733, -5.12325)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.5477, 202.728, 107.185)
 
 [node name="AoOniBars" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4698, 202.561, 84.9838)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.4698, 202.2, 84.6897)
 
 [node name="AoOniBarsBreak" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.2008, 202.544, 86.861)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.9684, 202.2, 85.3907)
+
+[node name="AoOniBarsBreak2" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.7436, 202.2, 87.0107)
 
 [node name="AoOniBarsGiveup" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.584, 79.1308)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.6729, 202.2, 79.1308)
 
 [node name="IlopuluSpawn" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.071, 202.253, 28.379)

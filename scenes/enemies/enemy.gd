@@ -3,6 +3,7 @@ class_name Enemy extends CharacterBody3D
 @export var current_room: String
 @export var disappear_zones: Array[Area3D]
 @export var is_wandering := false
+@export var chase_player := true
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
@@ -34,7 +35,7 @@ func _ready():
 func _physics_process(delta):
 	if not is_on_floor() and not is_flying:
 		velocity.y -= gravity * delta
-	if not current_target:
+	if not current_target and chase_player:
 		check_targets()
 	if current_target or waypoints:
 		var distance_to_target = nav.distance_to_target()
@@ -43,16 +44,20 @@ func _physics_process(delta):
 		else:
 			var next_pos = nav.get_next_path_position()
 			direction = (next_pos - global_position).normalized()
-			if is_on_floor() or is_flying:
-				look_forward()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
 			if current_target and current_target.killed:
 				current_target = null
 				velocity = Vector3.ZERO
+		if is_on_floor() or is_flying:
+			look_forward()
 	elif is_wandering:
 		if wandering_timer.is_stopped():
 			wandering_timer.start()
 		velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+	else:
+		velocity = Vector3.ZERO
+		if is_on_floor() or is_flying:
+			look_forward()
 	move_and_slide()
 
 
@@ -163,7 +168,7 @@ func _on_wandering_timer_timeout():
 
 func _on_navigation_agent_3d_target_reached():
 	if waypoints:
-		waypoints.pop_back()
+		waypoints.pop_front()
 		velocity = Vector3.ZERO
 
 

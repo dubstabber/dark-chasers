@@ -30,7 +30,7 @@ collision_layer = 0
 [node name="Timers" type="Node" parent="."]
 
 [node name="InteractionTimer" type="Timer" parent="Timers"]
-wait_time = 0.25
+wait_time = 0.55
 autostart = true
 
 [node name="FindPathTimer" type="Timer" parent="Timers"]

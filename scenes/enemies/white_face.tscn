@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://rmpekd3phfok" path="res://sounds/sfx/DSSCRM.wav" id="4_xoc2c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mjagp"]
-radius = 0.398133
+radius = 0.38
 height = 1.59168
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1vtrc"]
@@ -16,26 +16,31 @@ height = 1.68562
 [node name="White face" instance=ExtResource("1_btl1h")]
 script = ExtResource("2_yvmo4")
 
-[node name="RotationController#Sprite3D" type="Sprite3D" parent="." index="1"]
+[node name="Interaction" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.174409, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="Graphics" index="0"]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.4, 0)
+offset = Vector2(0, 12.5)
 billboard = 2
 shaded = true
+render_priority = 1
 texture = ExtResource("3_0bxla")
 
-[node name="CollisionShape3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37951, 0)
-shape = SubResource("CapsuleShape3D_mjagp")
-
-[node name="SoundMusic" type="AudioStreamPlayer3D" parent="." index="3"]
+[node name="SoundMusic" type="AudioStreamPlayer3D" parent="." index="2"]
 stream = ExtResource("4_xoc2c")
 autoplay = true
 max_distance = 9.0
+
+[node name="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.806301, 0)
+shape = SubResource("CapsuleShape3D_mjagp")
 
 [node name="NavigationAgent3D" parent="." index="4"]
 path_postprocessing = 1
 
 [node name="KillZone" parent="." index="5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.402849, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.855693, 0)
 
 [node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_1vtrc")

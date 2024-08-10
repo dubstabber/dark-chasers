@@ -1,6 +1,6 @@
 extends Enemy
 
-@onready var sprite_3d = $RotationController/Sprite3D
+@onready var sprite_3d = $Graphics/Sprite3D
 
 
 func _ready():

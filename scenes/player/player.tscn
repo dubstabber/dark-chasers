@@ -334,5 +334,7 @@ omni_attenuation = 0.196146
 
 [node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.376429, 0)
+attenuation_model = 2
+volume_db = -20.0
 script = ExtResource("7_epsiy")
 footstep_material_library = ExtResource("8_aki86")

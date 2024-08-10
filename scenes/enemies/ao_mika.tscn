@@ -236,5 +236,7 @@ shape = SubResource("CapsuleShape3D_gxwi0")
 
 [node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.280391, 0)
+attenuation_model = 2
+volume_db = -20.0
 script = ExtResource("12_v87qk")
 footstep_material_library = ExtResource("13_g5b7d")

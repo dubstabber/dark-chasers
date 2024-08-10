@@ -19,14 +19,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("3_ahxem")]
+"values": [ExtResource("3_ycvft")]
 }
 
 [sub_resource type="Animation" id="Animation_ts116"]
@@ -36,7 +36,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -48,7 +48,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/path = NodePath("FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -70,7 +70,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -82,7 +82,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/path = NodePath("FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -104,7 +104,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -116,7 +116,7 @@ tracks/0/keys = {
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
+tracks/1/path = NodePath("FootstepSurfaceDetector")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -138,7 +138,7 @@ loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -155,7 +155,7 @@ loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -172,7 +172,7 @@ loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("Graphics/Sprite3D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -204,30 +204,37 @@ height = 2.15466
 [node name="Ao mika" instance=ExtResource("1_l71hh")]
 script = ExtResource("2_sn0v8")
 
-[node name="Sprite3D" type="Sprite3D" parent="RotationController" index="1"]
+[node name="Interaction" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="Sprite3D" type="Sprite3D" parent="Graphics" index="0"]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.4, 0)
+offset = Vector2(0, 33)
 billboard = 2
 shaded = true
 render_priority = 1
-texture = ExtResource("3_ahxem")
+texture = ExtResource("3_ycvft")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="RotationController" index="2"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics" index="1"]
+root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_yhobe")
 }
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65371, 0)
 shape = SubResource("CapsuleShape3D_jjbyh")
 
-[node name="NavigationAgent3D" parent="." index="2"]
+[node name="NavigationAgent3D" parent="." index="3"]
 path_postprocessing = 1
 
-[node name="KillZone" parent="." index="3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+[node name="KillZone" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08321, 0)
 
 [node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_gxwi0")
 
-[node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="5"]
+[node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.280391, 0)
 script = ExtResource("12_v87qk")
 footstep_material_library = ExtResource("13_g5b7d")

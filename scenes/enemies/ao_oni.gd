@@ -1,7 +1,7 @@
 extends Enemy
 
-@onready var animation_player = $RotationController/AnimationPlayer
-@onready var sprite_3d = $RotationController/Sprite3D
+@onready var animation_player = $Graphics/AnimationPlayer
+@onready var sprite_3d = $Graphics/Sprite3D
 
 
 func _ready():
@@ -19,9 +19,9 @@ func _physics_process(delta):
 func animate_sprite():
 	var current_camera = get_viewport().get_camera_3d()
 	if current_camera:
-		var p_pos = rotation_controller.global_position.direction_to(current_camera.global_position)
-		var vertical_side = rotation_controller.global_transform.basis.z
-		var horizontal_side = rotation_controller.global_transform.basis.x
+		var p_pos = graphics.global_position.direction_to(current_camera.global_position)
+		var vertical_side = graphics.global_transform.basis.z
+		var horizontal_side = graphics.global_transform.basis.x
 		var h_dot = horizontal_side.dot(p_pos)
 		var v_dot = vertical_side.dot(p_pos)
 		var state = "run" if velocity else "stay"

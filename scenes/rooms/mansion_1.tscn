@@ -12401,9 +12401,10 @@ unique_name_in_owner = true
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
 
-[node name="Ao oni" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
+[node name="Ao oni" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 202.506, 89.2973)
 current_room = "BigHall"
+disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
 
 [node name="Ao mika" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_dc1jo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 202.677, 100.782)

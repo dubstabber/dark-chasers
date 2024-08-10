@@ -12,11 +12,11 @@ floor_block_on_wall = false
 floor_snap_length = 0.31
 script = ExtResource("1_fvloq")
 
-[node name="RotationController" type="Node3D" parent="."]
-
-[node name="Interaction" type="RayCast3D" parent="RotationController"]
+[node name="Interaction" type="RayCast3D" parent="."]
 target_position = Vector3(0, 0, -1.1)
 collision_mask = 12
+
+[node name="Graphics" type="Node3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 

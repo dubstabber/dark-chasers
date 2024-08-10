@@ -20,8 +20,8 @@ var accel: float
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var wandering_timer = $Timers/WanderingTimer
-@onready var rotation_controller = $RotationController
-@onready var interaction_ray = $RotationController/Interaction
+@onready var graphics = $Graphics
+@onready var interaction_ray = $Interaction
 
 
 func _ready():
@@ -42,9 +42,9 @@ func _physics_process(delta):
 			velocity = Vector3.ZERO
 		else:
 			var next_pos = nav.get_next_path_position()
-			if global_position != next_pos and (is_on_floor() or is_flying):
-				rotation_controller.look_at(next_pos,Vector3(0.001, 0.95, 0.001))
 			direction = (next_pos - global_position).normalized()
+			if is_on_floor() or is_flying:
+				look_forward()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
 			if current_target and current_target.killed:
 				current_target = null
@@ -56,7 +56,11 @@ func _physics_process(delta):
 	move_and_slide()
 
 
-func check_targets():
+func look_forward() -> void:
+	rotation.y = atan2(velocity.x, velocity.z) + PI
+
+
+func check_targets() -> void:
 	if players:
 		var space_state = get_world_3d().direct_space_state
 		for target in players.get_children():
@@ -116,24 +120,6 @@ func add_disappear_zone(area):
 	area.connect("body_entered", _on_disappear_area)
 
 
-func handle_footstep():
-	match ground_type:
-		"dirt":
-			Utils.play_footstep_sound(Preloads.dirt_footstep_sounds.pick_random(), self)
-		"hard":
-			Utils.play_footstep_sound(Preloads.hard_footstep_sounds.pick_random(), self)
-		"carpet":
-			Utils.play_footstep_sound(Preloads.carpet_footstep_sounds.pick_random(), self)
-		"floor":
-			Utils.play_footstep_sound(Preloads.floor_footstep_sounds.pick_random(), self)
-		"wood":
-			Utils.play_footstep_sound(Preloads.wood_footstep_sounds.pick_random(), self)
-		"metal1":
-			Utils.play_footstep_sound(Preloads.metal1_footstep_sounds.pick_random(), self)
-		"metal2":
-			Utils.play_footstep_sound(Preloads.metal2_footstep_sounds.pick_random(), self)
-
-
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
 	if distance_to_target < 10:
@@ -164,15 +150,15 @@ func _on_interaction_timer_timeout():
 			parent.open(collider.name)
 		elif is_wandering:
 			direction = Vector3(-direction.x, 0, -direction.z)
-			if global_position != global_position + direction and (is_on_floor() or is_flying):
-				rotation_controller.look_at(global_position + direction)
+			if is_on_floor() or is_flying:
+				look_forward()
 
 
 func _on_wandering_timer_timeout():
 	wandering_timer.wait_time = randf_range(0.5, 3)
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
-	if global_position != global_position + direction and (is_on_floor() or is_flying):
-		rotation_controller.look_at(global_position + direction)
+	if is_on_floor() or is_flying:
+		look_forward()
 
 
 func _on_navigation_agent_3d_target_reached():

@@ -16,25 +16,25 @@ height = 1.68562
 [node name="White face" instance=ExtResource("1_btl1h")]
 script = ExtResource("2_yvmo4")
 
-[node name="Sprite3D" type="Sprite3D" parent="RotationController" index="1"]
+[node name="RotationController#Sprite3D" type="Sprite3D" parent="." index="1"]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0.4, 0)
 billboard = 2
 shaded = true
 texture = ExtResource("3_0bxla")
 
-[node name="CollisionShape3D" parent="." index="1"]
+[node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37951, 0)
 shape = SubResource("CapsuleShape3D_mjagp")
-
-[node name="NavigationAgent3D" parent="." index="2"]
-path_postprocessing = 1
 
 [node name="SoundMusic" type="AudioStreamPlayer3D" parent="." index="3"]
 stream = ExtResource("4_xoc2c")
 autoplay = true
 max_distance = 9.0
 
-[node name="KillZone" parent="." index="4"]
+[node name="NavigationAgent3D" parent="." index="4"]
+path_postprocessing = 1
+
+[node name="KillZone" parent="." index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.402849, 0)
 
 [node name="CollisionShape3D" parent="KillZone" index="0"]

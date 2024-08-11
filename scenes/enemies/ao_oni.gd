@@ -1,5 +1,7 @@
 extends Enemy
 
+var current_anim := ""
+
 @onready var animation_player = $Graphics/AnimationPlayer
 @onready var sprite_3d = $Graphics/Sprite3D
 
@@ -25,12 +27,14 @@ func animate_sprite():
 		var h_dot = horizontal_side.dot(p_pos)
 		var v_dot = vertical_side.dot(p_pos)
 		var state = "run" if velocity else "stay"
-		if v_dot < -0.5 and not animation_player.current_animation.contains(state+'-front'):
-			animation_player.play(state + "-front")
-		elif v_dot > 0.5 and not animation_player.current_animation.contains(state+'-back'):
-			animation_player.play(state + "-back")
+		if v_dot < -0.5:
+			current_anim = state + "-front"
+		elif v_dot > 0.5:
+			current_anim = state + "-back"
 		else:
 			sprite_3d.flip_h = h_dot > 0
-			if abs(v_dot) < 0.3 and not animation_player.current_animation.contains(state+'-side'):
-				animation_player.play(state + "-side")
-
+			if abs(v_dot) < 0.3:
+				current_anim = state + "-side"
+	
+	if animation_player.current_animation != current_anim:
+		animation_player.play(current_anim)

@@ -1,0 +1,207 @@
+[gd_scene load_steps=31 format=3 uid="uid://jgmxt13pm14c"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_7e6im"]
+[ext_resource type="Texture2D" uid="uid://1n6cqvqjy2y3" path="res://images/enemies/rat/1177A5.png" id="2_aas3s"]
+[ext_resource type="Script" path="res://scenes/enemies/rat.gd" id="2_rfy3j"]
+[ext_resource type="Texture2D" uid="uid://cyha8236euwmc" path="res://images/enemies/rat/1177A1.png" id="2_vtc2c"]
+[ext_resource type="Texture2D" uid="uid://b6ewejtljbfdo" path="res://images/enemies/rat/1177A6A4.png" id="3_0q0io"]
+[ext_resource type="Texture2D" uid="uid://pseye6lhbnvx" path="res://images/enemies/rat/1177E0.png" id="3_awyde"]
+[ext_resource type="Texture2D" uid="uid://hxh5hmshfio3" path="res://images/enemies/rat/1177B5.png" id="4_6ss85"]
+[ext_resource type="Texture2D" uid="uid://djbgj6xmbimma" path="res://images/enemies/rat/1177B1.png" id="4_c8mxm"]
+[ext_resource type="Texture2D" uid="uid://b344x0up14ede" path="res://images/enemies/rat/1177F0.png" id="4_vmuqm"]
+[ext_resource type="Texture2D" uid="uid://ddfy0aij1kqu3" path="res://images/enemies/rat/1177A7A3.png" id="4_xfki2"]
+[ext_resource type="Texture2D" uid="uid://dqep3wm4e7bk8" path="res://images/enemies/rat/1177G0.png" id="5_3mwki"]
+[ext_resource type="Texture2D" uid="uid://uka0idf6iyuw" path="res://images/enemies/rat/1177C5.png" id="5_b07sd"]
+[ext_resource type="Texture2D" uid="uid://dtnx5yoqv801b" path="res://images/enemies/rat/1177C1.png" id="5_kkuss"]
+[ext_resource type="Texture2D" uid="uid://pe8muptymi2v" path="res://images/enemies/rat/1177A8A2.png" id="5_pm8pi"]
+[ext_resource type="Texture2D" uid="uid://cmc10tkglw35p" path="res://images/enemies/rat/1177H0.png" id="6_amqv8"]
+[ext_resource type="Texture2D" uid="uid://fvnrpdk00xcw" path="res://images/enemies/rat/1177D1.png" id="6_qwnis"]
+[ext_resource type="Texture2D" uid="uid://cp1dbmwx1bt5o" path="res://images/enemies/rat/1177D5.png" id="6_ts221"]
+[ext_resource type="Texture2D" uid="uid://dh06q03hemsnb" path="res://images/enemies/rat/1177I0.png" id="7_0l07s"]
+[ext_resource type="Texture2D" uid="uid://2a4u84mktxs5" path="res://images/enemies/rat/1177B6B4.png" id="8_16d5p"]
+[ext_resource type="Texture2D" uid="uid://lapw7lk35orx" path="res://images/enemies/rat/1177J0.png" id="8_bev21"]
+[ext_resource type="Texture2D" uid="uid://be07jo55g7kgv" path="res://images/enemies/rat/1177C6C4.png" id="9_vpon3"]
+[ext_resource type="Texture2D" uid="uid://dvljjymrro47d" path="res://images/enemies/rat/1177D6D4.png" id="10_7nnwc"]
+[ext_resource type="Texture2D" uid="uid://d3tdlxxoc5m31" path="res://images/enemies/rat/1177B8B2.png" id="12_emllc"]
+[ext_resource type="Texture2D" uid="uid://euce0kb4bmwa" path="res://images/enemies/rat/1177B7B3.png" id="12_fpm8p"]
+[ext_resource type="Texture2D" uid="uid://dssd43s0etfba" path="res://images/enemies/rat/1177C7C3.png" id="13_6xl3n"]
+[ext_resource type="Texture2D" uid="uid://ckiqoc0eoys63" path="res://images/enemies/rat/1177C8C2.png" id="13_g6vhj"]
+[ext_resource type="Texture2D" uid="uid://b6yk2mo8a3xtq" path="res://images/enemies/rat/1177D7D3.png" id="14_g2dpy"]
+[ext_resource type="Texture2D" uid="uid://dqqxom26tfd6p" path="res://images/enemies/rat/1177D8D2.png" id="14_xyxya"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pe523"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_awyde")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_vmuqm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_3mwki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_amqv8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_0l07s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_bev21")
+}],
+"loop": false,
+"name": &"death",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_aas3s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6ss85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_b07sd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ts221")
+}],
+"loop": true,
+"name": &"run-back",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_0q0io")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_16d5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_vpon3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_7nnwc")
+}],
+"loop": true,
+"name": &"run-back-side",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_vtc2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_c8mxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_kkuss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_qwnis")
+}],
+"loop": true,
+"name": &"run-front",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_pm8pi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_emllc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_g6vhj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_xyxya")
+}],
+"loop": true,
+"name": &"run-front-side",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_xfki2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_fpm8p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_6xl3n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_g2dpy")
+}],
+"loop": true,
+"name": &"run-side",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_aas3s")
+}],
+"loop": false,
+"name": &"stay-back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_0q0io")
+}],
+"loop": false,
+"name": &"stay-back-side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_vtc2c")
+}],
+"loop": false,
+"name": &"stay-front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_pm8pi")
+}],
+"loop": false,
+"name": &"stay-front-side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_xfki2")
+}],
+"loop": false,
+"name": &"stay-side",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rcw6u"]
+radius = 0.132455
+height = 1.06756
+
+[node name="Rat" instance=ExtResource("1_7e6im")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+collision_mask = 13
+script = ExtResource("2_rfy3j")
+is_wandering = true
+chase_player = false
+
+[node name="Interaction" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130287, 0)
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Graphics" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.149365, 0)
+billboard = 2
+shaded = true
+render_priority = 1
+sprite_frames = SubResource("SpriteFrames_pe523")
+animation = &"stay-front"
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.135469, -0.152568)
+shape = SubResource("CapsuleShape3D_rcw6u")

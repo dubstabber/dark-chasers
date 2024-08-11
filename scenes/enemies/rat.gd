@@ -2,15 +2,13 @@ extends Enemy
 
 var current_anim := ""
 
-@onready var animation_player = $Graphics/AnimationPlayer
-@onready var sprite_3d = $Graphics/Sprite3D
+@onready var animated_sprite: AnimatedSprite3D = $Graphics/AnimatedSprite3D
 
 
 func _ready():
 	super._ready()
-	if not speed: speed = 7.0
+	if not speed: speed = 4.0
 	accel = 10
-	animation_player.speed_scale = speed / 7.0
 
 
 func _physics_process(delta):
@@ -27,14 +25,18 @@ func animate_sprite():
 		var h_dot = horizontal_side.dot(p_pos)
 		var v_dot = vertical_side.dot(p_pos)
 		var state = "run" if velocity else "stay"
-		if v_dot < -0.5:
+		if v_dot < -0.85:
 			current_anim = state + "-front"
-		elif v_dot > 0.5:
+		elif v_dot > 0.85:
 			current_anim = state + "-back"
 		else:
-			sprite_3d.flip_h = h_dot > 0
+			animated_sprite.flip_h = h_dot < 0
 			if abs(v_dot) < 0.3:
 				current_anim = state + "-side"
-	
-	if animation_player.current_animation != current_anim:
-		animation_player.play(current_anim)
+			elif v_dot < 0:
+				current_anim = state + "-front-side"
+			else:
+				current_anim = state + "-back-side"
+
+	if animated_sprite.animation != current_anim:
+		animated_sprite.play(current_anim)

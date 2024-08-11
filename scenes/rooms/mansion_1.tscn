@@ -1,4 +1,4 @@
-[gd_scene load_steps=1174 format=3 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1175 format=3 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -158,6 +158,7 @@
 [ext_resource type="PackedScene" uid="uid://davh7h62aalnn" path="res://scenes/enemies/ao_mika.tscn" id="142_dc1jo"]
 [ext_resource type="Script" path="res://scenes/objects/Door.gd" id="142_edvtm"]
 [ext_resource type="Script" path="res://scenes/objects/HingeDoor.gd" id="143_8e0go"]
+[ext_resource type="PackedScene" uid="uid://jgmxt13pm14c" path="res://scenes/enemies/rat.tscn" id="143_fu78y"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="143_ui4j0"]
 [ext_resource type="PackedScene" uid="uid://b78wse81qlgqi" path="res://scenes/objects/flower_pot.tscn" id="143_w8saf"]
 [ext_resource type="Script" path="res://scenes/objects/Button.gd" id="144_26gxq"]
@@ -12410,6 +12411,10 @@ disappear_zones = [NodePath("../../DisappearZones/HiddenDoorAoOni")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 202.677, 100.782)
 current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
+
+[node name="Rat" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -75.9618, 202.198, -29.1142)
+current_room = "FirstFloor"
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 

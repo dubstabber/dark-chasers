@@ -158,7 +158,7 @@ func _on_interaction_timer_timeout():
 
 
 func _on_wandering_timer_timeout():
-	wandering_timer.wait_time = randf_range(0.5, 3)
+	wandering_timer.wait_time = randf_range(0.2, 2.8)
 	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
 
 
@@ -178,6 +178,7 @@ func _on_navigation_agent_3d_link_reached(details):
 
 func _on_navigation_agent_3d_waypoint_reached(_details):
 	jump_speed = 0
+
 
 func _on_disappear_area(body):
 	if body == self:

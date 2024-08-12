@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://duukdf1bft8vx"]
+[gd_scene load_steps=6 format=3 uid="uid://duukdf1bft8vx"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_btl1h"]
-[ext_resource type="Script" path="res://scenes/enemies/white_face.gd" id="2_yvmo4"]
 [ext_resource type="Texture2D" uid="uid://cls1vl6l3x42a" path="res://images/enemies/white-face/WHTFA0.png" id="3_0bxla"]
 [ext_resource type="AudioStream" uid="uid://rmpekd3phfok" path="res://sounds/sfx/DSSCRM.wav" id="4_xoc2c"]
 
@@ -14,7 +13,7 @@ radius = 0.615115
 height = 1.68562
 
 [node name="White face" instance=ExtResource("1_btl1h")]
-script = ExtResource("2_yvmo4")
+speed = 4.0
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.174409, 0)

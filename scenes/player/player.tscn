@@ -319,9 +319,6 @@ libraries = {
 "": SubResource("AnimationLibrary_scfly")
 }
 
-[node name="AmbientMusic" type="AudioStreamPlayer3D" parent="."]
-volume_db = -34.0
-
 [node name="InteractSound" type="AudioStreamPlayer3D" parent="."]
 attenuation_model = 2
 volume_db = -28.235

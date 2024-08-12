@@ -3,12 +3,7 @@ extends Enemy
 var current_anim := ""
 
 @onready var animated_sprite: AnimatedSprite3D = $Graphics/AnimatedSprite3D
-
-
-func _ready():
-	super._ready()
-	if not speed: speed = 4.0
-	accel = 10
+@onready var mouse_sound_player: AudioStreamPlayer3D = $MouseSoundPlayer3D
 
 
 func _physics_process(delta):
@@ -40,3 +35,7 @@ func animate_sprite():
 
 	if animated_sprite.animation != current_anim:
 		animated_sprite.play(current_anim)
+
+
+func _on_sound_interval_timeout() -> void:
+	mouse_sound_player.play()

@@ -8,8 +8,6 @@ var current_anim := ""
 
 func _ready():
 	super._ready()
-	if not speed: speed = 7.0
-	accel = 10
 	animation_player.speed_scale = speed / 7.0
 
 

@@ -5,8 +5,6 @@ class_name Level extends Node3D
 @onready var player_spawners = get_node_or_null("%PlayerSpawners")
 @onready var players = get_node_or_null("%Players")
 @onready var enemies = get_node_or_null("%Enemies")
-@onready var global_music = get_node_or_null("%GlobalMusic")
-@onready var global_sound = get_node_or_null("%GlobalSound")
 
 
 func _ready():

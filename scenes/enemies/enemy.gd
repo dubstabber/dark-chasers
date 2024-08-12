@@ -4,7 +4,9 @@ class_name Enemy extends CharacterBody3D
 @export var disappear_zones: Array[Area3D]
 @export var is_wandering := false
 @export var chase_player := true
-
+@export var can_open_door := true
+@export var speed: float = 7.0
+@export var accel: float = 10.0
 @export var debug_prints := false
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -16,9 +18,6 @@ var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
 var is_flying := false
-
-var speed: float
-var accel: float
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $Timers/FindPathTimer
@@ -127,10 +126,8 @@ func add_disappear_zone(area):
 
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
-	if distance_to_target < 10:
+	if distance_to_target < 20:
 		find_path_timer.wait_time = 0.1
-	elif distance_to_target < 20:
-		find_path_timer.wait_time = 0.2
 	elif distance_to_target < 35:
 		find_path_timer.wait_time = 0.5
 	elif distance_to_target < 50:
@@ -151,7 +148,7 @@ func _on_interaction_timer_timeout():
 	var collider = interaction_ray.get_collider()
 	if collider:
 		var parent = collider.get_parent()
-		if parent.is_in_group("door") and parent.can_manual_open:
+		if parent.is_in_group("door") and parent.can_manual_open and can_open_door:
 			parent.open(collider.name)
 		elif is_wandering:
 			direction = Vector3(-direction.x, 0, -direction.z)

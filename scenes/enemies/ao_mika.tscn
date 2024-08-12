@@ -203,6 +203,7 @@ height = 2.15466
 
 [node name="Ao mika" instance=ExtResource("1_l71hh")]
 script = ExtResource("2_sn0v8")
+speed = 8.0
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.134421, 0)

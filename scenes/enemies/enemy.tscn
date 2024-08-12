@@ -34,7 +34,7 @@ wait_time = 0.55
 autostart = true
 
 [node name="FindPathTimer" type="Timer" parent="Timers"]
-wait_time = 0.3
+wait_time = 0.1
 autostart = true
 
 [node name="WanderingTimer" type="Timer" parent="Timers"]

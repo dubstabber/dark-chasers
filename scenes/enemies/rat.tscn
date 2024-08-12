@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://jgmxt13pm14c"]
+[gd_scene load_steps=34 format=3 uid="uid://jgmxt13pm14c"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_7e6im"]
 [ext_resource type="Texture2D" uid="uid://1n6cqvqjy2y3" path="res://images/enemies/rat/1177A5.png" id="2_aas3s"]
@@ -28,6 +28,8 @@
 [ext_resource type="Texture2D" uid="uid://ckiqoc0eoys63" path="res://images/enemies/rat/1177C8C2.png" id="13_g6vhj"]
 [ext_resource type="Texture2D" uid="uid://b6yk2mo8a3xtq" path="res://images/enemies/rat/1177D7D3.png" id="14_g2dpy"]
 [ext_resource type="Texture2D" uid="uid://dqqxom26tfd6p" path="res://images/enemies/rat/1177D8D2.png" id="14_xyxya"]
+[ext_resource type="AudioStream" uid="uid://drdk3vl8vachj" path="res://sounds/sfx/SND1217.wav" id="29_fadbo"]
+[ext_resource type="AudioStream" uid="uid://86y5phe7slym" path="res://sounds/sfx/SND1218.wav" id="30_g42il"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_pe523"]
 animations = [{
@@ -184,12 +186,21 @@ animations = [{
 radius = 0.132455
 height = 1.06756
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_osx53"]
+streams_count = 2
+stream_0/stream = ExtResource("29_fadbo")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("30_g42il")
+stream_1/weight = 1.0
+
 [node name="Rat" instance=ExtResource("1_7e6im")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
 collision_mask = 13
 script = ExtResource("2_rfy3j")
 is_wandering = true
 chase_player = false
+can_open_door = false
+speed = 4.0
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130287, 0)
@@ -205,3 +216,13 @@ animation = &"stay-front"
 [node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.135469, -0.152568)
 shape = SubResource("CapsuleShape3D_rcw6u")
+
+[node name="SoundInterval" type="Timer" parent="Timers" index="3"]
+wait_time = 4.0
+autostart = true
+
+[node name="MouseSoundPlayer3D" type="AudioStreamPlayer3D" parent="." index="6"]
+stream = SubResource("AudioStreamRandomizer_osx53")
+volume_db = -15.0
+
+[connection signal="timeout" from="Timers/SoundInterval" to="." method="_on_sound_interval_timeout"]

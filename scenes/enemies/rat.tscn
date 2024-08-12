@@ -186,10 +186,11 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rcw6u"]
-radius = 0.132455
-height = 1.06756
+radius = 0.128666
+height = 0.300407
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_osx53"]
+playback_mode = 1
 streams_count = 2
 stream_0/stream = ExtResource("29_fadbo")
 stream_0/weight = 1.0
@@ -208,6 +209,9 @@ stream_2/weight = 1.0
 [node name="Rat" instance=ExtResource("1_7e6im")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
 collision_mask = 13
+floor_stop_on_slope = true
+floor_block_on_wall = true
+floor_snap_length = 0.61
 script = ExtResource("2_rfy3j")
 is_wandering = true
 chase_player = false
@@ -223,7 +227,7 @@ billboard = 2
 shaded = true
 render_priority = 1
 sprite_frames = SubResource("SpriteFrames_pe523")
-animation = &"death"
+animation = &"stay-side"
 
 [node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.135469, -0.152568)

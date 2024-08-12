@@ -25,6 +25,7 @@ const KILL_PLAYER_SOUND := preload("res://sounds/sfx/DSSLOP.wav")
 
 const CREEP_AMB_SOUND := preload("res://sounds/music/CREEPAMB.wav")
 const AOSEE_SOUND := preload("res://sounds/music/AOSEE.wav")
+const D_RUNNING_SOUND := preload("res://sounds/music/D_RUNNIN.ogg")
 const BAR_SHAKE_SOUND := preload("res://sounds/sfx/BARSHAKE.ogg")
 const SPAWN_SOUND := preload("res://sounds/sfx/DSTELEPT.ogg")
 const EVENT_SOUND := preload("res://sounds/sfx/CREVENT.wav")

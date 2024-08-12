@@ -18,6 +18,7 @@ var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
 var is_flying := false
+var is_killed := false
 
 @onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $Timers/FindPathTimer
@@ -36,27 +37,28 @@ func _ready():
 func _physics_process(delta):
 	if not is_on_floor() and not is_flying:
 		velocity.y -= gravity * delta
-	if not current_target and chase_player:
-		check_targets()
-	if current_target or waypoints:
-		var distance_to_target = nav.distance_to_target()
-		
-		var next_pos = nav.get_next_path_position()
-		direction = (next_pos - global_position).normalized()
-		velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-		if current_target and current_target.killed:
-			current_target = null
+	if not is_killed:
+		if not current_target and chase_player:
+			check_targets()
+		if current_target or waypoints:
+			var distance_to_target = nav.distance_to_target()
+			
+			var next_pos = nav.get_next_path_position()
+			direction = (next_pos - global_position).normalized()
+			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+			if current_target and current_target.killed:
+				current_target = null
+				velocity = Vector3.ZERO
+			if is_on_floor() or is_flying:
+				look_forward()
+		elif is_wandering:
+			if wandering_timer.is_stopped():
+				wandering_timer.start()
+			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+			if is_on_floor() or is_flying:
+				look_forward()
+		else:
 			velocity = Vector3.ZERO
-		if is_on_floor() or is_flying:
-			look_forward()
-	elif is_wandering:
-		if wandering_timer.is_stopped():
-			wandering_timer.start()
-		velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-		if is_on_floor() or is_flying:
-			look_forward()
-	else:
-		velocity = Vector3.ZERO
 	move_and_slide()
 
 

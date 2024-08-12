@@ -9077,6 +9077,7 @@ albedo_texture = ExtResource("10_ls102")
 uv1_scale = Vector3(1.65, 1.6, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33lod"]
+render_priority = 2
 transparency = 1
 albedo_texture = ExtResource("10_ls102")
 uv1_scale = Vector3(1.65, 1.6, 1)
@@ -12417,6 +12418,19 @@ disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -75.9618, 202.198, -29.1142)
 current_room = "FirstFloor"
 
+[node name="Rat2" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -26.541, 202.678, 136.024)
+current_room = "ThirdFloor"
+
+[node name="Rat3" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -24.6666, 202.195, -32.7973)
+
+[node name="Rat4" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 37.9792, 202.515, 89.6282)
+
+[node name="Rat5" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 21.4969, 202.195, 79.9931)
+
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Blockers"]
@@ -13033,7 +13047,7 @@ autoplay = true
 max_distance = 7.0
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42.5768, 202.2, -48.3454)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.0802, 202.2, 131.374)
 
 [node name="Decorations" type="Node3D" parent="NavigationRegion3D"]
 

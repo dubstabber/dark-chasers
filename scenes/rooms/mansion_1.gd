@@ -13,7 +13,7 @@ func _ready():
 			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 			
 	spawn_player()
-	open_all_doors()
+	#open_all_doors()
 
 
 func spawn_player():
@@ -44,7 +44,7 @@ func respawn(p):
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/TestSpawn.position
-	p.current_room = "FirstFloor"
+	p.current_room = "ThirdFloor"
 	Utils.play_sound(Preloads.SPAWN_SOUND, p)
 
 

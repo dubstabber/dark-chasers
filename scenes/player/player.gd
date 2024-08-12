@@ -70,7 +70,6 @@ var hud: CanvasLayer
 @onready var interact_player = $nek/head/eyes/Camera3D/GunBase/InteractPlayer
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
 @onready var hit_scan = $nek/head/eyes/Camera3D/HitScan
-@onready var ambient_music = $AmbientMusic
 @onready var interact_sound = $InteractSound
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
 

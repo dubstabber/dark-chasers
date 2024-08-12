@@ -2,6 +2,9 @@ extends Level
 
 var keys_collected: Array
 
+@onready var global_music: AudioStreamPlayer = $GlobalMusic
+
+
 func _ready():
 	super._ready()
 	var destroyables = get_tree().get_nodes_in_group("destroyable")
@@ -19,8 +22,6 @@ func spawn_player():
 	#player.blocked_movement = true
 	player.hud = hud
 	#hud.show_black_screen()
-	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
-	player.ambient_music.play()
 	
 	#respawn(player)
 	test_respawn(player)
@@ -105,9 +106,6 @@ func _key_body_entered(body, key_type, event, message_text):
 			var whiteface = Preloads.WHITEFACE_SCENE.instantiate()
 			enemies.add_child(whiteface)
 			whiteface.current_room = "BigHall"
-			
-			whiteface.debug_prints = true
-			
 			whiteface.position = $NavigationRegion3D/EventSpawners/WhiteFaceSpawn.position
 			whiteface.current_target = body
 		"": pass
@@ -137,8 +135,8 @@ func _handle_button_event(body, event):
 		"show moving bars":
 			for player in players.get_children():
 				player.blocked_movement = true
-			global_sound.stream = Preloads.EVENT_SOUND
-			global_sound.play()
+			global_music.stream = Preloads.EVENT_SOUND
+			global_music.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
@@ -157,8 +155,8 @@ func _handle_button_event(body, event):
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
-			global_sound.stream = Preloads.EVENT_SOUND
-			global_sound.play()
+			global_music.stream = Preloads.EVENT_SOUND
+			global_music.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
@@ -211,8 +209,8 @@ func _handle_area_event(body: CharacterBody3D, event):
 			$"NavigationRegion3D/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 			$"NavigationRegion3D/Enemies/Ao oni".connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
-			global_sound.stream = Preloads.EVENT_SOUND
-			global_sound.play()
+			global_music.stream = Preloads.EVENT_SOUND
+			global_music.play()
 			await get_tree().create_timer(1.0).timeout
 			var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
 			enemies.add_child(ilopulu)

@@ -1,12 +1,8 @@
 extends Enemy
 
-@onready var animated_sprite_3d = $RotationController/AnimatedSprite3D
+var cur_anim := ""
 
-
-func _ready():
-	super._ready()
-	if not speed: speed = 9.0
-	accel = 10
+@onready var animated_sprite = $Graphics/AnimatedSprite3D
 
 
 func _physics_process(delta):
@@ -15,8 +11,11 @@ func _physics_process(delta):
 
 
 func animate_sprite():
-	if velocity and not animated_sprite_3d.animation.contains('run'):
-		animated_sprite_3d.play('run')
-	elif not velocity and not animated_sprite_3d.animation.contains('stay'):
-		animated_sprite_3d.play('stay')
+	if velocity:
+		cur_anim = 'run'
+	else:
+		cur_anim = 'stay'
+		
+	if animated_sprite.animation != cur_anim:
+		animated_sprite.play(cur_anim)
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=733 format=3 uid="uid://cf8s2goweois8"]
 
-[ext_resource type="Script" path="res://scenes/rooms/poolroomspaces.gd" id="1_3id8a"]
+[ext_resource type="Script" uid="uid://dmcppajx5pft1" path="res://scenes/rooms/poolroomspaces.gd" id="1_3id8a"]
 [ext_resource type="PackedScene" uid="uid://cx5esi65nfv71" path="res://models/poolroomspaces/poolroomspaces.glb" id="2_tgdgh"]
 [ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player/player.tscn" id="3_4ge6v"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_l6txu"]
@@ -8049,5 +8049,11 @@ omni_range = 4.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 140.756, -9.60623, -137.445)
 
 [node name="HUD" parent="." instance=ExtResource("4_l6txu")]
+
+[node name="PlayerSpawners" type="Node3D" parent="."]
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Enemies" type="Node3D" parent="."]
 
 [editable path="map"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://2qiuthtyghl1"]
 
 [ext_resource type="Texture2D" uid="uid://dpikbkj6vhhfv" path="res://images/objects/dark-book/1068A0.png" id="1_7g4mc"]
-[ext_resource type="Script" path="res://scenes/objects/dark_book.gd" id="1_pkehj"]
+[ext_resource type="Script" uid="uid://bygxc4a42xnp" path="res://scenes/objects/dark_book.gd" id="1_pkehj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i1quk"]
 size = Vector3(0.243896, 0.0458984, 0.195312)

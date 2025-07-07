@@ -75,7 +75,6 @@ animations = [{
 
 [node name="Poof" type="AnimatedSprite3D"]
 modulate = Color(1, 1, 1, 0.290196)
-billboard = 1
 sprite_frames = SubResource("SpriteFrames_4v206")
 autoplay = "default"
 frame = 15

@@ -23,7 +23,7 @@ void vertex() {
 vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
     float sine = sin(rotation);
     float cosine = cos(rotation);
-    
+
     uv -= pivot;
     uv.x = uv.x * cosine - uv.y * sine;
     uv.y = uv.x * sine + uv.y * cosine;
@@ -34,7 +34,7 @@ vec2 rotateUV(vec2 uv, vec2 pivot, float rotation) {
 vec2 scale(vec2 uv, float x, float y)
 {
 	mat2 scale = mat2(vec2(x, 0.0), vec2(0.0, y));
-	
+
 	uv -= 0.5;
 	uv = uv * scale;
 	uv += 0.5;

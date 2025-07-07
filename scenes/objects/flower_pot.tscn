@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://b78wse81qlgqi"]
 
-[ext_resource type="Script" path="res://scenes/objects/flower_pot.gd" id="1_2hyoh"]
+[ext_resource type="Script" uid="uid://cnk1ff78egyhh" path="res://scenes/objects/flower_pot.gd" id="1_2hyoh"]
 [ext_resource type="Texture2D" uid="uid://flaycw7esskt" path="res://images/objects/flower-pot/1075A0.png" id="1_lxn2p"]
 [ext_resource type="Texture2D" uid="uid://ksj20e4ggmsj" path="res://images/objects/flower-pot/1075B0.png" id="2_6khna"]
 

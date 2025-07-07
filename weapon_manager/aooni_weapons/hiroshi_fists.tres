@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3 uid="uid://bsk7jap7yhaw8"]
+
+[ext_resource type="PackedScene" uid="uid://dfjtdxrmqnudo" path="res://scenes/particles/poof.tscn" id="1_burny"]
+[ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_t60ek"]
+
+[resource]
+script = ExtResource("1_t60ek")
+shoot_type = 0
+name = "Hiroshi fists"
+slot = 1
+slot_priority = 1
+pullout_anim_name = "hiroshi_fists_pullout"
+shoot_anim_name = "hiroshi_fists_punch"
+auto_hit = true
+melee_attack = true
+damage = 5
+hit_particle = ExtResource("1_burny")

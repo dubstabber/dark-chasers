@@ -35,15 +35,10 @@ const POT_BREAK_SOUND := preload("res://sounds/sfx/SND1048.wav")
 const PAPER_BREAK_SOUND := preload("res://sounds/sfx/SND1023.wav")
 const GLASS_BREAK_SOUND := preload("res://sounds/sfx/GLASSBRK.wav")
 
-const PISTOL_SHOOT_SOUND := preload("res://sounds/sfx/HIRSHOT.wav")
-
 const BUTTON_UP_1_IMAGE := preload("res://images/textures/BSW01A.png")
 const BUTTON_DOWN_1_IMAGE := preload("res://images/textures/BSW01B.png")
 const BUTTON_UP_5_IMAGE := preload("res://images/textures/BSW05A.png")
 const BUTTON_DOWN_5_IMAGE := preload("res://images/textures/BSW05B.png")
-
-const PUFF_SCENE := preload("res://scenes/particles/puff.tscn")
-const POOF_SCENE := preload("res://scenes/particles/poof.tscn")
 
 const WATER_SPLASH_SOUND := preload("res://sounds/sfx/footsteps/water/DSSPLSML.wav")
 
@@ -111,4 +106,3 @@ const GLASS_SCRAP_IMAGES := [
 ]
 
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")
-

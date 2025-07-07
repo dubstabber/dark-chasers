@@ -10,7 +10,7 @@ void sky() {
     if (eyedir.y > horizon_height) {
         float phi = acos(eyedir.y);
         float theta = atan(eyedir.z, eyedir.x);
-		
+
         float vertical_scale = 0.48 - horizon_height;
         vec2 uv = vec2(theta / (2.0 * PI), phi * vertical_scale / (0.5 * PI));
 		COLOR = texture(source_panorama, uv).rgb;

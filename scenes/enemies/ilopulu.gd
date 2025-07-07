@@ -18,4 +18,3 @@ func animate_sprite():
 		
 	if animated_sprite.animation != cur_anim:
 		animated_sprite.play(cur_anim)
-

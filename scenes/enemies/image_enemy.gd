@@ -4,7 +4,7 @@ extends Enemy
 
 var enemy_data: Dictionary
 
-@onready var image = $RotationController/Sprite3D
+@onready var image = $Graphics/Sprite3D
 @onready var sound_music = $SoundMusic
 
 
@@ -42,4 +42,3 @@ func _physics_process(delta):
 func _draw_music():
 	sound_music.stream = enemy_data.musics.pick_random()
 	sound_music.play()
-

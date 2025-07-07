@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxcoqwwtje00u"]
 
 [ext_resource type="Texture2D" uid="uid://bh5sixu5c2uoc" path="res://images/objects/glasses/1187A0.png" id="1_3d6u2"]
-[ext_resource type="Script" path="res://scenes/objects/break_glass.gd" id="1_jsu7e"]
+[ext_resource type="Script" uid="uid://0lax4sx4ont5" path="res://scenes/objects/break_glass.gd" id="1_jsu7e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_px8vl"]
 size = Vector3(0.0771484, 0.208984, 0.0771484)

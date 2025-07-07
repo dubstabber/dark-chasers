@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://nnix111hmhh4"]
 
-[ext_resource type="Script" path="res://scenes/objects/break_glass.gd" id="1_5yk5s"]
+[ext_resource type="Script" uid="uid://0lax4sx4ont5" path="res://scenes/objects/break_glass.gd" id="1_5yk5s"]
 [ext_resource type="Texture2D" uid="uid://bo5b7d7pycowb" path="res://images/objects/glasses/1165A0.png" id="2_yxn2v"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q301n"]

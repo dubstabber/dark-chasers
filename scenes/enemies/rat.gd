@@ -47,6 +47,7 @@ func _on_sound_interval_timeout() -> void:
 func take_damage(amount: int) -> void:
 	if is_killed:
 		return
+	health -= amount
 	if health >= 0:
 		is_killed = true
 		animated_sprite.play('death')

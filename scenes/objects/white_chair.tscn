@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://b4vbbj8tneui0"]
 
-[ext_resource type="Script" path="res://scenes/objects/white_chair.gd" id="1_kxg7w"]
+[ext_resource type="Script" uid="uid://bp83mcodwwmax" path="res://scenes/objects/white_chair.gd" id="1_kxg7w"]
 [ext_resource type="Texture2D" uid="uid://cs6agq77a5e47" path="res://images/objects/white-chair/CHAIA6.png" id="2_5c3hp"]
 [ext_resource type="Texture2D" uid="uid://ce2fi1kclj4fi" path="res://images/objects/white-chair/CHAIA5.png" id="2_efaqc"]
 [ext_resource type="Texture2D" uid="uid://ikjh4thjjrky" path="res://images/objects/white-chair/CHAIA1.png" id="2_tb4ur"]

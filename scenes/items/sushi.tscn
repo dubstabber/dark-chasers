@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://swf63peiq0st"]
 
-[ext_resource type="Script" path="res://scenes/items/health.gd" id="1_bbw8y"]
+[ext_resource type="Script" uid="uid://diballdndevut" path="res://scenes/items/health.gd" id="1_bbw8y"]
 [ext_resource type="Texture2D" uid="uid://cgsk0d7587b1i" path="res://images/items/SSHIA0.png" id="1_k1irs"]
 [ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_ytmuv"]
 

@@ -40,9 +40,7 @@ func _physics_process(delta):
 	if not is_killed:
 		if not current_target and chase_player:
 			check_targets()
-		if current_target or waypoints:
-			var distance_to_target = nav.distance_to_target()
-			
+		if current_target or not waypoints.is_empty():
 			var next_pos = nav.get_next_path_position()
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
@@ -63,7 +61,8 @@ func _physics_process(delta):
 
 
 func look_forward() -> void:
-	rotation.y = atan2(velocity.x, velocity.z) + PI
+	if velocity:
+		rotation.y = atan2(velocity.x, velocity.z) + PI
 
 
 func check_targets() -> void:
@@ -91,7 +90,7 @@ func makepath() -> void:
 		elif map_transitions:
 			var transition_point = find_path_to_player()[0]
 			nav.target_position = map_transitions.get_node(transition_point).global_position
-	elif waypoints:
+	elif not waypoints.is_empty():
 		nav.target_position = waypoints[0]
 
 
@@ -128,7 +127,7 @@ func add_disappear_zone(area):
 
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
-	if distance_to_target < 20:
+	if distance_to_target < 20 or not waypoints.is_empty():
 		find_path_timer.wait_time = 0.1
 	elif distance_to_target < 35:
 		find_path_timer.wait_time = 0.5
@@ -162,9 +161,9 @@ func _on_wandering_timer_timeout():
 
 
 func _on_navigation_agent_3d_target_reached():
-	if waypoints:
+	if not waypoints.is_empty():
 		waypoints.pop_front()
-		velocity = Vector3.ZERO
+		if waypoints.is_empty(): velocity = Vector3.ZERO
 
 
 func _on_navigation_agent_3d_link_reached(details):
@@ -182,4 +181,3 @@ func _on_navigation_agent_3d_waypoint_reached(_details):
 func _on_disappear_area(body):
 	if body == self:
 		queue_free()
-

@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://5q2aomrq4gjw"]
+[gd_scene load_steps=9 format=3 uid="uid://5q2aomrq4gjw"]
 
-[ext_resource type="Script" path="res://scenes/rooms/room_1.gd" id="1_3lwtk"]
+[ext_resource type="Script" uid="uid://c765qag2pbwqq" path="res://scenes/rooms/room_1.gd" id="1_3lwtk"]
 [ext_resource type="Texture2D" uid="uid://co5uy0k6hjm4t" path="res://images/skyboxes/space1.png" id="1_26bms"]
 [ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="3_6e2tk"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_vk5nm"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r5ja7"]
 panorama = ExtResource("1_26bms")
@@ -31,138 +32,149 @@ environment = SubResource("Environment_main8")
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_icseg")
 
-[node name="Ground" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Map" type="Node3D" parent="NavigationRegion3D"]
+unique_name_in_owner = true
+
+[node name="Ground" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(85.7774, 1, 191.709)
 
-[node name="Ceiling" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Ceiling" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.04789, 0, 9.36679, -43.4679)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(85.7774, 1, 99.3224)
 
-[node name="Wall" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 10)
 
-[node name="Wall2" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall2" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.24189, 0, 0)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 10)
 
-[node name="Wall3" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall3" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.79812, 0, -5.6977)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 10)
 
-[node name="Wall4" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall4" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.02485, 0, 5.48701)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 10)
 
-[node name="Wall5" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall5" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.629939, 0, 9.23984)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 72.2476)
 
-[node name="Wall7" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall7" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.0755196, 4.78514, 95.0752)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 85.837)
 
-[node name="Wall9" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall9" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.0755196, 4.78514, -95.2098)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 85.837)
 
-[node name="Wall6" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall6" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 43.4116, 4.77375, -0.0185528)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 191.577)
 
-[node name="Wall8" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Wall8" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -42.3576, 4.77375, -0.0185528)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(1, 10, 191.577)
 
-[node name="Slope" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Slope" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(0.913467, -0.406912, 0, 0.406912, 0.913467, 0, 0, 0, 1, -4.3563, 2.05275, 60.4244)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(10, 1, 10)
 
-[node name="Slope2" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Slope2" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.50317, 4.0001, 60.4244)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(7.20565, 1, 10)
 
-[node name="Slope3" type="CSGBox3D" parent="NavigationRegion3D"]
+[node name="Slope3" type="CSGBox3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2162, 4.0001, 60.4244)
 use_collision = true
 collision_layer = 4
 collision_mask = 0
 size = Vector3(7.20565, 1, 10)
 
-[node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-up"]]
+[node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-up"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51788, 5.55624, 57.8976)
 end_position = Vector3(6.24383, -0.168085, 0.0534439)
 
-[node name="NavigationLink3D3" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-up"]]
+[node name="NavigationLink3D3" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-up"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51788, 5.55624, 61.401)
 end_position = Vector3(6.24383, -0.168085, 0.0534439)
 
-[node name="NavigationLink3D4" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-up"]]
+[node name="NavigationLink3D4" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-up"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.51788, 5.55624, 65.334)
 end_position = Vector3(6.24383, -0.168085, 0.0534439)
 
-[node name="NavigationLink3D2" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+[node name="NavigationLink3D2" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-down"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.877, 5.41532, 64.9524)
 bidirectional = false
 end_position = Vector3(0.373163, -4.69097, 1.92145)
 
-[node name="NavigationLink3D5" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+[node name="NavigationLink3D5" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-down"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.1178, 5.41532, 64.8656)
 bidirectional = false
 end_position = Vector3(2.0517, -4.79764, 1.23734)
 
-[node name="NavigationLink3D6" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+[node name="NavigationLink3D6" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-down"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.4679, 5.41532, 60.7486)
 bidirectional = false
 end_position = Vector3(2.16479, -4.24298, 0.00736237)
 
-[node name="NavigationLink3D7" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+[node name="NavigationLink3D7" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-down"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.1601, 5.41532, 56.9772)
 bidirectional = false
 end_position = Vector3(2.55725, -4.84425, -2.45472)
 
-[node name="NavigationLink3D8" type="NavigationLink3D" parent="NavigationRegion3D" groups=["jump-down"]]
+[node name="NavigationLink3D8" type="NavigationLink3D" parent="NavigationRegion3D/Map" groups=["jump-down"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3552, 5.41532, 56.6696)
 bidirectional = false
 end_position = Vector3(1.967, -4.8, -3.146)
+
+[node name="PlayerSpawners" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Marker3D" type="Marker3D" parent="PlayerSpawners" groups=["player_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 46.8886)
+
+[node name="EnemySpawners" type="Node3D" parent="."]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.51703, -21.5044)
@@ -171,9 +183,6 @@ light_energy = 4.556
 shadow_enabled = true
 omni_range = 176.654
 
-[node name="Marker3D" type="Marker3D" parent="." groups=["player_spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34013, 46.8886)
-
 [node name="Teleport" parent="." instance=ExtResource("3_6e2tk")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 39.661, 1.74775, 92.5288)
 level_name = "res://scenes/rooms/fdm_backrooms.tscn"
@@ -181,3 +190,11 @@ level_name = "res://scenes/rooms/fdm_backrooms.tscn"
 [node name="Teleport2" parent="." instance=ExtResource("3_6e2tk")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -39.2033, 1.74775, 92.5288)
 level_name = "res://scenes/rooms/mansion_1.tscn"
+
+[node name="Players" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Enemies" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="HUD" parent="." instance=ExtResource("4_vk5nm")]

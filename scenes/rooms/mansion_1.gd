@@ -168,6 +168,7 @@ func _handle_button_event(body, event):
 
 
 func _handle_area_event(body: CharacterBody3D, event):
+	if event.strip_edges().is_empty(): return
 	match event:
 		"entered the mansion text":
 			hud.show_event_text("You enter carefully into the mansion.", false, 3.0)
@@ -207,8 +208,10 @@ func _handle_area_event(body: CharacterBody3D, event):
 			global_music.volume_db = -5
 			global_music.play()
 			hud.show_event_text("THE AO ONI! RUN!", false, 3.0)
-			$"NavigationRegion3D/Enemies/Ao oni".connect("tree_exited", _on_custom_event.bind("monster disappeared"))
-			$"NavigationRegion3D/Enemies/Ao oni".connect("tree_exited", global_music.stop)
+			var ao_oni = get_node_or_null("NavigationRegion3D/Enemies/Ao oni")
+			if ao_oni:
+				ao_oni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
+				ao_oni.connect("tree_exited", global_music.stop)
 		"spawn ilopulu":
 			global_music.stream = Preloads.EVENT_SOUND
 			global_music.play()
@@ -235,7 +238,6 @@ func _handle_area_event(body: CharacterBody3D, event):
 		"kill player":
 			if "kill" in body:
 				body.kill()
-		"": pass
 		_:
 			prints("unknown event: '",event,"'")
 

@@ -37,7 +37,8 @@ folder_colors={
 "res://models/": "blue",
 "res://scenes/": "green",
 "res://shaders/": "pink",
-"res://sounds/": "yellow"
+"res://sounds/": "yellow",
+"res://weapon_manager/": "gray"
 }
 
 [importer_defaults]

@@ -1,7 +1,7 @@
 @tool
 extends Node3D
 
-const whitegreen : Color = Color(0.9, 0.97, 0.94)
+const whitegreen : Color = Color(0.98, 0.99, 0.98)
 var MainCamPath: NodePath
 
 @export var size : Vector2 = Vector2(2, 2)
@@ -58,10 +58,13 @@ func _process(delta):
 	cam.global_transform = MirrorTransform * MainCam.global_transform
 	
 	# Look perpendicular into the mirror plane for frostum camera
-	cam.global_transform = cam.global_transform.looking_at(
-			cam.global_transform.origin/2 + MainCam.global_transform.origin/2, \
-			mirror.global_transform.basis.y
-		)
+	var target_position = cam.global_transform.origin/2 + MainCam.global_transform.origin/2
+	# Check if target position is different from camera origin to avoid looking_at() error
+	if not cam.global_transform.origin.is_equal_approx(target_position):
+		cam.global_transform = cam.global_transform.looking_at(
+				target_position,
+				mirror.global_transform.basis.y
+			)
 	var cam2mirror_offset = mirror.global_transform.origin - cam.global_transform.origin
 	var near = abs((cam2mirror_offset).dot(MirrorNormal)) # near plane distance
 	near += 0.05 # avoid rendering own surface

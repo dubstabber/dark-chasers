@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=34 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -8,13 +8,17 @@
 [ext_resource type="Texture2D" uid="uid://cr2vq3lcp6hbd" path="res://images/player_wieldables/HFSTA0.png" id="4_p5d7t"]
 [ext_resource type="Texture2D" uid="uid://d27ty7pf8btbo" path="res://images/player_wieldables/HFSTE0.png" id="5_2e56o"]
 [ext_resource type="PackedScene" uid="uid://rqdfm8m8h0ta" path="res://weapon_manager/weapon_manager.tscn" id="5_2logq"]
-[ext_resource type="Resource" uid="uid://cuyldh62wq0p6" path="res://weapon_manager/aooni_weapons/hiroshi_pistol.tres" id="5_3vbji"]
+[ext_resource type="Resource" uid="uid://cuyldh62wq0p6" path="res://weapon_manager/weapons/hiroshi_pistol.tres" id="5_3vbji"]
 [ext_resource type="Script" uid="uid://b5x4ehxe1tlru" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="7_epsiy"]
 [ext_resource type="Texture2D" uid="uid://cafys0kr50msk" path="res://images/player_wieldables/KTCRA0.png" id="7_icwp4"]
 [ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://dynamic_footstep_system/dark_chasers_material_library.tres" id="8_aki86"]
 [ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="8_pitn3"]
-[ext_resource type="Resource" uid="uid://bsk7jap7yhaw8" path="res://weapon_manager/aooni_weapons/hiroshi_fists.tres" id="11_1oeti"]
-[ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://weapon_manager/aooni_weapons/silver_crowbar.tres" id="14_ydl5d"]
+[ext_resource type="Texture2D" uid="uid://dhjgn0ibhwhxi" path="res://images/player_wieldables/LIT1A0.png" id="9_uf5tr"]
+[ext_resource type="Texture2D" uid="uid://3jo7x560mlpb" path="res://images/player_wieldables/LIT1B0.png" id="10_lgqa7"]
+[ext_resource type="Resource" uid="uid://bsk7jap7yhaw8" path="res://weapon_manager/weapons/hiroshi_fists.tres" id="11_1oeti"]
+[ext_resource type="Texture2D" uid="uid://dmh16fn4rr8bm" path="res://images/player_wieldables/LIT1C0.png" id="11_8ydkj"]
+[ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://weapon_manager/weapons/silver_crowbar.tres" id="14_ydl5d"]
+[ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://weapon_manager/weapons/doom_lighter.tres" id="18_lgqa7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
@@ -508,9 +512,77 @@ tracks/2/keys = {
 [sub_resource type="Animation" id="Animation_yk4v5"]
 resource_name = "silver_crowbar_punch"
 
+[sub_resource type="Animation" id="Animation_fcs02"]
+resource_name = "doom_lighter_pullout"
+length = 0.8
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/GunBase2D/RightHandSlot:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [null]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.48, 0.62),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("9_uf5tr"), ExtResource("9_uf5tr"), ExtResource("10_lgqa7"), ExtResource("11_8ydkj")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.46, 0.6, 0.62),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(336, 771), Vector2(336, 560), Vector2(336, 560), Vector2(336, 560), Vector2(336, 530)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(3, 3)]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../../../WeaponManager")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.62),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_weapon_draw_sound"
+}]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r05nh"]
 _data = {
 &"RESET": SubResource("Animation_nqp58"),
+&"doom_lighter_pullout": SubResource("Animation_fcs02"),
 &"hiroshi_fists_pullout": SubResource("Animation_epc33"),
 &"hiroshi_fists_punch": SubResource("Animation_aorbl"),
 &"hiroshi_pistol_pullout": SubResource("Animation_nucnw"),
@@ -518,11 +590,6 @@ _data = {
 &"silver_crowbar_pullout": SubResource("Animation_4kmua"),
 &"silver_crowbar_punch": SubResource("Animation_yk4v5")
 }
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_8ywj6"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mf4jw"]
-noise = SubResource("FastNoiseLite_8ywj6")
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_mask = 14
@@ -622,12 +689,12 @@ volume_db = -20.0
 script = ExtResource("7_epsiy")
 footstep_material_library = ExtResource("8_aki86")
 
-[node name="WeaponManager" parent="." node_paths=PackedStringArray("player", "gun_base", "animation_player", "hit_sound_player", "bullet_raycast") instance=ExtResource("5_2logq")]
-slot_1 = Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti"), ExtResource("14_ydl5d")])
+[node name="WeaponManager" parent="." node_paths=PackedStringArray("player", "gun_base", "animation_player", "hit_sound_player", "weapon_sound_player", "bullet_raycast") instance=ExtResource("5_2logq")]
+slot_1 = Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti"), ExtResource("14_ydl5d"), ExtResource("18_lgqa7")])
 slot_2 = Array[ExtResource("8_pitn3")]([ExtResource("5_3vbji")])
 player = NodePath("..")
 gun_base = NodePath("../nek/head/eyes/Camera3D/GunBase2D")
 animation_player = NodePath("../nek/head/eyes/WeaponAnimationPlayer")
 hit_sound_player = NodePath("../InteractSound")
+weapon_sound_player = NodePath("../InteractSound")
 bullet_raycast = NodePath("../nek/head/eyes/Camera3D/HitScanRayCast")
-sway_noise = SubResource("NoiseTexture2D_mf4jw")

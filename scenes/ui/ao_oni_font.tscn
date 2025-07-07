@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cxcvipmnr6um2"]
 
-[ext_resource type="Script" path="res://fonts/bitmap_text.gd" id="1_6jaqa"]
+[ext_resource type="Script" uid="uid://b4hbck1kytale" path="res://fonts/bitmap_text.gd" id="1_6jaqa"]
 
 [node name="AoOniFont" type="Control"]
 layout_mode = 3

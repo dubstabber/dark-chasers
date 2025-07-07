@@ -36,6 +36,7 @@ func _ready():
 					t.connect("body_entered", _on_transition_entered.bind(m))
 					t.connect("body_exited", _on_transition_exited)
 	for mesh in %Map.get_children():
+		if mesh is not MeshInstance3D: continue
 		var material = mesh.get_active_material(0)
 		if material and material.has_method('set_transparency') and material.transparency == 0:
 			material.transparency = 1

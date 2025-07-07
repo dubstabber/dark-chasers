@@ -41,4 +41,3 @@ func play_footstep_sound(sound_source: AudioStream, parent_node:Node = self):
 	sound.volume_db = -20
 	sound.connect("finished", sound.queue_free)
 	sound.play()
-

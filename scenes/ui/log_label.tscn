@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dded6ol00i2pi"]
 
-[ext_resource type="Script" path="res://scenes/ui/log_label.gd" id="1_5pbm0"]
+[ext_resource type="Script" uid="uid://nccolf6oq4m8" path="res://scenes/ui/log_label.gd" id="1_5pbm0"]
 [ext_resource type="PackedScene" uid="uid://cxcvipmnr6um2" path="res://scenes/ui/ao_oni_font.tscn" id="2_ofik3"]
 
 [node name="LogLabel" type="Control"]

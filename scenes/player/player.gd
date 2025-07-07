@@ -67,16 +67,10 @@ var hud: CanvasLayer
 @onready var crounch_col = $CrouchingCollisionShape
 @onready var crounch_ray_cast_3d = $CrounchRayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
-@onready var interact_player = $nek/head/eyes/Camera3D/GunBase/InteractPlayer
+
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
-@onready var hit_scan = $nek/head/eyes/Camera3D/HitScan
 @onready var interact_sound = $InteractSound
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
-
-
-func _ready():
-	camera_3d.fov = 85
-	switch_weapon(WEAPON_TYPE.PISTOL)
 
 
 func _input(event):
@@ -87,7 +81,7 @@ func _input(event):
 			rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
 			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-89), deg_to_rad(89))
-			
+
 
 func _physics_process(delta):
 	if not is_on_floor() and not clip_mode:
@@ -114,7 +108,7 @@ func _physics_process(delta):
 			stay_col.disabled = false
 			crounch_col.disabled = true
 			head.position.y = lerp(head.position.y, 0.0, delta*lerp_speed)
-			if Input.is_action_pressed("sprint"):
+			if Input.is_action_pressed("sprint") and velocity.length() > 0.1:
 				current_speed = lerp(current_speed, SPRINTING_SPEED, delta * lerp_speed)
 				camera_3d.fov += 2
 				camera_3d.fov = clamp(camera_3d.fov, 85, 110)
@@ -145,7 +139,7 @@ func _physics_process(delta):
 		
 		if is_on_floor() and not sliding and input_dir != Vector2.ZERO:
 			head_bobbing_vector.y = sin(head_bobbing_index)
-			head_bobbing_vector.x = sin(head_bobbing_index/2)+0.5
+			head_bobbing_vector.x = sin(head_bobbing_index/2)
 			
 			if head_bobbing_vector.y > -head_bobbing_current_intensity:
 				can_step = true
@@ -154,7 +148,7 @@ func _physics_process(delta):
 				footstep_surface_detector.play_footstep()
 			
 			eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y*(head_bobbing_current_intensity/2.0),delta * lerp_speed)
-			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x*head_bobbing_current_intensity,delta * lerp_speed)
+			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x*(head_bobbing_current_intensity/2.0),delta * lerp_speed)
 		else:
 			eyes.position.y = lerp(eyes.position.y, 0.0,delta * lerp_speed)
 			eyes.position.x = lerp(eyes.position.x, 0.0,delta * lerp_speed)
@@ -211,21 +205,6 @@ func _physics_process(delta):
 			if transit_pos:
 				position = transit_pos.global_position
 				transit_pos = null
-			
-		if Input.is_action_pressed("hit"):
-			if not interact_player.is_playing():
-				match current_weapon:
-					WEAPON_TYPE.FISTS:
-						interact_player.play("fist-attack")
-		if Input.is_action_just_pressed("hit"):
-			if not interact_player.is_playing():
-				match current_weapon:
-					WEAPON_TYPE.PISTOL:
-						interact_player.play("pistol-shoot")
-		if Input.is_action_just_pressed("Weapon 1"):
-			switch_weapon(WEAPON_TYPE.FISTS)
-		if Input.is_action_just_pressed("Weapon 2"):
-			switch_weapon(WEAPON_TYPE.PISTOL)
 		
 		if direction:
 			velocity.x = direction.x * current_speed
@@ -246,47 +225,6 @@ func _physics_process(delta):
 			death_throw -= 0.1
 
 
-func switch_weapon(new_weapon: int):
-	if current_weapon == new_weapon: return
-	if interact_player.is_playing():
-		await interact_player.animation_finished
-	match current_weapon:
-		WEAPON_TYPE.PISTOL:
-			interact_player.play_backwards("pistol-switch")
-	current_weapon = new_weapon
-	match current_weapon:
-		WEAPON_TYPE.FISTS:
-			interact_sound.stream = null
-		WEAPON_TYPE.PISTOL:
-			interact_player.play("pistol-switch")
-			interact_sound.stream = Preloads.PISTOL_SHOOT_SOUND
-
-
-func hit(damage: int):
-	if interact_sound.stream: interact_sound.play()
-	var collider
-	match current_weapon:
-		WEAPON_TYPE.FISTS:
-			collider = interaction.get_collider()
-		WEAPON_TYPE.PISTOL:
-			collider = hit_scan.get_collider()
-	if collider:
-		var hit_particle
-		match current_weapon:
-			WEAPON_TYPE.FISTS:
-				hit_particle = Preloads.POOF_SCENE.instantiate()
-			WEAPON_TYPE.PISTOL:
-				hit_particle = Preloads.PUFF_SCENE.instantiate()
-		get_tree().root.add_child(hit_particle)
-		hit_particle.global_position = hit_scan.get_collision_point()
-		hit_particle.connect("animation_finished", hit_particle.queue_free)
-		if "take_damage" in collider:
-			collider.take_damage(damage)
-		if collider.is_in_group("destroyable"):
-			collider.queue_free()
-	
-
-
 func kill(pos = null):
 	if not killed:
 		if pos:
@@ -296,3 +234,6 @@ func kill(pos = null):
 		killed = true
 		color_rect.modulate.a = 0.7
 		Utils.play_sound(Preloads.KILL_PLAYER_SOUND, self)
+
+
+#func add_weapon()

@@ -26,6 +26,5 @@ animations = [{
 }]
 
 [node name="Puff" type="AnimatedSprite3D"]
-billboard = 1
 sprite_frames = SubResource("SpriteFrames_fdipe")
 autoplay = "default"

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="FootstepMaterialLibrary" load_steps=13 format=3 uid="uid://dvab7my8m4tta"]
 
-[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_material_profile.gd" id="1_5idub"]
-[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_material_library.gd" id="1_7qjs8"]
+[ext_resource type="Script" uid="uid://b2xga2b7umghm" path="res://dynamic_footstep_system/scripts/footstep_material_profile.gd" id="1_5idub"]
+[ext_resource type="Script" uid="uid://dp3iwntgjj6g7" path="res://dynamic_footstep_system/scripts/footstep_material_library.gd" id="1_7qjs8"]
 [ext_resource type="AudioStream" uid="uid://d2hey83rv3vj7" path="res://dynamic_footstep_system/footstep_profiles/dirt1_footstep_profile.tres" id="1_5528t"]
 [ext_resource type="AudioStream" uid="uid://bp1d52pe1rcj8" path="res://dynamic_footstep_system/footstep_profiles/carpet_footstep_profile.tres" id="3_kuofs"]
 [ext_resource type="AudioStream" uid="uid://cftv5iqr7ndei" path="res://dynamic_footstep_system/footstep_profiles/wood_footstep_profile.tres" id="4_3alrb"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://curr1hvhg2u61"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_0h1jq"]
-[ext_resource type="Script" path="res://scenes/enemies/ilopulu.gd" id="2_ci2av"]
+[ext_resource type="Script" uid="uid://cmiodefddvvp3" path="res://scenes/enemies/ilopulu.gd" id="2_ci2av"]
 [ext_resource type="Texture2D" uid="uid://d28181lghvf1g" path="res://images/enemies/ilopulu/ILOPA0.png" id="3_gw83j"]
 [ext_resource type="Texture2D" uid="uid://2tagxmyilbhx" path="res://images/enemies/ilopulu/ILOPB0.png" id="4_o86ge"]
 

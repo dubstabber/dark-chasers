@@ -2,9 +2,6 @@ extends RayCast3D
 
 @onready var body = get_parent()
 
-func _ready():
-	pass # Replace with function body.
-
 
 func _physics_process(_delta):
 	if is_colliding():

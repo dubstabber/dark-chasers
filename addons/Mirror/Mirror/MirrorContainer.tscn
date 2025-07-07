@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://wnlgsuhygh3f"]
 
-[ext_resource type="Shader" path="res://addons/Mirror/Mirror/Mirror.gdshader" id="1_647ym"]
+[ext_resource type="Shader" uid="uid://c1jk6i424k4r5" path="res://addons/Mirror/Mirror/Mirror.gdshader" id="1_647ym"]
 
 [sub_resource type="QuadMesh" id="11"]
 size = Vector2(0.81, 0.97)
@@ -13,9 +13,9 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_647ym")
 shader_parameter/tint = Color(0.98, 0.98, 0.98, 1)
-shader_parameter/distort_strength = null
-shader_parameter/albedo = null
 shader_parameter/mirror_tex = SubResource("ViewportTexture_guvh6")
+shader_parameter/distort_strength = 0.0
+shader_parameter/albedo = Color(0, 0, 0, 1)
 
 [node name="MirrorContainer" type="Node3D"]
 

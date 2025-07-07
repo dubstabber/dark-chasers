@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb0ja5up2c6ny"]
 
-[ext_resource type="Script" path="res://scenes/enemies/image_enemy.gd" id="1_fvloq"]
+[ext_resource type="Script" uid="uid://crvqpgygs5h8g" path="res://scenes/enemies/image_enemy.gd" id="1_fvloq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nli0v"]
 radius = 0.360225
@@ -20,28 +20,27 @@ floor_block_on_wall = false
 floor_snap_length = 0.31
 script = ExtResource("1_fvloq")
 
-[node name="RotationController" type="Node3D" parent="."]
-
-[node name="Sprite3D" type="Sprite3D" parent="RotationController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.478793, 0)
-billboard = 2
-
-[node name="Interaction" type="RayCast3D" parent="RotationController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.281964, 0)
+[node name="Interaction" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277546, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 12
 
+[node name="Graphics" type="Node3D" parent="."]
+
+[node name="Sprite3D" type="Sprite3D" parent="Graphics"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.975002, 0)
+billboard = 2
+render_priority = 1
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.60043, 0)
 shape = SubResource("CapsuleShape3D_nli0v")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_postprocessing = 1
 
-[node name="SoundMusic" type="AudioStreamPlayer3D" parent="."]
-volume_db = -20.322
-
 [node name="KillZone" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.141669, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.744169, 0)
 collision_layer = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
@@ -59,6 +58,10 @@ one_shot = true
 [node name="FindPathTimer" type="Timer" parent="Timers"]
 wait_time = 0.3
 autostart = true
+
+[node name="SoundMusic" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+volume_db = -20.322
 
 [connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

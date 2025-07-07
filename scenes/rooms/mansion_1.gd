@@ -13,7 +13,7 @@ func _ready():
 			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 			
 	spawn_player()
-	#open_all_doors()
+	open_all_doors()
 
 
 func spawn_player():
@@ -44,7 +44,7 @@ func respawn(p):
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/TestSpawn.position
-	p.current_room = "ThirdFloor"
+	p.current_room = "FirstFloor"
 	Utils.play_sound(Preloads.SPAWN_SOUND, p)
 
 
@@ -178,6 +178,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			enemies.add_child(aooni)
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/CrawlingAoOniArea)
 			aooni.position = $NavigationRegion3D/EventSpawners/AoOniCrawler.position
+			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawler2.position)
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawlerEnd.position)
 			await get_tree().create_timer(4.5).timeout
 			for player in players.get_children():
@@ -275,4 +276,3 @@ func open_all_doors():
 	var doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
 		door.open()
-

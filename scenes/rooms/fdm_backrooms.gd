@@ -1,4 +1,4 @@
-extends Node3D
+extends Level
 
 enum GAME_MODE {
 	NONE,
@@ -11,15 +11,12 @@ var enemy_spawners: Array
 var current_spawner := 0
 var current_game_mode: int
 
-@onready var delay_between_spawners = $NavigationRegion3D/Fdmmaps0_31Fdg46/Timers/DelayBetweenSpawners
-@onready var player_spawners = $NavigationRegion3D/Fdmmaps0_31Fdg46/PlayerSpawners
-@onready var players = $NavigationRegion3D/Fdmmaps0_31Fdg46/Players
-@onready var enemies = $NavigationRegion3D/Fdmmaps0_31Fdg46/Enemies
+@onready var delay_between_spawners = $Timers/DelayBetweenSpawners
+@onready var spawn_barriers = $Map/FDG46_039
 
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	super._ready()
 	
 	current_game_mode = GAME_MODE.STANDARD
 	spawn_player()
@@ -28,24 +25,10 @@ func _ready():
 		spawn_enemy(0)
 
 
-func _process(_delta):
-	if Input.is_action_just_pressed("menu"):
-		get_tree().quit()
-	if Input.is_action_just_pressed("toggle-window-mode"):
-		if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_FULLSCREEN:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-
-
 func spawn_player():
-	var player = Preloads.PLAYER_SCENE.instantiate() as CharacterBody3D
+	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
-	var hud = Preloads.HUD_SCENE.instantiate()
-	add_child(hud)
 	player.hud = hud
-	player.ambient_music.stream = Preloads.D_RUNNING_SOUND
-	player.ambient_music.play()
 	respawn(player)
 
 
@@ -57,6 +40,7 @@ func spawn_enemy(index):
 	var enemy = Preloads.IMAGE_ENEMY_SCENE.instantiate()
 	enemies.add_child(enemy)
 	enemy.position = enemy_spawners[index].position
+	enemy.is_wandering = true
 	var spawner_timer = Timer.new()
 	enemy_spawners[index].add_child(spawner_timer)
 	spawner_timer.connect("timeout", respawn_enemy.bind(index, spawner_timer))
@@ -73,6 +57,13 @@ func respawn_enemy(index, spawner_timer):
 	spawner_timer.wait_time = randf_range(min_respawn_time,max_respawn_time)
 	spawner_timer.start()
 
+
 func _on_delay_between_spawners_timeout():
 	if current_spawner != enemy_spawners.size():
 		spawn_enemy(current_spawner)
+
+
+func _on_disable_barriers_timeout() -> void:
+	spawn_barriers.hide()
+	spawn_barriers.get_child(0).collision_layer = 0
+	

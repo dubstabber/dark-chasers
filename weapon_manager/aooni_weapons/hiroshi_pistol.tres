@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://cuyldh62wq0p6"]
+
+[ext_resource type="AudioStream" uid="uid://1l16mbokwgvt" path="res://sounds/sfx/HIRSHOT.wav" id="1_canqh"]
+[ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_er35p"]
+[ext_resource type="PackedScene" uid="uid://bu47mjytnvtv0" path="res://scenes/particles/puff.tscn" id="1_v2ntt"]
+
+[resource]
+script = ExtResource("1_er35p")
+shoot_type = 0
+name = "Hiroshi pistol"
+slot = 2
+slot_priority = 1
+pullout_anim_name = "hiroshi_pistol_pullout"
+shoot_anim_name = "hiroshi_pistol_shoot"
+auto_hit = false
+melee_attack = false
+hit_sound = ExtResource("1_canqh")
+damage = 15
+hit_particle = ExtResource("1_v2ntt")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=3 uid="uid://b1vimowqmce5w"]
 
-[ext_resource type="Script" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
+[ext_resource type="Script" uid="uid://drjk48niw8xym" path="res://scenes/enemies/ao_oni.gd" id="1_xmjcu"]
 [ext_resource type="Texture2D" uid="uid://bhgrkq04i5nfs" path="res://images/enemies/ao-oni/AONIA4A6.png" id="2_bgw0k"]
 [ext_resource type="Texture2D" uid="uid://b1pskcfv7wyvc" path="res://images/enemies/ao-oni/AONIA1.png" id="2_iaafa"]
 [ext_resource type="Texture2D" uid="uid://qe7ijko24ssb" path="res://images/enemies/ao-oni/AONIB4B6.png" id="2_u6v1l"]
@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://beijksyrqiunb" path="res://images/enemies/ao-oni/AONIC1.png" id="4_y64dm"]
 [ext_resource type="Texture2D" uid="uid://b3q8cfyh37g3u" path="res://images/enemies/ao-oni/AONIC3C7.png" id="5_k2h66"]
 [ext_resource type="Texture2D" uid="uid://vgfc4lpa8uoh" path="res://images/enemies/ao-oni/AONIB3B7.png" id="7_aoo63"]
-[ext_resource type="Script" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="11_di6fq"]
+[ext_resource type="Script" uid="uid://b5x4ehxe1tlru" path="res://dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="11_di6fq"]
 [ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://dynamic_footstep_system/dark_chasers_material_library.tres" id="12_hau6t"]
 
 [sub_resource type="Animation" id="Animation_2yldm"]
@@ -183,13 +183,13 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ali5n"]
 _data = {
-"RESET": SubResource("Animation_2yldm"),
-"run-back": SubResource("Animation_utq5j"),
-"run-front": SubResource("Animation_r4ike"),
-"run-side": SubResource("Animation_sqno1"),
-"stay-back": SubResource("Animation_ct5r0"),
-"stay-front": SubResource("Animation_7ib5g"),
-"stay-side": SubResource("Animation_myl4e")
+&"RESET": SubResource("Animation_2yldm"),
+&"run-back": SubResource("Animation_utq5j"),
+&"run-front": SubResource("Animation_r4ike"),
+&"run-side": SubResource("Animation_sqno1"),
+&"stay-back": SubResource("Animation_ct5r0"),
+&"stay-front": SubResource("Animation_7ib5g"),
+&"stay-side": SubResource("Animation_myl4e")
 }
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dl8o4"]

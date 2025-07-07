@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://b254pho30ji8e"]
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=5 format=3 uid="uid://b254pho30ji8e"]
 
 [ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_dwe5d"]
 [ext_resource type="AudioStream" uid="uid://bhunfy05o66rn" path="res://sounds/sfx/SND1009.wav" id="1_fnq8l"]
+[ext_resource type="AudioStream" uid="uid://dus54imardskt" path="res://sounds/sfx/SND1007.wav" id="2_n1mbh"]
 [ext_resource type="AudioStream" uid="uid://dglsmsl30gvmp" path="res://sounds/sfx/SND1008.wav" id="2_rkvqk"]
 
 [resource]
@@ -12,8 +13,9 @@ slot = 1
 slot_priority = 1
 pullout_anim_name = "doom_lighter_pullout"
 shoot_anim_name = ""
-auto_hit = false
+auto_hit = true
 melee_attack = false
+hit_sound = ExtResource("2_n1mbh")
 draw_sound = ExtResource("1_fnq8l")
 holster_sound = ExtResource("2_rkvqk")
 damage = 0

@@ -272,3 +272,11 @@ func play_weapon_holster_sound() -> void:
 	if sound_to_play:
 		weapon_sound_player.stream = sound_to_play
 		weapon_sound_player.play()
+
+
+func play_hit_sound() -> void:
+	if not current_weapon or not hit_sound_player:
+		return
+	
+	if current_weapon.hit_sound:
+		hit_sound_player.play()

@@ -1,2 +1,63 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Ignore Godot generated import files and directories
+.import/
+*.import
+
+# Ignore Godot export and temporary directories
+.export/
+.export-*.
+export/
+export-debug/
+export-release/
+
+# Ignore mono build artifacts (if using Godot C#)
+.mono/
+
+# Ignore Godot ShaderCache (generated at runtime)
+shader_cache/
+
+# Ignore user-specific/editor metadata
+.editor/
+
+# IDE & editor folders
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Backup and temporary files
+*~
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.swp
+*.swo
+*.swn
+
+# Binary build outputs / libraries
+*.exe
+*.dll
+*.so
+*.dylib
+*.class
+*.o
+*.a
+*.obj
+*.lib
+
+# Blender backup files
+*.blend1
+*.blend2
+*.blend@
+
+# Logs
+*.log
+
+# Godot export presets (usually contains machine-specific paths)
+export_presets.cfg

@@ -1,8 +1,4 @@
 class_name WeaponManager extends Node3D
-"""
-Handles weapon slots, equipping, animations as well as bob effects that react to
-player movement. The overall behaviour is unchanged; the script is just cleaned up.
-"""
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -57,17 +53,15 @@ var weapon_switch_queue: Array[int] = []
 # --------------------------------------------------------------------------
 # Bob tuning values
 # --------------------------------------------------------------------------
-
-@export var WEAPON_BOB_SMOOTHING: float = 8.0
-@export var WEAPON_BOB_MAX_OFFSET: float = 180.0
-@export var WEAPON_BOB_HORIZONTAL_RANGE: float = 110.0
-@export var WEAPON_BOB_VERTICAL_RANGE: float = 95.0
-@export var WEAPON_BOB_SPEED: float = 2.5
-@export var WEAPON_BOB_SPEED_REFERENCE: float = 5.0
-@export var WEAPON_BOB_MIN_SPEED_MULT: float = 0.5
-@export var WEAPON_BOB_MAX_SPEED_MULT: float = 2.5
-@export var WEAPON_BOB_IDLE_INTENSITY: float = 0.3
-@export var WEAPON_BOB_IDLE_SPEED_MULT: float = 0.4
+const WEAPON_BOB_SMOOTHING: float = 8.0
+const WEAPON_BOB_MAX_OFFSET: float = 180.0
+const WEAPON_BOB_HORIZONTAL_RANGE: float = 110.0
+const WEAPON_BOB_VERTICAL_RANGE: float = 95.0
+const WEAPON_BOB_SPEED: float = 2.5
+const WEAPON_BOB_SPEED_REFERENCE: float = 5.0
+const WEAPON_BOB_MIN_SPEED_MULT: float = 0.5
+const WEAPON_BOB_MAX_SPEED_MULT: float = 2.5
+const WEAPON_BOB_IDLE_SPEED_MULT: float = 0.4
 
 # ========================================================================== #
 # Lifecycle
@@ -261,6 +255,7 @@ func play_weapon_draw_sound() -> void:
 	if sound_to_play:
 		weapon_sound_player.stream = sound_to_play
 		weapon_sound_player.play()
+
 
 func play_weapon_holster_sound() -> void:
 	if not current_weapon or not weapon_sound_player:

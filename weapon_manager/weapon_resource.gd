@@ -1,6 +1,7 @@
 class_name WeaponResource extends Resource
 
 enum ShootTypes {
+	None,
 	HitScan,
 	Projectile,
 }
@@ -19,6 +20,8 @@ var weapon_manager: WeaponManager
 @export var auto_hit := false
 @export var melee_attack := false
 @export var hit_sound: AudioStream
+@export var draw_sound: AudioStream
+@export var holster_sound: AudioStream
 @export var damage := 10
 @export var hit_particle: PackedScene
 
@@ -40,6 +43,7 @@ func hit() -> void:
 				collider.take_damage(damage)
 			if collider.is_in_group("destroyable"):
 				collider.queue_free()
+
 
 
 func _calculate_sprite_rotation(normal: Vector3) -> Basis:

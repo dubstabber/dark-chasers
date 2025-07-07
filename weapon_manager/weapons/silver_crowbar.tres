@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="WeaponResource" load_steps=2 format=3 uid="uid://djpa0nptavvfd"]
 
-[ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_a24k3"]
+[ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_kykft"]
 
 [resource]
-script = ExtResource("1_a24k3")
-shoot_type = 0
+script = ExtResource("1_kykft")
+shoot_type = 1
 name = "Silver crowbar"
 slot = 1
 slot_priority = 2

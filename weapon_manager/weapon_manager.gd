@@ -84,7 +84,8 @@ func _process(delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("hit") and current_weapon.shoot_anim_name:
-		animation_player.play(current_weapon.shoot_anim_name)
+		if not animation_player.is_playing():
+			animation_player.play(current_weapon.shoot_anim_name)
 	
 	if is_auto_hitting:
 		if current_weapon.repeat_shoot_anim_name and not animation_player.is_playing():
@@ -134,11 +135,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		is_auto_hitting = true
 	elif event.is_action_released("hit") and is_auto_hitting:
 		is_auto_hitting = false
-		await animation_player.animation_finished
-		if not animation_player.is_playing():
+
+		if animation_player.is_playing():
+			await animation_player.animation_finished
+
+		if is_auto_hitting:
+			return
+
+		if current_weapon and current_weapon.pullout_anim_name and not animation_player.is_playing():
 			animation_player.stop()
+
 			animation_player.current_animation = current_weapon.pullout_anim_name
-			animation_player.seek(animation_player.get_animation(current_weapon.pullout_anim_name).length, true, true)
+			var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
+			if pullout_anim:
+				animation_player.seek(pullout_anim.length, true, true)
 
 	if event.is_action_pressed("hit") and current_weapon and not current_weapon.auto_hit:
 		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon:

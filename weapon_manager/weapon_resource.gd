@@ -17,6 +17,7 @@ var weapon_manager: WeaponManager
 
 @export var pullout_anim_name: String
 @export var shoot_anim_name: String
+@export var repeat_shoot_anim_name: String
 @export var auto_hit := false
 @export var melee_attack := false
 @export var hit_sound: AudioStream

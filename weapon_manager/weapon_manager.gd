@@ -21,6 +21,8 @@ var base_gun_position: Vector2 = Vector2.ZERO
 
 var current_weapon: WeaponResource
 
+var is_auto_hitting := false
+
 # --------------------------------------------------------------------------
 # Weapon switching state management
 # --------------------------------------------------------------------------
@@ -73,15 +75,23 @@ func _ready() -> void:
 	
 	switch_weapon(2) # default
 
+
 func _process(delta: float) -> void:
 	_update_speed(delta)
 	_update_bob(delta)
 	_apply_offsets()
 
+
 func _physics_process(_delta: float) -> void:
-	if Input.is_action_pressed("hit") and current_weapon and current_weapon.auto_hit:
-		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon:
+	if Input.is_action_just_pressed("hit") and current_weapon.shoot_anim_name:
+		animation_player.play(current_weapon.shoot_anim_name)
+	
+	if is_auto_hitting:
+		if current_weapon.repeat_shoot_anim_name and not animation_player.is_playing():
+			animation_player.play(current_weapon.repeat_shoot_anim_name)
+		elif current_weapon.shoot_anim_name and not animation_player.is_playing():
 			animation_player.play(current_weapon.shoot_anim_name)
+
 
 # ========================================================================== #
 # Update helpers
@@ -116,20 +126,23 @@ func _apply_offsets() -> void:
 		gun_base.position = base_gun_position + weapon_bob_amount
 
 
-func _weapon_bob(delta: float, bob_speed: float, hbob: float, vbob: float) -> void:
-	time += delta
-	weapon_bob_amount.x = sin(time * bob_speed) * hbob
-	weapon_bob_amount.y = abs(cos(time * bob_speed) * vbob)
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if player.blocked_movement:
 		return
 
+	if event.is_action_pressed("hit") and current_weapon and current_weapon.auto_hit:
+		is_auto_hitting = true
+	elif event.is_action_released("hit") and is_auto_hitting:
+		is_auto_hitting = false
+		await animation_player.animation_finished
+		if not animation_player.is_playing():
+			animation_player.stop()
+			animation_player.current_animation = current_weapon.pullout_anim_name
+			animation_player.seek(animation_player.get_animation(current_weapon.pullout_anim_name).length, true, true)
+
 	if event.is_action_pressed("hit") and current_weapon and not current_weapon.auto_hit:
 		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon:
 			animation_player.play(current_weapon.shoot_anim_name)
-			hit_sound_player.play()
 
 	if event is InputEventKey and event.pressed:
 		var num: int = event.unicode - KEY_0
@@ -142,7 +155,6 @@ func hit() -> void:
 
 
 func switch_weapon(slot_index: int) -> void:
-	# Check if slot is empty before queuing
 	match slot_index:
 		1: if slot_1.is_empty(): return
 		2: if slot_2.is_empty(): return
@@ -154,13 +166,10 @@ func switch_weapon(slot_index: int) -> void:
 		8: if slot_8.is_empty(): return
 		9: if slot_9.is_empty(): return
 
-	# Add to queue if already switching, or start processing immediately
 	if is_switching_weapon:
-		# Clear queue and add only the latest request to avoid processing outdated requests
 		weapon_switch_queue.clear()
 		weapon_switch_queue.append(slot_index)
 	else:
-		# Start processing immediately
 		is_switching_weapon = true
 		_start_weapon_switch_process(slot_index)
 
@@ -215,6 +224,8 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	var next_weapon := slot[selected_slot_position]
 	if current_weapon == next_weapon:
 		return
+
+	is_auto_hitting = false
 
 	# Put away current weapon if one is equipped
 	if current_weapon and current_weapon.pullout_anim_name:
@@ -279,4 +290,5 @@ func play_hit_sound() -> void:
 		return
 	
 	if current_weapon.hit_sound:
+		hit_sound_player.stream = current_weapon.hit_sound
 		hit_sound_player.play()

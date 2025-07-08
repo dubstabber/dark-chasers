@@ -1,5 +1,8 @@
 class_name WeaponManager extends Node3D
 
+signal lighter_on
+signal lighter_off
+
 # --------------------------------------------------------------------------
 # Runtime state
 # --------------------------------------------------------------------------
@@ -149,6 +152,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
 			if pullout_anim:
 				animation_player.seek(pullout_anim.length, true, true)
+				lighter_off.emit()
 
 	if event.is_action_pressed("hit") and current_weapon and not current_weapon.auto_hit:
 		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon:
@@ -302,3 +306,7 @@ func play_hit_sound() -> void:
 	if current_weapon.hit_sound:
 		hit_sound_player.stream = current_weapon.hit_sound
 		hit_sound_player.play()
+
+
+func light_lighter() -> void:
+	lighter_on.emit()

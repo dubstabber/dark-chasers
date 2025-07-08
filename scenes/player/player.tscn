@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=42 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -23,6 +23,7 @@
 [ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://weapon_manager/weapons/silver_crowbar.tres" id="14_ydl5d"]
 [ext_resource type="Texture2D" uid="uid://sgr1h8ysxxai" path="res://images/player_wieldables/LIT1I0.png" id="15_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://bfhl4ddadkbfx" path="res://images/player_wieldables/LIT1J0.png" id="16_007i1"]
+[ext_resource type="Script" uid="uid://gnxv0loyv5wk" path="res://scenes/player/player_omni_light_3d.gd" id="17_007i1"]
 [ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://weapon_manager/weapons/doom_lighter.tres" id="18_lgqa7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
@@ -610,14 +611,17 @@ tracks/1/path = NodePath("../../../WeaponManager")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.4, 0.64),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0.4, 0.64, 0.68),
+"transitions": PackedFloat32Array(1, 1, 1),
 "values": [{
 "args": [],
 "method": &"play_hit_sound"
 }, {
 "args": [],
 "method": &"play_hit_sound"
+}, {
+"args": [],
+"method": &"light_lighter"
 }]
 }
 
@@ -636,6 +640,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [ExtResource("15_cnsyf"), ExtResource("16_007i1")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(336, 560), Vector2(336, 551)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r05nh"]
@@ -737,11 +753,13 @@ libraries = {
 attenuation_model = 2
 volume_db = -28.235
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="PlayerOmniLight3D" type="OmniLight3D" parent="." node_paths=PackedStringArray("lighter_source")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.677557, 0)
 light_energy = 0.06
 omni_range = 3.4597
 omni_attenuation = 0.196146
+script = ExtResource("17_007i1")
+lighter_source = NodePath("../WeaponManager")
 
 [node name="FootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.376429, 0)

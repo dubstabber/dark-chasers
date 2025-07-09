@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=47 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -23,7 +23,13 @@
 [ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://weapon_manager/weapons/silver_crowbar.tres" id="14_ydl5d"]
 [ext_resource type="Texture2D" uid="uid://sgr1h8ysxxai" path="res://images/player_wieldables/LIT1I0.png" id="15_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://bfhl4ddadkbfx" path="res://images/player_wieldables/LIT1J0.png" id="16_007i1"]
+[ext_resource type="Texture2D" uid="uid://53ig715ll144" path="res://images/player_wieldables/KTCRB0.png" id="17_6cv16"]
 [ext_resource type="Script" uid="uid://gnxv0loyv5wk" path="res://scenes/player/player_omni_light_3d.gd" id="17_007i1"]
+[ext_resource type="Texture2D" uid="uid://ccc1vdntnl5em" path="res://images/player_wieldables/KTCRC0.png" id="18_iqsei"]
+[ext_resource type="Texture2D" uid="uid://dljw7y83l23t7" path="res://images/player_wieldables/KTCRD0.png" id="19_tffgl"]
+[ext_resource type="Texture2D" uid="uid://brmjhaqetq3cc" path="res://images/player_wieldables/KTCRE0.png" id="20_pk8ii"]
+[ext_resource type="Texture2D" uid="uid://bvls0bhv0jwch" path="res://images/player_wieldables/KTCRF0.png" id="21_5mf0n"]
+[ext_resource type="Texture2D" uid="uid://cdm1h63vvbm12" path="res://images/player_wieldables/KTCRG0.png" id="22_4hvnv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
@@ -647,7 +653,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(2, 2)]
+"values": [Vector2(1.5, 1.5)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -659,11 +665,51 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.4),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(780, 807), Vector2(780, 510)]
+"values": [Vector2(700, 780), Vector2(700, 540)]
 }
 
 [sub_resource type="Animation" id="Animation_yk4v5"]
 resource_name = "silver_crowbar_punch"
+length = 0.3
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/GunBase2D/RightHandSlot:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("17_6cv16"), ExtResource("18_iqsei"), ExtResource("19_tffgl"), ExtResource("20_pk8ii"), ExtResource("21_5mf0n"), ExtResource("22_4hvnv")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/GunBase2D/RightHandSlot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(1089, 490), Vector2(995.2, 460), Vector2(901.4, 490), Vector2(807.6, 530), Vector2(713.8, 580), Vector2(620, 630)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../../../WeaponManager")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play_hit_sound"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r05nh"]
 _data = {

@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=41 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -24,7 +24,6 @@
 [ext_resource type="Texture2D" uid="uid://sgr1h8ysxxai" path="res://images/player_wieldables/LIT1I0.png" id="15_cnsyf"]
 [ext_resource type="Texture2D" uid="uid://bfhl4ddadkbfx" path="res://images/player_wieldables/LIT1J0.png" id="16_007i1"]
 [ext_resource type="Script" uid="uid://gnxv0loyv5wk" path="res://scenes/player/player_omni_light_3d.gd" id="17_007i1"]
-[ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://weapon_manager/weapons/doom_lighter.tres" id="18_lgqa7"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
@@ -194,6 +193,84 @@ _data = {
 &"RESET": SubResource("Animation_nqp58"),
 &"jump": SubResource("Animation_j6b8x"),
 &"landing": SubResource("Animation_wf0y5")
+}
+
+[sub_resource type="Animation" id="Animation_lgqa7"]
+resource_name = "doom_light_the_lighter"
+length = 0.8
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.52, 0.64, 0.68, 0.74, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("12_yj68g"), ExtResource("13_ioxgp"), ExtResource("14_cnsyf"), ExtResource("13_ioxgp"), ExtResource("14_cnsyf"), ExtResource("15_cnsyf"), ExtResource("16_007i1"), ExtResource("15_cnsyf")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../../WeaponManager")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4, 0.64, 0.68),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": [],
+"method": &"play_hit_sound"
+}, {
+"args": [],
+"method": &"play_hit_sound"
+}, {
+"args": [],
+"method": &"light_lighter"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.68, 0.74, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(336, 558), Vector2(336, 560), Vector2(336, 551), Vector2(336, 560)]
+}
+
+[sub_resource type="Animation" id="Animation_6cv16"]
+resource_name = "doom_lighter_lighting"
+length = 0.12
+step = 0.02
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("15_cnsyf"), ExtResource("16_007i1")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.06),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(336, 560), Vector2(336, 551)]
 }
 
 [sub_resource type="Animation" id="Animation_fcs02"]
@@ -588,84 +665,6 @@ tracks/2/keys = {
 [sub_resource type="Animation" id="Animation_yk4v5"]
 resource_name = "silver_crowbar_punch"
 
-[sub_resource type="Animation" id="Animation_lgqa7"]
-resource_name = "doom_light_the_lighter"
-length = 0.8
-step = 0.02
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.52, 0.64, 0.68, 0.74, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("12_yj68g"), ExtResource("13_ioxgp"), ExtResource("14_cnsyf"), ExtResource("13_ioxgp"), ExtResource("14_cnsyf"), ExtResource("15_cnsyf"), ExtResource("16_007i1"), ExtResource("15_cnsyf")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../../../WeaponManager")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.4, 0.64, 0.68),
-"transitions": PackedFloat32Array(1, 1, 1),
-"values": [{
-"args": [],
-"method": &"play_hit_sound"
-}, {
-"args": [],
-"method": &"play_hit_sound"
-}, {
-"args": [],
-"method": &"light_lighter"
-}]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.68, 0.74, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(336, 558), Vector2(336, 560), Vector2(336, 551), Vector2(336, 560)]
-}
-
-[sub_resource type="Animation" id="Animation_6cv16"]
-resource_name = "doom_lighter_lighting"
-length = 0.12
-step = 0.02
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.06),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("15_cnsyf"), ExtResource("16_007i1")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Camera3D/GunBase2D/LeftHandSlot:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.06),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(336, 560), Vector2(336, 551)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r05nh"]
 _data = {
 &"RESET": SubResource("Animation_nqp58"),
@@ -781,7 +780,7 @@ script = ExtResource("7_epsiy")
 footstep_material_library = ExtResource("8_aki86")
 
 [node name="WeaponManager" parent="." node_paths=PackedStringArray("player", "gun_base", "animation_player", "hit_sound_player", "weapon_sound_player", "bullet_raycast") instance=ExtResource("5_2logq")]
-slot_1 = Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti"), ExtResource("14_ydl5d"), ExtResource("18_lgqa7")])
+slot_1 = Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti"), ExtResource("14_ydl5d")])
 slot_2 = Array[ExtResource("8_pitn3")]([ExtResource("5_3vbji")])
 player = NodePath("..")
 gun_base = NodePath("../nek/head/eyes/Camera3D/GunBase2D")

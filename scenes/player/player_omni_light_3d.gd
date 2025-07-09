@@ -5,8 +5,9 @@ extends OmniLight3D
 
 
 func _ready() -> void:
-	lighter_source.lighter_on.connect(light_lighter)
-	lighter_source.lighter_off.connect(extinguish_lighter)
+	if lighter_source:
+		lighter_source.lighter_on.connect(light_lighter)
+		lighter_source.lighter_off.connect(extinguish_lighter)
 
 
 func light_lighter() -> void:

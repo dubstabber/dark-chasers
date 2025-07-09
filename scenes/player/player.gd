@@ -1,10 +1,6 @@
 class_name Player extends CharacterBody3D
 
-enum WEAPON_TYPE {
-	FISTS,
-	PISTOL,
-	LIGHTER
-}
+signal weapon_added(weapon: WeaponResource)
 
 const JUMP_VELOCITY := 6.0
 const WALKING_SPEED := 5.0
@@ -235,5 +231,3 @@ func kill(pos = null):
 		color_rect.modulate.a = 0.7
 		Utils.play_sound(Preloads.KILL_PLAYER_SOUND, self)
 
-
-#func add_weapon()

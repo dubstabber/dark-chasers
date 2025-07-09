@@ -76,6 +76,10 @@ func _ready() -> void:
 	right_hand = gun_base.get_node_or_null("RightHandSlot")
 	base_gun_position = gun_base.position
 	
+	# Connect to player's weapon pickup signal
+	if player and player.has_signal("weapon_added"):
+		player.weapon_added.connect(_on_weapon_added)
+	
 	switch_weapon(2) # default
 
 
@@ -128,6 +132,53 @@ func _update_bob(delta: float) -> void:
 func _apply_offsets() -> void:
 	if gun_base:
 		gun_base.position = base_gun_position + weapon_bob_amount
+
+
+# --------------------------------------------------------------------------
+# Weapon pickup helpers
+# --------------------------------------------------------------------------
+func _get_slot_array(slot_index: int) -> Array[WeaponResource]:
+	match slot_index:
+		1: return slot_1
+		2: return slot_2
+		3: return slot_3
+		4: return slot_4
+		5: return slot_5
+		6: return slot_6
+		7: return slot_7
+		8: return slot_8
+		9: return slot_9
+	return []
+
+
+func _on_weapon_added(new_weapon: WeaponResource) -> void:
+	if not new_weapon:
+		return
+	
+	var slot_index: int = clamp(new_weapon.slot, 1, 9)
+	var slot_array: Array[WeaponResource] = _get_slot_array(slot_index)
+	
+	# If we already own this weapon, simply equip it
+	if new_weapon in slot_array:
+		selected_slot_index = slot_index
+		selected_slot_position = slot_array.find(new_weapon)
+		await _equip_from_slot(slot_array)
+		return
+	
+	# Insert weapon respecting slot_priority (lower value = higher priority)
+	var inserted := false
+	for i in range(slot_array.size()):
+		if new_weapon.slot_priority < slot_array[i].slot_priority:
+			slot_array.insert(i, new_weapon)
+			inserted = true
+			break
+	if not inserted:
+		slot_array.append(new_weapon)
+	
+	# Equip the newly picked-up weapon
+	selected_slot_index = slot_index
+	selected_slot_position = slot_array.find(new_weapon)
+	await _equip_from_slot(slot_array)
 
 
 func _unhandled_input(event: InputEvent) -> void:

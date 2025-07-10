@@ -105,4 +105,12 @@ const GLASS_SCRAP_IMAGES := [
 	preload("res://images/particles/GLACI0.png")
 ]
 
+const DOOM_DECAL_IMAGES := [
+	preload("res://images/particles/chip1.png"),
+	preload("res://images/particles/chip2.png"),
+	preload("res://images/particles/chip3.png"),
+	preload("res://images/particles/chip4.png"),
+	preload("res://images/particles/chip5.png")
+]
+
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")

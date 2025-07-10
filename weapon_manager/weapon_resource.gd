@@ -27,6 +27,7 @@ var weapon_manager: WeaponManager
 @export var damage_entity_sound: AudioStream
 @export var damage := 10
 @export var hit_particle: PackedScene
+@export var hit_decal: PackedScene
 
 
 func hit() -> void:
@@ -39,10 +40,13 @@ func hit() -> void:
 				var hit_particle1 = hit_particle.instantiate()
 				weapon_manager.get_tree().root.add_child(hit_particle1)
 				hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
-				# var rotation_basis = _calculate_sprite_rotation(hit_normal)
-				# hit_particle1.global_transform.basis = rotation_basis
-			
 				hit_particle1.connect("animation_finished", hit_particle1.queue_free)
+			if hit_decal and not collider.is_in_group("entity") and not collider.is_in_group("no_decals"):
+				var hit_decal1 = hit_decal.instantiate()
+				collider.add_child(hit_decal1)
+				hit_decal1.global_transform.origin = hit_pos + hit_normal * 0.01
+				var rotation_basis = _calculate_sprite_rotation(hit_normal)
+				hit_decal1.global_transform.basis = rotation_basis
 
 			if collider.is_in_group("entity"):
 				if damage_entity_sound:

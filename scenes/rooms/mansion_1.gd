@@ -107,6 +107,7 @@ func _key_body_entered(body, key_type, event, message_text):
 			enemies.add_child(whiteface)
 			whiteface.current_room = "BigHall"
 			whiteface.position = $NavigationRegion3D/EventSpawners/WhiteFaceSpawn.position
+			# $NavigationRegion3D/WorldEnvironment.queue_free()
 			whiteface.current_target = body
 		"": pass
 		_:

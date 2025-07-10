@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="WeaponResource" load_steps=3 format=3 uid="uid://djpa0nptavvfd"]
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=5 format=3 uid="uid://djpa0nptavvfd"]
 
 [ext_resource type="AudioStream" uid="uid://815opx11tuna" path="res://sounds/sfx/CROWSLAS.wav" id="1_drlb0"]
 [ext_resource type="Script" uid="uid://hdcy154xuw6k" path="res://weapon_manager/weapon_resource.gd" id="1_kykft"]
+[ext_resource type="AudioStream" uid="uid://ccxgqvarvc3vd" path="res://sounds/sfx/CROWHITE.wav" id="1_xt1mj"]
+[ext_resource type="AudioStream" uid="uid://ct6wbmtvj6e64" path="res://sounds/sfx/CROWHITW.wav" id="2_ckm2g"]
 
 [resource]
 script = ExtResource("1_kykft")
@@ -15,4 +17,6 @@ repeat_shoot_anim_name = ""
 auto_hit = true
 melee_attack = true
 hit_sound = ExtResource("1_drlb0")
+damage_wall_sound = ExtResource("2_ckm2g")
+damage_entity_sound = ExtResource("1_xt1mj")
 damage = 20

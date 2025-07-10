@@ -23,6 +23,8 @@ var weapon_manager: WeaponManager
 @export var hit_sound: AudioStream
 @export var draw_sound: AudioStream
 @export var holster_sound: AudioStream
+@export var damage_wall_sound: AudioStream
+@export var damage_entity_sound: AudioStream
 @export var damage := 10
 @export var hit_particle: PackedScene
 
@@ -31,15 +33,22 @@ func hit() -> void:
 	if shoot_type == ShootTypes.HitScan:
 		var collider = weapon_manager.bullet_raycast.get_collider()
 		if collider:
-			var hit_particle1 = hit_particle.instantiate()
-			weapon_manager.get_tree().root.add_child(hit_particle1)
 			var hit_pos = weapon_manager.bullet_raycast.get_collision_point()
 			var hit_normal = weapon_manager.bullet_raycast.get_collision_normal()
-			hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
-			var rotation_basis = _calculate_sprite_rotation(hit_normal)
-			hit_particle1.global_transform.basis = rotation_basis
+			if hit_particle:
+				var hit_particle1 = hit_particle.instantiate()
+				weapon_manager.get_tree().root.add_child(hit_particle1)
+				hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
+				var rotation_basis = _calculate_sprite_rotation(hit_normal)
+				hit_particle1.global_transform.basis = rotation_basis
 			
-			hit_particle1.connect("animation_finished", hit_particle1.queue_free)
+				hit_particle1.connect("animation_finished", hit_particle1.queue_free)
+
+			if collider.is_in_group("entity"):
+				if damage_entity_sound:
+					Utils.play_sound(damage_entity_sound, weapon_manager.get_tree().root, hit_pos)
+			elif damage_wall_sound:
+				Utils.play_sound(damage_wall_sound, weapon_manager.get_tree().root, hit_pos)
 			if collider.has_method("take_damage"):
 				collider.take_damage(damage)
 			if collider.is_in_group("destroyable"):

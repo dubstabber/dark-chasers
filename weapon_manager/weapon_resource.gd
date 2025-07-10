@@ -39,8 +39,8 @@ func hit() -> void:
 				var hit_particle1 = hit_particle.instantiate()
 				weapon_manager.get_tree().root.add_child(hit_particle1)
 				hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
-				var rotation_basis = _calculate_sprite_rotation(hit_normal)
-				hit_particle1.global_transform.basis = rotation_basis
+				# var rotation_basis = _calculate_sprite_rotation(hit_normal)
+				# hit_particle1.global_transform.basis = rotation_basis
 			
 				hit_particle1.connect("animation_finished", hit_particle1.queue_free)
 

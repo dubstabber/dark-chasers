@@ -227,7 +227,7 @@ texture = ExtResource("2_iaafa")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics"]
 libraries = {
-"": SubResource("AnimationLibrary_ali5n")
+&"": SubResource("AnimationLibrary_ali5n")
 }
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 
-[node name="Enemy" type="CharacterBody3D" groups=["enemy"]]
+[node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
 collision_mask = 45
 slide_on_ceiling = false

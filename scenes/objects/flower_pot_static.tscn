@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_cdj4w"]
 size = Vector3(0.232178, 0.508789, 0.275635)
 
-[node name="FlowerPotStatic" type="StaticBody3D"]
+[node name="FlowerPotStatic" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 

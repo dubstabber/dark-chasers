@@ -10766,7 +10766,7 @@ shape = SubResource("ConcavePolygonShape3D_yw4t8")
 mesh = SubResource("ArrayMesh_ia3yh")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Map/MAP01_137"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Map/MAP01_137" groups=["no_decals"]]
 collision_layer = 4
 collision_mask = 0
 
@@ -10777,7 +10777,7 @@ shape = SubResource("ConcavePolygonShape3D_nehyg")
 mesh = SubResource("ArrayMesh_lbsyv")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Map/MAP01_138"]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Map/MAP01_138" groups=["no_decals"]]
 collision_layer = 4
 collision_mask = 0
 
@@ -12997,21 +12997,21 @@ shape = SubResource("BoxShape3D_xwmtc")
 
 [node name="TextureFixes" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="Mirror" type="Node3D" parent="NavigationRegion3D/TextureFixes"]
+[node name="Mirror" type="Node3D" parent="NavigationRegion3D/TextureFixes" groups=["no_decals"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.159, 203.322, -28.48)
 script = ExtResource("194_0vynp")
 size = Vector2(0.8, 0.96)
 ResolutionPerUnit = 400
 MirrorColor = Color(0.854902, 0.847059, 0.839216, 1)
 
-[node name="Mirror2" type="Node3D" parent="NavigationRegion3D/TextureFixes"]
+[node name="Mirror2" type="Node3D" parent="NavigationRegion3D/TextureFixes" groups=["no_decals"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.319, 203.233, -23.367)
 script = ExtResource("194_0vynp")
 size = Vector2(0.65, 0.82)
 ResolutionPerUnit = 400
 MirrorColor = Color(0.854902, 0.847059, 0.839216, 1)
 
-[node name="Mirror3" type="Node3D" parent="NavigationRegion3D/TextureFixes"]
+[node name="Mirror3" type="Node3D" parent="NavigationRegion3D/TextureFixes" groups=["no_decals"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.8821, 203.319, -23.3566)
 script = ExtResource("194_0vynp")
 size = Vector2(0.81, 0.97)

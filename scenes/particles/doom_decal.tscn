@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://ddsofvjmxcpmk"]
+
+[ext_resource type="Script" uid="uid://bo6nuo88gh3or" path="res://scenes/particles/doom_decal.gd" id="1_21ags"]
+
+[node name="DoomDecal" type="Sprite3D"]
+modulate = Color(0.144063, 0.144063, 0.144063, 1)
+pixel_size = 0.007
+script = ExtResource("1_21ags")

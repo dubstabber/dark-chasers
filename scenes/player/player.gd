@@ -192,11 +192,14 @@ func _physics_process(delta):
 
 		if Input.is_action_just_pressed("use"):
 			var collider = interaction.get_collider()
-			if collider: 
-				var parent = collider.get_parent()
-				if parent.is_in_group("door") and parent.can_manual_open:
-					parent.open(collider.name)
-				
+			if collider:
+				var root_node = collider.get_parent()
+				if root_node is Openable:
+					if root_node.has_method("open_with_point"):
+						root_node.open_with_point(interaction.get_collision_point())
+					else:
+						root_node.open(collider.name)
+
 				if collider.is_in_group("button"):
 					collider.press(self)
 			if transit_pos:
@@ -231,4 +234,3 @@ func kill(pos = null):
 		killed = true
 		color_rect.modulate.a = 0.7
 		Utils.play_sound(Preloads.KILL_PLAYER_SOUND, self)
-

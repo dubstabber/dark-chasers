@@ -1,4 +1,4 @@
-[gd_scene load_steps=1180 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1182 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -203,6 +203,8 @@
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="Shader" uid="uid://c4jx80hgp3v5y" path="res://shaders/adjust_mansion_wall.gdshader" id="178_1x7r2"]
 [ext_resource type="Shader" uid="uid://cvr26j12fjs1q" path="res://shaders/invert_y.gdshader" id="179_6qbc7"]
+[ext_resource type="PackedScene" uid="uid://btyxvfk53peer" path="res://scenes/objects/test_door.tscn" id="179_a4yma"]
+[ext_resource type="AudioStream" uid="uid://cwtqpiklh7vhx" path="res://sounds/sfx/DOORLOCK.ogg" id="180_8paui"]
 [ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 [ext_resource type="Shader" uid="uid://hxptfitnb8b4" path="res://shaders/adjust_blink_wall.gdshader" id="183_veal5"]
@@ -13972,6 +13974,13 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.28233, 2.56445, 0.01)
 material = SubResource("ShaderMaterial_dgm2s")
+
+[node name="TestDoor" parent="Doors" instance=ExtResource("179_a4yma")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.9808, 203.48, -30.0378)
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
+locked_sound = ExtResource("180_8paui")
+allow_left = true
 
 [node name="Decorations" type="Node3D" parent="."]
 

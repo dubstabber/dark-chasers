@@ -15,11 +15,8 @@ const GOLD_KEY_IMAGE := preload("res://images/items/YKGOA0.png")
 const EMERALD_KEY_IMAGE := preload("res://images/items/EMERA0.png")
 const SILVER_KEY_IMAGE := preload("res://images/items/SILVA0.png")
 
-const DOOR_LOCKED_SOUND := preload("res://sounds/sfx/DOORLOCK.ogg")
+const DOOR_LOCKED_SOUND := preload("res://sounds/sfx/DOORLOCK.ogg") # TODO: remove
 const KEY_COLLECTED_SOUND := preload("res://sounds/sfx/DSKEYPIC.wav")
-
-const OPEN_DOOR_SOUND := preload("res://sounds/sfx/DSDOROPN.ogg")
-const CLOSE_DOOR_SOUND := preload("res://sounds/sfx/DSDORCLS.ogg")
 
 const KILL_PLAYER_SOUND := preload("res://sounds/sfx/DSSLOP.wav")
 

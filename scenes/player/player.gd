@@ -194,12 +194,10 @@ func _physics_process(delta):
 			var collider = interaction.get_collider()
 			if collider:
 				var root_node = collider.get_parent()
-				if root_node is Openable:
+				if root_node is Openable or root_node.is_in_group("door"):
 					if root_node.has_method("open_with_point"):
 						root_node.open_with_point(interaction.get_collision_point())
-					else:
-						root_node.open(collider.name)
-
+					
 				if collider.is_in_group("button"):
 					collider.press(self)
 			if transit_pos:

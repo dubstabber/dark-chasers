@@ -1,6 +1,6 @@
 extends Node3D
 
-class_name Openable
+class_name DoorTest
 
 signal door_locked(text)
 

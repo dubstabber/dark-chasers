@@ -1,0 +1,66 @@
+[gd_scene load_steps=9 format=3 uid="uid://cao1qnqp5htgl"]
+
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_vdnvr"]
+[ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="2_e7ax3"]
+[ext_resource type="ArrayMesh" uid="uid://dpds5yx872ds1" path="res://models/mansion1/door1/door1.res" id="2_ougaw"]
+[ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="3_j8fdm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uw3m6"]
+size = Vector3(1.28, 2.56, 0.321)
+
+[sub_resource type="Animation" id="Animation_vdnvr"]
+resource_name = "Open"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ougaw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ougaw"]
+_data = {
+&"Open": SubResource("Animation_vdnvr"),
+&"RESET": SubResource("Animation_ougaw")
+}
+
+[node name="AoDoor1" type="Node3D" groups=["door"]]
+script = ExtResource("1_vdnvr")
+open_sound = ExtResource("2_e7ax3")
+close_sound = ExtResource("3_j8fdm")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D"]
+mesh = ExtResource("2_ougaw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
+shape = SubResource("BoxShape3D_uw3m6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ougaw")
+}

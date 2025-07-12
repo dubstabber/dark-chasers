@@ -148,11 +148,12 @@ func _on_kill_zone_body_entered(body):
 func _on_interaction_timer_timeout():
 	var collider = interaction_ray.get_collider()
 	if collider:
-		var parent = collider.get_parent()
-		if parent.is_in_group("door") and parent.can_manual_open and can_open_door:
-			parent.open(collider.name)
-		elif is_wandering:
-			direction = Vector3(-direction.x, 0, -direction.z)
+		var root_node = collider.get_parent()
+		if root_node is Openable:
+			if root_node.has_method("open_with_point") and can_open_door:
+				root_node.open_with_point(interaction_ray.get_collision_point())
+			elif is_wandering:
+				direction = Vector3(-direction.x, 0, -direction.z)
 
 
 func _on_wandering_timer_timeout():

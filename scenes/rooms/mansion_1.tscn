@@ -13976,11 +13976,20 @@ size = Vector3(1.28233, 2.56445, 0.01)
 material = SubResource("ShaderMaterial_dgm2s")
 
 [node name="TestDoor" parent="Doors" instance=ExtResource("179_a4yma")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.9808, 203.48, -30.0378)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56.9808, 203.48, -29.0265)
 open_sound = ExtResource("146_cfh8b")
 close_sound = ExtResource("147_wb10i")
 locked_sound = ExtResource("180_8paui")
-allow_left = true
+allow_right = true
+
+[node name="TestDoor2" parent="Doors" instance=ExtResource("179_a4yma")]
+transform = Transform3D(0.660015, 0, -0.751253, 0, 1, 0, 0.751253, 0, 0.660015, -54.8691, 203.48, -30.3386)
+open_sound = ExtResource("146_cfh8b")
+close_sound = ExtResource("147_wb10i")
+locked_sound = ExtResource("180_8paui")
+allow_front = false
+allow_back = false
+allow_right = true
 
 [node name="Decorations" type="Node3D" parent="."]
 

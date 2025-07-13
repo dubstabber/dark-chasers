@@ -20,4 +20,3 @@ func _body_entered(body):
 		if temporary_camera: temporary_camera.set_current(true)
 		if door_to_open: door_to_open.open()
 		event_triggered.emit(body, event_name)
-

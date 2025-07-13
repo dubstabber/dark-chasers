@@ -1,5 +1,4 @@
 extends Node3D
-
 class_name Openable
 
 signal door_locked(text)
@@ -34,6 +33,7 @@ const _SIDE_NAMES := {
 var _is_open := false
 var _map: Node3D
 var _playing_forward := true
+var _has_reversed_due_block := false
 
 @onready var _body = $"AnimatableBody3D"
 @onready var _anim: AnimationPlayer = $"AnimationPlayer"
@@ -72,8 +72,13 @@ func _toggle_door(force := false) -> void:
 	if _anim.is_playing():
 		if not can_interrupt:
 			return
-		
-		if _playing_forward:
+
+		if _anim.current_animation == "Open" and _anim.speed_scale < 0:
+			_anim.speed_scale = abs(_anim.speed_scale)
+			_playing_forward = true
+			_has_reversed_due_block = true
+			Utils.play_sound(open_sound, self)
+		elif _playing_forward:
 			_anim.play_backwards("Open")
 			_playing_forward = false
 			Utils.play_sound(close_sound, self)
@@ -84,6 +89,8 @@ func _toggle_door(force := false) -> void:
 		return
 
 	if _is_open:
+		if (not can_interrupt) and not force:
+			return
 		_anim.play_backwards("Open")
 		_playing_forward = false
 		Utils.play_sound(close_sound, self)
@@ -221,3 +228,64 @@ func open_with_point(hit_pos: Vector3) -> void:
 		if locked_sound:
 			Utils.play_sound(locked_sound, self)
 		door_locked.emit(locked_message)
+
+
+# --- Blocking & Auto-reopen logic -------------------------------------------------
+
+func _physics_process(_delta: float) -> void:
+	if _anim and _anim.is_playing() and not _playing_forward and can_interrupt and not _has_reversed_due_block:
+		if _is_blocked():
+			_toggle_door()
+
+
+func _is_blocked() -> bool:
+	var global_aabb: AABB = _get_global_door_aabb()
+
+	var box_shape := BoxShape3D.new()
+	box_shape.size = global_aabb.size
+
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = box_shape
+	query.transform = Transform3D(Basis.IDENTITY, global_aabb.position + global_aabb.size * 0.5)
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	if _body:
+		query.exclude = [_body.get_rid()]
+
+	var space_state := get_world_3d().direct_space_state
+	var results: Array[Dictionary] = space_state.intersect_shape(query, 8)
+	for hit in results:
+		var collider: Object = hit.get("collider")
+		if collider and _is_blocking_body(collider):
+			if collider is Node3D:
+				var local_p: Vector3 = _body.to_local(collider.global_transform.origin)
+				var side_name: String = _get_side_from_local_point(local_p)
+				if not is_side_allowed(side_name):
+					continue
+			return true
+	return false
+
+
+func _is_blocking_body(body: Object) -> bool:
+	var node: Node = body
+	while node:
+		if node is CharacterBody3D or node is RigidBody3D:
+			return true
+		node = node.get_parent()
+	return false
+
+
+func _get_global_door_aabb() -> AABB:
+	var local_aabb := _get_door_aabb()
+	var min_v := Vector3(INF, INF, INF)
+	var max_v := Vector3(-INF, -INF, -INF)
+	for x_sel in [0.0, 1.0]:
+		for y_sel in [0.0, 1.0]:
+			for z_sel in [0.0, 1.0]:
+				var corner_local := local_aabb.position + Vector3(local_aabb.size.x * x_sel,
+					local_aabb.size.y * y_sel,
+					local_aabb.size.z * z_sel)
+				var corner_global: Vector3 = _body.to_global(corner_local)
+				min_v = min_v.min(corner_global)
+				max_v = max_v.max(corner_global)
+	return AABB(min_v, max_v - min_v)

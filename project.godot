@@ -65,6 +65,12 @@ bsp={
 },
 "water_scene_template": "res://addons/bsp_importer/water_example_template.tscn"
 }
+animation_library={
+&"gltf/embedded_image_handling": 2
+}
+scene={
+&"gltf/embedded_image_handling": 2
+}
 
 [input]
 

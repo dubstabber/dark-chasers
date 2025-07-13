@@ -1,4 +1,4 @@
-[gd_scene load_steps=1175 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1171 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -78,8 +78,6 @@
 [ext_resource type="Texture2D" uid="uid://vnoudtxwhyar" path="res://models/mansion1/mansion1_HRFRDRMR.png" id="67_xlctd"]
 [ext_resource type="Texture2D" uid="uid://b33bi3pkxbi6q" path="res://models/mansion1/mansion1_CMFLESH.png" id="68_58ysr"]
 [ext_resource type="Texture2D" uid="uid://ddb40dxd7pyqd" path="res://models/mansion1/mansion1_CBSCTCH.png" id="69_1j2d7"]
-[ext_resource type="Texture2D" uid="uid://dpn7n2bfbq2dc" path="res://images/textures/HRFRDOOR.png" id="69_228et"]
-[ext_resource type="Texture2D" uid="uid://cl2a8kmekn451" path="res://images/textures/HRFRDRMR.png" id="70_0i33l"]
 [ext_resource type="Texture2D" uid="uid://yp4jlhwtbrut" path="res://models/mansion1/mansion1_CSTAYOUT.png" id="70_kqsak"]
 [ext_resource type="Shader" uid="uid://c2dcn0hevbk4h" path="res://shaders/imtrtx.gdshader" id="71_du04h"]
 [ext_resource type="Texture2D" uid="uid://qmnabicu868j" path="res://models/mansion1/mansion1_IMTRTX.png" id="71_jic2e"]
@@ -194,10 +192,10 @@
 [ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
 [ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
 [ext_resource type="PackedScene" uid="uid://bo5dwiemer8k4" path="res://scenes/objects/candle.tscn" id="168_mswtm"]
+[ext_resource type="PackedScene" uid="uid://coi5t3tlf2d2p" path="res://scenes/objects/ao_door2.tscn" id="170_0l5v2"]
 [ext_resource type="Texture2D" uid="uid://bukqoux87u3bp" path="res://images/textures/HRBLKPLE.png" id="177_c4kb2"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
 [ext_resource type="Shader" uid="uid://c4jx80hgp3v5y" path="res://shaders/adjust_mansion_wall.gdshader" id="178_1x7r2"]
-[ext_resource type="Shader" uid="uid://cvr26j12fjs1q" path="res://shaders/invert_y.gdshader" id="179_6qbc7"]
 [ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 [ext_resource type="Shader" uid="uid://hxptfitnb8b4" path="res://shaders/adjust_blink_wall.gdshader" id="183_veal5"]
@@ -9181,36 +9179,6 @@ albedo_texture = ExtResource("41_7xeps")
 transparency = 1
 albedo_texture = ExtResource("181_jptga")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yuj2i"]
-render_priority = 1
-shader = ExtResource("179_6qbc7")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("69_228et")
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_1v21g"]
-render_priority = 1
-shader = ExtResource("179_6qbc7")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("70_0i33l")
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dgm2s"]
 render_priority = 0
 shader = ExtResource("183_veal5")
@@ -13204,6 +13172,13 @@ texture = ExtResource("153_h4sxn")
 
 [node name="Doors" type="Node3D" parent="."]
 
+[node name="HingeAoDoor" parent="Doors" instance=ExtResource("170_0l5v2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.77)
+locked_message = "The door is locked."
+
+[node name="AoDoor1" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.555, 203.481, -29.77)
+
 [node name="Door" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9625, 203.474, -27.0733)
 
@@ -13222,9 +13197,6 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.292, 2.55, 0.16)
 material = SubResource("StandardMaterial3D_5ehfr")
-
-[node name="AoDoor1" parent="Doors" instance=ExtResource("161_b5j3m")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.555, 203.481, -29.77)
 
 [node name="Door3" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9699, 203.474, -27.042)
@@ -13762,25 +13734,6 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.91309, 1.59375, 0.09375)
 material = SubResource("StandardMaterial3D_d2ngu")
-
-[node name="HingeDoor" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.68, 203.48, -38.7951)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/HingeDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.639999, 0, 0)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.28, 2.55, 0.06)
-material = SubResource("ShaderMaterial_yuj2i")
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/HingeDoor"]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0.639999, 0, 0.0673828)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.28, 2.55, 0.06)
-material = SubResource("ShaderMaterial_1v21g")
 
 [node name="BlinkWall" type="CSGBox3D" parent="Doors" groups=["destroyable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0785, 203.474, 73.273)

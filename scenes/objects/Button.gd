@@ -36,4 +36,3 @@ func change_sprite():
 		"circle":
 			if is_pressed: sprite_3d.texture = Preloads.BUTTON_DOWN_1_IMAGE
 			else: sprite_3d.texture = Preloads.BUTTON_UP_1_IMAGE
-

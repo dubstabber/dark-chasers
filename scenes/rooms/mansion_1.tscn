@@ -12346,6 +12346,11 @@ disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -75.9618, 202.198, -29.1142)
 current_room = "FirstFloor"
 
+[node name="Rat6" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -77.7027, 202.198, -29.1142)
+current_room = "FirstFloor"
+is_wandering = false
+
 [node name="Rat2" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -26.541, 202.678, 136.024)
 current_room = "ThirdFloor"
@@ -13651,9 +13656,6 @@ material = SubResource("ShaderMaterial_dgm2s")
 
 [node name="WhiteChair" parent="Decorations" instance=ExtResource("142_1au2x")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -74.5144, 202.8, -26.0547)
-
-[node name="WhiteChair11" parent="Decorations" instance=ExtResource("142_1au2x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.6443, 202.75, -20.5824)
 
 [node name="WhiteChair2" parent="Decorations" instance=ExtResource("142_1au2x")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -74.4766, 202.801, -23.0837)

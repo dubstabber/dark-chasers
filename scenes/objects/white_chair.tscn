@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b4vbbj8tneui0"]
+[gd_scene load_steps=13 format=3 uid="uid://b4vbbj8tneui0"]
 
 [ext_resource type="Script" uid="uid://bp83mcodwwmax" path="res://scenes/objects/white_chair.gd" id="1_kxg7w"]
 [ext_resource type="Texture2D" uid="uid://cs6agq77a5e47" path="res://images/objects/white-chair/CHAIA6.png" id="2_5c3hp"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dwhdy10wcvdd1" path="res://images/objects/white-chair/CHAIA7.png" id="4_xw2ru"]
 [ext_resource type="Texture2D" uid="uid://gd40vw8nqlwe" path="res://images/objects/white-chair/CHAIA2.png" id="6_o7i6e"]
 [ext_resource type="Texture2D" uid="uid://cri26ovdhn3nf" path="res://images/objects/white-chair/CHAIA3.png" id="7_yxnmu"]
+[ext_resource type="PackedScene" uid="uid://bqm8xvn4qxqxq" path="res://scenes/components/directional_sprite_animator.tscn" id="10_t6lfe"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xpsgd"]
 size = Vector3(1.5, 1, 1.5)
@@ -89,11 +90,14 @@ script = ExtResource("1_kxg7w")
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, -0.249544, 0)
 shape = SubResource("BoxShape3D_xpsgd")
 
-[node name="RotationController" type="Node3D" parent="."]
-
-[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="RotationController"]
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 billboard = 2
 shaded = true
 render_priority = 1
 sprite_frames = SubResource("SpriteFrames_64spv")
-animation = &"front-left"
+animation = &"front"
+frame_progress = 1.0
+
+[node name="DirectionalSpriteAnimator" parent="." instance=ExtResource("10_t6lfe")]
+sprite_node_path = NodePath("../AnimatedSprite3D")
+reference_node_path = NodePath("..")

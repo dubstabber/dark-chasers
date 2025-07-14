@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bu47mjytnvtv0"]
+[gd_scene load_steps=7 format=3 uid="uid://bu47mjytnvtv0"]
 
-[ext_resource type="Texture2D" uid="uid://d213pl8vn0noo" path="res://images/particles/PUFFA0.png" id="1_57yt8"]
-[ext_resource type="Texture2D" uid="uid://b8qo8qc6lb7yx" path="res://images/particles/PUFFB0.png" id="2_h2a7k"]
-[ext_resource type="Texture2D" uid="uid://dr3r0o2o70l53" path="res://images/particles/PUFFC0.png" id="3_p1ops"]
-[ext_resource type="Texture2D" uid="uid://coirl182fitam" path="res://images/particles/PUFFD0.png" id="4_gq01l"]
+[ext_resource type="Texture2D" uid="uid://bu475sgyw8pol" path="res://images/particles/PUFFA0.png" id="1_57yt8"]
+[ext_resource type="Texture2D" uid="uid://7jacqjfdqljp" path="res://images/particles/PUFFB0.png" id="2_h2a7k"]
+[ext_resource type="Texture2D" uid="uid://1um4vkly1wk7" path="res://images/particles/PUFFC0.png" id="3_p1ops"]
+[ext_resource type="Texture2D" uid="uid://d02jwhnt0fn20" path="res://images/particles/PUFFD0.png" id="4_gq01l"]
+[ext_resource type="Script" uid="uid://8tmy1t4br2b4" path="res://scenes/particles/puff.gd" id="5_d412j"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fdipe"]
 animations = [{
@@ -22,10 +23,15 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 20.0
+"speed": 8.0
 }]
 
 [node name="Puff" type="AnimatedSprite3D"]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+modulate = Color(1, 1, 1, 0.811765)
 billboard = 2
+shaded = true
 sprite_frames = SubResource("SpriteFrames_fdipe")
 autoplay = "default"
+frame_progress = 1.0
+script = ExtResource("5_d412j")

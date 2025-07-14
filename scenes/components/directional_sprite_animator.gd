@@ -7,7 +7,8 @@ signal sprite_changed(new_sprite_name: String)
 
 enum DirectionMode {
 	FOUR_DIRECTIONAL, ## 4 directions: front, right, back, left (90° segments)
-	EIGHT_DIRECTIONAL ## 8 directions: front, front-right, right, back-right, back, back-left, left, front-left (45° segments)
+	EIGHT_DIRECTIONAL, ## 8 directions: front, front-right, right, back-right, back, back-left, left, front-left (45° segments)
+	EIGHT_DIRECTIONAL_WITH_FLIPPING ## 8 directions using 5 sprites with horizontal flipping: front, front-side, side, back-side, back (45° segments)
 }
 
 @export_group("Configuration")
@@ -32,6 +33,7 @@ var _last_segment := -1
 var _update_timer := 0.0
 var _update_interval := 0.1
 var _current_sprite_name := ""
+var _current_flip_h := false # Track current horizontal flip state
 
 func _ready():
 	_initialize_nodes()
@@ -76,13 +78,26 @@ func _validate_sprite_configuration():
 		sprite_names = _get_default_sprite_names()
 
 func _get_expected_sprite_count() -> int:
-	return 4 if direction_mode == DirectionMode.FOUR_DIRECTIONAL else 8
+	match direction_mode:
+		DirectionMode.FOUR_DIRECTIONAL:
+			return 4
+		DirectionMode.EIGHT_DIRECTIONAL:
+			return 8
+		DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING:
+			return 5 # front, front-side, side, back-side, back
+		_:
+			return 8
 
 func _get_default_sprite_names() -> Array[String]:
-	if direction_mode == DirectionMode.FOUR_DIRECTIONAL:
-		return ["front", "right", "back", "left"]
-	else:
-		return ["front", "front-right", "right", "back-right", "back", "back-left", "left", "front-left"]
+	match direction_mode:
+		DirectionMode.FOUR_DIRECTIONAL:
+			return ["front", "right", "back", "left"]
+		DirectionMode.EIGHT_DIRECTIONAL:
+			return ["front", "front-right", "right", "back-right", "back", "back-left", "left", "front-left"]
+		DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING:
+			return ["front", "front-side", "side", "back-side", "back"]
+		_:
+			return ["front", "front-right", "right", "back-right", "back", "back-left", "left", "front-left"]
 
 func _update_sprite_animation():
 	# Smart camera detection - handle dynamic camera changes
@@ -132,9 +147,14 @@ func _update_sprite_animation():
 	
 	_last_segment = segment
 	
-	if segment >= 0 and segment < sprite_names.size():
-		var new_sprite_name = sprite_names[segment]
-		_set_sprite_animation(new_sprite_name)
+	if segment >= 0:
+		match direction_mode:
+			DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING:
+				_handle_sprite_flipping_8_directional(segment)
+			_:
+				if segment < sprite_names.size():
+					var new_sprite_name = sprite_names[segment]
+					_set_sprite_animation(new_sprite_name)
 
 func _calculate_viewing_segment(camera: Camera3D) -> int:
 	var ref_pos = _reference_node.global_position
@@ -204,18 +224,64 @@ func _calculate_8_directional_segment(angle_degrees: float) -> int:
 	# Ensure we stay in 0-7 range
 	return segment % 8
 
-func _set_sprite_animation(sprite_name: String):
-	if _current_sprite_name == sprite_name:
+func _handle_sprite_flipping_8_directional(segment: int):
+	# Map 8 segments to 5 sprite names with flipping
+	# Segments: 0=front, 1=front-right, 2=right, 3=back-right, 4=back, 5=back-left, 6=left, 7=front-left
+	# Sprite mapping with flipping:
+	# 0: front (no flip)
+	# 1: front-side (no flip)
+	# 2: side (no flip)
+	# 3: back-side (no flip)
+	# 4: back (no flip)
+	# 5: back-side (flip)
+	# 6: side (flip)
+	# 7: front-side (flip)
+	var sprite_index: int
+	var flip_h: bool = false
+
+	match segment:
+		0: # front
+			sprite_index = 0
+		1: # front-right -> front-side
+			sprite_index = 1
+		2: # right -> side
+			sprite_index = 2
+		3: # back-right -> back-side
+			sprite_index = 3
+		4: # back
+			sprite_index = 4
+		5: # back-left -> back-side (flipped)
+			sprite_index = 3
+			flip_h = true
+		6: # left -> side (flipped)
+			sprite_index = 2
+			flip_h = true
+		7: # front-left -> front-side (flipped)
+			sprite_index = 1
+			flip_h = true
+
+	if sprite_index < sprite_names.size():
+		var sprite_name = sprite_names[sprite_index]
+		_set_sprite_animation(sprite_name, flip_h)
+
+
+func _set_sprite_animation(sprite_name: String, flip_h: bool = false):
+	if _current_sprite_name == sprite_name and _current_flip_h == flip_h:
 		return
-		
+
 	_current_sprite_name = sprite_name
-	
+	_current_flip_h = flip_h
+
 	if _sprite_node.has_method("play"):
 		if _sprite_node.animation != sprite_name:
 			_sprite_node.play(sprite_name)
 	elif _sprite_node.has_method("set_texture"):
 		push_warning("DirectionalSpriteAnimator: Sprite3D texture switching not implemented")
-	
+
+	# Apply horizontal flipping if the sprite node supports it
+	if "flip_h" in _sprite_node:
+		_sprite_node.flip_h = flip_h
+
 	sprite_changed.emit(sprite_name)
 
 func set_enabled(value: bool):
@@ -252,6 +318,16 @@ func setup_4_directional(custom_sprite_names: Array[String] = []):
 ## Configure the component for 8-directional mode with default sprite names
 func setup_8_directional(custom_sprite_names: Array[String] = []):
 	direction_mode = DirectionMode.EIGHT_DIRECTIONAL
+	if custom_sprite_names.is_empty():
+		sprite_names = _get_default_sprite_names()
+	else:
+		sprite_names = custom_sprite_names
+	_validate_sprite_configuration()
+	force_update()
+
+## Configure the component for 8-directional mode with sprite flipping (uses 5 sprites)
+func setup_8_directional_flipping(custom_sprite_names: Array[String] = []):
+	direction_mode = DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING
 	if custom_sprite_names.is_empty():
 		sprite_names = _get_default_sprite_names()
 	else:
@@ -298,13 +374,26 @@ func debug_angle_info() -> Dictionary:
 	if adjusted_angle >= 360:
 		adjusted_angle -= 360
 
+	var mode_name: String
+	match direction_mode:
+		DirectionMode.FOUR_DIRECTIONAL:
+			mode_name = "4-directional"
+		DirectionMode.EIGHT_DIRECTIONAL:
+			mode_name = "8-directional"
+		DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING:
+			mode_name = "8-directional-flipping"
+		_:
+			mode_name = "unknown"
+
 	return {
-		"direction_mode": "4-directional" if direction_mode == DirectionMode.FOUR_DIRECTIONAL else "8-directional",
+		"direction_mode": mode_name,
 		"angle_degrees": angle_degrees,
 		"adjusted_angle": adjusted_angle,
 		"segment_size": segment_size,
 		"segment": segment,
-		"sprite_name": sprite_names[segment] if segment < sprite_names.size() else "unknown",
+		"sprite_name": _current_sprite_name,
+		"sprite_flipping": direction_mode == DirectionMode.EIGHT_DIRECTIONAL_WITH_FLIPPING,
+		"flip_h": _current_flip_h,
 		"forward_component": forward_component,
 		"right_component": right_component
 	}

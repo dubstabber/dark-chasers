@@ -19,7 +19,7 @@ func _ready():
 func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
-	#player.blocked_movement = true
+	# player.blocked_movement = true
 	player.hud = hud
 	#hud.show_black_screen()
 	
@@ -111,7 +111,7 @@ func _key_body_entered(body, key_type, event, message_text):
 			whiteface.current_target = body
 		"": pass
 		_:
-			prints("unknown event: '",event,"'")
+			prints("unknown event: '", event, "'")
 
 
 func _handle_button_event(body, event):
@@ -165,7 +165,7 @@ func _handle_button_event(body, event):
 			hud.show_event_text("You: I activated the switch. I better get out of here quickly!", false, 3.0)
 		"": pass
 		_:
-			prints("unknown event: '",event,"'")
+			prints("unknown event: '", event, "'")
 
 
 func _handle_area_event(body: CharacterBody3D, event):
@@ -240,13 +240,13 @@ func _handle_area_event(body: CharacterBody3D, event):
 			if "kill" in body:
 				body.kill()
 		_:
-			prints("unknown event: '",event,"'")
+			prints("unknown event: '", event, "'")
 
 
 func _on_custom_event(event):
 	match event:
 		"monster disappeared":
-			var random_text_idx = randi_range(0,4)
+			var random_text_idx = randi_range(0, 4)
 			match random_text_idx:
 				0:
 					hud.show_event_text("You: I think he dissapeared..", false, 3.0)
@@ -266,7 +266,7 @@ func _on_custom_event(event):
 			hud.show_event_text("You: Whatever that THING was... it's gone...", false, 3.0)
 		"": pass
 		_:
-			prints("unknown event: '",event,"'")
+			prints("unknown event: '", event, "'")
 
 
 func _door_locked(text):

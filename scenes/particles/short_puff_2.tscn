@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cdwcuxvyaeruk"]
+
+[ext_resource type="Texture2D" uid="uid://1um4vkly1wk7" path="res://images/particles/PUFFC0.png" id="1_uoq8i"]
+[ext_resource type="Texture2D" uid="uid://d02jwhnt0fn20" path="res://images/particles/PUFFD0.png" id="2_83cdt"]
+[ext_resource type="Script" uid="uid://2u1wqeau3guu" path="res://scenes/particles/short_puff_2.gd" id="3_83cdt"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cthep"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_uoq8i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_83cdt")
+}],
+"loop": false,
+"name": &"default",
+"speed": 7.0
+}]
+
+[node name="ShortPuff2" type="AnimatedSprite3D"]
+modulate = Color(1, 1, 1, 0.513726)
+billboard = 2
+shaded = true
+sprite_frames = SubResource("SpriteFrames_cthep")
+autoplay = "default"
+frame = 1
+frame_progress = 1.0
+script = ExtResource("3_83cdt")

@@ -18,5 +18,5 @@ func _body_entered(body):
 	if body.is_in_group('player') and not triggered:
 		if one_trigger_only: triggered = true
 		if temporary_camera: temporary_camera.set_current(true)
-		if door_to_open: door_to_open.open()
+		if door_to_open and door_to_open.has_method("open"): door_to_open.open()
 		event_triggered.emit(body, event_name)

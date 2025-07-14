@@ -183,6 +183,7 @@
 [ext_resource type="PackedScene" uid="uid://imvpdy3i31ge" path="res://scenes/objects/pot.tscn" id="158_lc1o7"]
 [ext_resource type="PackedScene" uid="uid://cwc87yv1gw6g2" path="res://scenes/objects/pot_2.tscn" id="159_7lfi8"]
 [ext_resource type="PackedScene" uid="uid://5cy801rr43wb" path="res://scenes/objects/glass_7.tscn" id="160_0x3ry"]
+[ext_resource type="AudioStream" uid="uid://cwtqpiklh7vhx" path="res://sounds/sfx/DOORLOCK.ogg" id="160_qbtei"]
 [ext_resource type="PackedScene" uid="uid://b4l0xb0padsci" path="res://scenes/objects/moving_bars_1.tscn" id="161_2it1x"]
 [ext_resource type="PackedScene" uid="uid://gvoggmm2d6m6" path="res://scenes/objects/glass_8.tscn" id="161_82x3n"]
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="161_b5j3m"]
@@ -9054,12 +9055,6 @@ size = Vector3(0.28, 1.886, 2.19434)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwmtc"]
 size = Vector3(1.255, 1.88648, 0.279541)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ehfr"]
-transparency = 1
-cull_mode = 2
-depth_draw_mode = 1
-albedo_texture = ExtResource("15_emvb5")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cfyp"]
 transparency = 1
 depth_draw_mode = 1
@@ -12346,11 +12341,6 @@ disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -75.9618, 202.198, -29.1142)
 current_room = "FirstFloor"
 
-[node name="Rat6" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -77.7027, 202.198, -29.1142)
-current_room = "FirstFloor"
-is_wandering = false
-
 [node name="Rat2" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -26.541, 202.678, 136.024)
 current_room = "ThirdFloor"
@@ -13139,24 +13129,11 @@ transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -45.5016
 [node name="AoDoor1" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.555, 203.481, -29.77)
 
-[node name="Door" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9625, 203.474, -27.0733)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0564175)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.55, 0.16)
-material = SubResource("StandardMaterial3D_5ehfr")
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.102)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.55, 0.16)
-material = SubResource("StandardMaterial3D_5ehfr")
+[node name="AoDoor2" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9585, 203.48, -27.0564)
+key_needed = "ruby"
+locked_message = "You need the ruby key!"
+locked_sound = ExtResource("160_qbtei")
 
 [node name="Door3" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9699, 203.474, -27.042)

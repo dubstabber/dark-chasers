@@ -13923,7 +13923,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138.626, 202.312, -82.1455)
 
 [node name="DebugCamera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(-0.849985, 0, -0.526808, 0, 1, 0, 0.526808, 0, -0.849985, -48.7456, 203.935, -35.2478)
+transform = Transform3D(-0.241939, 0, -0.970292, 0, 1, 0, 0.970292, 0, -0.241939, -28.2449, 203.935, -30.366)
 
 [node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("208_jn553")

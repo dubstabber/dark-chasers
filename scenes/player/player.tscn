@@ -934,10 +934,11 @@ billboard = 2
 shaded = true
 alpha_cut = 2
 sprite_frames = SubResource("SpriteFrames_iqsei")
-animation = &"stay-front"
+animation = &"run-side"
 autoplay = "stay-front"
-frame_progress = 1.0
 
 [node name="DirectionalSpriteAnimator" parent="." instance=ExtResource("40_7obkq")]
 sprite_node_path = NodePath("../AnimatedSprite3D")
 reference_node_path = NodePath("..")
+direction_mode = 0
+sprite_names = Array[String](["front", "side", "back"])

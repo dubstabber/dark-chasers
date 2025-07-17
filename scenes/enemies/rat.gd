@@ -19,13 +19,13 @@ func _setup_sprite_animator():
 		sprite_animator.reference_node_path = NodePath("Graphics") # Use Graphics node as reference
 		sprite_animator.sprite_changed.connect(_on_sprite_changed)
 
-		# Configure for 8-directional animation with sprite flipping
+		# Configure for 8-directional animation with sprite flipping (new API)
 		# Start with "stay" state sprites (only 5 sprites needed with flipping)
 		var stay_sprites: Array[String] = ["stay-front", "stay-front-side", "stay-side", "stay-back-side", "stay-back"]
-		sprite_animator.setup_8_directional_flipping(stay_sprites)
-
-		# Enable for better responsiveness with camera changes
-		sprite_animator.always_check_camera = true
+		sprite_animator.direction_mode = DirectionalSpriteAnimator.DirectionMode.EIGHT_DIRECTIONAL_FLIP
+		sprite_animator.sprite_names = stay_sprites
+		# Force immediate update by resetting cached segment
+		sprite_animator._last_segment = -1
 
 func _on_sprite_changed(sprite_name: String):
 	current_anim = sprite_name
@@ -37,7 +37,7 @@ func _physics_process(delta):
 
 func _update_animation_state():
 	if is_killed:
-		sprite_animator.enabled = false
+		sprite_animator.set_process(false)
 		return
 
 	# Update sprite names based on current movement state
@@ -52,7 +52,8 @@ func _update_animation_state():
 	# Only update if the state changed
 	if sprite_animator.sprite_names != new_sprites:
 		sprite_animator.sprite_names = new_sprites
-		sprite_animator.force_update()
+		# Reset cached segment so animator picks correct sprite next frame
+		sprite_animator._last_segment = -1
 
 
 func _on_sound_interval_timeout() -> void:
@@ -93,7 +94,7 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		is_killed = true
 		# Disable the sprite animator and manually play death animation
-		sprite_animator.enabled = false
+		sprite_animator.set_process(false)
 
 		# Adjust sprite position for better death animation visibility
 		# The death animation frames appear to be positioned lower in their textures

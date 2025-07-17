@@ -25,7 +25,7 @@ func spawn_player():
 	
 	#respawn(player)
 	test_respawn(player)
-	
+	player.debug_camera = %DebugCamera3D
 	#hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
 	#await get_tree().create_timer(6.0).timeout
 	#hud.show_event_text("They say there is a monster that lives there_")

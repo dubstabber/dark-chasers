@@ -13921,6 +13921,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02633, 205.675, 115.313)
 [node name="SilverCrowbar" parent="Items" instance=ExtResource("210_r663d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138.626, 202.312, -82.1455)
 
+[node name="DebugCamera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(-0.849985, 0, -0.526808, 0, 1, 0, 0.526808, 0, -0.849985, -48.7456, 203.935, -35.2478)
+
 [node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("208_jn553")
 volume_db = -12.0

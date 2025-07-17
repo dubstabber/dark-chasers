@@ -35,9 +35,11 @@ var _update_interval := 0.1
 var _current_sprite_name := ""
 var _current_flip_h := false # Track current horizontal flip state
 
+
 func _ready():
 	_initialize_nodes()
 	_validate_sprite_configuration()
+
 
 func _process(delta):
 	if not enabled:
@@ -48,13 +50,9 @@ func _process(delta):
 		_update_timer = 0.0
 		_update_sprite_animation()
 
+
 func _initialize_nodes():
-	if sprite_node_path.is_empty():
-		_sprite_node = get_parent().get_node_or_null("AnimatedSprite3D")
-		if not _sprite_node:
-			_sprite_node = get_parent().get_node_or_null("Sprite3D")
-	else:
-		_sprite_node = get_node(sprite_node_path)
+	_sprite_node = get_node(sprite_node_path)
 	
 	if reference_node_path.is_empty():
 		_reference_node = get_parent()
@@ -65,6 +63,7 @@ func _initialize_nodes():
 		push_error("DirectionalSpriteAnimator: No sprite node found")
 	if not _reference_node:
 		push_error("DirectionalSpriteAnimator: No reference node found")
+
 
 func _validate_sprite_configuration():
 	var expected_count = _get_expected_sprite_count()
@@ -77,6 +76,7 @@ func _validate_sprite_configuration():
 		])
 		sprite_names = _get_default_sprite_names()
 
+
 func _get_expected_sprite_count() -> int:
 	match direction_mode:
 		DirectionMode.FOUR_DIRECTIONAL:
@@ -88,6 +88,7 @@ func _get_expected_sprite_count() -> int:
 		_:
 			return 8
 
+
 func _get_default_sprite_names() -> Array[String]:
 	match direction_mode:
 		DirectionMode.FOUR_DIRECTIONAL:
@@ -98,6 +99,7 @@ func _get_default_sprite_names() -> Array[String]:
 			return ["front", "front-side", "side", "back-side", "back"]
 		_:
 			return ["front", "front-right", "right", "back-right", "back", "back-left", "left", "front-left"]
+
 
 func _update_sprite_animation():
 	# Smart camera detection - handle dynamic camera changes
@@ -156,6 +158,7 @@ func _update_sprite_animation():
 					var new_sprite_name = sprite_names[segment]
 					_set_sprite_animation(new_sprite_name)
 
+
 func _calculate_viewing_segment(camera: Camera3D) -> int:
 	var ref_pos = _reference_node.global_position
 	var camera_pos = camera.global_position
@@ -193,6 +196,7 @@ func _calculate_viewing_segment(camera: Camera3D) -> int:
 	else:
 		return _calculate_8_directional_segment(angle_degrees)
 
+
 func _calculate_4_directional_segment(angle_degrees: float) -> int:
 	# 4-directional: 90-degree segments
 	# front: 315° - 45° (wraps around 0°)
@@ -210,6 +214,7 @@ func _calculate_4_directional_segment(angle_degrees: float) -> int:
 	# Ensure we stay in 0-3 range
 	return segment % 4
 
+
 func _calculate_8_directional_segment(angle_degrees: float) -> int:
 	# 8-directional: 45-degree segments
 	# Same logic as before but kept separate for clarity
@@ -223,6 +228,7 @@ func _calculate_8_directional_segment(angle_degrees: float) -> int:
 
 	# Ensure we stay in 0-7 range
 	return segment % 8
+
 
 func _handle_sprite_flipping_8_directional(segment: int):
 	# Map 8 segments to 5 sprite names with flipping
@@ -284,15 +290,19 @@ func _set_sprite_animation(sprite_name: String, flip_h: bool = false):
 
 	sprite_changed.emit(sprite_name)
 
+
 func set_enabled(value: bool):
 	enabled = value
+
 
 func get_current_sprite_name() -> String:
 	return _current_sprite_name
 
+
 func force_update():
 	_last_segment = -1
 	_update_sprite_animation()
+
 
 ## Call this when you know the camera has changed for immediate response
 func on_camera_changed():
@@ -301,9 +311,11 @@ func on_camera_changed():
 	_last_segment = -1
 	_update_sprite_animation()
 
+
 ## Get the currently tracked camera (useful for debugging)
 func get_current_camera() -> Camera3D:
 	return _cached_camera
+
 
 ## Configure the component for 4-directional mode with default sprite names
 func setup_4_directional(custom_sprite_names: Array[String] = []):
@@ -315,6 +327,7 @@ func setup_4_directional(custom_sprite_names: Array[String] = []):
 	_validate_sprite_configuration()
 	force_update()
 
+
 ## Configure the component for 8-directional mode with default sprite names
 func setup_8_directional(custom_sprite_names: Array[String] = []):
 	direction_mode = DirectionMode.EIGHT_DIRECTIONAL
@@ -324,6 +337,7 @@ func setup_8_directional(custom_sprite_names: Array[String] = []):
 		sprite_names = custom_sprite_names
 	_validate_sprite_configuration()
 	force_update()
+
 
 ## Configure the component for 8-directional mode with sprite flipping (uses 5 sprites)
 func setup_8_directional_flipping(custom_sprite_names: Array[String] = []):

@@ -1,7 +1,7 @@
 class_name Player extends CharacterBody3D
 
-@warning_ignore("UNUSED_SIGNAL") 
-signal weapon_added(weapon: WeaponResource) 
+@warning_ignore("UNUSED_SIGNAL")
+signal weapon_added(weapon: WeaponResource)
 
 const JUMP_VELOCITY := 6.0
 const WALKING_SPEED := 5.0
@@ -55,6 +55,8 @@ var blocked_movement := false
 
 var hud: CanvasLayer
 
+var debug_camera: Camera3D # temporary
+
 @onready var nek = $nek
 @onready var head = $nek/head
 @onready var eyes = $nek/head/eyes
@@ -78,6 +80,11 @@ func _input(event):
 			rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
 			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
 			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-89), deg_to_rad(89))
+	if event.is_action_pressed("switch-debug-camera"):
+		if camera_3d.current:
+			debug_camera.current = true
+		else:
+			camera_3d.current = true
 
 
 func _physics_process(delta):
@@ -89,7 +96,7 @@ func _physics_process(delta):
 		var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
 		if (Input.is_action_pressed("crouch") or sliding) and not clip_mode:
 			current_speed = lerp(current_speed, CROUCHING_SPEED, delta * lerp_speed)
-			head.position.y = lerp(head.position.y, crouching_depth, delta*lerp_speed)
+			head.position.y = lerp(head.position.y, crouching_depth, delta * lerp_speed)
 			stay_col.disabled = true
 			crounch_col.disabled = false
 			
@@ -104,7 +111,7 @@ func _physics_process(delta):
 		elif not crounch_ray_cast_3d.is_colliding():
 			stay_col.disabled = false
 			crounch_col.disabled = true
-			head.position.y = lerp(head.position.y, 0.0, delta*lerp_speed)
+			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
 			if Input.is_action_pressed("sprint") and velocity.length() > 0.1:
 				current_speed = lerp(current_speed, SPRINTING_SPEED, delta * lerp_speed)
 				camera_3d.fov += 2
@@ -136,7 +143,7 @@ func _physics_process(delta):
 		
 		if is_on_floor() and not sliding and input_dir != Vector2.ZERO:
 			head_bobbing_vector.y = sin(head_bobbing_index)
-			head_bobbing_vector.x = sin(head_bobbing_index/2)
+			head_bobbing_vector.x = sin(head_bobbing_index / 2)
 			
 			if head_bobbing_vector.y > -head_bobbing_current_intensity:
 				can_step = true
@@ -144,11 +151,11 @@ func _physics_process(delta):
 				can_step = false
 				footstep_surface_detector.play_footstep()
 			
-			eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y*(head_bobbing_current_intensity/2.0),delta * lerp_speed)
-			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x*(head_bobbing_current_intensity/2.0),delta * lerp_speed)
+			eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y * (head_bobbing_current_intensity / 2.0), delta * lerp_speed)
+			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x * (head_bobbing_current_intensity / 2.0), delta * lerp_speed)
 		else:
-			eyes.position.y = lerp(eyes.position.y, 0.0,delta * lerp_speed)
-			eyes.position.x = lerp(eyes.position.x, 0.0,delta * lerp_speed)
+			eyes.position.y = lerp(eyes.position.y, 0.0, delta * lerp_speed)
+			eyes.position.x = lerp(eyes.position.x, 0.0, delta * lerp_speed)
 			
 		if Input.is_action_just_pressed("jump") and clip_mode:
 			velocity.y = current_speed
@@ -157,7 +164,7 @@ func _physics_process(delta):
 		
 		if Input.is_action_just_pressed("crouch"):
 			if clip_mode:
-				velocity.y = -current_speed
+				velocity.y = - current_speed
 		elif Input.is_action_just_released("crouch"):
 			if clip_mode:
 				velocity.y = 0
@@ -172,10 +179,10 @@ func _physics_process(delta):
 				animation_player.play("landing")
 			
 		if is_on_floor():
-			direction = lerp(direction,(transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
+			direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
 		else:
 			if input_dir != Vector2.ZERO:
-				direction = lerp(direction,(transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * air_lerp_speed)
+				direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * air_lerp_speed)
 			
 		if sliding:
 			direction = (transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
@@ -183,7 +190,7 @@ func _physics_process(delta):
 
 		if Input.is_action_just_pressed("toggle-clip-mode"):
 			clip_mode = not clip_mode
-			if hud: hud._on_player_mode_changed("clip_mode",clip_mode)
+			if hud: hud._on_player_mode_changed("clip_mode", clip_mode)
 			if clip_mode:
 				collision_mask = 10
 				velocity = Vector3.ZERO
@@ -217,7 +224,7 @@ func _physics_process(delta):
 		move_and_slide()
 	else:
 		if death_throw > 0:
-			velocity = -direction * death_throw
+			velocity = - direction * death_throw
 			transform = transform.interpolate_with(transform.looking_at(killed_pos), lerp_speed * delta)
 			move_and_slide()
 			death_throw -= 0.1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=58 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://1nwylw46yt3r" path="res://images/characters/hiroshi/HIROB3B7.png" id="37_rw8a5"]
 [ext_resource type="Texture2D" uid="uid://b6d2qjge3lbti" path="res://images/characters/hiroshi/HIROA3A7.png" id="38_iwuka"]
 [ext_resource type="Texture2D" uid="uid://do61320cugscl" path="res://images/characters/hiroshi/HIROD3D7.png" id="39_hyqqp"]
+[ext_resource type="PackedScene" uid="uid://bqm8xvn4qxqxq" path="res://scenes/components/directional_sprite_animator.tscn" id="40_7obkq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
 radius = 0.231423
@@ -936,3 +937,7 @@ sprite_frames = SubResource("SpriteFrames_iqsei")
 animation = &"stay-front"
 autoplay = "stay-front"
 frame_progress = 1.0
+
+[node name="DirectionalSpriteAnimator" parent="." instance=ExtResource("40_7obkq")]
+sprite_node_path = NodePath("../AnimatedSprite3D")
+reference_node_path = NodePath("..")

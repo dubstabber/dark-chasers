@@ -23,6 +23,11 @@ enum DirectionMode {
 @export var sprite_node_path: NodePath
 @export var reference_node_path: NodePath
 @export var direction_mode: DirectionMode = DirectionMode.EIGHT_DIRECTIONAL
+# When enabled, if the camera is extremely close to the reference point (e.g. first-person view),
+# treat it as looking straight at the object to avoid angle jitter that causes sprite flipping.
+@export var front_on_close_camera: bool = false
+# Distance (in world units) below which the close-camera override kicks in.
+@export var close_camera_distance: float = 0.35
 # If true, the animator checks the camera every frame even if the segment did not change
 @export var always_check_camera: bool = false
 
@@ -79,6 +84,16 @@ func _calculate_segment(camera: Camera3D) -> int:
 	var cam_pos: Vector3 = camera.global_position
 	var dx: float = cam_pos.x - obj_pos.x
 	var dz: float = cam_pos.z - obj_pos.z
+
+	# ------------------------------------------------------------------
+	#  Close-camera override
+	# ------------------------------------------------------------------
+	var dist_sq: float = dx * dx + dz * dz
+	if front_on_close_camera and dist_sq < close_camera_distance * close_camera_distance:
+		_debug_last_angle = 0.0
+		_debug_forward_comp = 0.0
+		_debug_right_comp = 0.0
+		return 0  # "front" segment for any mode
 
 	# Basis vectors in world space
 	var basis := _reference_node.global_transform.basis

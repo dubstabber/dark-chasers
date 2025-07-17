@@ -223,7 +223,7 @@ billboard = 2
 shaded = true
 render_priority = 1
 sprite_frames = SubResource("SpriteFrames_pe523")
-animation = &"run-front"
+animation = &"run-front-side"
 
 [node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.135469, -0.152568)
@@ -244,7 +244,7 @@ volume_db = -13.0
 [node name="DirectionalSpriteAnimator" parent="." index="8" instance=ExtResource("34_htnwb")]
 sprite_node_path = NodePath("../Graphics/AnimatedSprite3D")
 reference_node_path = NodePath("..")
-direction_mode = 2
+direction_mode = 3
 sprite_names = Array[String](["front", "front-side", "side", "back-side", "back"])
 
 [connection signal="timeout" from="Timers/SoundInterval" to="." method="_on_sound_interval_timeout"]

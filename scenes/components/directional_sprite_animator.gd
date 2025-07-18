@@ -298,138 +298,89 @@ func _calculate_segment_by_yaw(cam: Camera3D) -> int:
 	var cam_fwd: Vector3 = - cam.global_transform.basis.z
 	var cam_yaw := rad_to_deg(atan2(cam_fwd.x, cam_fwd.z))
 
-	# Debug the yaw calculation
-	if OS.is_debug_build():
-		print("=== Yaw-Based Debug ===")
-		print("Object forward: ", obj_fwd)
-		print("Object yaw: %.2f°" % obj_yaw)
-		print("Camera forward: ", cam_fwd)
-		print("Camera yaw: %.2f°" % cam_yaw)
-		print("Raw angle (cam_yaw - obj_yaw): %.2f°" % (cam_yaw - obj_yaw))
-
 	var angle := fmod(cam_yaw - obj_yaw + 360.0, 360.0)
 
-	if OS.is_debug_build():
-		print("Final angle: %.2f°" % angle)
-		print("Calculated segment: %d" % _get_segment_from_angle(angle))
-		print("====================")
+	# Store debug values (also reused for flip decision)
+	_debug_last_angle = angle
+	_debug_forward_comp = 0.0
+	_debug_right_comp = 0.0
 
 	return _get_segment_from_angle(angle)
 
-# Calculate segment for non-mirror cameras (full position-based version)
+# Calculate segment for non-mirror cameras using object-local direction.
 func _calculate_segment(camera: Camera3D) -> int:
 	# Mirror pass – always use position-based calculation for mirrors
 	if _is_mirror_camera:
 		return _calculate_mirror_segment(camera)
-	
-	# Force yaw-only path if requested (but not for mirrors)
+
+	# If explicitly requested, use yaw-only path
 	if camera_yaw_only:
 		return _calculate_segment_by_yaw(camera)
 
-	# -------- Simple approach: Use mirror logic but account for camera rotation --------
-	# Start with the same calculation as mirrors (which works), then adjust for camera rotation
+	# Vector from object to camera (world)
+	var to_camera := camera.global_position - _reference_node.global_position
+	to_camera.y = 0
 
-	var obj_pos: Vector3 = _reference_node.global_position
-	var cam_pos: Vector3 = camera.global_position
-
-	# Calculate vector FROM object TO camera (same as mirror logic)
-	var to_camera := cam_pos - obj_pos
-	to_camera.y = 0 # Project to XZ plane
-
-	# If camera is effectively inside the object (first-person), use view direction
-	if to_camera.length_squared() < 0.0004: # 0.02^2
+	# Very close – fall back to yaw method to avoid jitter
+	if to_camera.length_squared() < 0.0004:
 		return _calculate_segment_by_yaw(camera)
 
 	# Close-camera override
-	var dist_sq := to_camera.length_squared()
-	if front_on_close_camera and dist_sq < close_camera_distance * close_camera_distance:
-		_debug_last_angle = 0.0
-		_debug_forward_comp = 0.0
-		_debug_right_comp = 0.0
+	if front_on_close_camera and to_camera.length_squared() < close_camera_distance * close_camera_distance:
 		return 0
 
-	# Normalize the to_camera vector
-	to_camera = to_camera.normalized()
+	# Transform this vector into the object's local space. This automatically
+	# compensates for any camera rotation, because the object’s local axes already
+	# encode its orientation.
+	var local_dir: Vector3 = _reference_node.to_local(camera.global_position)
+	local_dir.y = 0
+	if local_dir.length_squared() == 0:
+		return 0
+	local_dir = local_dir.normalized()
 
-	# Get object's forward and right vectors (same as mirror logic)
-	var obj_basis := _reference_node.global_transform.basis
-	var obj_forward: Vector3 = - obj_basis.z
-	var obj_right: Vector3 = obj_basis.x
-
-	# Project to XZ plane and normalize
-	obj_forward.y = 0
-	obj_right.y = 0
-	obj_forward = obj_forward.normalized()
-	obj_right = obj_right.normalized()
-
-	# Calculate dot products to determine angle (same as mirror logic)
-	var forward_dot: float = obj_forward.dot(to_camera)
-	var right_dot: float = obj_right.dot(to_camera)
-
-	# Calculate the base angle (same as mirror logic)
-	var base_angle := rad_to_deg(atan2(right_dot, forward_dot))
-	if base_angle < 0:
-		base_angle += 360.0
-
-	# HERE'S THE KEY: Transform coordinate system based on camera rotation
-	# Instead of adjusting angles, transform the to_camera vector based on camera rotation
-	var cam_y_rotation := rad_to_deg(camera.rotation.y)
-	var cam_global_y_rotation := rad_to_deg(camera.global_rotation.y)
-
-	# Use whichever rotation value is more significant
-	var effective_rotation = cam_y_rotation
-	if abs(cam_global_y_rotation) > abs(cam_y_rotation):
-		effective_rotation = cam_global_y_rotation
-
-	# Transform the to_camera vector by rotating it by the camera's rotation
-	# This properly handles the coordinate system transformation
-	var transformed_to_camera = to_camera
-	if abs(effective_rotation) > 1.0: # Camera has significant rotation
-		var rotation_rad = deg_to_rad(-effective_rotation) # Negative to counter-rotate
-		var cos_rot = cos(rotation_rad)
-		var sin_rot = sin(rotation_rad)
-
-		# Apply 2D rotation matrix to XZ components
-		var new_x = to_camera.x * cos_rot - to_camera.z * sin_rot
-		var new_z = to_camera.x * sin_rot + to_camera.z * cos_rot
-		transformed_to_camera = Vector3(new_x, 0, new_z).normalized()
-
-	# Recalculate dot products with the transformed vector
-	var transformed_forward_dot: float = obj_forward.dot(transformed_to_camera)
-	var transformed_right_dot: float = obj_right.dot(transformed_to_camera)
-
-	# Calculate angle using the transformed vector
-	var angle := rad_to_deg(atan2(transformed_right_dot, transformed_forward_dot))
+	# In the object's local space, +Z is BACK (since -Z is forward). We want 0° to
+	# represent the camera seeing the object's BACK so we use –local_dir.z.
+	var angle := rad_to_deg(atan2(local_dir.x, -local_dir.z))
 	if angle < 0:
 		angle += 360.0
 
-	_debug_forward_comp = transformed_forward_dot
-	_debug_right_comp = transformed_right_dot
+	# Debug vars (used by debug utilities)
 	_debug_last_angle = angle
+	_debug_forward_comp = - local_dir.z
+	_debug_right_comp = local_dir.x
 
-	var segment = _get_segment_from_angle(angle)
+	return _get_segment_from_angle(angle)
 
-	# Debug output for normal cameras
-	if OS.is_debug_build():
-		print("=== Normal Camera Debug (Coordinate Transform) ===")
-		print("Player position: ", obj_pos)
-		print("Camera position: ", cam_pos)
-		print("Original to_camera vector: ", to_camera)
-		print("Effective camera rotation: %.2f°" % effective_rotation)
-		print("Transformed to_camera vector: ", transformed_to_camera)
-		print("Object forward: ", obj_forward)
-		print("Object right: ", obj_right)
-		print("Original forward dot: %.3f" % forward_dot)
-		print("Original right dot: %.3f" % right_dot)
-		print("Transformed forward dot: %.3f" % transformed_forward_dot)
-		print("Transformed right dot: %.3f" % transformed_right_dot)
-		print("Base angle: %.2f°" % base_angle)
-		print("Final transformed angle: %.2f°" % angle)
-		print("Calculated segment: ", segment)
-		print("Direction mode: ", direction_mode)
-		print("==================================================")
+# Helper: mirror left/right related segments for 4- and 8-direction modes
+func _mirror_segment_horizontal(seg: int) -> int:
+	match direction_mode:
+		DirectionMode.FOUR_DIRECTIONAL:
+			var map = {1: 3, 3: 1} # right ↔ left
+			return map.get(seg, seg)
+		DirectionMode.EIGHT_DIRECTIONAL, DirectionMode.EIGHT_DIRECTIONAL_FLIP:
+			var map8 = {1: 7, 2: 6, 3: 5, 5: 3, 6: 2, 7: 1}
+			return map8.get(seg, seg)
+		_:
+			return seg
 
-	return segment
+# Helper: checks if camera is facing (looking toward) the object; if so, swap
+# left/right segments so the perceived lateral direction is correct.
+func _mirror_segment_horizontal_for_facing(seg: int, cam: Camera3D) -> int:
+	if cam == null or _reference_node == null:
+		return seg
+	var cam_forward: Vector3 = - cam.global_transform.basis.z
+	var obj_forward: Vector3 = - _reference_node.global_transform.basis.z
+	cam_forward.y = 0
+	obj_forward.y = 0
+	if cam_forward.length_squared() == 0 or obj_forward.length_squared() == 0:
+		return seg
+	cam_forward = cam_forward.normalized()
+	obj_forward = obj_forward.normalized()
+	var facing_dot := obj_forward.dot(cam_forward)
+	# When the camera faces the object (dot <= 0) we invert left/right.
+	if facing_dot <= 0.0:
+		return _mirror_segment_horizontal(seg)
+	return seg
 
 # Helper: derive segment from an arbitrary XZ-plane direction vector
 func _segment_from_direction(dir: Vector3) -> int:
@@ -538,8 +489,16 @@ func _apply_segment(segment: int):
 		DirectionMode.THREE_DIRECTIONAL:
 			index = [0, 1, 2][segment] # front/side/back order
 			if segment == 1:
-				# Determine side orientation: right halves (45-135°) need flip
-				flip = _is_right_side()
+				# For mirror cameras keep the specialised orientation logic.
+				if _is_mirror_camera:
+					flip = _is_right_side()
+				else:
+					# Derive side based on the angle: 45°-135° = right side
+					# which requires a horizontal flip to face camera-right.
+					# 225°-315° = left side (no flip).
+					var ang := _debug_last_angle
+					ang = fposmod(ang, 360.0)
+					flip = (ang >= 45.0 and ang < 135.0)
 		DirectionMode.FOUR_DIRECTIONAL:
 			index = segment # 0-3 match sprite order
 		DirectionMode.EIGHT_DIRECTIONAL:
@@ -570,7 +529,7 @@ func _is_right_side() -> bool:
 	if cam == null or _reference_node == null:
 		return _current_flip_h # keep previous if uncertain
 
-	# MIRROR CAMERA: decide side based on orientation, not position
+	# MIRROR CAMERA: decide side based on orientation, accounting for main camera rotation
 	if _is_mirror_camera:
 		var cam_forward: Vector3 = - cam.global_transform.basis.z
 		var obj_forward: Vector3 = - _reference_node.global_transform.basis.z
@@ -581,11 +540,43 @@ func _is_right_side() -> bool:
 			return _current_flip_h
 		cam_forward = cam_forward.normalized()
 		obj_forward = obj_forward.normalized()
-		var side_val := obj_forward.cross(cam_forward).y
+
+		# Calculate base side value using cross product
+		var base_side_val := obj_forward.cross(cam_forward).y
+
+		# Account for main camera rotation affecting the viewport perspective
+		var main_camera := get_viewport().get_camera_3d()
+		var adjusted_side_val := base_side_val
+
+		if main_camera != null and main_camera != cam:
+			var main_cam_y_rotation := rad_to_deg(main_camera.rotation.y)
+
+			# Apply the same rotation compensation logic as in _calculate_mirror_segment
+			if abs(main_cam_y_rotation - 180.0) < 1.0:
+				# When main camera is rotated ~180°, flip the side determination
+				adjusted_side_val = - base_side_val
+			else:
+				# For other rotations, we need to account for the rotation effect
+				# Convert the rotation to a factor that affects side determination
+				var rotation_factor := cos(deg_to_rad(main_cam_y_rotation))
+				if rotation_factor < 0:
+					# When rotation factor is negative (90° to 270°), flip the side
+					adjusted_side_val = - base_side_val
+
 		const ORIENT_DEAD := 0.05
-		if abs(side_val) < ORIENT_DEAD:
+		if abs(adjusted_side_val) < ORIENT_DEAD:
 			return _current_flip_h
-		return side_val > 0 # positive = camera sees player's right side
+
+		# Debug output for side determination
+		if OS.is_debug_build():
+			print("=== Side Determination Debug (Mirror) ===")
+			print("Base side value: ", base_side_val)
+			print("Adjusted side value: ", adjusted_side_val)
+			if main_camera != null and main_camera != cam:
+				print("Main camera Y rotation: %.2f°" % rad_to_deg(main_camera.rotation.y))
+			print("Result (is right side): ", adjusted_side_val > 0)
+
+		return adjusted_side_val > 0 # positive = camera sees player's right side
 
 	# NORMAL CAMERA: use position-based logic with dead zone
 	var delta: Vector3 = cam.global_position - _reference_node.global_position

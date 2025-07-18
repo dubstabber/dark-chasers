@@ -39,6 +39,21 @@ enum DirectionMode {
 ]
 
 # ────────────────────────────────────────────────────────────────────────────────
+#  TUNING PARAMETERS
+# ────────────────────────────────────────────────────────────────────────────────
+# In THREE_DIRECTIONAL mode the cutoff between front↔side and back↔side can be
+# tweaked. 45° means the front sprite is used when the camera is within ±45° of
+# the object’s forward vector (so a 90° cone in total). Increase this to make
+# the front sprite appear for a wider range, decrease to switch to side sooner.
+
+@export_range(5.0, 89.0, 1.0, "degrees") var three_dir_front_half_deg: float = 45.0
+
+# In FOUR_DIRECTIONAL mode, the angle offset for the quadrant boundaries.
+# Default 45° means boundaries are at 45°, 135°, 225°, 315°.
+# Adjust this to fine-tune when transitions occur between front/right/back/left.
+@export_range(0.0, 89.0, 1.0, "degrees") var four_dir_angle_offset: float = 45.0
+
+# ────────────────────────────────────────────────────────────────────────────────
 #  INTERNAL STATE
 # ────────────────────────────────────────────────────────────────────────────────
 
@@ -68,8 +83,10 @@ func _detect_mirror_camera(camera: Camera3D) -> void:
 	# Reset smoothing when switching in/out of mirror rendering
 	if was_mirror != _is_mirror_camera:
 		_mirror_segment_buffer.clear()
-		for i in range(_mirror_buffer_size):
-			_mirror_segment_buffer.append(0)
+		# Start with an empty buffer – we will populate it with real
+		# segment values as they come in. Pre-filling with zeros biased the
+		# smoothing toward the front segment and produced incorrect angles
+		# for the first few frames when a mirror camera began rendering.
 
 # ────────────────────────────────────────────────────────────────────────────────
 #  LIFECYCLE
@@ -87,8 +104,10 @@ func _ready():
 		push_error("DirectionalSpriteAnimator: reference_node_path is invalid")
 	
 	# Initialize mirror buffer
-	for i in range(_mirror_buffer_size):
-		_mirror_segment_buffer.append(0)
+	# Start with an empty buffer – we will populate it with real
+	# segment values as they come in. Pre-filling with zeros biased the
+	# smoothing toward the front segment and produced incorrect angles
+	# for the first few frames when a mirror camera began rendering.
 
 # Utility: pick closest camera (main or mirror) to evaluate sprite direction
 func _get_relevant_camera() -> Camera3D:
@@ -120,8 +139,10 @@ func _process(_delta):
 	# Reset smoothing buffer when switching in/out of mirror camera
 	if _is_mirror_camera != prev_is_mirror:
 		_mirror_segment_buffer.clear()
-		for i in range(_mirror_buffer_size):
-			_mirror_segment_buffer.append(0)
+		# Start with an empty buffer – we will populate it with real
+		# segment values as they come in. Pre-filling with zeros biased the
+		# smoothing toward the front segment and produced incorrect angles
+		# for the first few frames when a mirror camera began rendering.
 
 	# Debug print for mirror detection
 	if _is_mirror_camera and OS.is_debug_build():
@@ -181,7 +202,7 @@ func _calculate_mirror_segment(mirror_camera: Camera3D) -> int:
 	
 	# Calculate vector FROM player TO mirror camera
 	var to_camera := cam_pos - obj_pos
-	to_camera.y = 0  # Project to XZ plane
+	to_camera.y = 0 # Project to XZ plane
 	to_camera = to_camera.normalized()
 	
 	# Check for close-camera override for mirrors
@@ -194,7 +215,7 @@ func _calculate_mirror_segment(mirror_camera: Camera3D) -> int:
 	
 	# Get player's forward and right vectors
 	var basis := _reference_node.global_transform.basis
-	var forward: Vector3 = -basis.z
+	var forward: Vector3 = - basis.z
 	var right: Vector3 = basis.x
 	
 	# Project to XZ plane
@@ -207,11 +228,34 @@ func _calculate_mirror_segment(mirror_camera: Camera3D) -> int:
 	var forward_dot: float = forward.dot(to_camera)
 	var right_dot: float = right.dot(to_camera)
 	
-	# Calculate angle in degrees
-	var angle := rad_to_deg(atan2(right_dot, forward_dot))
-	if angle < 0:
-		angle += 360.0
-	
+	# Calculate base angle in degrees
+	var base_angle := rad_to_deg(atan2(right_dot, forward_dot))
+	if base_angle < 0:
+		base_angle += 360.0
+
+	# CRITICAL FIX: Account for main camera rotation affecting the viewport
+	# When the main external camera is rotated, it affects how mirrors should display sprites
+	var main_camera := get_viewport().get_camera_3d()
+	var angle := base_angle
+
+	if main_camera != null and main_camera != mirror_camera:
+		# Get main camera's Y rotation
+		var main_cam_y_rotation := rad_to_deg(main_camera.rotation.y)
+
+		# The key insight: when camera rotates 180°, we need to flip the entire perspective
+		# This means adding 180° to flip both front↔back AND left↔right correctly
+		if abs(main_cam_y_rotation - 180.0) < 1.0: # Camera rotated ~180°
+			angle = base_angle + 180.0
+		else:
+			# For other rotations, use the standard transformation
+			angle = base_angle - main_cam_y_rotation
+
+		# Normalize to 0-360 range
+		while angle < 0:
+			angle += 360.0
+		while angle >= 360.0:
+			angle -= 360.0
+
 	# Debug prints
 	if OS.is_debug_build():
 		print("=== Mirror Debug ===")
@@ -222,16 +266,21 @@ func _calculate_mirror_segment(mirror_camera: Camera3D) -> int:
 		print("Player right: ", right)
 		print("Forward dot: ", forward_dot)
 		print("Right dot: ", right_dot)
-		print("Calculated angle: ", angle)
+		print("Base angle: %.2f°" % base_angle)
+		if main_camera != null and main_camera != mirror_camera:
+			print("Main camera Y rotation: %.2f°" % rad_to_deg(main_camera.rotation.y))
+			print("Adjusted angle: %.2f°" % angle)
+		else:
+			print("No main camera adjustment needed")
 		print("Player rotation Y: ", rad_to_deg(_reference_node.rotation.y))
-	
+
 	# Get base segment from angle
 	var base_seg := _get_segment_from_angle(angle)
-	
+
 	if OS.is_debug_build():
 		print("Base segment: ", base_seg)
 		print("Direction mode: ", direction_mode)
-	
+
 	# For mirrors, we typically want to mirror left/right but the calculation
 	# should already give us the correct view since we're calculating from
 	# the mirror camera's perspective
@@ -248,7 +297,23 @@ func _calculate_segment_by_yaw(cam: Camera3D) -> int:
 	var obj_yaw := rad_to_deg(atan2(obj_fwd.x, obj_fwd.z))
 	var cam_fwd: Vector3 = - cam.global_transform.basis.z
 	var cam_yaw := rad_to_deg(atan2(cam_fwd.x, cam_fwd.z))
+
+	# Debug the yaw calculation
+	if OS.is_debug_build():
+		print("=== Yaw-Based Debug ===")
+		print("Object forward: ", obj_fwd)
+		print("Object yaw: %.2f°" % obj_yaw)
+		print("Camera forward: ", cam_fwd)
+		print("Camera yaw: %.2f°" % cam_yaw)
+		print("Raw angle (cam_yaw - obj_yaw): %.2f°" % (cam_yaw - obj_yaw))
+
 	var angle := fmod(cam_yaw - obj_yaw + 360.0, 360.0)
+
+	if OS.is_debug_build():
+		print("Final angle: %.2f°" % angle)
+		print("Calculated segment: %d" % _get_segment_from_angle(angle))
+		print("====================")
+
 	return _get_segment_from_angle(angle)
 
 # Calculate segment for non-mirror cameras (full position-based version)
@@ -260,50 +325,135 @@ func _calculate_segment(camera: Camera3D) -> int:
 	# Force yaw-only path if requested (but not for mirrors)
 	if camera_yaw_only:
 		return _calculate_segment_by_yaw(camera)
-	
-	# -------- Normal camera calculation (position based) --------
+
+	# -------- Simple approach: Use mirror logic but account for camera rotation --------
+	# Start with the same calculation as mirrors (which works), then adjust for camera rotation
+
 	var obj_pos: Vector3 = _reference_node.global_position
 	var cam_pos: Vector3 = camera.global_position
-	var dx: float = cam_pos.x - obj_pos.x
-	var dz: float = cam_pos.z - obj_pos.z
+
+	# Calculate vector FROM object TO camera (same as mirror logic)
+	var to_camera := cam_pos - obj_pos
+	to_camera.y = 0 # Project to XZ plane
 
 	# If camera is effectively inside the object (first-person), use view direction
-	if abs(dx) < 0.02 and abs(dz) < 0.02:
-		var cam_forward: Vector3 = - camera.global_transform.basis.z
-		cam_forward.y = 0
-		if cam_forward.length_squared() > 0.0001:
-			return _segment_from_direction(cam_forward.normalized())
+	if to_camera.length_squared() < 0.0004: # 0.02^2
+		return _calculate_segment_by_yaw(camera)
 
 	# Close-camera override
-	var dist_sq := dx * dx + dz * dz
+	var dist_sq := to_camera.length_squared()
 	if front_on_close_camera and dist_sq < close_camera_distance * close_camera_distance:
 		_debug_last_angle = 0.0
 		_debug_forward_comp = 0.0
 		_debug_right_comp = 0.0
 		return 0
 
-	# Project camera vector into object local space
-	var basis := _reference_node.global_transform.basis
-	var forward: Vector3 = - basis.z
-	var right: Vector3 = basis.x
-	var f_comp: float = forward.x * dx + forward.z * dz
-	var r_comp: float = right.x * dx + right.z * dz
-	_debug_forward_comp = f_comp
-	_debug_right_comp = r_comp
-	var angle := rad_to_deg(atan2(r_comp, f_comp))
+	# Normalize the to_camera vector
+	to_camera = to_camera.normalized()
+
+	# Get object's forward and right vectors (same as mirror logic)
+	var obj_basis := _reference_node.global_transform.basis
+	var obj_forward: Vector3 = - obj_basis.z
+	var obj_right: Vector3 = obj_basis.x
+
+	# Project to XZ plane and normalize
+	obj_forward.y = 0
+	obj_right.y = 0
+	obj_forward = obj_forward.normalized()
+	obj_right = obj_right.normalized()
+
+	# Calculate dot products to determine angle (same as mirror logic)
+	var forward_dot: float = obj_forward.dot(to_camera)
+	var right_dot: float = obj_right.dot(to_camera)
+
+	# Calculate the base angle (same as mirror logic)
+	var base_angle := rad_to_deg(atan2(right_dot, forward_dot))
+	if base_angle < 0:
+		base_angle += 360.0
+
+	# HERE'S THE KEY: Transform coordinate system based on camera rotation
+	# Instead of adjusting angles, transform the to_camera vector based on camera rotation
+	var cam_y_rotation := rad_to_deg(camera.rotation.y)
+	var cam_global_y_rotation := rad_to_deg(camera.global_rotation.y)
+
+	# Use whichever rotation value is more significant
+	var effective_rotation = cam_y_rotation
+	if abs(cam_global_y_rotation) > abs(cam_y_rotation):
+		effective_rotation = cam_global_y_rotation
+
+	# Transform the to_camera vector by rotating it by the camera's rotation
+	# This properly handles the coordinate system transformation
+	var transformed_to_camera = to_camera
+	if abs(effective_rotation) > 1.0: # Camera has significant rotation
+		var rotation_rad = deg_to_rad(-effective_rotation) # Negative to counter-rotate
+		var cos_rot = cos(rotation_rad)
+		var sin_rot = sin(rotation_rad)
+
+		# Apply 2D rotation matrix to XZ components
+		var new_x = to_camera.x * cos_rot - to_camera.z * sin_rot
+		var new_z = to_camera.x * sin_rot + to_camera.z * cos_rot
+		transformed_to_camera = Vector3(new_x, 0, new_z).normalized()
+
+	# Recalculate dot products with the transformed vector
+	var transformed_forward_dot: float = obj_forward.dot(transformed_to_camera)
+	var transformed_right_dot: float = obj_right.dot(transformed_to_camera)
+
+	# Calculate angle using the transformed vector
+	var angle := rad_to_deg(atan2(transformed_right_dot, transformed_forward_dot))
 	if angle < 0:
 		angle += 360.0
+
+	_debug_forward_comp = transformed_forward_dot
+	_debug_right_comp = transformed_right_dot
 	_debug_last_angle = angle
-	return _get_segment_from_angle(angle)
+
+	var segment = _get_segment_from_angle(angle)
+
+	# Debug output for normal cameras
+	if OS.is_debug_build():
+		print("=== Normal Camera Debug (Coordinate Transform) ===")
+		print("Player position: ", obj_pos)
+		print("Camera position: ", cam_pos)
+		print("Original to_camera vector: ", to_camera)
+		print("Effective camera rotation: %.2f°" % effective_rotation)
+		print("Transformed to_camera vector: ", transformed_to_camera)
+		print("Object forward: ", obj_forward)
+		print("Object right: ", obj_right)
+		print("Original forward dot: %.3f" % forward_dot)
+		print("Original right dot: %.3f" % right_dot)
+		print("Transformed forward dot: %.3f" % transformed_forward_dot)
+		print("Transformed right dot: %.3f" % transformed_right_dot)
+		print("Base angle: %.2f°" % base_angle)
+		print("Final transformed angle: %.2f°" % angle)
+		print("Calculated segment: ", segment)
+		print("Direction mode: ", direction_mode)
+		print("==================================================")
+
+	return segment
 
 # Helper: derive segment from an arbitrary XZ-plane direction vector
 func _segment_from_direction(dir: Vector3) -> int:
+	# Use consistent approach with normalized vectors and dot products
 	var basis := _reference_node.global_transform.basis
 	var forward: Vector3 = - basis.z
 	var right: Vector3 = basis.x
-	var f_comp := forward.x * dir.x + forward.z * dir.z
-	var r_comp := right.x * dir.x + right.z * dir.z
-	var angle := rad_to_deg(atan2(r_comp, f_comp))
+
+	# Project to XZ plane and normalize
+	forward.y = 0
+	right.y = 0
+	forward = forward.normalized()
+	right = right.normalized()
+
+	# Ensure direction is also normalized and projected to XZ plane
+	dir.y = 0
+	dir = dir.normalized()
+
+	# Calculate dot products
+	var forward_dot: float = forward.dot(dir)
+	var right_dot: float = right.dot(dir)
+
+	# Calculate angle using dot products
+	var angle := rad_to_deg(atan2(right_dot, forward_dot))
 	if angle < 0:
 		angle += 360.0
 	return _get_segment_from_angle(angle)
@@ -318,25 +468,61 @@ func _get_segment_from_angle(angle: float) -> int:
 			return _segment_8(angle) # covers both 8-dir modes
 
 func _segment_3(angle: float) -> int:
-	if angle >= 315 or angle < 45:
+	# Improved THREE_DIRECTIONAL logic with better boundary handling
+	var front_half: float = clamp(three_dir_front_half_deg, 5.0, 89.0)
+
+	# Normalize angle to 0-360 range
+	while angle < 0:
+		angle += 360.0
+	while angle >= 360.0:
+		angle -= 360.0
+
+	# Front range: within ±front_half degrees of forward (0°)
+	# Handle wraparound at 0°/360° boundary more explicitly
+	if angle <= front_half or angle >= (360.0 - front_half):
 		return 0 # front
-	elif (angle >= 45 and angle < 135) or (angle >= 225 and angle < 315):
-		return 1 # side
-	else:
+
+	# Back range: within ±front_half degrees of 180° (object facing away)
+	elif angle >= (180.0 - front_half) and angle <= (180.0 + front_half):
 		return 2 # back
 
+	# Everything else is considered side (left or right)
+	else:
+		return 1 # side
+
 func _segment_4(angle: float) -> int:
-	# 90° quadrants centered on axes
-	if angle >= 315 or angle < 45:
+	# Improved FOUR_DIRECTIONAL logic with configurable boundaries
+	# Normalize angle to 0-360 range
+	while angle < 0:
+		angle += 360.0
+	while angle >= 360.0:
+		angle -= 360.0
+
+	var offset: float = clamp(four_dir_angle_offset, 0.0, 89.0)
+	var boundary1 = offset # Default: 45°
+	var boundary2 = 90.0 + offset # Default: 135°
+	var boundary3 = 180.0 + offset # Default: 225°
+	var boundary4 = 270.0 + offset # Default: 315°
+
+	# 90° quadrants with configurable boundaries
+	if angle >= boundary4 or angle < boundary1:
 		return 0 # front
-	elif angle < 135:
+	elif angle < boundary2:
 		return 1 # right
-	elif angle < 225:
+	elif angle < boundary3:
 		return 2 # back
 	else:
 		return 3 # left
 
 func _segment_8(angle: float) -> int:
+	# Improved EIGHT_DIRECTIONAL logic with better angle normalization
+	# Normalize angle to 0-360 range
+	while angle < 0:
+		angle += 360.0
+	while angle >= 360.0:
+		angle -= 360.0
+
+	# Calculate segment with 45° boundaries, offset by 22.5° to center on axes
 	var seg := int(floor((angle + 22.5) / 45.0)) % 8
 	return seg
 
@@ -461,13 +647,134 @@ func debug_angle_info() -> Dictionary:
 		return {}
 
 	var seg := _calculate_segment(cam)
+	var mode_name := ""
+	var threshold_info := {}
+
+	match direction_mode:
+		DirectionMode.THREE_DIRECTIONAL:
+			mode_name = "THREE_DIRECTIONAL"
+			threshold_info = {
+				"front_half_deg": three_dir_front_half_deg,
+				"front_range": "0° ±%.1f° (%.1f° - %.1f°, %.1f° - 360°)" % [
+					three_dir_front_half_deg,
+					0.0, three_dir_front_half_deg,
+					360.0 - three_dir_front_half_deg
+				],
+				"back_range": "180° ±%.1f° (%.1f° - %.1f°)" % [
+					three_dir_front_half_deg,
+					180.0 - three_dir_front_half_deg,
+					180.0 + three_dir_front_half_deg
+				]
+			}
+		DirectionMode.FOUR_DIRECTIONAL:
+			mode_name = "FOUR_DIRECTIONAL"
+			threshold_info = {
+				"angle_offset": four_dir_angle_offset,
+				"boundaries": "%.1f°, %.1f°, %.1f°, %.1f°" % [
+					four_dir_angle_offset,
+					90.0 + four_dir_angle_offset,
+					180.0 + four_dir_angle_offset,
+					270.0 + four_dir_angle_offset
+				]
+			}
+		DirectionMode.EIGHT_DIRECTIONAL, DirectionMode.EIGHT_DIRECTIONAL_FLIP:
+			mode_name = "EIGHT_DIRECTIONAL" if direction_mode == DirectionMode.EIGHT_DIRECTIONAL else "EIGHT_DIRECTIONAL_FLIP"
+			threshold_info = {
+				"segment_size": 45.0,
+				"boundaries": "22.5°, 67.5°, 112.5°, 157.5°, 202.5°, 247.5°, 292.5°, 337.5°"
+			}
+
 	return {
 		"angle_degrees": _debug_last_angle,
 		"forward_component": _debug_forward_comp,
 		"right_component": _debug_right_comp,
 		"segment": seg,
 		"direction_mode": direction_mode,
+		"mode_name": mode_name,
 		"sprite_name": (seg >= 0 and seg < sprite_names.size()) and sprite_names[seg] or "",
+		"is_mirror_camera": _is_mirror_camera,
+		"threshold_info": threshold_info
+	}
+
+# Debug function to print detailed angle information
+func print_debug_info():
+	var debug_info = debug_angle_info()
+	if debug_info.is_empty():
+		print("DirectionalSpriteAnimator: No debug info available")
+		return
+
+	print("=== DirectionalSpriteAnimator Debug Info ===")
+	print("Mode: %s (%d)" % [debug_info.get("mode_name", "unknown"), debug_info.get("direction_mode", -1)])
+	print("Current angle: %.2f°" % debug_info.get("angle_degrees", 0))
+	print("Forward component: %.3f" % debug_info.get("forward_component", 0))
+	print("Right component: %.3f" % debug_info.get("right_component", 0))
+	print("Calculated segment: %d" % debug_info.get("segment", -1))
+	print("Current sprite: %s" % debug_info.get("sprite_name", "unknown"))
+	print("Is mirror camera: %s" % debug_info.get("is_mirror_camera", false))
+
+	var threshold_info = debug_info.get("threshold_info", {})
+	if not threshold_info.is_empty():
+		print("Threshold info:")
+		for key in threshold_info:
+			print("  %s: %s" % [key, threshold_info[key]])
+	print("==========================================")
+
+# Test function to see what segment a specific angle would produce
+func test_angle(angle_degrees: float) -> Dictionary:
+	var segment = _get_segment_from_angle(angle_degrees)
+	return {
+		"input_angle": angle_degrees,
+		"calculated_segment": segment,
+		"sprite_name": (segment >= 0 and segment < sprite_names.size()) and sprite_names[segment] or "invalid",
+		"direction_mode": direction_mode
+	}
+
+# Test multiple angles to see the boundaries
+func test_angle_boundaries():
+	print("=== Angle Boundary Test ===")
+	var test_angles = [0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5]
+	for angle in test_angles:
+		var result = test_angle(angle)
+		print("%.1f° -> segment %d (%s)" % [angle, result.calculated_segment, result.sprite_name])
+	print("===========================")
+
+# Compare old vs new angle calculation methods for debugging
+func compare_calculation_methods(camera: Camera3D) -> Dictionary:
+	if not camera or not _reference_node:
+		return {}
+
+	var obj_pos: Vector3 = _reference_node.global_position
+	var cam_pos: Vector3 = camera.global_position
+
+	# OLD METHOD (the problematic position-based one)
+	var dx: float = cam_pos.x - obj_pos.x
+	var dz: float = cam_pos.z - obj_pos.z
+	var basis_old := _reference_node.global_transform.basis
+	var forward_old: Vector3 = - basis_old.z
+	var right_old: Vector3 = basis_old.x
+	var f_comp_old: float = forward_old.x * dx + forward_old.z * dz
+	var r_comp_old: float = right_old.x * dx + right_old.z * dz
+	var angle_old := rad_to_deg(atan2(r_comp_old, f_comp_old))
+	if angle_old < 0:
+		angle_old += 360.0
+
+	# NEW METHOD (yaw-based, handles camera rotation correctly)
+	var obj_fwd: Vector3 = - _reference_node.global_transform.basis.z
+	var obj_yaw := rad_to_deg(atan2(obj_fwd.x, obj_fwd.z))
+	var cam_fwd: Vector3 = - camera.global_transform.basis.z
+	var cam_yaw := rad_to_deg(atan2(cam_fwd.x, cam_fwd.z))
+	var angle_new := fmod(cam_yaw - obj_yaw + 360.0, 360.0)
+
+	return {
+		"old_angle": angle_old,
+		"new_angle": angle_new,
+		"angle_difference": abs(angle_new - angle_old),
+		"old_segment": _get_segment_from_angle(angle_old),
+		"new_segment": _get_segment_from_angle(angle_new),
+		"segments_match": _get_segment_from_angle(angle_old) == _get_segment_from_angle(angle_new),
+		"obj_yaw": obj_yaw,
+		"cam_yaw": cam_yaw,
+		"method": "yaw_based"
 	}
 
 # ────────────────────────────────────────────────────────────────────────────────

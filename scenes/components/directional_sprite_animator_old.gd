@@ -1,4 +1,4 @@
-class_name DirectionalSpriteAnimator extends Node
+extends Node
 
 ## A reusable component for animating sprites based on camera viewing angle
 ## Supports both 4-directional and 8-directional sprite animation with equal angle segments

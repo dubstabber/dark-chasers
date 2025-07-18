@@ -939,7 +939,5 @@ autoplay = "stay-front"
 
 [node name="DirectionalSpriteAnimator" parent="." instance=ExtResource("40_7obkq")]
 sprite_node_path = NodePath("../AnimatedSprite3D")
-reference_node_path = NodePath("..")
 direction_mode = 0
-front_on_close_camera = true
 sprite_names = Array[String](["front", "side", "back"])

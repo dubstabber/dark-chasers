@@ -97,8 +97,14 @@ func _setup_sprite_animator():
 	for s in stay_sprites:
 		sprite_animator.sprite_names.append(s)
 
-	# reference node is the eyes so facing follows head orientation
-	sprite_animator.reference_node_path = NodePath("nek/head/eyes")
+	# reference node is the player root to get full rotation (Y rotation from mouse horizontal movement)
+	sprite_animator.reference_node_path = NodePath("")
+
+	# Use yaw-only calculation to avoid head bobbing position interference
+	sprite_animator.camera_yaw_only = true
+	
+	# Enable always_check_camera so mirrors update even when standing still
+	sprite_animator.always_check_camera = true
 
 	# Ensure next frame computes a sprite
 	sprite_animator._last_segment = -1

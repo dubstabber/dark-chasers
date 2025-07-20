@@ -50,6 +50,14 @@ var has_moving_state: bool = false
 var idle_sprites: Dictionary = {}
 var movement_sprites: Dictionary = {}
 
+# Direction and animation state
+var current_direction: String = "front"
+var current_frame: int = 0
+var is_moving: bool = false
+
+# Shader material for directional rendering
+var directional_material: ShaderMaterial
+
 #endregion
 
 #region Initialization
@@ -57,6 +65,11 @@ var movement_sprites: Dictionary = {}
 func _ready():
 	_initialize_sprite_dictionaries()
 	_update_moving_state()
+	_setup_shader_material()
+
+func _process(_delta):
+	_update_directional_rendering()
+	_update_target_position()
 
 func _initialize_sprite_dictionaries():
 	var directions = _get_current_directions()
@@ -166,13 +179,18 @@ func generate_atlas() -> ImageTexture:
 	
 	if atlas_texture:
 		texture = atlas_texture
-	
+		# Update shader uniforms when atlas changes
+		call_deferred("_update_shader_uniforms")
+
 	return atlas_texture
 
 func _generate_atlas_if_ready():
 	if is_inside_tree():
 		if _has_any_sprites():
 			generate_atlas()
+			# Ensure shader material is set up
+			if directional_material == null:
+				_setup_shader_material()
 		else:
 			texture = null
 
@@ -329,8 +347,8 @@ func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row:
 	
 	# Calculate position and blit
 	var dest_pos = Vector2i(col * sprite_size.x, row * sprite_size.y)
-	var src_rect = Rect2i(0, 0, 
-		min(sprite_image.get_width(), sprite_size.x), 
+	var src_rect = Rect2i(0, 0,
+		min(sprite_image.get_width(), sprite_size.x),
 		min(sprite_image.get_height(), sprite_size.y))
 	
 	atlas_image.blit_rect(sprite_image, src_rect, dest_pos)
@@ -351,12 +369,20 @@ func _update_moving_state():
 		notify_property_list_changed()
 		call_deferred("_generate_atlas_if_ready")
 
-func _get_target_node() -> Node:
+func _get_target_node() -> Node3D:
+	var target_node: Node = null
 	if not target_node_path.is_empty() and has_node(target_node_path):
-		return get_node(target_node_path)
-	return get_parent()
+		target_node = get_node(target_node_path)
+	else:
+		target_node = get_parent()
 
-func _target_has_moving_state(target: Node) -> bool:
+	# Ensure we return a Node3D or null
+	if target_node is Node3D:
+		return target_node
+	else:
+		return null
+
+func _target_has_moving_state(target: Node3D) -> bool:
 	if target.get("moving_state") != null:
 		return true
 	
@@ -368,6 +394,154 @@ func _target_has_moving_state(target: Node) -> bool:
 
 #endregion
 
+#region Directional Rendering
 
+func _setup_shader_material():
+	# Create shader material if it doesn't exist
+	if directional_material == null:
+		directional_material = ShaderMaterial.new()
+		var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
+		directional_material.shader = shader
+		material_override = directional_material
 
+	# Initialize shader uniforms
+	_update_shader_uniforms()
 
+func _update_directional_rendering():
+	if not is_inside_tree() or directional_material == null:
+		return
+
+	# Check for movement state changes (direction is now calculated in shader)
+	var target_node = _get_target_node()
+	if target_node == null:
+		return
+
+	var new_moving_state = _get_moving_state(target_node)
+
+	# Update if movement state changed (shader handles direction automatically)
+	if new_moving_state != is_moving:
+		is_moving = new_moving_state
+		_update_shader_uniforms()
+
+func _calculate_camera_direction(camera: Camera3D, target: Node3D) -> String:
+	# Calculate direction vector from target to camera
+	var direction_to_camera = target.global_position.direction_to(camera.global_position)
+
+	# Get target's transform basis for local direction calculation
+	var target_basis = target.global_transform.basis
+	var forward = target_basis.z # Local forward direction
+	var right = target_basis.x # Local right direction
+
+	# Calculate dot products for direction determination
+	var forward_dot = forward.dot(direction_to_camera)
+	var _right_dot = right.dot(direction_to_camera) # Used for other direction modes
+
+	# Determine direction based on THREE_DIRECTIONAL system
+	if direction_mode == DirectionMode.THREE_DIRECTIONS:
+		if forward_dot < -0.5:
+			return "front" # Camera is in front of target
+		elif forward_dot > 0.5:
+			return "back" # Camera is behind target
+		else:
+			return "side" # Camera is to the side
+
+	# For other direction modes, implement similar logic
+	# This is a simplified version focusing on THREE_DIRECTIONAL
+	return "front"
+
+func _get_moving_state(target: Node3D) -> bool:
+	# Check if target has moving_state property
+	if target.has_method("get") and target.get("moving_state") != null:
+		var moving_state = target.get("moving_state")
+		# Ensure we return a boolean
+		if moving_state is bool:
+			return moving_state
+		elif moving_state is String:
+			return moving_state != "" and moving_state != "idle"
+		else:
+			return bool(moving_state)
+
+	# Check if target has velocity and is moving
+	if target.has_method("get") and target.get("velocity") != null:
+		var velocity = target.get("velocity")
+		if velocity is Vector3:
+			return velocity.length() > 0.1
+
+	return false
+
+func _update_shader_uniforms():
+	if directional_material == null or texture == null:
+		return
+
+	# Set atlas texture
+	directional_material.set_shader_parameter("atlas_texture", texture)
+
+	# Calculate atlas dimensions and frame size
+	var atlas_size = Vector2(texture.get_width(), texture.get_height())
+	var frame_size = get_atlas_frame_size()
+
+	if frame_size != Vector2i.ZERO:
+		directional_material.set_shader_parameter("atlas_dimensions", atlas_size)
+		directional_material.set_shader_parameter("frame_size", Vector2(frame_size))
+
+		# Set direction count
+		var directions = _get_current_directions()
+		directional_material.set_shader_parameter("direction_count", directions.size())
+
+		# Set current frame (0 for idle, >0 for movement frames)
+		var frame_index = 0
+		if is_moving and has_moving_state:
+			# For movement, use frame 1+ (idle is frame 0)
+			frame_index = 1 # Could be animated based on time
+		directional_material.set_shader_parameter("current_frame", frame_index)
+
+		# Set target position for shader-based direction calculation
+		var target_node = _get_target_node()
+		if target_node:
+			directional_material.set_shader_parameter("target_position", target_node.global_position)
+		else:
+			directional_material.set_shader_parameter("target_position", global_position)
+
+		# Enable automatic direction calculation in shader (works for all camera types)
+		directional_material.set_shader_parameter("auto_direction", true)
+
+		# Set billboard mode based on Sprite3D's billboard property
+		var billboard_enabled = (billboard != BaseMaterial3D.BILLBOARD_DISABLED)
+		directional_material.set_shader_parameter("billboard_enabled", billboard_enabled)
+
+		# Set alpha cut from Sprite3D property
+		directional_material.set_shader_parameter("alpha_cut", alpha_cut)
+
+		# Set albedo color (default white)
+		directional_material.set_shader_parameter("albedo_color", Color.WHITE)
+
+func _should_flip_horizontal() -> bool:
+	if direction_mode != DirectionMode.THREE_DIRECTIONS or current_direction != "side":
+		return false
+
+	# Get current camera for flip determination
+	var current_camera = get_viewport().get_camera_3d()
+	var target_node = _get_target_node()
+
+	if current_camera == null or target_node == null:
+		return false
+
+	# Calculate if camera is on the right side (should flip)
+	var direction_to_camera = target_node.global_position.direction_to(current_camera.global_position)
+	var target_basis = target_node.global_transform.basis
+	var right = target_basis.x
+
+	return right.dot(direction_to_camera) > 0
+
+func _update_target_position():
+	# Update target position in shader for real-time direction calculation
+	if directional_material == null:
+		return
+
+	var target_node = _get_target_node()
+	if target_node:
+		directional_material.set_shader_parameter("target_position", target_node.global_position)
+	else:
+		directional_material.set_shader_parameter("target_position", global_position)
+
+#endregion

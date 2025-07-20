@@ -74,11 +74,11 @@ var debug_camera: Camera3D # temporary
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
 
 
-
-
-func _update_animation_state():
-	if velocity.length() > 0.1:
-		moving_state = "run"
+# func _update_animation_state():
+# 	if velocity.length() > 0.1:
+# 		moving_state = "run"
+# 	else:
+# 		moving_state = "idle"
 
 
 func _input(event):
@@ -230,7 +230,7 @@ func _physics_process(delta):
 			velocity.y = current_speed
 			
 		# Update animation state based on movement
-		_update_animation_state()
+		# _update_animation_state()
 
 		last_velocity = velocity
 		move_and_slide()

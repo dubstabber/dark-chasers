@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqxvfk53peer"]
+
+[ext_resource type="Script" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gd" id="1_test"]
+[ext_resource type="Script" path="res://scenes/components/directional_sprite_3d/test_camera_controller.gd" id="2_test"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.2, 0.2, 0.3, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.5
+height = 2.0
+
+[node name="TestDirectionalSprite" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.866, 0.5, 0, -0.5, 0.866, 0, 2, 5)
+environment = SubResource("Environment_1")
+script = ExtResource("2_test")
+
+[node name="TestTarget" type="CharacterBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="DirectionalSprite3D" type="Sprite3D" parent="TestTarget"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 2
+shaded = true
+script = ExtResource("1_test")
+direction_mode = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestTarget"]
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Instructions" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -100.0
+offset_right = 400.0
+offset_bottom = -10.0
+text = "DirectionalSprite3D Billboard Test:
+1. Add front/side/back idle sprites to DirectionalSprite3D in inspector
+2. Use Arrow Keys or WASD to orbit camera around target
+3. Use Q/E to move camera up/down
+4. Press R to reset camera position
+5. Press B to toggle billboard mode (test Y-axis billboard)
+6. Press SPACE for debug info
+7. IMPORTANT: With billboard ON, sprite should NEVER show thin edges
+8. The sprite face should always be visible from any horizontal angle
+9. Compare with billboard OFF to see the difference"

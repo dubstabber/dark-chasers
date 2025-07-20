@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://dqxvfk53peer"]
+
+[ext_resource type="Script" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gd" id="1_editor"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.2, 0.2, 0.3, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_1"]
+size = Vector2(64, 64)
+
+[node name="EditorPreviewTest" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.866, 0.5, 0, -0.5, 0.866, 0, 2, 5)
+environment = SubResource("Environment_1")
+
+[node name="TestTarget" type="Node3D" parent="."]
+
+[node name="DirectionalSprite3D" type="Sprite3D" parent="TestTarget"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 2
+shaded = true
+texture = SubResource("PlaceholderTexture2D_1")
+script = ExtResource("1_editor")
+direction_mode = 0
+
+[node name="Instructions" type="Label" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -100.0
+offset_right = 500.0
+offset_bottom = -10.0
+text = "Editor Preview Test:
+1. Add front/side/back sprites to DirectionalSprite3D in inspector
+2. Move the EDITOR camera around in the 3D viewport
+3. The sprite should change directions in the editor preview
+4. Test by orbiting around the object in the editor
+5. Compare with runtime behavior - should be identical"

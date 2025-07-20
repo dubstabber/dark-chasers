@@ -53,6 +53,8 @@ var head_bobbing_current_intensity = 0.0
 
 var blocked_movement := false
 
+var moving_state := "idle"
+
 var hud: CanvasLayer
 
 var debug_camera: Camera3D # temporary
@@ -70,76 +72,13 @@ var debug_camera: Camera3D # temporary
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
 @onready var interact_sound = $InteractSound
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
-@onready var sprite_animator = $DirectionalSpriteAnimator
 
 
-# -----------------------------------------------------------------------------
-#  SPRITE ANIMATION SETUP / UPDATE
-# -----------------------------------------------------------------------------
-
-func _ready():
-	_setup_sprite_animator()
-
-func _setup_sprite_animator():
-	if not sprite_animator:
-		return
-
-	# 3-directional animations that follow the pattern "state-direction"
-	sprite_animator.direction_mode = DirectionalSpriteAnimator.DirectionMode.THREE_DIRECTIONAL
-
-	# Initial sprite set – idle "stay" state
-	var stay_sprites := [
-		"stay-front",
-		"stay-side",
-		"stay-back",
-	]
-	sprite_animator.sprite_names.clear()
-	for s in stay_sprites:
-		sprite_animator.sprite_names.append(s)
-
-	# reference node is the player root to get full rotation (Y rotation from mouse horizontal movement)
-	sprite_animator.reference_node_path = NodePath("")
-
-	# Use yaw-only calculation to avoid head bobbing position interference
-	sprite_animator.camera_yaw_only = true
-	
-	# Enable always_check_camera so mirrors update even when standing still
-	sprite_animator.always_check_camera = true
-
-	# Ensure next frame computes a sprite
-	sprite_animator._last_segment = -1
-
-	# (Optional) listen to sprite changes for debugging
-	# sprite_animator.sprite_changed.connect(_on_sprite_changed)
-
-func _on_sprite_changed(_name: String):
-	# For debugging – leave empty for now
-	pass
 
 
 func _update_animation_state():
-	if not sprite_animator:
-		return
-
-	# Determine animation state based on player movement and actions
-	var new_state = "stay" # Default to idle/stay
-	# Check if player is moving (has velocity)
 	if velocity.length() > 0.1:
-		new_state = "run"
-
-	# Build sprite list for the chosen state (front/side/back)
-	var new_sprites := [
-		"%s-front" % new_state,
-		"%s-side" % new_state,
-		"%s-back" % new_state,
-	]
-
-	if sprite_animator and sprite_animator.sprite_names != new_sprites:
-		sprite_animator.sprite_names.clear()
-	for s in new_sprites:
-		sprite_animator.sprite_names.append(s)
-		# Force animator to refresh next frame
-		sprite_animator._last_segment = -1
+		moving_state = "run"
 
 
 func _input(event):

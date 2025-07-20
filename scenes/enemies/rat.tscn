@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://jgmxt13pm14c"]
+[gd_scene load_steps=38 format=3 uid="uid://jgmxt13pm14c"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_7e6im"]
 [ext_resource type="Texture2D" uid="uid://1n6cqvqjy2y3" path="res://images/enemies/rat/1177A5.png" id="2_aas3s"]
@@ -33,7 +33,6 @@
 [ext_resource type="AudioStream" uid="uid://dot04hbgwhwx8" path="res://sounds/sfx/SND1338.wav" id="31_fnqv1"]
 [ext_resource type="AudioStream" uid="uid://cry3jcsiq1ckr" path="res://sounds/sfx/SND1339.wav" id="32_jnfsc"]
 [ext_resource type="AudioStream" uid="uid://4f7kqn8hx7fc" path="res://sounds/sfx/SND1340.wav" id="33_87hou"]
-[ext_resource type="PackedScene" uid="uid://bqm8xvn4qxqxq" path="res://scenes/components/directional_sprite_animator.tscn" id="34_htnwb"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_pe523"]
 animations = [{
@@ -240,11 +239,5 @@ volume_db = -15.0
 [node name="DeathSound" type="AudioStreamPlayer3D" parent="." index="7"]
 stream = SubResource("AudioStreamRandomizer_71mfx")
 volume_db = -13.0
-
-[node name="DirectionalSpriteAnimator" parent="." index="8" instance=ExtResource("34_htnwb")]
-sprite_node_path = NodePath("../Graphics/AnimatedSprite3D")
-reference_node_path = NodePath("..")
-direction_mode = 3
-sprite_names = Array[String](["front", "front-side", "side", "back-side", "back"])
 
 [connection signal="timeout" from="Timers/SoundInterval" to="." method="_on_sound_interval_timeout"]

@@ -23,13 +23,11 @@ func _enter_tree():
 
 
 func _ready():
+	MainCam = get_node_or_null(MainCamPath)
 	cam = $MirrorContainer/SubViewport/Camera3D
 	mirror = $MirrorContainer/MeshInstance3D
 	viewport = $MirrorContainer/SubViewport
 
-	# Add this camera to a global group so other scripts can query all mirror cameras
-	if cam and not cam.is_in_group("mirror_camera"):
-		cam.add_to_group("mirror_camera")
 
 
 func _process(delta):

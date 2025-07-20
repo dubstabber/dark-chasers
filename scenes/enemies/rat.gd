@@ -5,55 +5,6 @@ var health := 20
 
 @onready var animated_sprite: AnimatedSprite3D = $Graphics/AnimatedSprite3D
 @onready var mouse_sound_player: AudioStreamPlayer3D = $MouseSoundPlayer3D
-@onready var sprite_animator = $DirectionalSpriteAnimator
-
-func _ready():
-	_setup_sprite_animator()
-	# Connect to animation signals to handle death animation positioning
-	animated_sprite.animation_finished.connect(_on_death_animation_finished)
-
-func _setup_sprite_animator():
-	if sprite_animator:
-		# Configure the sprite animator component
-		sprite_animator.sprite_node_path = NodePath("Graphics/AnimatedSprite3D")
-		sprite_animator.reference_node_path = NodePath("Graphics") # Use Graphics node as reference
-		sprite_animator.sprite_changed.connect(_on_sprite_changed)
-
-		# Configure for 8-directional animation with sprite flipping (new API)
-		# Start with "stay" state sprites (only 5 sprites needed with flipping)
-		var stay_sprites: Array[String] = ["stay-front", "stay-front-side", "stay-side", "stay-back-side", "stay-back"]
-		sprite_animator.direction_mode = DirectionalSpriteAnimator.DirectionMode.EIGHT_DIRECTIONAL_FLIP
-		sprite_animator.sprite_names = stay_sprites
-		# Force immediate update by resetting cached segment
-		sprite_animator._last_segment = -1
-
-func _on_sprite_changed(sprite_name: String):
-	current_anim = sprite_name
-
-func _physics_process(delta):
-	super._physics_process(delta)
-	_update_animation_state()
-	_monitor_death_animation()
-
-func _update_animation_state():
-	if is_killed:
-		sprite_animator.set_process(false)
-		return
-
-	# Update sprite names based on current movement state
-	var state = "run" if velocity else "stay"
-	var new_sprites: Array[String] = []
-
-	# Build sprite names for current state (5 sprites with flipping)
-	var base_directions = ["front", "front-side", "side", "back-side", "back"]
-	for dir_name in base_directions:
-		new_sprites.append(state + "-" + dir_name)
-
-	# Only update if the state changed
-	if sprite_animator.sprite_names != new_sprites:
-		sprite_animator.sprite_names = new_sprites
-		# Reset cached segment so animator picks correct sprite next frame
-		sprite_animator._last_segment = -1
 
 
 func _on_sound_interval_timeout() -> void:
@@ -93,14 +44,7 @@ func take_damage(amount: int) -> void:
 	health -= amount
 	if health <= 0:
 		is_killed = true
-		# Disable the sprite animator and manually play death animation
-		sprite_animator.set_process(false)
-
-		# Adjust sprite position for better death animation visibility
-		# The death animation frames appear to be positioned lower in their textures
-		# so we need to raise the sprite to keep it visible above ground
 		animated_sprite.position.y += 0.05
-
 		animated_sprite.play('death')
 		velocity = Vector3.ZERO
 		$Timers/SoundInterval.autostart = false

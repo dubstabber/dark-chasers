@@ -162,6 +162,10 @@ func generate_atlas() -> ImageTexture:
 		push_warning("DirectionalSprite3D: No directions available for atlas generation")
 		return null
 	
+	# Validate sprite dimensions before proceeding
+	if not _validate_sprite_dimensions(directions):
+		return null
+	
 	# Collect sprites and determine dimensions
 	var all_sprites: Array[Array] = []
 	var sprite_size = _get_sprite_dimensions(directions)
@@ -265,17 +269,27 @@ func _has_any_sprites() -> bool:
 	return false
 
 func _get_sprite_dimensions(directions: Array) -> Vector2i:
+	var max_width = 0
+	var max_height = 0
+	
+	# Scan all sprites to find maximum dimensions
 	for direction in directions:
+		# Check idle sprite
 		var idle_sprite = idle_sprites.get(direction)
 		if idle_sprite is Texture2D:
-			return _get_texture_dimensions(idle_sprite)
+			var dimensions = _get_texture_dimensions(idle_sprite)
+			max_width = max(max_width, dimensions.x)
+			max_height = max(max_height, dimensions.y)
 		
+		# Check movement sprites
 		var movement_sprites_array = movement_sprites.get(direction, [])
 		for sprite in movement_sprites_array:
 			if sprite is Texture2D:
-				return _get_texture_dimensions(sprite)
+				var dimensions = _get_texture_dimensions(sprite)
+				max_width = max(max_width, dimensions.x)
+				max_height = max(max_height, dimensions.y)
 	
-	return Vector2i.ZERO
+	return Vector2i(max_width, max_height)
 
 func _get_texture_dimensions(tex: Texture2D) -> Vector2i:
 	var image = tex.get_image()
@@ -286,6 +300,19 @@ func _get_texture_dimensions(tex: Texture2D) -> Vector2i:
 		image.decompress()
 	
 	return Vector2i(image.get_width(), image.get_height())
+
+## Validates that all sprites have reasonable dimensions for atlas generation
+func _validate_sprite_dimensions(directions: Array) -> bool:
+	var max_dimensions = _get_sprite_dimensions(directions)
+	if max_dimensions == Vector2i.ZERO:
+		push_warning("DirectionalSprite3D: No valid sprites found for atlas generation")
+		return false
+	
+	# Check for extremely large textures that might cause memory issues
+	if max_dimensions.x > 2048 or max_dimensions.y > 2048:
+		push_warning("DirectionalSprite3D: Large sprite dimensions detected (%dx%d). Consider using smaller textures for better performance." % [max_dimensions.x, max_dimensions.y])
+	
+	return true
 
 func _collect_direction_sprites(direction: String) -> Array[Texture2D]:
 	var direction_sprites: Array[Texture2D] = []
@@ -345,11 +372,29 @@ func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row:
 	if sprite_image.get_format() != Image.FORMAT_RGBA8:
 		sprite_image.convert(Image.FORMAT_RGBA8)
 	
-	# Calculate position and blit
-	var dest_pos = Vector2i(col * sprite_size.x, row * sprite_size.y)
-	var src_rect = Rect2i(0, 0,
-		min(sprite_image.get_width(), sprite_size.x),
-		min(sprite_image.get_height(), sprite_size.y))
+	# Get actual sprite dimensions
+	var actual_width = sprite_image.get_width()
+	var actual_height = sprite_image.get_height()
+	
+	# Calculate atlas cell position
+	var cell_pos = Vector2i(col * sprite_size.x, row * sprite_size.y)
+	
+	# Center the sprite within the atlas cell if it's smaller
+	var offset_x = (sprite_size.x - actual_width) / 2
+	var offset_y = (sprite_size.y - actual_height) / 2
+	var dest_pos = Vector2i(cell_pos.x + offset_x, cell_pos.y + offset_y)
+	
+	# Ensure we don't exceed atlas cell boundaries
+	var blit_width = min(actual_width, sprite_size.x)
+	var blit_height = min(actual_height, sprite_size.y)
+	var src_rect = Rect2i(0, 0, blit_width, blit_height)
+	
+	# Adjust destination if sprite is larger than cell (crop from center)
+	if actual_width > sprite_size.x or actual_height > sprite_size.y:
+		var crop_offset_x = (actual_width - sprite_size.x) / 2
+		var crop_offset_y = (actual_height - sprite_size.y) / 2
+		src_rect = Rect2i(crop_offset_x, crop_offset_y, sprite_size.x, sprite_size.y)
+		dest_pos = cell_pos
 	
 	atlas_image.blit_rect(sprite_image, src_rect, dest_pos)
 
@@ -397,12 +442,15 @@ func _target_has_moving_state(target: Node3D) -> bool:
 #region Directional Rendering
 
 func _setup_shader_material():
-	# Create shader material if it doesn't exist
-	if directional_material == null:
-		directional_material = ShaderMaterial.new()
-		var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
-		directional_material.shader = shader
-		material_override = directional_material
+	# Re-use a material the user already assigned in the editor so that any
+	# parameters tweaked from the Inspector carry over to the running game.
+	if material_override is ShaderMaterial:
+		directional_material = material_override
+	else:
+		if directional_material == null:
+			directional_material = ShaderMaterial.new()
+			directional_material.shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
+			material_override = directional_material
 
 	# Initialize shader uniforms
 	_update_shader_uniforms()
@@ -505,15 +553,11 @@ func _update_shader_uniforms():
 		# Enable automatic direction calculation in shader (works for all camera types)
 		directional_material.set_shader_parameter("auto_direction", true)
 
-		# Set billboard mode based on Sprite3D's billboard property
+		# Convey the Sprite3D billboard mode to the shader
 		var billboard_enabled = (billboard != BaseMaterial3D.BILLBOARD_DISABLED)
 		directional_material.set_shader_parameter("billboard_enabled", billboard_enabled)
 
-		# Set alpha cut from Sprite3D property
-		directional_material.set_shader_parameter("alpha_cut", alpha_cut)
 
-		# Set albedo color (default white)
-		directional_material.set_shader_parameter("albedo_color", Color.WHITE)
 
 func _should_flip_horizontal() -> bool:
 	if direction_mode != DirectionMode.THREE_DIRECTIONS or current_direction != "side":

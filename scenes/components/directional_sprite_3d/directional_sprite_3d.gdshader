@@ -32,37 +32,25 @@ void vertex() {
 		);
 		vec3 model_pos = MODEL_MATRIX[3].xyz;
 
-		// Get camera position
-		vec3 camera_pos = INV_VIEW_MATRIX[3].xyz;
+		// Extract camera's right and up vectors directly from view matrix
+		// This keeps the sprite parallel to the camera view plane
+		vec3 camera_right = normalize(INV_VIEW_MATRIX[0].xyz);
+		vec3 camera_up = normalize(INV_VIEW_MATRIX[1].xyz);
+		vec3 camera_forward = normalize(INV_VIEW_MATRIX[2].xyz);
 
-		// Calculate look direction for Y-axis billboard
-		vec3 look_at = normalize(camera_pos - model_pos);
-		look_at.y = 0.0; // Constrain to horizontal plane
-
-		// Handle degenerate case
-		if (length(look_at) < 0.001) {
-			look_at = vec3(0.0, 0.0, 1.0);
-		} else {
-			look_at = normalize(look_at);
-		}
-
-		// Create billboard rotation matrix
-		vec3 up = vec3(0.0, 1.0, 0.0);
-		vec3 right = normalize(cross(up, look_at));
-		vec3 forward = cross(right, up);
-
-		// Create new model matrix with billboard rotation
+		// Create billboard rotation matrix using camera's orientation
+		// This ensures the sprite stays parallel to the camera view
 		mat4 billboard_model = mat4(
-			vec4(right * model_scale.x, 0.0),
-			vec4(up * model_scale.y, 0.0),
-			vec4(forward * model_scale.z, 0.0),
+			vec4(camera_right * model_scale.x, 0.0),
+			vec4(camera_up * model_scale.y, 0.0),
+			vec4(-camera_forward * model_scale.z, 0.0),
 			vec4(model_pos, 1.0)
 		);
 
 		// Apply billboard transformation
 		vec4 world_vertex = billboard_model * vec4(VERTEX, 1.0);
 		world_position = world_vertex.xyz;
-		world_normal = forward;
+		world_normal = -camera_forward;
 
 		// Let Godot handle the rest of the transformation pipeline
 		VERTEX = VERTEX; // Keep original vertex, but override MODELVIEW

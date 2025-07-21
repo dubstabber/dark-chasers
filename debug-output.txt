@@ -1,0 +1,335 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+Vulkan 1.4.311 - Forward+ - Using Device #1: AMD - AMD Radeon RX 560 Series (RADV POLARIS11)
+
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x44
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: _update_shader_uniforms called - atlas: 26x150, frame: 24x48
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'front'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'front': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'front': res://images/characters/hiroshi/HIROA1.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'side'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["side"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x44
+DirectionalSprite3D: Final sprite dimensions: 20x44
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'side': actual 19x44 vs expected 20x44
+DirectionalSprite3D: Idle sprite for 'side': res://images/characters/hiroshi/HIROB3B7.png (size: 19x44, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'back'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'back': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'back': res://images/characters/hiroshi/HIROA5.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Shader updated - atlas: 26x150, frame: 24x48, padded: 26x50, compressed: false
+=== DirectionalSprite3D Enhanced Debug Test ===
+Testing atlas generation and checking for idle sprite artifacts...
+=== Setting up test sprites ===
+✓ Test sprites configured
+
+=== Forcing Atlas Regeneration with Enhanced Debugging ===
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'front'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'front': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'front': res://images/characters/hiroshi/HIROA1.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[0]: res://images/characters/hiroshi/HIROB1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[1]: res://images/characters/hiroshi/HIROD1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'side'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["side"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Final sprite dimensions: 20x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'side': actual 19x45 vs expected 20x48
+DirectionalSprite3D: Idle sprite for 'side': res://images/characters/hiroshi/HIROA3A7.png (size: 19x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[0]: res://images/characters/hiroshi/HIROB3B7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[1]: res://images/characters/hiroshi/HIROD3D7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'back'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'back': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'back': res://images/characters/hiroshi/HIROA5.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[0]: res://images/characters/hiroshi/HIROB5.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[1]: res://images/characters/hiroshi/HIROD5.png (size: 21x44, compressed)
+DirectionalSprite3D: Using increased padding (4 pixels) for compressed textures
+DirectionalSprite3D: Generating atlas 84x156, cell size 28x52, padding 4
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 0
+DirectionalSprite3D: Positioned exact-size sprite 24x48 at (2,2)
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 1
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (30,2)
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 2
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (58,2)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 0
+DirectionalSprite3D: Padded sprite 20x48 to 24x48 and positioned at (2,54)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 1
+DirectionalSprite3D: Padded sprite 20x44 to 24x48 and positioned at (30,54)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 2
+DirectionalSprite3D: Padded sprite 20x44 to 24x48 and positioned at (58,54)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 0
+DirectionalSprite3D: Positioned exact-size sprite 24x48 at (2,106)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 1
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (30,106)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 2
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (58,106)
+DirectionalSprite3D: Atlas texture created successfully: 84x156
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: _update_shader_uniforms called - atlas: 84x156, frame: 24x48
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'front'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'front': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'front': res://images/characters/hiroshi/HIROA1.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[0]: res://images/characters/hiroshi/HIROB1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[1]: res://images/characters/hiroshi/HIROD1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'side'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["side"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Final sprite dimensions: 20x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'side': actual 19x45 vs expected 20x48
+DirectionalSprite3D: Idle sprite for 'side': res://images/characters/hiroshi/HIROA3A7.png (size: 19x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[0]: res://images/characters/hiroshi/HIROB3B7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[1]: res://images/characters/hiroshi/HIROD3D7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'back'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'back': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'back': res://images/characters/hiroshi/HIROA5.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[0]: res://images/characters/hiroshi/HIROB5.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[1]: res://images/characters/hiroshi/HIROD5.png (size: 21x44, compressed)
+DirectionalSprite3D: Shader updated - atlas: 84x156, frame: 24x48, padded: 28x52, compressed: true
+✓ Atlas generated successfully: 84x156
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'front'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'front': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'front': res://images/characters/hiroshi/HIROA1.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[0]: res://images/characters/hiroshi/HIROB1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[1]: res://images/characters/hiroshi/HIROD1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'side'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["side"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Final sprite dimensions: 20x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'side': actual 19x45 vs expected 20x48
+DirectionalSprite3D: Idle sprite for 'side': res://images/characters/hiroshi/HIROA3A7.png (size: 19x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[0]: res://images/characters/hiroshi/HIROB3B7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[1]: res://images/characters/hiroshi/HIROD3D7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'back'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'back': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'back': res://images/characters/hiroshi/HIROA5.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[0]: res://images/characters/hiroshi/HIROB5.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[1]: res://images/characters/hiroshi/HIROD5.png (size: 21x44, compressed)
+DirectionalSprite3D: Using increased padding (4 pixels) for compressed textures
+DirectionalSprite3D: Generating atlas 84x156, cell size 28x52, padding 4
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 0
+DirectionalSprite3D: Positioned exact-size sprite 24x48 at (2,2)
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 1
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (30,2)
+DirectionalSprite3D: Blitting sprite for direction 'front', frame 2
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (58,2)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 0
+DirectionalSprite3D: Padded sprite 20x48 to 24x48 and positioned at (2,54)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 1
+DirectionalSprite3D: Padded sprite 20x44 to 24x48 and positioned at (30,54)
+DirectionalSprite3D: Blitting sprite for direction 'side', frame 2
+DirectionalSprite3D: Padded sprite 20x44 to 24x48 and positioned at (58,54)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 0
+DirectionalSprite3D: Positioned exact-size sprite 24x48 at (2,106)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 1
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (30,106)
+DirectionalSprite3D: Blitting sprite for direction 'back', frame 2
+DirectionalSprite3D: Padded sprite 24x44 to 24x48 and positioned at (58,106)
+DirectionalSprite3D: Atlas texture created successfully: 84x156
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: _update_shader_uniforms called - atlas: 84x156, frame: 24x48
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'front'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'front': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'front': res://images/characters/hiroshi/HIROA1.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[0]: res://images/characters/hiroshi/HIROB1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'front'
+DirectionalSprite3D: Movement sprite for 'front'[1]: res://images/characters/hiroshi/HIROD1.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'side'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["side"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Final sprite dimensions: 20x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'side': actual 19x45 vs expected 20x48
+DirectionalSprite3D: Idle sprite for 'side': res://images/characters/hiroshi/HIROA3A7.png (size: 19x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[0]: res://images/characters/hiroshi/HIROB3B7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'side'
+DirectionalSprite3D: Movement sprite for 'side'[1]: res://images/characters/hiroshi/HIROD3D7.png (size: 19x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed idle sprite 'back'
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+DirectionalSprite3D: ⚠️  SIZE MISMATCH in idle sprite for 'back': actual 23x45 vs expected 24x48
+DirectionalSprite3D: Idle sprite for 'back': res://images/characters/hiroshi/HIROA5.png (size: 23x45, compressed, format: 22)
+DirectionalSprite3D: Skipping artifact check for compressed movement[0] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[0]: res://images/characters/hiroshi/HIROB5.png (size: 21x44, compressed)
+DirectionalSprite3D: Skipping artifact check for compressed movement[1] sprite 'back'
+DirectionalSprite3D: Movement sprite for 'back'[1]: res://images/characters/hiroshi/HIROD5.png (size: 21x44, compressed)
+DirectionalSprite3D: Shader updated - atlas: 84x156, frame: 24x48, padded: 28x52, compressed: true
+
+=== Verifying Shader Parameters After Atlas Generation ===
+Actual atlas: 84x156
+Shader atlas_dimensions: (84.0, 156.0)
+Shader frame_size: (24.0, 48.0)
+Shader padded_frame_size: (28.0, 52.0)
+Shader has_compressed_textures: true
+✅ Shader atlas dimensions MATCH actual atlas!
+
+=== Testing Atlas Generation ===
+Atlas dimensions: 84x156
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+Frame size: 24x48
+Expected padded frame size: 26x50
+Found compressed texture in direction 'front'
+✓ Compressed textures detected - should use 4 pixel padding
+Directions: ["front", "side", "back"]
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+Direction 'front' (row 0) frame position: 0x0
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+Direction 'side' (row 1) frame position: 0x52
+DirectionalSprite3D: _get_sprite_dimensions called with directions: ["front", "side", "back"]
+DirectionalSprite3D: idle_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: movement_sprites keys: ["front", "side", "back"]
+DirectionalSprite3D: Idle sprite 'front' dimensions: 24x48
+DirectionalSprite3D: Idle sprite 'side' dimensions: 20x48
+DirectionalSprite3D: Idle sprite 'back' dimensions: 24x48
+DirectionalSprite3D: Final sprite dimensions: 24x48
+Direction 'back' (row 2) frame position: 0x104
+
+=== Testing Shader Parameters ===
+Shader atlas_dimensions: (84.0, 156.0)
+Shader frame_size: (24.0, 48.0)
+Shader padded_frame_size: (28.0, 52.0)
+Shader has_compressed_textures: true
+Calculated padding: (4.0, 4.0) (expected: 4)
+✓ Padding correctly applied to shader parameters
+✓ Compressed textures detected - using enhanced bleeding prevention
+
+=== Enhanced Debug Test Completed ===
+Check the output above for any suspicious content warnings!
+--- Debugging process stopped ---

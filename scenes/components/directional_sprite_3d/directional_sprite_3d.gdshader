@@ -5,6 +5,8 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specula
 uniform sampler2D atlas_texture : source_color, filter_nearest;
 uniform vec2 atlas_dimensions = vec2(1.0, 1.0);
 uniform vec2 frame_size = vec2(1.0, 1.0);
+uniform vec2 padded_frame_size = vec2(1.0, 1.0);
+uniform bool has_compressed_textures = false;
 uniform int direction_count : hint_range(1, 8) = 3;
 uniform int current_frame : hint_range(0, 15) = 0;
 
@@ -74,29 +76,53 @@ void vertex() {
 }
 
 void fragment() {
-	// Calculate atlas UV coordinates
-	vec2 atlas_frame_pos = vec2(
-		float(current_frame) * frame_size.x,
-		float(sprite_direction) * frame_size.y
+	// Calculate atlas cell position using padded frame size
+	vec2 atlas_cell_pos = vec2(
+		float(current_frame) * padded_frame_size.x,
+		float(sprite_direction) * padded_frame_size.y
 	);
-	
-	vec2 normalized_frame_pos = atlas_frame_pos / atlas_dimensions;
-	vec2 normalized_frame_size = frame_size / atlas_dimensions;
-	
+
+	// Since sprites are now padded to fill the entire cell, use the full padded area
+	// No need for padding offset - sprites fill the entire padded cell
+	vec2 sprite_pos = atlas_cell_pos;
+
+	// Normalize positions and sizes - use padded frame size since sprites now fill the entire cell
+	vec2 normalized_sprite_pos = sprite_pos / atlas_dimensions;
+	vec2 normalized_frame_size = padded_frame_size / atlas_dimensions;
+
 	// Apply horizontal flipping if needed
 	vec2 uv = UV;
 	if (flip_horizontal > 0) {
 		uv.x = 1.0 - uv.x;
 	}
-	
-	// Sample atlas texture
-	vec2 final_uv = normalized_frame_pos + (uv * normalized_frame_size);
+
+	// Clamp UV coordinates to valid range
+	uv = clamp(uv, vec2(0.0), vec2(1.0));
+
+	// Calculate final UV coordinates within the actual sprite area
+	vec2 final_uv = normalized_sprite_pos + (uv * normalized_frame_size);
+
+	// For compressed textures, apply conservative clamping to prevent bleeding
+	if (has_compressed_textures) {
+		// Add a very small inset to avoid sampling edge pixels
+		vec2 pixel_size = vec2(1.0) / atlas_dimensions;
+		vec2 safe_inset = pixel_size * 0.5; // Half pixel inset for better safety
+
+		// Clamp to sprite boundaries with inset (using padded frame size since sprites fill the cell)
+		vec2 sprite_min = normalized_sprite_pos + safe_inset;
+		vec2 sprite_max = normalized_sprite_pos + normalized_frame_size - safe_inset;
+		final_uv = clamp(final_uv, sprite_min, sprite_max);
+	}
+
+	// Ensure final UV stays within atlas bounds as a safety measure
+	final_uv = clamp(final_uv, vec2(0.0), vec2(1.0));
+
 	vec4 tex_color = texture(atlas_texture, final_uv);
-	
+
 	// Apply material properties
 	ALBEDO = tex_color.rgb * albedo_color.rgb;
 	ALPHA = tex_color.a * albedo_color.a;
-	
+
 	// Alpha testing
 	if (ALPHA < alpha_cut) {
 		discard;

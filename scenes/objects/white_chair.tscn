@@ -147,6 +147,7 @@ alpha_cut = 1
 texture = SubResource("ImageTexture_cbpd5")
 script = ExtResource("11_5m1i2")
 direction_mode = 1
+force_refresh = null
 atlas_preview = SubResource("ImageTexture_5m1i2")
 front_idle_sprite = ExtResource("2_tb4ur")
 left_idle_sprite = ExtResource("7_yxnmu")

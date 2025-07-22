@@ -102,3 +102,18 @@ void fragment() {
 		discard;
 	}
 }
+
+// ------------------------------------------------------------------
+// Custom lighting pass
+// Makes billboard brightness depend only on distance/energy, not angle
+// ------------------------------------------------------------------
+void light() {
+	// Distance fall-off and light energy
+	float attenuation = ATTENUATION;
+	
+	// Apply light colour & energy uniformly
+	DIFFUSE_LIGHT = LIGHT_COLOR.rgb * attenuation;
+	
+	// Disable specular highlights on flat sprites
+	SPECULAR_LIGHT = vec3(0.0);
+}

@@ -380,8 +380,8 @@ func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row:
 	var cell_pos = Vector2i(col * sprite_size.x, row * sprite_size.y)
 	
 	# Center the sprite within the atlas cell if it's smaller
-	var offset_x = (sprite_size.x - actual_width) / 2
-	var offset_y = (sprite_size.y - actual_height) / 2
+	var offset_x = (sprite_size.x - actual_width) / 2.0
+	var offset_y = (sprite_size.y - actual_height) / 2.0
 	var dest_pos = Vector2i(cell_pos.x + offset_x, cell_pos.y + offset_y)
 	
 	# Ensure we don't exceed atlas cell boundaries
@@ -391,8 +391,8 @@ func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row:
 	
 	# Adjust destination if sprite is larger than cell (crop from center)
 	if actual_width > sprite_size.x or actual_height > sprite_size.y:
-		var crop_offset_x = (actual_width - sprite_size.x) / 2
-		var crop_offset_y = (actual_height - sprite_size.y) / 2
+		var crop_offset_x = (actual_width - sprite_size.x)
+		var crop_offset_y = (actual_height - sprite_size.y)
 		src_rect = Rect2i(crop_offset_x, crop_offset_y, sprite_size.x, sprite_size.y)
 		dest_pos = cell_pos
 	
@@ -556,7 +556,6 @@ func _update_shader_uniforms():
 		# Convey the Sprite3D billboard mode to the shader
 		var billboard_enabled = (billboard != BaseMaterial3D.BILLBOARD_DISABLED)
 		directional_material.set_shader_parameter("billboard_enabled", billboard_enabled)
-
 
 
 func _should_flip_horizontal() -> bool:

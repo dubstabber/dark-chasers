@@ -40,7 +40,12 @@ const DIRECTION_SETS = {
 		_initialize_sprite_dictionaries()
 		notify_property_list_changed()
 		_update_moving_state()
+		# Regenerate atlas if sprites are present; otherwise ensure uniforms are updated
 		call_deferred("_generate_atlas_if_ready")
+		# Always refresh shader uniforms after direction mode changes so parameters like
+		# `direction_count` and `direction_mode` stay in sync even when using a manually
+		# assigned atlas texture.
+		call_deferred("_update_shader_uniforms")
 
 #endregion
 
@@ -204,9 +209,12 @@ func _generate_atlas_if_ready():
 			# We can detect this by checking if we have individual sprites but no texture
 			# If there's a texture but no individual sprites, it was manually set
 			if texture != null and not _has_any_sprites():
-				# This is a manually set texture, don't interfere with it
+				# This is a manually set texture; make sure shader material and uniforms are up to date.
 				if directional_material == null:
 					_setup_shader_material()
+				# Even if the material already exists, ensure its parameters reflect any changes
+				# to direction mode or billboard settings.
+				call_deferred("_update_shader_uniforms")
 			else:
 				# No sprites and no texture, clear everything
 				texture = null

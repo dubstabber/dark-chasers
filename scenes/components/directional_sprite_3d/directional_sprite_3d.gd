@@ -47,6 +47,14 @@ const DIRECTION_SETS = {
 		# assigned atlas texture.
 		call_deferred("_update_shader_uniforms")
 
+@export var force_refresh: bool = false:
+	set(value):
+		if value:
+			force_refresh = false
+			print("DirectionalSprite3D: Force refreshing atlas...")
+			_generate_atlas_if_ready()
+			debug_atlas_info()
+
 #endregion
 
 #region Internal Variables
@@ -115,23 +123,27 @@ func _get(property: StringName):
 func _set(property: StringName, value) -> bool:
 	var prop_name = str(property)
 	var changed = false
-	
+
+	# Prevent setting the atlas_preview property
+	if prop_name == "atlas_preview":
+		return false
+
 	if prop_name.ends_with(IDLE_SUFFIX):
 		var direction = prop_name.replace(IDLE_SUFFIX, "")
 		if _is_valid_direction(direction):
 			idle_sprites[direction] = value
 			changed = true
-	
+
 	if prop_name.ends_with(MOVEMENT_SUFFIX):
 		var direction = prop_name.replace(MOVEMENT_SUFFIX, "")
 		if _is_valid_direction(direction):
 			movement_sprites[direction] = _validate_texture_array(value)
 			changed = true
-	
+
 	if changed:
 		call_deferred("_generate_atlas_if_ready")
 		return true
-	
+
 	return false
 
 func _get_property_list():
@@ -217,6 +229,8 @@ func generate_atlas() -> ImageTexture:
 		_update_current_sprite_texture(sprite_size)
 		# Update shader uniforms when atlas changes
 		call_deferred("_update_shader_uniforms")
+		# Notify inspector that atlas_preview property has changed
+		notify_property_list_changed()
 
 	return atlas_texture
 
@@ -243,6 +257,8 @@ func _generate_atlas_if_ready():
 				texture = null
 				atlas_texture = null
 				current_sprite_texture = null
+				# Notify inspector that atlas_preview property has changed
+				notify_property_list_changed()
 				# Reset to default material when no sprites
 				if directional_material != null:
 					material_override = null
@@ -276,11 +292,11 @@ func _update_current_sprite_texture(sprite_size: Vector2i):
 			# Center the sprite in the properly sized canvas
 			var actual_width = sprite_image.get_width()
 			var actual_height = sprite_image.get_height()
-			var offset_x = (sprite_size.x - actual_width) / 2
-			var offset_y = (sprite_size.y - actual_height) / 2
+			var offset_x = (sprite_size.x - actual_width) / 2.0
+			var offset_y = (sprite_size.y - actual_height) / 2.0
 
 			# Blit the sprite centered in the canvas
-			current_image.blit_rect(sprite_image, Rect2i(0, 0, actual_width, actual_height), Vector2i(offset_x, offset_y))
+			current_image.blit_rect(sprite_image, Rect2i(0, 0, actual_width, actual_height), Vector2i(int(offset_x), int(offset_y)))
 
 	# Create the texture
 	current_sprite_texture = ImageTexture.new()
@@ -463,14 +479,14 @@ func _create_atlas_texture(all_sprites: Array[Array], atlas_dimensions: Vector2i
 		row += 1
 	
 	# Create texture
-	var atlas_texture = ImageTexture.new()
-	atlas_texture.set_image(atlas_image)
-	
-	if atlas_texture.get_width() == 0 or atlas_texture.get_height() == 0:
+	var new_atlas_texture = ImageTexture.new()
+	new_atlas_texture.set_image(atlas_image)
+
+	if new_atlas_texture.get_width() == 0 or new_atlas_texture.get_height() == 0:
 		push_error("DirectionalSprite3D: Failed to create atlas texture")
 		return null
-	
-	return atlas_texture
+
+	return new_atlas_texture
 
 func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row: int, sprite_size: Vector2i):
 	var sprite_image = sprite.get_image()
@@ -785,5 +801,52 @@ func _update_target_position():
 		directional_material.set_shader_parameter("target_position", target_node.global_position)
 	else:
 		directional_material.set_shader_parameter("target_position", global_position)
+
+## Debug function to print atlas information
+func debug_atlas_info():
+	print("=== DirectionalSprite3D Debug Info ===")
+	print("Direction mode: ", direction_mode)
+	print("Has moving state: ", has_moving_state)
+	print("Current direction: ", current_direction)
+	print("Is moving: ", is_moving)
+
+	var directions = _get_current_directions()
+	print("Available directions: ", directions)
+
+	print("Idle sprites:")
+	for direction in directions:
+		var sprite = idle_sprites.get(direction)
+		if sprite:
+			print("  ", direction, ": ", sprite.get_size())
+		else:
+			print("  ", direction, ": null")
+
+	if has_moving_state:
+		print("Movement sprites:")
+		for direction in directions:
+			var sprites = movement_sprites.get(direction, [])
+			print("  ", direction, ": ", sprites.size(), " frames")
+			for i in range(sprites.size()):
+				if sprites[i]:
+					print("    Frame ", i, ": ", sprites[i].get_size())
+				else:
+					print("    Frame ", i, ": null")
+
+	if atlas_texture:
+		print("Atlas texture: ", atlas_texture.get_size())
+	else:
+		print("Atlas texture: null")
+
+	if texture:
+		print("Display texture: ", texture.get_size())
+	else:
+		print("Display texture: null")
+
+	if current_sprite_texture:
+		print("Current sprite texture: ", current_sprite_texture.get_size())
+	else:
+		print("Current sprite texture: null")
+	print("Has any sprites: ", _has_any_sprites())
+	print("=====================================")
 
 #endregion

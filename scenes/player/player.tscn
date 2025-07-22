@@ -938,6 +938,7 @@ shaded = true
 alpha_cut = 1
 texture = SubResource("ImageTexture_ttakn")
 script = ExtResource("31_tffgl")
+force_refresh = null
 atlas_preview = SubResource("ImageTexture_genst")
 front_idle_sprite = ExtResource("32_4hvnv")
 side_idle_sprite = ExtResource("33_bbmj2")

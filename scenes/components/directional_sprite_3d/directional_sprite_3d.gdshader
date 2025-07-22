@@ -12,6 +12,7 @@ uniform int current_frame : hint_range(0, 15) = 0;
 uniform vec3 target_position = vec3(0.0, 0.0, 0.0);
 uniform bool auto_direction = true;
 uniform bool billboard_enabled = true;
+uniform int direction_mode : hint_range(0, 3) = 0; // 0=THREE, 1=FOUR, 2=FIVE, 3=EIGHT
 
 // Material properties
 uniform float alpha_cut : hint_range(0.0, 1.0) = 0.5;
@@ -48,24 +49,93 @@ void vertex() {
 	if (auto_direction) {
 		vec3 camera_pos = INV_VIEW_MATRIX[3].xyz;
 		vec3 to_camera = normalize(camera_pos - target_position);
-		
+
 		// Get target's local axes (assuming Z-forward, X-right)
 		vec3 target_forward = normalize(MODEL_MATRIX[2].xyz);
 		vec3 target_right = normalize(MODEL_MATRIX[0].xyz);
-		
+
 		float forward_dot = dot(target_forward, to_camera);
 		float right_dot = dot(target_right, to_camera);
-		
-		// Determine direction (optimized for THREE_DIRECTIONAL system)
-		if (forward_dot < -0.5) {
-			sprite_direction = 0; // front
+
+		// Direction calculation based on mode
+		if (direction_mode == 0) { // THREE_DIRECTIONS
+			if (forward_dot < -0.5) {
+				sprite_direction = 0; // front
+				flip_horizontal = 0;
+			} else if (forward_dot > 0.5) {
+				sprite_direction = 2; // back
+				flip_horizontal = 0;
+			} else {
+				sprite_direction = 1; // side
+				flip_horizontal = (right_dot > 0.0) ? 1 : 0;
+			}
+		} else if (direction_mode == 1) { // FOUR_DIRECTIONS
+			// front, left, right, back - no flipping needed
 			flip_horizontal = 0;
-		} else if (forward_dot > 0.5) {
-			sprite_direction = 2; // back
+			if (forward_dot < -0.5) {
+				sprite_direction = 0; // front
+			} else if (forward_dot > 0.5) {
+				sprite_direction = 3; // back
+			} else if (right_dot > 0.0) {
+				sprite_direction = 2; // right
+			} else {
+				sprite_direction = 1; // left
+			}
+		} else if (direction_mode == 2) { // FIVE_DIRECTIONS
+			// front, side, back, front_side, back_side - uses flipping for side directions
+			if (forward_dot < -0.5) {
+				sprite_direction = 0; // front
+				flip_horizontal = 0;
+			} else if (forward_dot > 0.5) {
+				sprite_direction = 2; // back
+				flip_horizontal = 0;
+			} else {
+				// Side directions - check if it's more front-side or back-side
+				if (forward_dot < 0.0) {
+					sprite_direction = 3; // front_side
+				} else {
+					sprite_direction = 4; // back_side
+				}
+				flip_horizontal = (right_dot > 0.0) ? 1 : 0;
+			}
+		} else if (direction_mode == 3) { // EIGHT_DIRECTIONS
+			// front, left, right, back, front_left, front_right, back_left, back_right - no flipping
 			flip_horizontal = 0;
+
+			// Use 8-direction calculation with 45-degree sectors
+			float angle = atan(right_dot, -forward_dot); // atan2 equivalent
+
+			// Convert angle to 0-2π range
+			if (angle < 0.0) {
+				angle += 6.28318530718; // 2π
+			}
+
+			// Determine direction based on angle (8 sectors of 45 degrees each)
+			float sector = angle / 0.78539816339; // angle / (π/4)
+			int direction_index = int(sector + 0.5) % 8;
+
+			// Map to sprite directions: front, left, right, back, front_left, front_right, back_left, back_right
+			if (direction_index == 0) {
+				sprite_direction = 0; // front
+			} else if (direction_index == 1) {
+				sprite_direction = 4; // front_left
+			} else if (direction_index == 2) {
+				sprite_direction = 1; // left
+			} else if (direction_index == 3) {
+				sprite_direction = 6; // back_left
+			} else if (direction_index == 4) {
+				sprite_direction = 3; // back
+			} else if (direction_index == 5) {
+				sprite_direction = 7; // back_right
+			} else if (direction_index == 6) {
+				sprite_direction = 2; // right
+			} else { // direction_index == 7
+				sprite_direction = 5; // front_right
+			}
 		} else {
-			sprite_direction = 1; // side
-			flip_horizontal = (right_dot > 0.0) ? 1 : 0;
+			// Default fallback for unsupported modes
+			sprite_direction = 0;
+			flip_horizontal = 0;
 		}
 	} else {
 		sprite_direction = 0;

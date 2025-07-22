@@ -762,6 +762,7 @@ shader_parameter/current_frame = 0
 shader_parameter/target_position = Vector3(0, 0, 0)
 shader_parameter/auto_direction = true
 shader_parameter/billboard_enabled = true
+shader_parameter/direction_mode = 0
 shader_parameter/alpha_cut = 0.5
 shader_parameter/albedo_color = Color(1, 1, 1, 1)
 

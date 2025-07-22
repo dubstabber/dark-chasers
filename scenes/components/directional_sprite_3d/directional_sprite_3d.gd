@@ -63,6 +63,10 @@ var is_moving: bool = false
 # Shader material for directional rendering
 var directional_material: ShaderMaterial
 
+# Atlas and texture management
+var atlas_texture: ImageTexture
+var current_sprite_texture: ImageTexture
+
 #endregion
 
 #region Initialization
@@ -73,7 +77,7 @@ func _ready():
 	# Set up shader material if needed
 	if material_override is ShaderMaterial:
 		directional_material = material_override
-	if directional_material == null and (_has_any_sprites() or texture != null):
+	if directional_material == null and (_has_any_sprites() or atlas_texture != null):
 		_setup_shader_material()
 
 func _process(_delta):
@@ -92,17 +96,20 @@ func _initialize_sprite_dictionaries():
 
 func _get(property: StringName):
 	var prop_name = str(property)
-	
+
+	if prop_name == "atlas_preview":
+		return atlas_texture
+
 	if prop_name.ends_with(IDLE_SUFFIX):
 		var direction = prop_name.replace(IDLE_SUFFIX, "")
 		return idle_sprites.get(direction)
-	
+
 	if prop_name.ends_with(MOVEMENT_SUFFIX):
 		var direction = prop_name.replace(MOVEMENT_SUFFIX, "")
 		if not movement_sprites.has(direction):
 			movement_sprites[direction] = []
 		return movement_sprites[direction]
-	
+
 	return null
 
 func _set(property: StringName, value) -> bool:
@@ -130,12 +137,27 @@ func _set(property: StringName, value) -> bool:
 func _get_property_list():
 	var properties: Array[Dictionary] = []
 	var directions = _get_current_directions()
-	
+
+	# Add atlas preview property (read-only)
+	properties.append({
+		"name": "Atlas Preview",
+		"type": TYPE_NIL,
+		"usage": PROPERTY_USAGE_GROUP,
+	})
+
+	properties.append({
+		"name": "atlas_preview",
+		"type": TYPE_OBJECT,
+		"hint": PROPERTY_HINT_RESOURCE_TYPE,
+		"hint_string": "Texture2D",
+		"usage": PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_READ_ONLY
+	})
+
 	_add_sprite_group_properties(properties, "Idle sprites", directions, IDLE_SUFFIX, TYPE_OBJECT, "Texture2D")
-	
+
 	if has_moving_state:
 		_add_sprite_group_properties(properties, "Movement sprites", directions, MOVEMENT_SUFFIX, TYPE_ARRAY, "%d/%d:Texture2D" % [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE])
-	
+
 	return properties
 
 func _add_sprite_group_properties(properties: Array[Dictionary], group_name: String, directions: Array, suffix: String, property_type: int, hint_string: String):
@@ -165,33 +187,34 @@ func _add_sprite_group_properties(properties: Array[Dictionary], group_name: Str
 func generate_atlas() -> ImageTexture:
 	if not _has_any_sprites():
 		return null
-	
+
 	var directions = _get_current_directions()
 	if directions.is_empty():
 		push_warning("DirectionalSprite3D: No directions available for atlas generation")
 		return null
-	
+
 	# Validate sprite dimensions before proceeding
 	if not _validate_sprite_dimensions(directions):
 		return null
-	
+
 	# Collect sprites and determine dimensions
 	var all_sprites: Array[Array] = []
 	var sprite_size = _get_sprite_dimensions(directions)
 	var max_frames = 1
-	
+
 	# Collect all sprites for each direction
 	for direction in directions:
 		var direction_sprites = _collect_direction_sprites(direction)
 		all_sprites.append([direction, direction_sprites])
 		max_frames = max(max_frames, direction_sprites.size())
-	
+
 	# Create and populate atlas
 	var atlas_dimensions = Vector2i(sprite_size.x * max_frames, sprite_size.y * directions.size())
-	var atlas_texture = _create_atlas_texture(all_sprites, atlas_dimensions, sprite_size)
-	
+	atlas_texture = _create_atlas_texture(all_sprites, atlas_dimensions, sprite_size)
+
 	if atlas_texture:
-		texture = atlas_texture
+		# Create properly sized current sprite texture
+		_update_current_sprite_texture(sprite_size)
 		# Update shader uniforms when atlas changes
 		call_deferred("_update_shader_uniforms")
 
@@ -218,10 +241,75 @@ func _generate_atlas_if_ready():
 			else:
 				# No sprites and no texture, clear everything
 				texture = null
+				atlas_texture = null
+				current_sprite_texture = null
 				# Reset to default material when no sprites
 				if directional_material != null:
 					material_override = null
 					directional_material = null
+
+## Create a properly sized texture for the current sprite selection
+## This texture has the maximum dimensions of all sprites but shows only the selected sprite
+func _update_current_sprite_texture(sprite_size: Vector2i):
+	if sprite_size == Vector2i.ZERO:
+		current_sprite_texture = null
+		texture = null
+		return
+
+	# Create a texture with the proper size (max dimensions of all sprites)
+	var current_image = Image.create(sprite_size.x, sprite_size.y, false, Image.FORMAT_RGBA8)
+	current_image.fill(Color.TRANSPARENT)
+
+	# Get the current sprite to display
+	var current_sprite = _get_current_display_sprite()
+	if current_sprite != null:
+		var sprite_image = current_sprite.get_image()
+		if sprite_image != null:
+			# Handle compressed textures
+			if sprite_image.is_compressed():
+				sprite_image.decompress()
+
+			# Convert to proper format
+			if sprite_image.get_format() != Image.FORMAT_RGBA8:
+				sprite_image.convert(Image.FORMAT_RGBA8)
+
+			# Center the sprite in the properly sized canvas
+			var actual_width = sprite_image.get_width()
+			var actual_height = sprite_image.get_height()
+			var offset_x = (sprite_size.x - actual_width) / 2
+			var offset_y = (sprite_size.y - actual_height) / 2
+
+			# Blit the sprite centered in the canvas
+			current_image.blit_rect(sprite_image, Rect2i(0, 0, actual_width, actual_height), Vector2i(offset_x, offset_y))
+
+	# Create the texture
+	current_sprite_texture = ImageTexture.new()
+	current_sprite_texture.set_image(current_image)
+	texture = current_sprite_texture
+
+## Get the sprite that should currently be displayed based on direction and movement state
+func _get_current_display_sprite() -> Texture2D:
+	var directions = _get_current_directions()
+	if directions.is_empty():
+		return null
+
+	# Use the first direction as default, or current_direction if it's valid
+	var display_direction = directions[0]
+	if current_direction in directions:
+		display_direction = current_direction
+
+	# Prefer movement sprite if moving and available, otherwise use idle
+	if is_moving and has_moving_state:
+		var movement_sprites_array = movement_sprites.get(display_direction, [])
+		if movement_sprites_array.size() > 0 and movement_sprites_array[0] != null:
+			return movement_sprites_array[0] # Use first movement frame
+
+	# Fall back to idle sprite
+	var idle_sprite = idle_sprites.get(display_direction)
+	if idle_sprite is Texture2D:
+		return idle_sprite
+
+	return null
 
 #endregion
 
@@ -467,8 +555,8 @@ func _target_has_moving_state(target: Node3D) -> bool:
 #region Directional Rendering
 
 func _setup_shader_material():
-	# Only set up shader material if we have a texture
-	if texture == null:
+	# Only set up shader material if we have an atlas texture
+	if atlas_texture == null:
 		return
 
 	# Re-use a material the user already assigned in the editor so that any
@@ -500,10 +588,24 @@ func _update_directional_rendering():
 
 	var new_moving_state = _get_moving_state(target_node)
 
-	# Update if movement state changed (shader handles direction automatically)
-	if new_moving_state != is_moving:
+	# Calculate current direction for display texture updates
+	var camera = get_viewport().get_camera_3d()
+	var new_direction = current_direction
+	if camera != null:
+		new_direction = _calculate_camera_direction(camera, target_node)
+
+	# Update if movement state or direction changed
+	var state_changed = new_moving_state != is_moving
+	var direction_changed = new_direction != current_direction
+
+	if state_changed or direction_changed:
 		is_moving = new_moving_state
+		current_direction = new_direction
 		_update_shader_uniforms()
+		# Update the display texture to show the correct sprite
+		if atlas_texture != null:
+			var sprite_size = get_atlas_frame_size()
+			_update_current_sprite_texture(sprite_size)
 
 func _calculate_camera_direction(camera: Camera3D, target: Node3D) -> String:
 	# Calculate direction vector from target to camera
@@ -606,14 +708,14 @@ func _get_moving_state(target: Node3D) -> bool:
 	return false
 
 func _update_shader_uniforms():
-	if directional_material == null or texture == null:
+	if directional_material == null or atlas_texture == null:
 		return
 
-	# Set atlas texture
-	directional_material.set_shader_parameter("atlas_texture", texture)
+	# Set atlas texture (use the generated atlas, not the display texture)
+	directional_material.set_shader_parameter("atlas_texture", atlas_texture)
 
 	# Calculate atlas dimensions and frame size
-	var atlas_size = Vector2(texture.get_width(), texture.get_height())
+	var atlas_size = Vector2(atlas_texture.get_width(), atlas_texture.get_height())
 	var frame_size = get_atlas_frame_size()
 
 	if frame_size != Vector2i.ZERO and atlas_size != Vector2.ZERO:

@@ -304,15 +304,15 @@ func _update_current_sprite_texture(sprite_size: Vector2i):
 	texture = current_sprite_texture
 
 ## Get the sprite that should currently be displayed based on direction and movement state
+## Note: This is only used for editor preview - actual rendering direction is handled by shader
 func _get_current_display_sprite() -> Texture2D:
 	var directions = _get_current_directions()
 	if directions.is_empty():
 		return null
 
-	# Use the first direction as default, or current_direction if it's valid
+	# Use the first direction as default for editor preview
+	# The shader handles actual direction calculation during rendering
 	var display_direction = directions[0]
-	if current_direction in directions:
-		display_direction = current_direction
 
 	# Prefer movement sprite if moving and available, otherwise use idle
 	if is_moving and has_moving_state:
@@ -604,104 +604,18 @@ func _update_directional_rendering():
 
 	var new_moving_state = _get_moving_state(target_node)
 
-	# Calculate current direction for display texture updates
-	var camera = get_viewport().get_camera_3d()
-	var new_direction = current_direction
-	if camera != null:
-		new_direction = _calculate_camera_direction(camera, target_node)
-
-	# Update if movement state or direction changed
+	# Update if movement state changed
 	var state_changed = new_moving_state != is_moving
-	var direction_changed = new_direction != current_direction
 
-	if state_changed or direction_changed:
+	if state_changed:
 		is_moving = new_moving_state
-		current_direction = new_direction
 		_update_shader_uniforms()
-		# Update the display texture to show the correct sprite
-		if atlas_texture != null:
-			var sprite_size = get_atlas_frame_size()
-			_update_current_sprite_texture(sprite_size)
+		# Note: Direction calculation and sprite selection is now handled entirely by the shader
+		# The shader uses INV_VIEW_MATRIX to get camera position and calculates direction automatically
 
-func _calculate_camera_direction(camera: Camera3D, target: Node3D) -> String:
-	# Calculate direction vector from target to camera
-	var direction_to_camera = target.global_position.direction_to(camera.global_position)
-
-	# Get target's transform basis for local direction calculation
-	var target_basis = target.global_transform.basis
-	var forward = target_basis.z # Local forward direction
-	var right = target_basis.x # Local right direction
-
-	# Calculate dot products for direction determination
-	var forward_dot = forward.dot(direction_to_camera)
-	var right_dot = right.dot(direction_to_camera)
-
-	# Determine direction based on current mode
-	match direction_mode:
-		DirectionMode.THREE_DIRECTIONS:
-			if forward_dot < -0.5:
-				return "front" # Camera is in front of target
-			elif forward_dot > 0.5:
-				return "back" # Camera is behind target
-			else:
-				return "side" # Camera is to the side
-
-		DirectionMode.FOUR_DIRECTIONS:
-			if forward_dot < -0.5:
-				return "front"
-			elif forward_dot > 0.5:
-				return "back"
-			elif right_dot > 0.0:
-				return "right"
-			else:
-				return "left"
-
-		DirectionMode.FIVE_DIRECTIONS:
-			if forward_dot < -0.5:
-				return "front"
-			elif forward_dot > 0.5:
-				return "back"
-			else:
-				# Side directions - check if it's more front-side or back-side
-				if forward_dot < 0.0:
-					return "front_side"
-				else:
-					return "back_side"
-
-		DirectionMode.EIGHT_DIRECTIONS:
-			# Use 8-direction calculation with 45-degree sectors
-			var angle = atan2(right_dot, -forward_dot)
-
-			# Convert angle to 0-2π range
-			if angle < 0.0:
-				angle += 2.0 * PI
-
-			# Determine direction based on angle (8 sectors of 45 degrees each)
-			var sector = angle / (PI / 4.0)
-			var direction_index = int(sector + 0.5) % 8
-
-			# Map to direction names
-			match direction_index:
-				0, 7:
-					return "front"
-				1:
-					return "front_left"
-				2:
-					return "left"
-				3:
-					return "back_left"
-				4:
-					return "back"
-				5:
-					return "back_right"
-				6:
-					return "right"
-				_:
-					return "front_right"
-
-		_:
-			# Default fallback
-			return "front"
+# Note: Direction calculation is now handled entirely by the shader
+# The shader uses INV_VIEW_MATRIX to get camera position and calculates direction automatically
+# This function has been removed as it's no longer needed
 
 func _get_moving_state(target: Node3D) -> bool:
 	# Check if target has moving_state property
@@ -768,28 +682,9 @@ func _update_shader_uniforms():
 		directional_material.set_shader_parameter("billboard_enabled", billboard_enabled)
 
 
-func _should_flip_horizontal() -> bool:
-	# THREE_DIRECTIONS and FIVE_DIRECTIONS modes use horizontal flipping for side directions
-	# FOUR_DIRECTIONS and EIGHT_DIRECTIONS have dedicated sprites for each direction
-	var uses_flipping = (direction_mode == DirectionMode.THREE_DIRECTIONS and current_direction == "side") or \
-						(direction_mode == DirectionMode.FIVE_DIRECTIONS and (current_direction == "front_side" or current_direction == "back_side"))
-
-	if not uses_flipping:
-		return false
-
-	# Get current camera for flip determination
-	var current_camera = get_viewport().get_camera_3d()
-	var target_node = _get_target_node()
-
-	if current_camera == null or target_node == null:
-		return false
-
-	# Calculate if camera is on the right side (should flip)
-	var direction_to_camera = target_node.global_position.direction_to(current_camera.global_position)
-	var target_basis = target_node.global_transform.basis
-	var right = target_basis.x
-
-	return right.dot(direction_to_camera) > 0
+# Note: Horizontal flipping is now handled entirely by the shader
+# The shader calculates flip_horizontal based on camera position using INV_VIEW_MATRIX
+# This function has been removed as it's no longer needed
 
 func _update_target_position():
 	# Update target position in shader for real-time direction calculation

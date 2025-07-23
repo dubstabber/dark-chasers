@@ -132,38 +132,26 @@ void vertex() {
 				flip_horizontal = 1;
 			}
 		} else if (direction_mode == 3) { // EIGHT_DIRECTIONS
-			// front, left, right, back, front_left, front_right, back_left, back_right - no flipping
+			// Uses the same 8 angular sectors as calculated above
 			flip_horizontal = 0;
 
-			// Use 8-direction calculation with 45-degree sectors
-			float angle = atan(right_dot, -forward_dot); // atan2 equivalent
-
-			// Convert angle to 0-2π range
-			if (angle < 0.0) {
-				angle += 6.28318530718; // 2π
-			}
-
-			// Determine direction based on angle (8 sectors of 45 degrees each)
-			float sector = angle / 0.78539816339; // angle / (π/4)
-			int direction_index = int(sector + 0.5) % 8;
-
-			// Map to sprite directions: front, left, right, back, front_left, front_right, back_left, back_right
+			// Map to sprite directions: front(0), left(1), right(2), back(3), front_left(4), front_right(5), back_left(6), back_right(7)
 			if (direction_index == 0) {
 				sprite_direction = 0; // front
 			} else if (direction_index == 1) {
-				sprite_direction = 4; // front_left
+				sprite_direction = 5; // front_right
 			} else if (direction_index == 2) {
-				sprite_direction = 1; // left
+				sprite_direction = 2; // right
 			} else if (direction_index == 3) {
-				sprite_direction = 6; // back_left
+				sprite_direction = 7; // back_right
 			} else if (direction_index == 4) {
 				sprite_direction = 3; // back
 			} else if (direction_index == 5) {
-				sprite_direction = 7; // back_right
+				sprite_direction = 6; // back_left
 			} else if (direction_index == 6) {
-				sprite_direction = 2; // right
+				sprite_direction = 1; // left
 			} else { // direction_index == 7
-				sprite_direction = 5; // front_right
+				sprite_direction = 4; // front_left
 			}
 		} else {
 			// Default fallback for unsupported modes

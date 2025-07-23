@@ -5,10 +5,26 @@ var health := 20
 
 @onready var directional_sprite: DirectionalSprite3D = $Graphics/DirectionalSprite3D
 @onready var mouse_sound_player: AudioStreamPlayer3D = $MouseSoundPlayer3D
+@onready var sprite_animation_player: AnimationPlayer = $SpriteAnimationPlayer
+
+
+func _physics_process(delta: float) -> void:
+	super._physics_process(delta)
+	_update_animation_state()
+
+
+func _update_animation_state():
+	if velocity.length() > 0.1:
+		moving_state = "run"
+		sprite_animation_player.play("move")
+	else:
+		moving_state = "idle"
+		sprite_animation_player.play("RESET")
 
 
 func _on_sound_interval_timeout() -> void:
 	mouse_sound_player.play()
+
 
 func _monitor_death_animation():
 	# Monitor death animation frames and adjust positioning for optimal visibility

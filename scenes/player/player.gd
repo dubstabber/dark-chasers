@@ -68,7 +68,7 @@ var debug_camera: Camera3D # temporary
 @onready var crounch_col = $CrouchingCollisionShape
 @onready var crounch_ray_cast_3d = $CrounchRayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
-@onready var sprite_animation_player = $SpriteAnimationPlayer
+#@onready var sprite_animation_player = $SpriteAnimationPlayer
 
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
 @onready var interact_sound = $InteractSound
@@ -78,10 +78,10 @@ var debug_camera: Camera3D # temporary
 func _update_animation_state():
 	if velocity.length() > 0.1:
 		moving_state = "run"
-		sprite_animation_player.play("move")
+		#sprite_animation_player.play("move")
 	else:
 		moving_state = "idle"
-		sprite_animation_player.play("RESET")
+		#sprite_animation_player.play("RESET")
 
 
 func _input(event):

@@ -58,17 +58,9 @@ func _physics_process(delta):
 				look_forward()
 		else:
 			velocity = Vector3.ZERO
-	_update_animation_state()
+	
 	move_and_slide()
 
-
-func _update_animation_state():
-	if velocity.length() > 0.1:
-		moving_state = "run"
-		#sprite_animation_player.play("move")
-	else:
-		moving_state = "idle"
-		#sprite_animation_player.play("RESET")
 
 func look_forward() -> void:
 	if velocity:

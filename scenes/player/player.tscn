@@ -31,7 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://bvls0bhv0jwch" path="res://images/player_wieldables/KTCRF0.png" id="21_5mf0n"]
 [ext_resource type="Texture2D" uid="uid://cdm1h63vvbm12" path="res://images/player_wieldables/KTCRG0.png" id="22_4hvnv"]
 [ext_resource type="Script" uid="uid://ccvuru3xjtx3k" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gd" id="31_tffgl"]
-[ext_resource type="Shader" uid="uid://ds00iyu45l7i3" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d-broken.gdshader" id="31_vo27k"]
+[ext_resource type="Shader" uid="uid://c3p87imp1aoah" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader" id="31_vo27k"]
 [ext_resource type="Texture2D" uid="uid://b6d2qjge3lbti" path="res://images/characters/hiroshi/HIROA3A7.png" id="33_4hvnv"]
 [ext_resource type="Texture2D" uid="uid://bs24rvd4qcnl5" path="res://images/characters/hiroshi/HIROA1.png" id="33_5mf0n"]
 [ext_resource type="Texture2D" uid="uid://bgudkm7b8kj5p" path="res://images/characters/hiroshi/HIROA5.png" id="34_7obkq"]
@@ -751,20 +751,18 @@ data = {
 [sub_resource type="ImageTexture" id="ImageTexture_genst"]
 image = SubResource("Image_vo27k")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vo27k"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_genst"]
 render_priority = 0
 shader = ExtResource("31_vo27k")
 shader_parameter/atlas_texture = SubResource("ImageTexture_genst")
 shader_parameter/atlas_dimensions = Vector2(69, 135)
 shader_parameter/max_sprite_size = Vector2(23, 45)
-shader_parameter/direction_count = 3
 shader_parameter/current_frame = 0
-shader_parameter/target_position = Vector3(0, 0, 0)
-shader_parameter/auto_direction = true
-shader_parameter/billboard_enabled = true
 shader_parameter/direction_mode = 0
-shader_parameter/alpha_cut = 0.5
+shader_parameter/target_position = Vector3(0, 0, 0)
+shader_parameter/billboard_mode = 2
 shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/debug_mode = false
 
 [sub_resource type="Image" id="Image_niom3"]
 data = {
@@ -891,13 +889,13 @@ weapon_sound_player = NodePath("../InteractSound")
 bullet_raycast = NodePath("../nek/head/eyes/Camera3D/HitScanRayCast")
 
 [node name="DirectionalSprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0.594422, 0)
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0.604423, 0)
 layers = 2
-material_override = SubResource("ShaderMaterial_vo27k")
+material_override = SubResource("ShaderMaterial_genst")
 billboard = 2
-texture_filter = 2
 texture = SubResource("ImageTexture_ttakn")
 script = ExtResource("31_tffgl")
+debug_mode = null
 front_idle_sprite = ExtResource("33_5mf0n")
 side_idle_sprite = ExtResource("33_4hvnv")
 back_idle_sprite = ExtResource("34_7obkq")

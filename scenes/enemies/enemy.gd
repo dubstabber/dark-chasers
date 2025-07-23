@@ -17,6 +17,7 @@ var jump_speed := 0.0
 var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
+var moving_state := "idle"
 var is_flying := false
 var is_killed := false
 
@@ -57,8 +58,17 @@ func _physics_process(delta):
 				look_forward()
 		else:
 			velocity = Vector3.ZERO
+	_update_animation_state()
 	move_and_slide()
 
+
+func _update_animation_state():
+	if velocity.length() > 0.1:
+		moving_state = "run"
+		#sprite_animation_player.play("move")
+	else:
+		moving_state = "idle"
+		#sprite_animation_player.play("RESET")
 
 func look_forward() -> void:
 	if velocity:

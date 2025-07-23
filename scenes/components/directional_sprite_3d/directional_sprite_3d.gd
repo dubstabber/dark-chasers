@@ -1,5 +1,5 @@
 @tool
-class_name DirectionlSprite3D
+class_name DirectionalSprite3D
 extends Sprite3D
 
 enum DirectionMode {

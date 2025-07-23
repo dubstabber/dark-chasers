@@ -179,6 +179,14 @@ func generate_atlas():
 		if material_override is ShaderMaterial and material_override.shader:
 			material_override.set_shader_parameter("atlas_texture", atlas_texture)
 			material_override.set_shader_parameter("billboard_mode", billboard)
+			var atlas_size = Vector2(atlas_texture.get_width(), atlas_texture.get_height())
+			material_override.set_shader_parameter("atlas_dimensions", atlas_size)
+			material_override.set_shader_parameter("max_sprite_size", Vector2(max_sprite_size))
+			material_override.set_shader_parameter("direction_mode", direction_mode)
+			var target_node = _get_target_node()
+			if target_node:
+				directional_material.set_shader_parameter("target_position", target_node.global_position)
+
 		notify_property_list_changed()
 
 

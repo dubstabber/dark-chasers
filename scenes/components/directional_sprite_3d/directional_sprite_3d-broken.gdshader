@@ -4,7 +4,7 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specula
 // Atlas configuration
 uniform sampler2D atlas_texture : source_color, filter_nearest;
 uniform vec2 atlas_dimensions = vec2(1.0, 1.0);
-uniform vec2 frame_size = vec2(1.0, 1.0);
+uniform vec2 max_sprite_size = vec2(1.0, 1.0);
 uniform int direction_count : hint_range(1, 8) = 3;
 uniform int current_frame : hint_range(0, 15) = 0;
 
@@ -146,12 +146,12 @@ void vertex() {
 void fragment() {
 	// Calculate atlas UV coordinates
 	vec2 atlas_frame_pos = vec2(
-		float(current_frame) * frame_size.x,
-		float(sprite_direction) * frame_size.y
+		float(current_frame) * max_sprite_size.x,
+		float(sprite_direction) * max_sprite_size.y
 	);
 
 	vec2 normalized_frame_pos = atlas_frame_pos / atlas_dimensions;
-	vec2 normalized_frame_size = frame_size / atlas_dimensions;
+	vec2 normalized_frame_size = max_sprite_size / atlas_dimensions;
 
 	// Apply horizontal flipping if needed
 	vec2 uv = UV;

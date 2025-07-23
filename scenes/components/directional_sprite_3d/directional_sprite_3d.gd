@@ -45,9 +45,31 @@ var directional_material: ShaderMaterial
 		generate_atlas()
 		notify_property_list_changed()
 
+@export var debug_mode: bool = false:
+	set(value):
+		debug_mode = value
+		if directional_material:
+			directional_material.set_shader_parameter("debug_mode", debug_mode)
+
 
 func _ready() -> void:
 	_get_target_node()
+	# Set up the shader material
+	if not material_override:
+		var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
+		directional_material = ShaderMaterial.new()
+		directional_material.shader = shader
+		material_override = directional_material
+	else:
+		directional_material = material_override as ShaderMaterial
+
+
+func _process(_delta: float) -> void:
+	# Update target position for per-camera sprite direction calculation
+	if directional_material and directional_material.shader:
+		var target_node = _get_target_node()
+		if target_node:
+			directional_material.set_shader_parameter("target_position", target_node.global_position)
 
 
 func _get(property: StringName):
@@ -70,7 +92,8 @@ func _set(property: StringName, value) -> bool:
 	var prop_name = str(property)
 	
 	if prop_name == "billboard":
-		material_override.set_shader_parameter("billboard_mode", value)
+		if directional_material:
+			directional_material.set_shader_parameter("billboard_mode", value)
 
 	if prop_name.ends_with(IDLE_SUFFIX):
 		var direction = prop_name.replace(IDLE_SUFFIX, "")
@@ -176,16 +199,22 @@ func generate_atlas():
 		image.fill(Color.TRANSPARENT)
 		texture = ImageTexture.create_from_image(image)
 
-		if material_override is ShaderMaterial and material_override.shader:
-			material_override.set_shader_parameter("atlas_texture", atlas_texture)
-			material_override.set_shader_parameter("billboard_mode", billboard)
+		# Ensure we have the shader material set up
+		if not directional_material:
+			var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
+			directional_material = ShaderMaterial.new()
+			directional_material.shader = shader
+			material_override = directional_material
+		
+		if directional_material and directional_material.shader:
+			directional_material.set_shader_parameter("atlas_texture", atlas_texture)
+			directional_material.set_shader_parameter("billboard_mode", billboard)
 			var atlas_size = Vector2(atlas_texture.get_width(), atlas_texture.get_height())
-			material_override.set_shader_parameter("atlas_dimensions", atlas_size)
-			material_override.set_shader_parameter("max_sprite_size", Vector2(max_sprite_size))
-			material_override.set_shader_parameter("direction_mode", direction_mode)
-			var target_node = _get_target_node()
-			if target_node:
-				directional_material.set_shader_parameter("target_position", target_node.global_position)
+			directional_material.set_shader_parameter("atlas_dimensions", atlas_size)
+			directional_material.set_shader_parameter("max_sprite_size", Vector2(max_sprite_size))
+			directional_material.set_shader_parameter("direction_mode", direction_mode)
+			directional_material.set_shader_parameter("debug_mode", debug_mode)
+			# Target position will be updated in _process
 
 		notify_property_list_changed()
 
@@ -341,13 +370,3 @@ func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: int, row:
 		dest_pos = cell_pos
 	
 	atlas_image.blit_rect(sprite_image, src_rect, dest_pos)
-
-
-# func _notification(what):
-# 	if what == NOTIFICATION_EDITOR_PRE_SAVE or what == NOTIFICATION_EDITOR_POST_SAVE:
-# 		print('changedd')
-
-# func _validate_property(property: Dictionary):
-# 	if property.name == "billboard":
-# 		print('billboard changed')
-# 		print(property)

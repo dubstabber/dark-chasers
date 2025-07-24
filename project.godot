@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="dark-chasers"
-run/main_scene="res://scenes/rooms/mansion_1.tscn"
+run/main_scene="uid://c2jqgo5cy7g7l"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
@@ -38,6 +38,7 @@ folder_colors={
 "res://scenes/": "green",
 "res://shaders/": "pink",
 "res://sounds/": "yellow",
+"res://utils/": "gray",
 "res://weapon_manager/": "gray"
 }
 

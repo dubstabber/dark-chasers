@@ -32,6 +32,25 @@ var directional_material: ShaderMaterial
 
 #endregion
 
+
+# Alpha cut mode: 0 Disabled,1 Discard,2 Opaque Pre-Pass,3 Alpha Hash
+@export_enum("Disabled","Discard","Opaque Pre-Pass","Alpha Hash") var sprite_alpha_cut_mode: int = 0:
+	set(value):
+		sprite_alpha_cut_mode = value
+		if directional_material:
+			directional_material.set_shader_parameter("alpha_cut_mode", sprite_alpha_cut_mode)
+			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
+
+# Alpha cut threshold for Discard/Pre-Pass
+@export_range(0.0, 1.0, 0.01) var alpha_cut_threshold: float = 0.5:
+	set(value):
+		alpha_cut_threshold = value
+		if directional_material:
+			directional_material.set_shader_parameter("alpha_cut_threshold", alpha_cut_threshold)
+			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
+			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
+
+
 @export var target_node_path: NodePath = NodePath(""):
 	set(value):
 		target_node_path = value
@@ -52,24 +71,30 @@ var directional_material: ShaderMaterial
 			directional_material.set_shader_parameter("debug_mode", debug_mode)
 
 
+
 func _ready() -> void:
 	_get_target_node()
 	# Set up the shader material
-	if not material_override:
-		var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
-		directional_material = ShaderMaterial.new()
-		directional_material.shader = shader
-		material_override = directional_material
+	if material_override is ShaderMaterial and material_override.shader is Shader:
+		directional_material = material_override
+		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
+		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
+		directional_material.render_priority = self.render_priority
 	else:
-		directional_material = material_override as ShaderMaterial
+		push_warning("DirectionalSprite3D: Invalid material override. Expected ShaderMaterial with Shader.")
 
 
 func _process(_delta: float) -> void:
-	# Update target position for per-camera sprite direction calculation
+	# Update per-frame shader parameters
 	if directional_material and directional_material.shader:
 		var target_node = _get_target_node()
 		if target_node:
 			directional_material.set_shader_parameter("target_position", target_node.global_position)
+		
+		# Synchronise shader parameters each frame
+		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
+		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
+		directional_material.render_priority = self.render_priority
 
 
 func _get(property: StringName):
@@ -94,6 +119,12 @@ func _set(property: StringName, value) -> bool:
 	if prop_name == "billboard":
 		if directional_material:
 			directional_material.set_shader_parameter("billboard_mode", value)
+	
+	if prop_name == "render_priority":
+		if directional_material:
+			directional_material.render_priority = value
+
+
 
 	if prop_name.ends_with(IDLE_SUFFIX):
 		var direction = prop_name.replace(IDLE_SUFFIX, "")
@@ -213,6 +244,9 @@ func generate_atlas():
 			directional_material.set_shader_parameter("atlas_dimensions", atlas_size)
 			directional_material.set_shader_parameter("max_sprite_size", Vector2(max_sprite_size))
 			directional_material.set_shader_parameter("direction_mode", direction_mode)
+			directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
+			directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
+			directional_material.render_priority = self.render_priority
 			directional_material.set_shader_parameter("debug_mode", debug_mode)
 			# Target position will be updated in _process
 

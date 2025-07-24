@@ -3,9 +3,6 @@ extends RigidBody3D
 var health := 20
 
 
-@onready var animated_sprite_3d = $AnimatedSprite3D
-
-
 func take_damage(dmg: int):
 	health -= dmg
 	if health <= 0:

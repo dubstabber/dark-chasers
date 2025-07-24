@@ -42,5 +42,6 @@ disabled = true
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
 billboard = 2
 shaded = true
+texture_filter = 2
 render_priority = 1
 sprite_frames = SubResource("SpriteFrames_sbim7")

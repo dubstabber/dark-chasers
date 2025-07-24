@@ -10,7 +10,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kbiir"]
 resource_name = "PillarSide"
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_eab58")
 roughness = 0.9
 
@@ -90,7 +92,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oeqx6"]
 resource_name = "PillarFrame"
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_nhaao")
 roughness = 0.5
 uv1_offset = Vector3(0.645, 0.67, 0)

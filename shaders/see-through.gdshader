@@ -1,8 +1,9 @@
 shader_type spatial;
-render_mode unshaded;
-
-uniform sampler2D SCREEN_TEXTURE: hint_screen_texture, filter_linear_mipmap;
+// Invisible volume that writes depth to occlude everything behind it.
+render_mode unshaded, depth_draw_always, cull_disabled, blend_mix;
 
 void fragment() {
-	ALBEDO = textureLod(SCREEN_TEXTURE, SCREEN_UV, 0.0).rgb;
+    // Transparent colour so the mesh itself is invisible
+    ALBEDO = vec3(0.0);
+    ALPHA = 0.0;
 }

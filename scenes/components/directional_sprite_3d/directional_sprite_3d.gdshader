@@ -1,4 +1,5 @@
 shader_type spatial;
+// depth_draw_alpha_prepass writes depth from alpha-cut pixels in an initial pass to avoid transparency order issues.
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D atlas_texture : source_color, filter_nearest;
@@ -10,6 +11,9 @@ uniform int direction_mode : hint_range(0, 3) = 0; // 0=THREE, 1=FOUR, 2=FIVE, 3
 uniform vec3 target_position = vec3(0.0, 0.0, 0.0);
 
 uniform int billboard_mode = 0; // 0 = none, 1 = full, 2 = y
+
+uniform int alpha_cut_mode : hint_range(0, 3) = 0; // 0 = Disabled, 1 = Discard, 2 = Opaque Pre-Pass, 3 = Alpha Hash
+uniform float alpha_cut_threshold : hint_range(0.0, 1.0) = 0.5;
 
 uniform vec4 albedo_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform bool debug_mode = false;
@@ -181,6 +185,27 @@ void fragment() {
 	vec2 final_uv = normalized_frame_pos + (uv * normalized_frame_size);
 	vec4 tex_color = texture(atlas_texture, final_uv);
 
+    // Combine texture and material alpha once
+    float combined_alpha = tex_color.a * albedo_color.a;
+
+    // Handle Alpha Cut modes
+    bool alpha_discard = false;
+    if (alpha_cut_mode == 1 || alpha_cut_mode == 2) { // Discard or Opaque Pre-Pass – treat both as discard in this shader
+        if (combined_alpha < alpha_cut_threshold) {
+            alpha_discard = true;
+        }
+    } else if (alpha_cut_mode == 3) { // Alpha Hash (dither)
+        // Simple hash function based on screen position
+        float hash = fract(sin(dot(FRAGCOORD.xy , vec2(12.9898, 78.233))) * 43758.5453);
+        if (hash >= combined_alpha) {
+            alpha_discard = true;
+        }
+    }
+
+    if (alpha_discard) {
+        discard;
+    }
+
 	// Debug mode: color-code directions
 	if (debug_mode) {
 		vec3 debug_color;
@@ -198,7 +223,7 @@ void fragment() {
 	} else {
 		// Apply material properties
 		ALBEDO = tex_color.rgb * albedo_color.rgb;
-		ALPHA = tex_color.a * albedo_color.a;
+		ALPHA = combined_alpha;
 	}
 }
 

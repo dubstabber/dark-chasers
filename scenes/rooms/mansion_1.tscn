@@ -9150,7 +9150,7 @@ material = SubResource("StandardMaterial3D_5yjcn")
 size = Vector3(2, 1.4, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vrhyf"]
-render_priority = 0
+render_priority = -100
 shader = ExtResource("203_4phr8")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8a4wf"]
@@ -13848,7 +13848,7 @@ skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_vrhyf")
 
 [node name="HidingArea2" type="MeshInstance3D" parent="Decorations"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5725, 206.027, 105.75)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5725, 206.027, 105.67)
 mesh = SubResource("BoxMesh_wub4h")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_vrhyf")

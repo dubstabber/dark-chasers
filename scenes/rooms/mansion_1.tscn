@@ -1548,6 +1548,7 @@ data = PackedVector3Array(-74.6, 202.2, -18.89, -74.6, 204.44, -18.25, -74.6, 20
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xstrp"]
 resource_name = "CCLOCK"
+render_priority = 1
 transparency = 1
 cull_mode = 2
 depth_draw_mode = 1
@@ -1677,9 +1678,8 @@ data = PackedVector3Array(-82.6, 212.04, 42.07, -82.6, 212.2, 47.51, -82.6, 212.
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lnsvh"]
 resource_name = "OSFENCE"
-transparency = 2
-alpha_scissor_threshold = 0.5
-alpha_antialiasing_mode = 0
+render_priority = 1
+transparency = 1
 cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("36_2t7qr")
@@ -4240,6 +4240,7 @@ data = PackedVector3Array(-67.54, 203.1, -14.77, -67.54, 204.38, -15.77, -67.54,
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g2otr"]
 resource_name = "BBUCH01"
+render_priority = 1
 transparency = 1
 cull_mode = 2
 depth_draw_mode = 1

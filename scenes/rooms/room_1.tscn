@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://5q2aomrq4gjw"]
+[gd_scene load_steps=12 format=3 uid="uid://5q2aomrq4gjw"]
 
 [ext_resource type="Script" uid="uid://c765qag2pbwqq" path="res://scenes/rooms/room_1.gd" id="1_3lwtk"]
 [ext_resource type="Texture2D" uid="uid://co5uy0k6hjm4t" path="res://images/skyboxes/space1.png" id="1_26bms"]
 [ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="3_6e2tk"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_vk5nm"]
+[ext_resource type="PackedScene" uid="uid://dtnl3ap2wwpc5" path="res://scenes/enemies/giant_scorpion.tscn" id="5_p8nu4"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r5ja7"]
 panorama = ExtResource("1_26bms")
@@ -178,7 +179,7 @@ end_position = Vector3(1.967, -4.8, -3.146)
 unique_name_in_owner = true
 
 [node name="Marker3D" type="Marker3D" parent="PlayerSpawners" groups=["player_spawn"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 46.8886)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.63322, 0.5, 76.1017)
 
 [node name="EnemySpawners" type="Node3D" parent="."]
 
@@ -234,3 +235,6 @@ texture = SubResource("ViewportTexture_wodat")
 [node name="Sprite3D2" type="Sprite3D" parent="Displays"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.6177, 3.06769, 40.5286)
 texture = SubResource("ViewportTexture_p8nu4")
+
+[node name="GiantScorpion" parent="." instance=ExtResource("5_p8nu4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66408, 0.494847, 47.5417)

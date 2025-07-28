@@ -41,6 +41,9 @@ const DAMAGE_BLINK_HOLD_TIME = 0.15 # Hold damage color briefly
 const DAMAGE_BLINK_FADE_OUT_TIME = 0.8 # Smooth fade back to transparent
 const DAMAGE_BLINK_ORIGINAL_MODULATE = Color(1.0, 1.0, 1.0, 0.0) # DeathRect default state
 
+# Death animation configuration
+const DEATH_THROW_SPEED = 7.0 # Speed for enemy-caused death throw animation
+
 var mouse_sens := 0.25
 var current_speed := 5.0
 var current_room: String
@@ -48,14 +51,14 @@ var direction := Vector3.ZERO
 var fov := false
 var lerp_speed := 10.0
 var air_lerp_speed := 3.0
-var dead_lerp_speed := 2.0
+var dead_lerp_speed := 3.0
 var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
 var killed := false # Legacy death state - kept for death animation compatibility
-var death_throw := 10.5
+var death_throw := DEATH_THROW_SPEED
 var clip_mode := false
 var transit_pos: Marker3D = null
 var is_climbing := false
-var killed_pos: Vector3
+var killed_pos: Vector3 = Vector3.ZERO
 var is_crounching := false
 var crouching_depth := -0.5
 var last_velocity = Vector2.ZERO
@@ -309,9 +312,32 @@ func _physics_process(delta):
 		last_velocity = velocity
 		move_and_slide()
 	else:
+		# Death animation: different behavior based on death cause
 		if death_throw > 0:
-			velocity = - direction * death_throw
-			transform = transform.interpolate_with(transform.looking_at(killed_pos), lerp_speed * delta)
+			# Apply gradual camera lowering for all death types (simulate collapsing)
+			_apply_death_camera_lowering(delta)
+
+			# Different movement behavior based on death cause
+			if killed_pos != Vector3.ZERO:
+				# Enemy-caused death: throw player backward away from enemy
+				velocity = - direction * death_throw
+
+				# Apply smooth camera rotation to face the enemy during death throw
+				var distance_to_enemy = (killed_pos - position).length()
+				if distance_to_enemy > 0.1:
+					# Create target transform that looks at the enemy
+					var look_direction = (killed_pos - position).normalized()
+					var target_transform = Transform3D()
+					target_transform.origin = position
+					target_transform = target_transform.looking_at(position + look_direction, Vector3.UP)
+
+					# Smoothly interpolate toward the target transform
+					transform = transform.interpolate_with(target_transform, dead_lerp_speed * delta)
+			else:
+				# Fall damage death: no movement, just collapse in place
+				# Stop all movement - player should stay where they died
+				velocity = Vector3.ZERO
+
 			move_and_slide()
 			death_throw -= 0.1
 
@@ -374,8 +400,14 @@ func _on_health_component_died():
 		# Handle weapon death animations immediately
 		_handle_weapon_death_animations()
 
-		# Apply death screen overlay
-		color_rect.modulate.a = 0.7
+		# Handle camera orientation for death animation
+		_setup_death_camera_orientation()
+
+		# Configure collision shapes for death state
+		_configure_death_collision()
+
+		# Apply persistent death screen overlay
+		_apply_death_overlay()
 		# Note: Death sound is handled by the health component
 
 
@@ -439,11 +471,153 @@ func _handle_weapon_revival():
 	1. Re-enables weapon bobbing animations
 	2. Resets weapon state
 	3. Plays weapon pullout animation to "re-equip" current weapon
+	4. Resets death animation state
+	5. Re-enables collision shapes
+	6. Resets camera position and death overlay
 	"""
 	if not weapon_manager:
 		return
 
 	weapon_manager.reset_weapon_on_revival()
+
+	# Reset death animation state
+	killed_pos = Vector3.ZERO
+	death_throw = DEATH_THROW_SPEED
+
+	# Re-enable collision shapes
+	_enable_revival_collision()
+
+	# Reset camera position and death overlay
+	_reset_death_effects()
+
+
+func _setup_death_camera_orientation():
+	"""Setup proper camera orientation for death animation
+
+	Handles two scenarios:
+	1. Enemy-caused death: Orient camera toward the enemy that killed the player
+	2. Fall damage death: Center head pitch only, no horizontal rotation
+	"""
+	# Check if we have a valid enemy position (killed_pos was set by kill() method)
+	if killed_pos != Vector3.ZERO:
+		# Enemy-caused death: Orient camera toward the enemy
+		_orient_camera_toward_enemy()
+	else:
+		# Fall damage or other non-enemy death: Only center the head pitch
+		# Keep killed_pos as Vector3.ZERO to prevent any camera rotation in death animation
+		_center_head_pitch_for_fall_death()
+
+
+func _center_head_pitch_for_fall_death():
+	"""Center the head pitch for fall damage deaths
+
+	For fall damage deaths, we only want to center the vertical look angle
+	to look straight ahead horizontally. We preserve the current horizontal
+	orientation (yaw) and don't rotate toward any target.
+	"""
+	if not head:
+		return
+
+	# Only center the head's X rotation (pitch) to look straight ahead
+	# Don't change the player's Y rotation (yaw) - preserve horizontal orientation
+	head.rotation.x = 0.0
+
+
+func _configure_death_collision():
+	"""Configure collision shapes for death state
+
+	Disables the standing collision shape but keeps the crouching collision shape
+	active to prevent the player from falling through the map or going outside
+	the playable area during death animations. The smaller crouching shape is
+	more appropriate for a collapsed/dead player state.
+	"""
+	if stay_col:
+		stay_col.disabled = true
+	if crounch_col:
+		crounch_col.disabled = false # Keep crouching collision active for death state
+
+
+func _apply_death_overlay():
+	"""Apply persistent death screen overlay
+
+	Sets the DeathRect to show the red death overlay and ensures it persists
+	throughout the entire death sequence. Stops any damage blink effects that
+	might interfere with the death overlay.
+	"""
+	if not color_rect:
+		return
+
+	# Stop any damage blink tween that might interfere with death overlay
+	if damage_blink_tween:
+		damage_blink_tween.kill()
+		damage_blink_tween = null
+
+	# Apply persistent death overlay (red tint with 0.7 alpha)
+	color_rect.modulate = Color(1.0, 0.0, 0.0, 0.7)
+
+
+func _apply_death_camera_lowering(delta: float):
+	"""Apply gradual camera lowering during death throw animation
+
+	Simulates the player collapsing/falling to the ground by gradually
+	lowering the camera position. Uses the same lerping system as crouching
+	but targets a lower position to simulate death collapse.
+
+	Args:
+		delta: Frame delta time for smooth interpolation
+	"""
+	if not head:
+		return
+
+	# Target position for death camera lowering (lower than crouching)
+	var death_camera_depth = crouching_depth * 1.7
+
+	# Gradually lower the camera using the same lerp system as crouching
+	head.position.y = lerp(head.position.y, death_camera_depth, delta * dead_lerp_speed)
+
+
+func _enable_revival_collision():
+	"""Restore normal collision shapes when player is revived
+
+	Restores normal collision detection for physics interactions.
+	Enables the standing collision shape and disables the crouching collision
+	shape to return to the normal alive state.
+	"""
+	if stay_col:
+		stay_col.disabled = false # Enable standing collision for normal gameplay
+	if crounch_col:
+		crounch_col.disabled = true # Disable crouching collision (normal state)
+
+
+func _reset_death_effects():
+	"""Reset camera position and death overlay when player is revived
+
+	Restores normal camera position and clears the death screen overlay.
+	This ensures the player returns to a normal state after revival.
+	"""
+	# Reset head position to normal (not lowered)
+	if head:
+		head.position.y = 0.0
+
+	# Clear death overlay and restore transparent state
+	if color_rect:
+		color_rect.modulate = DAMAGE_BLINK_ORIGINAL_MODULATE
+
+
+func _orient_camera_toward_enemy():
+	"""Prepare camera orientation for enemy death animation
+
+	This method is called when an enemy kills the player to set up the death animation.
+	The actual camera rotation is handled gradually by the death animation loop using
+	transform.looking_at() interpolation for smooth movement.
+
+	Note: We don't apply immediate rotation here to avoid conflicts with the
+	death animation loop's transform interpolation.
+	"""
+	# The death animation loop will handle the actual camera rotation using:
+	# transform.looking_at(killed_pos) with interpolation
+	# This ensures smooth rotation toward the enemy during the death throw
+	pass
 
 
 ## Fall Damage System
@@ -497,8 +671,10 @@ func _play_damage_blink_effect():
 
 	Handles rapid damage events correctly by always restoring to the true
 	original transparent state, preventing residual red tinting.
+
+	Does not play if player is dead to avoid interfering with death overlay.
 	"""
-	if not color_rect:
+	if not color_rect or is_dead():
 		return
 
 	# Stop any existing blink tween

@@ -25,6 +25,7 @@ var base_gun_position: Vector2 = Vector2.ZERO
 var current_weapon: WeaponResource
 
 var is_auto_hitting := false
+var bobbing_enabled := true # Controls whether weapon bobbing is active
 
 # --------------------------------------------------------------------------
 # Weapon switching state management
@@ -90,10 +91,14 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	# Don't process weapon actions if player is dead
+	if player and player.has_method("is_dead") and player.is_dead():
+		return
+
 	if Input.is_action_just_pressed("hit") and current_weapon.shoot_anim_name:
 		if not animation_player.is_playing():
 			animation_player.play(current_weapon.shoot_anim_name)
-	
+
 	if is_auto_hitting:
 		if current_weapon.repeat_shoot_anim_name and not animation_player.is_playing():
 			animation_player.play(current_weapon.repeat_shoot_anim_name)
@@ -109,6 +114,11 @@ func _update_speed(delta: float) -> void:
 	smooth_movement_speed = lerp(smooth_movement_speed, speed, delta * movement_speed_smoothing)
 
 func _update_bob(delta: float) -> void:
+	# If bobbing is disabled, lerp weapon_bob_amount to zero
+	if not bobbing_enabled:
+		weapon_bob_amount = weapon_bob_amount.lerp(Vector2.ZERO, delta * WEAPON_BOB_SMOOTHING)
+		return
+
 	var intensity: float = clamp(smooth_movement_speed / WEAPON_BOB_SPEED_REFERENCE, 0.0, 1.0)
 
 	var time_scale: float = WEAPON_BOB_IDLE_SPEED_MULT
@@ -183,6 +193,10 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if player.blocked_movement:
+		return
+
+	# Don't process weapon input if player is dead
+	if player and player.has_method("is_dead") and player.is_dead():
 		return
 
 	if event.is_action_pressed("hit") and current_weapon and current_weapon.auto_hit:
@@ -361,3 +375,28 @@ func play_hit_sound() -> void:
 
 func light_lighter() -> void:
 	lighter_on.emit()
+
+
+# ========================================================================== #
+# Death handling methods
+# ========================================================================== #
+func disable_weapon_bobbing() -> void:
+	"""Disable weapon bobbing animations (called when player dies)"""
+	bobbing_enabled = false
+	smooth_movement_speed = 0.0
+
+
+func enable_weapon_bobbing() -> void:
+	"""Re-enable weapon bobbing animations (for revival or respawn)"""
+	bobbing_enabled = true
+
+
+func reset_weapon_on_revival() -> void:
+	"""Reset weapon state when player is revived or respawns"""
+	enable_weapon_bobbing()
+	is_auto_hitting = false
+
+	# If there's a current weapon, play its pullout animation to "re-equip" it
+	if current_weapon and current_weapon.pullout_anim_name and animation_player:
+		animation_player.stop()
+		animation_player.play(current_weapon.pullout_anim_name)

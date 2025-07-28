@@ -45,7 +45,7 @@ func _physics_process(delta):
 			var next_pos = nav.get_next_path_position()
 			direction = (next_pos - global_position).normalized()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
-			if current_target and current_target.killed:
+			if current_target and current_target.has_method("is_dead") and current_target.is_dead():
 				current_target = null
 				velocity = Vector3.ZERO
 			if is_on_floor() or is_flying:
@@ -80,7 +80,7 @@ func check_targets() -> void:
 			if (
 				result
 				and result.collider.is_in_group("player")
-				and not target.killed
+				and not (target.has_method("is_dead") and target.is_dead())
 			):
 				current_target = result.collider
 

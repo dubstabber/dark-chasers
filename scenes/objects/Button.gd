@@ -28,6 +28,7 @@ func press(body):
 			change_sprite()
 			if press_sound: Utils.play_sound(press_sound, self)
 
+
 func change_sprite():
 	match button_type:
 		"lever":

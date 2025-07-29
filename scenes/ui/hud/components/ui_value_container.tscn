@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://beiree0e8glqa"]
+
+[ext_resource type="Script" uid="uid://egrlk7wtbi7t" path="res://fonts/ui_bitmap_text.gd" id="1_gsqa6"]
+[ext_resource type="Texture2D" uid="uid://dic02hagqtsxl" path="res://images/fonts/STFSNUM1.png" id="2_joy1i"]
+[ext_resource type="Texture2D" uid="uid://qlhm3njom5au" path="res://images/fonts/STFSNUM9.png" id="3_rx8h5"]
+
+[node name="UIValueContainer" type="HBoxContainer"]
+offset_right = 38.0
+offset_bottom = 14.0
+theme_override_constants/separation = 2
+script = ExtResource("1_gsqa6")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("2_joy1i")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("3_rx8h5")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 2
+texture = ExtResource("3_rx8h5")
+expand_mode = 3
+stretch_mode = 5

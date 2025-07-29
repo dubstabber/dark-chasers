@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://cojpeusa1t4t6"]
+[gd_scene load_steps=6 format=3 uid="uid://cojpeusa1t4t6"]
 
 [ext_resource type="Script" uid="uid://b7jidh02jubbd" path="res://scenes/hud.gd" id="1_nn4nw"]
+[ext_resource type="Texture2D" uid="uid://bon0dd5vu1nko" path="res://images/fonts/STFSPRCT.png" id="2_5ysmq"]
 [ext_resource type="PackedScene" uid="uid://cxcvipmnr6um2" path="res://scenes/ui/ao_oni_font.tscn" id="2_bwwjm"]
+[ext_resource type="PackedScene" uid="uid://beiree0e8glqa" path="res://scenes/ui/hud/components/ui_value_container.tscn" id="3_6fi6k"]
+[ext_resource type="Texture2D" uid="uid://dtwy61f4q0t4d" path="res://images/fonts/STFSAMMO.png" id="4_uo2fv"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_nn4nw")
@@ -45,9 +48,68 @@ anchor_bottom = 1.0
 offset_top = -40.0
 offset_right = 40.0
 grow_vertical = 0
+theme_override_constants/margin_left = 35
+theme_override_constants/margin_bottom = 13
 
 [node name="VBoxContainer" type="VBoxContainer" parent="BottomLeft"]
 layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="ShieldHBoxContainer" type="HBoxContainer" parent="BottomLeft/VBoxContainer"]
+layout_mode = 2
+
+[node name="ShieldIconTextureRect" type="TextureRect" parent="BottomLeft/VBoxContainer/ShieldHBoxContainer"]
+custom_minimum_size = Vector2(16, 14)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_5ysmq")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="HealthHBoxContainer" type="HBoxContainer" parent="BottomLeft/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HealthIconTextureRect" type="TextureRect" parent="BottomLeft/VBoxContainer/HealthHBoxContainer"]
+custom_minimum_size = Vector2(16, 14)
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_5ysmq")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="UIValueContainer" parent="BottomLeft/VBoxContainer/HealthHBoxContainer" instance=ExtResource("3_6fi6k")]
+layout_mode = 2
+
+[node name="BottomRight" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -14.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BottomRight"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomRight/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="UIValueContainer" parent="BottomRight/VBoxContainer/HBoxContainer" instance=ExtResource("3_6fi6k")]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="BottomRight/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(16, 14)
+layout_mode = 2
+texture = ExtResource("4_uo2fv")
+expand_mode = 2
+stretch_mode = 4
 
 [node name="Center" type="MarginContainer" parent="."]
 anchors_preset = 8

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://cuyldh62wq0p6"]
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://test_shotgun_resource"]
 
 [ext_resource type="PackedScene" uid="uid://bu47mjytnvtv0" path="res://scenes/particles/puff.tscn" id="1_bakrd"]
 [ext_resource type="AudioStream" uid="uid://1l16mbokwgvt" path="res://sounds/sfx/HIRSHOT.wav" id="2_pxb42"]
@@ -7,8 +7,8 @@
 [resource]
 script = ExtResource("3_0ey75")
 shoot_type = 1
-name = "Hiroshi pistol"
-slot = 2
+name = "Test Shotgun"
+slot = 3
 slot_priority = 1
 pullout_anim_name = "hiroshi_pistol_pullout"
 shoot_anim_name = "hiroshi_pistol_shoot"
@@ -16,9 +16,9 @@ repeat_shoot_anim_name = ""
 auto_hit = false
 melee_attack = false
 hit_sound = ExtResource("2_pxb42")
-damage = 40
+damage = 60
 hit_particle = ExtResource("1_bakrd")
-max_ammo = 12
-current_ammo = 12
+max_ammo = 20
+current_ammo = 20
 ammo_per_shot = 2
 infinite_ammo = false

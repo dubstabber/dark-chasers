@@ -1,4 +1,4 @@
-[gd_scene load_steps=1166 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1167 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -203,6 +203,7 @@
 [ext_resource type="Script" uid="uid://cgtyip2baqmg2" path="res://addons/Mirror/Mirror/Mirror.gd" id="194_0vynp"]
 [ext_resource type="Shader" uid="uid://d2c2nnw51eg2a" path="res://shaders/see-through.gdshader" id="203_4phr8"]
 [ext_resource type="PackedScene" uid="uid://hb2sga12bblt" path="res://scenes/items/ao_shield.tscn" id="205_0l5v2"]
+[ext_resource type="PackedScene" uid="uid://fhuxv6yp4vyg" path="res://scenes/items/ao_health.tscn" id="205_qrnci"]
 [ext_resource type="AudioStream" uid="uid://pjh6rgapjvec" path="res://sounds/music/D_RUNNIN.ogg" id="208_jn553"]
 [ext_resource type="PackedScene" uid="uid://bfhn6wshiv372" path="res://scenes/items/doom_lighter.tscn" id="209_txfeo"]
 [ext_resource type="PackedScene" uid="uid://ci773u35iek6y" path="res://scenes/items/silver_crowbar.tscn" id="210_r663d"]
@@ -14176,6 +14177,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02633, 205.675, 115.313)
 
 [node name="SilverCrowbar" parent="Items" instance=ExtResource("210_r663d")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138.626, 202.312, -82.1455)
+
+[node name="AoHealth" parent="Items" instance=ExtResource("205_qrnci")]
+transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -155.27, 202.582, -102.092)
 
 [node name="AoShield" parent="Items" instance=ExtResource("205_0l5v2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.769, 202.529, -84.7809)

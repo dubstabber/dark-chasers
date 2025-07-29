@@ -315,10 +315,16 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 
 	# Put away current weapon if one is equipped
 	if current_weapon and current_weapon.pullout_anim_name:
+		# Disconnect signals from the old weapon
+		if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
+			current_weapon.ammo_changed.disconnect(_on_weapon_ammo_changed)
+		if current_weapon.ammo_depleted.is_connected(_on_weapon_ammo_depleted):
+			current_weapon.ammo_depleted.disconnect(_on_weapon_ammo_depleted)
+
 		# Wait for any current animation to finish before starting holster
 		if animation_player.is_playing():
 			await animation_player.animation_finished
-		
+
 		animation_player.play_backwards(current_weapon.pullout_anim_name)
 		await animation_player.animation_finished
 
@@ -332,6 +338,11 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
 		current_weapon.ammo_changed.disconnect(_on_weapon_ammo_changed)
 	current_weapon.ammo_changed.connect(_on_weapon_ammo_changed)
+
+	# Connect to weapon's ammo depleted signal
+	if current_weapon.ammo_depleted.is_connected(_on_weapon_ammo_depleted):
+		current_weapon.ammo_depleted.disconnect(_on_weapon_ammo_depleted)
+	current_weapon.ammo_depleted.connect(_on_weapon_ammo_depleted)
 
 	# Emit weapon switched signal and initial ammo state
 	weapon_switched.emit(current_weapon)
@@ -393,6 +404,10 @@ func light_lighter() -> void:
 	lighter_on.emit()
 
 
+func extinguish_lighter() -> void:
+	lighter_off.emit()
+
+
 # ========================================================================== #
 # Death handling methods
 # ========================================================================== #
@@ -427,3 +442,34 @@ func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
 	Forwards the ammo change signal to any connected systems (like the HUD).
 	"""
 	weapon_ammo_changed.emit(current_ammo, max_ammo)
+
+
+func _on_weapon_ammo_depleted():
+	"""Called when the current weapon's ammo is completely depleted
+
+	This handles the same logic as mouse button release for auto-hit weapons
+	to ensure the weapon returns to the correct idle frame when ammo runs out.
+	"""
+	if not current_weapon or not current_weapon.auto_hit:
+		return
+
+	# Stop auto-hitting behavior
+	is_auto_hitting = false
+
+	# Wait for current animation to finish, then reset to idle frame
+	if animation_player.is_playing():
+		await animation_player.animation_finished
+
+	# Double-check that we're still not auto-hitting (user might have pressed mouse again)
+	if is_auto_hitting:
+		return
+
+	# Reset to idle frame (same logic as mouse button release)
+	if current_weapon.pullout_anim_name and not animation_player.is_playing():
+		animation_player.stop()
+
+		animation_player.current_animation = current_weapon.pullout_anim_name
+		var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
+		if pullout_anim:
+			animation_player.seek(pullout_anim.length, true, true)
+			lighter_off.emit()

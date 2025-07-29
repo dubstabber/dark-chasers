@@ -10,6 +10,7 @@ var faded: bool
 @onready var log_label_scene = preload("res://scenes/ui/log_label.tscn")
 @onready var timer = $Timer
 @onready var health_ui_value_container: HBoxContainer = %HealthUIValueContainer
+@onready var ammo_ui_value_container: HBoxContainer = %AmmoUIValueContainer
 
 
 func _ready():
@@ -77,4 +78,3 @@ func update_health_display(current_health: int, _max_health: int):
 	"""
 	if health_ui_value_container and health_ui_value_container.has_method("set_value_with_aooni_font"):
 		health_ui_value_container.set_value_with_aooni_font(current_health)
-		print("Health display updated: ", current_health) # Debug - remove in production

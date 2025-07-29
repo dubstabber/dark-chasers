@@ -450,8 +450,6 @@ func set_hud(new_hud: CanvasLayer):
 	Automatically initializes the health display when the HUD is connected.
 	"""
 	hud = new_hud
-	print("HUD connected to player, initializing health display") # Debug - remove in production
-	# Initialize health display when HUD is connected
 	_initialize_health_display()
 
 

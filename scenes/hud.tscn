@@ -102,7 +102,8 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="UIValueContainer" parent="BottomRight/VBoxContainer/HBoxContainer" instance=ExtResource("3_6fi6k")]
+[node name="AmmoUIValueContainer" parent="BottomRight/VBoxContainer/HBoxContainer" instance=ExtResource("3_6fi6k")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="BottomRight/VBoxContainer/HBoxContainer"]

@@ -16,3 +16,7 @@ auto_hit = true
 melee_attack = true
 damage = 5
 hit_particle = ExtResource("1_ylswb")
+max_ammo = 0
+current_ammo = 0
+ammo_per_shot = 0
+infinite_ammo = true

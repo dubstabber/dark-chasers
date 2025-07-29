@@ -2,6 +2,8 @@ class_name WeaponManager extends Node3D
 
 signal lighter_on
 signal lighter_off
+signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
+signal weapon_switched(weapon: WeaponResource)
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -96,10 +98,10 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	if Input.is_action_just_pressed("hit") and current_weapon.shoot_anim_name:
-		if not animation_player.is_playing():
+		if not animation_player.is_playing() and current_weapon.can_fire():
 			animation_player.play(current_weapon.shoot_anim_name)
 
-	if is_auto_hitting:
+	if is_auto_hitting and current_weapon.can_fire():
 		if current_weapon.repeat_shoot_anim_name and not animation_player.is_playing():
 			animation_player.play(current_weapon.repeat_shoot_anim_name)
 		elif current_weapon.shoot_anim_name and not animation_player.is_playing():
@@ -220,7 +222,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				lighter_off.emit()
 
 	if event.is_action_pressed("hit") and current_weapon and not current_weapon.auto_hit:
-		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon:
+		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon and current_weapon.can_fire():
 			animation_player.play(current_weapon.shoot_anim_name)
 
 	if event is InputEventKey and event.pressed:
@@ -230,6 +232,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func hit() -> void:
 	if current_weapon and current_weapon.has_method("hit"):
+		# Consume ammo before hitting (for non-melee weapons)
+		if not current_weapon.melee_attack:
+			if not current_weapon.consume_ammo():
+				print("Cannot fire ", current_weapon.name, " - insufficient ammo (need ", current_weapon.ammo_per_shot, ", have ", current_weapon.current_ammo, ")") # Debug - remove in production
+				return # Don't hit if insufficient ammo
 		current_weapon.hit()
 
 
@@ -321,6 +328,15 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	hit_sound_player.stream = current_weapon.hit_sound if current_weapon.hit_sound else null
 	current_weapon.weapon_manager = self
 
+	# Connect to weapon's ammo signals
+	if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
+		current_weapon.ammo_changed.disconnect(_on_weapon_ammo_changed)
+	current_weapon.ammo_changed.connect(_on_weapon_ammo_changed)
+
+	# Emit weapon switched signal and initial ammo state
+	weapon_switched.emit(current_weapon)
+	weapon_ammo_changed.emit(current_weapon.current_ammo, current_weapon.max_ammo)
+
 	# Play draw animation for new weapon
 	if current_weapon.pullout_anim_name:
 		animation_player.play(current_weapon.pullout_anim_name)
@@ -400,3 +416,14 @@ func reset_weapon_on_revival() -> void:
 	if current_weapon and current_weapon.pullout_anim_name and animation_player:
 		animation_player.stop()
 		animation_player.play(current_weapon.pullout_anim_name)
+
+
+# ========================================================================== #
+# Ammo System Signal Handlers
+# ========================================================================== #
+func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
+	"""Called when the current weapon's ammo changes
+
+	Forwards the ammo change signal to any connected systems (like the HUD).
+	"""
+	weapon_ammo_changed.emit(current_ammo, max_ammo)

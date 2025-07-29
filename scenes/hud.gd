@@ -78,3 +78,14 @@ func update_health_display(current_health: int, _max_health: int):
 	"""
 	if health_ui_value_container and health_ui_value_container.has_method("set_value_with_aooni_font"):
 		health_ui_value_container.set_value_with_aooni_font(current_health)
+
+
+func update_ammo_display(current_ammo: int, _max_ammo: int):
+	"""Update the ammo display in the HUD
+
+	Args:
+		current_ammo: Current ammo value to display
+		_max_ammo: Maximum ammo value (for future use with ammo bars)
+	"""
+	if ammo_ui_value_container and ammo_ui_value_container.has_method("set_value_with_aooni_font"):
+		ammo_ui_value_container.set_value_with_aooni_font(current_ammo)

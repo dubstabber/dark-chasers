@@ -24,3 +24,7 @@ damage_entity_sound = ExtResource("1_xt1mj")
 damage = 20
 hit_particle = ExtResource("3_ckm2g")
 hit_decal = ExtResource("3_gu224")
+max_ammo = 0
+current_ammo = 0
+ammo_per_shot = 0
+infinite_ammo = true

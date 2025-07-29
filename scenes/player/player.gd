@@ -131,6 +131,11 @@ func _ready():
 		# Initialize health display (will be called again when HUD is connected)
 		_initialize_health_display()
 
+	# Connect weapon manager signals for ammo display
+	if weapon_manager:
+		weapon_manager.weapon_ammo_changed.connect(_on_weapon_ammo_changed)
+		weapon_manager.weapon_switched.connect(_on_weapon_switched)
+
 
 func _update_animation_state():
 	if velocity.length() > 0.1:
@@ -154,12 +159,6 @@ func _input(event):
 			debug_camera.current = true
 		else:
 			camera_3d.current = true
-
-	# Debug: Test fall damage and blink effect (remove in production)
-	if event.is_action_pressed("ui_cancel") and event.shift_pressed: # Shift+Escape
-		print("Debug: Testing fall damage blink effect")
-		take_damage(10)
-		_play_damage_blink_effect()
 
 
 func _physics_process(delta):
@@ -447,10 +446,43 @@ func _initialize_health_display():
 func set_hud(new_hud: CanvasLayer):
 	"""Setter for the HUD reference
 
-	Automatically initializes the health display when the HUD is connected.
+	Automatically initializes the health and ammo displays when the HUD is connected.
 	"""
 	hud = new_hud
 	_initialize_health_display()
+	_initialize_ammo_display()
+
+
+## Weapon System Signal Handlers
+## These methods are called by the WeaponManager when weapon/ammo events occur
+
+func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
+	"""Called when the current weapon's ammo changes
+
+	Updates the HUD ammo display with the new ammo values.
+	"""
+	if hud and hud.has_method("update_ammo_display"):
+		hud.update_ammo_display(current_ammo, max_ammo)
+
+
+func _on_weapon_switched(weapon: WeaponResource):
+	"""Called when the player switches weapons
+
+	Updates the HUD to show the new weapon's ammo count.
+	"""
+	if hud and hud.has_method("update_ammo_display"):
+		hud.update_ammo_display(weapon.current_ammo, weapon.max_ammo)
+
+
+func _initialize_ammo_display():
+	"""Initialize the ammo display in the HUD
+
+	This method ensures the HUD shows the correct ammo value when the player
+	is first created or when the HUD connection is established.
+	"""
+	if hud and hud.has_method("update_ammo_display") and weapon_manager and weapon_manager.current_weapon:
+		var weapon = weapon_manager.current_weapon
+		hud.update_ammo_display(weapon.current_ammo, weapon.max_ammo)
 
 
 func _handle_weapon_death_animations():

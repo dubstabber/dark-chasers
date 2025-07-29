@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://test_shotgun_resource"]
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://rkhcc2yv8irp"]
 
 [ext_resource type="PackedScene" uid="uid://bu47mjytnvtv0" path="res://scenes/particles/puff.tscn" id="1_bakrd"]
 [ext_resource type="AudioStream" uid="uid://1l16mbokwgvt" path="res://sounds/sfx/HIRSHOT.wav" id="2_pxb42"]

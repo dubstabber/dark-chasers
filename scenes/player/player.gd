@@ -427,7 +427,6 @@ func _on_health_component_health_changed(current_health: int, max_health: int):
 	- Health indicators
 	- HUD elements
 	"""
-	print("Player health changed: ", current_health, "/", max_health) # Debug - remove in production
 	# Update HUD health display
 	if hud and hud.has_method("update_health_display"):
 		hud.update_health_display(current_health, max_health)
@@ -703,7 +702,6 @@ func _check_fall_damage(fall_velocity: float):
 		damage_amount = min(damage_amount, FALL_DAMAGE_MAX)
 
 	if damage_amount > 0:
-		print("Fall damage: ", damage_amount, " (fall speed: ", fall_speed, ")")
 		take_damage(damage_amount)
 
 

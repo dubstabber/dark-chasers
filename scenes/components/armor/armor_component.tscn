@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8k2p00nh72vus"]
+
+[ext_resource type="Script" path="res://scenes/components/armor/armor_component.gd" id="1_armor"]
+
+[node name="ArmorComponent" type="Node"]
+script = ExtResource("1_armor")

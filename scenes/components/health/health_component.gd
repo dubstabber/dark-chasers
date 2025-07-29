@@ -66,30 +66,37 @@ func set_current_health(value: int):
 func take_damage(amount: int) -> bool:
 	if is_dead or invulnerable or invulnerability_timer > 0.0:
 		return false
-	
+
 	if amount <= 0:
 		return false
-	
+
+	# Check for ArmorComponent and process damage reduction
+	var final_damage = amount
+	var armor_component = _get_armor_component()
+	if armor_component and armor_component.has_method("process_damage"):
+		final_damage = armor_component.process_damage(amount)
+
+	# Apply remaining damage to health
 	var _old_health = current_health
-	current_health = max(0, current_health - amount)
-	
-	# Play damage sound
-	if damage_sound:
+	current_health = max(0, current_health - final_damage)
+
+	# Play damage sound (only if health damage was taken)
+	if final_damage > 0 and damage_sound:
 		_play_sound(damage_sound)
-	
-	# Emit signals
+
+	# Emit signals (use original damage amount for damage_taken signal)
 	damage_taken.emit(amount, current_health)
 	health_changed.emit(current_health, max_health)
-	
+
 	# Start invulnerability if configured
 	if invulnerability_duration > 0.0:
 		invulnerability_timer = invulnerability_duration
-	
+
 	# Check for death
 	if current_health <= 0 and not is_dead:
 		_handle_death()
 		return true
-	
+
 	return true
 
 func heal(amount: int) -> bool:
@@ -169,12 +176,25 @@ func _handle_death():
 		if is_instance_valid(get_parent()):
 			get_parent().queue_free()
 
+func _get_armor_component():
+	"""Get the ArmorComponent from the same parent node"""
+	var parent = get_parent()
+	if not parent:
+		return null
+
+	# Look for ArmorComponent as a sibling node
+	for child in parent.get_children():
+		if child.get_script() and child.get_script().get_global_name() == "ArmorComponent":
+			return child
+
+	return null
+
 func _connect_to_parent():
 	"""Connect to parent node if it has compatible methods"""
 	var parent = get_parent()
 	if not parent:
 		return
-	
+
 	# If parent has a take_damage method, we can override it
 	if parent.has_method("take_damage"):
 		# Note: This would require the parent to delegate to this component

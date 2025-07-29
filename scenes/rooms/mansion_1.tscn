@@ -14178,7 +14178,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.02633, 205.675, 115.313)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -138.626, 202.312, -82.1455)
 
 [node name="AoShield" parent="Items" instance=ExtResource("205_0l5v2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.598, 202.529, -84.7925)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.769, 202.529, -84.7809)
 
 [node name="DebugCamera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true

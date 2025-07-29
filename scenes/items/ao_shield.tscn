@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://hb2sga12bblt"]
+[gd_scene load_steps=5 format=3 uid="uid://hb2sga12bblt"]
 
 [ext_resource type="Script" uid="uid://bl5t8sm860t7d" path="res://scenes/items/shield.gd" id="1_bc5sw"]
 [ext_resource type="Texture2D" uid="uid://bd2lhn0jx86ud" path="res://images/items/AMPOA0.png" id="1_y33yk"]
+[ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_361eh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_y33yk"]
 size = Vector3(0.690826, 0.627703, 0.672795)
@@ -9,6 +10,8 @@ size = Vector3(0.690826, 0.627703, 0.672795)
 [node name="AoShield" type="Area3D" groups=["item"]]
 collision_layer = 8
 script = ExtResource("1_bc5sw")
+pickup_sound = ExtResource("2_361eh")
+event_string = "Obtained Armor Replenishment."
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.33, 0, 0, 0, 0.33, 0, 0, 0, 0.33, 0, 0, 0)

@@ -109,6 +109,7 @@ var debug_camera: Camera3D # temporary
 @onready var interact_sound = $InteractSound
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
 @onready var health_component: HealthComponent = $HealthComponent
+@onready var armor_component = $ArmorComponent
 @onready var weapon_manager: WeaponManager = $WeaponManager
 
 
@@ -116,9 +117,6 @@ func _ready():
 	# Configure and connect health component
 	# The HealthComponent handles all health logic, damage, healing, and death
 	if health_component:
-		# Configure health settings
-		health_component.invulnerability_duration = 0.5 # Brief invulnerability after taking damage
-
 		# Configure audio
 		health_component.death_sound = Preloads.KILL_PLAYER_SOUND
 		# Note: damage_sound and heal_sound can be set later if needed
@@ -130,6 +128,22 @@ func _ready():
 
 		# Initialize health display (will be called again when HUD is connected)
 		_initialize_health_display()
+
+	# Configure and connect armor component
+	if armor_component:
+		# Configure armor settings
+		armor_component.max_armor = 100
+		armor_component.current_armor = 0
+		#armor_component.damage_reduction_type = 0 # DOOM_GREEN type
+
+		# Connect signals
+		armor_component.armor_changed.connect(_on_armor_component_armor_changed)
+		armor_component.armor_gained.connect(_on_armor_component_armor_gained)
+		armor_component.armor_lost.connect(_on_armor_component_armor_lost)
+		armor_component.armor_depleted.connect(_on_armor_component_armor_depleted)
+
+		# Initialize armor display (will be called again when HUD is connected)
+		_initialize_armor_display()
 
 	# Connect weapon manager signals for ammo display
 	if weapon_manager:
@@ -432,6 +446,58 @@ func _on_health_component_health_changed(current_health: int, max_health: int):
 		hud.update_health_display(current_health, max_health)
 
 
+## Armor Component Signal Handlers
+## These methods are called by the ArmorComponent when armor events occur
+
+func _on_armor_component_armor_changed(current_armor: int, max_armor: int):
+	"""Called when armor changes (gained or lost)
+
+	This is where you can update UI elements like:
+	- Armor bars
+	- Armor indicators
+	- HUD elements
+	"""
+	# Update HUD armor display
+	if hud and hud.has_method("update_armor_display"):
+		hud.update_armor_display(current_armor, max_armor)
+
+
+func _on_armor_component_armor_gained(_amount: int, _current_armor: int):
+	"""Called when the player gains armor
+
+	This is where you can add player-specific armor gain effects like:
+	- Visual effects
+	- Sound effects (handled by ArmorComponent)
+	- UI notifications
+	"""
+	# Add any player-specific armor gain effects here
+	pass
+
+
+func _on_armor_component_armor_lost(_amount: int, _current_armor: int):
+	"""Called when the player loses armor
+
+	This is where you can add player-specific armor loss effects like:
+	- Visual effects
+	- Screen effects
+	- UI feedback
+	"""
+	# Add any player-specific armor loss effects here
+	pass
+
+
+func _on_armor_component_armor_depleted():
+	"""Called when armor is completely depleted
+
+	This is where you can add player-specific armor depletion effects like:
+	- Visual warnings
+	- Screen effects
+	- Audio cues (handled by ArmorComponent)
+	"""
+	# Add any player-specific armor depletion effects here
+	pass
+
+
 func _initialize_health_display():
 	"""Initialize the health display in the HUD
 
@@ -442,13 +508,24 @@ func _initialize_health_display():
 		hud.update_health_display(health_component.current_health, health_component.max_health)
 
 
+func _initialize_armor_display():
+	"""Initialize the armor display in the HUD
+
+	This method ensures the HUD shows the correct armor value when the player
+	is first created or when the HUD connection is established.
+	"""
+	if hud and hud.has_method("update_armor_display") and armor_component:
+		hud.update_armor_display(armor_component.current_armor, armor_component.max_armor)
+
+
 func set_hud(new_hud: CanvasLayer):
 	"""Setter for the HUD reference
 
-	Automatically initializes the health and ammo displays when the HUD is connected.
+	Automatically initializes the health, armor, and ammo displays when the HUD is connected.
 	"""
 	hud = new_hud
 	_initialize_health_display()
+	_initialize_armor_display()
 	_initialize_ammo_display()
 
 
@@ -841,3 +918,64 @@ func is_dead() -> bool:
 	if health_component:
 		return health_component.is_dead
 	return killed
+
+
+## Armor Management Methods
+## These methods provide a clean interface to the ArmorComponent
+
+func add_armor(amount: int) -> bool:
+	"""Add armor using the armor component
+
+	Args:
+		amount: Amount of armor to add
+
+	Returns:
+		bool: True if armor was added, False if at maximum or invalid amount
+	"""
+	if armor_component:
+		return armor_component.add_armor(amount)
+	return false
+
+
+func get_armor() -> int:
+	"""Get current armor value
+
+	Returns:
+		int: Current armor points
+	"""
+	if armor_component:
+		return armor_component.get_armor()
+	return 0
+
+
+func get_max_armor() -> int:
+	"""Get maximum armor value
+
+	Returns:
+		int: Maximum armor points
+	"""
+	if armor_component:
+		return armor_component.get_max_armor()
+	return 0
+
+
+func has_armor() -> bool:
+	"""Check if player has armor
+
+	Returns:
+		bool: True if player has armor > 0 and armor is not broken
+	"""
+	if armor_component:
+		return armor_component.has_armor()
+	return false
+
+
+func get_armor_percentage() -> float:
+	"""Get armor as a percentage of maximum
+
+	Returns:
+		float: Armor percentage (0.0 to 1.0)
+	"""
+	if armor_component:
+		return armor_component.get_armor_percentage()
+	return 0.0

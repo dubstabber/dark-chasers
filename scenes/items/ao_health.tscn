@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://fhuxv6yp4vyg"]
+
+[ext_resource type="Texture2D" uid="uid://b2mktx7hp4pel" path="res://images/items/MDPOA0.png" id="1_hr1xj"]
+[ext_resource type="Script" uid="uid://diballdndevut" path="res://scenes/items/health.gd" id="1_ry0ds"]
+[ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_t4eb7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hr1xj"]
+size = Vector3(0.743027, 0.781376, 0.741394)
+
+[node name="AoHealth" type="Area3D" groups=["item"]]
+collision_layer = 8
+script = ExtResource("1_ry0ds")
+event_string = "Obtainted Health Replenishment."
+pickup_sound = ExtResource("2_t4eb7")
+heal_value = 50
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.33, 0, 0, 0, 0.33, 0, 0, 0, 0.33, 0, 0, 0)
+billboard = 2
+shaded = true
+texture = ExtResource("1_hr1xj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00919342, 0.00848198, -0.00534058)
+shape = SubResource("BoxShape3D_hr1xj")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

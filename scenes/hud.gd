@@ -48,6 +48,7 @@ func show_event_text(text: String, _faded: bool = true, text_time: float = 0.0):
 		timer.wait_time = text_time
 		timer.start()
 
+
 func hide_event_text():
 	if faded:
 		tween = create_tween()

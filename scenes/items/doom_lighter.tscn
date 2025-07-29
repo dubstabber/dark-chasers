@@ -7,9 +7,10 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_8kfoi"]
 size = Vector3(0.293564, 0.246067, 0.288145)
 
-[node name="DoomLighter" type="Area3D"]
+[node name="DoomLighter" type="Area3D" groups=["item"]]
 script = ExtResource("1_up2y7")
 wieldable_item = ExtResource("2_1ie13")
+event_string = "Got lighter"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)

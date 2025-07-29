@@ -324,7 +324,7 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 
 	# Equip new weapon
 	current_weapon = next_weapon
-	bullet_raycast.target_position.z = -1 if current_weapon.melee_attack else -1000
+	bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
 	hit_sound_player.stream = current_weapon.hit_sound if current_weapon.hit_sound else null
 	current_weapon.weapon_manager = self
 

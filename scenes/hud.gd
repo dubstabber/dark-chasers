@@ -90,3 +90,14 @@ func update_ammo_display(current_ammo: int, _max_ammo: int):
 	"""
 	if ammo_ui_value_container and ammo_ui_value_container.has_method("set_value_with_aooni_font"):
 		ammo_ui_value_container.set_value_with_aooni_font(current_ammo)
+
+
+func update_armor_display(current_armor: int, _max_armor: int):
+	"""Update the armor display in the HUD
+
+	Args:
+		current_armor: Current armor value to display
+		_max_armor: Maximum armor value (for future use with armor bars)
+	"""
+	if shield_ui_value_container and shield_ui_value_container.has_method("set_value_with_aooni_font"):
+		shield_ui_value_container.set_value_with_aooni_font(current_armor)

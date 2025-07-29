@@ -8,10 +8,11 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_srs15"]
 size = Vector3(0.230883, 0.664707, 0.663136)
 
-[node name="SilverCrowbar" type="Area3D"]
+[node name="SilverCrowbar" type="Area3D" groups=["item"]]
 script = ExtResource("1_wihrt")
 wieldable_item = ExtResource("2_yu2la")
 pickup_sound = ExtResource("3_yu2la")
+event_string = "You got the crowbar!"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)

@@ -12471,7 +12471,7 @@ shape = SubResource("BoxShape3D_j8qqi")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2642, 4.461, 9.02548)
 
 [node name="ThirdFloorAbyss" type="Area3D" parent="NavigationRegion3D/Transitions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4936, 194.093, 111.093)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.4936, 199.144, 111.093)
 collision_layer = 8
 collision_mask = 3
 
@@ -12479,7 +12479,7 @@ collision_mask = 3
 shape = SubResource("BoxShape3D_aw2s6")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/ThirdFloorAbyss" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 17.7892, 3.75611)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 11.9337, 3.75611)
 
 [node name="PianoRoomExit" type="Area3D" parent="NavigationRegion3D/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3305, 203.478, 105.426)

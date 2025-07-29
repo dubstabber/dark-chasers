@@ -90,7 +90,7 @@ var fall_start_velocity := 0.0 # Track velocity when starting to fall
 # Damage blink effect
 var damage_blink_tween: Tween
 
-var hud: CanvasLayer
+var hud: CanvasLayer: set = set_hud
 
 var debug_camera: Camera3D # temporary
 
@@ -117,14 +117,7 @@ func _ready():
 	# The HealthComponent handles all health logic, damage, healing, and death
 	if health_component:
 		# Configure health settings
-		health_component.max_health = 100
-		health_component.current_health = 100
-		health_component.can_overheal = false
 		health_component.invulnerability_duration = 0.5 # Brief invulnerability after taking damage
-
-		# Configure death settings
-		health_component.destroy_on_death = false # Player shouldn't be destroyed on death
-		health_component.death_delay = 0.0
 
 		# Configure audio
 		health_component.death_sound = Preloads.KILL_PLAYER_SOUND
@@ -134,6 +127,9 @@ func _ready():
 		health_component.died.connect(_on_health_component_died)
 		health_component.damage_taken.connect(_on_health_component_damage_taken)
 		health_component.health_changed.connect(_on_health_component_health_changed)
+
+		# Initialize health display (will be called again when HUD is connected)
+		_initialize_health_display()
 
 
 func _update_animation_state():
@@ -424,7 +420,7 @@ func _on_health_component_damage_taken(_amount: int, _current_health: int):
 	_play_damage_blink_effect()
 
 
-func _on_health_component_health_changed(_current_health: int, _max_health: int):
+func _on_health_component_health_changed(current_health: int, max_health: int):
 	"""Called when health changes (damage or healing)
 
 	This is where you can update UI elements like:
@@ -432,8 +428,31 @@ func _on_health_component_health_changed(_current_health: int, _max_health: int)
 	- Health indicators
 	- HUD elements
 	"""
-	# Update HUD or other UI elements here if needed
-	pass
+	print("Player health changed: ", current_health, "/", max_health) # Debug - remove in production
+	# Update HUD health display
+	if hud and hud.has_method("update_health_display"):
+		hud.update_health_display(current_health, max_health)
+
+
+func _initialize_health_display():
+	"""Initialize the health display in the HUD
+
+	This method ensures the HUD shows the correct health value when the player
+	is first created or when the HUD connection is established.
+	"""
+	if hud and hud.has_method("update_health_display") and health_component:
+		hud.update_health_display(health_component.current_health, health_component.max_health)
+
+
+func set_hud(new_hud: CanvasLayer):
+	"""Setter for the HUD reference
+
+	Automatically initializes the health display when the HUD is connected.
+	"""
+	hud = new_hud
+	print("HUD connected to player, initializing health display") # Debug - remove in production
+	# Initialize health display when HUD is connected
+	_initialize_health_display()
 
 
 func _handle_weapon_death_animations():

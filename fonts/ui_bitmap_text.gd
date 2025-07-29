@@ -18,7 +18,8 @@ var font_scale := 0.4
 
 
 func _ready() -> void:
-	set_value_with_aooni_font(919) # test - remove later
+	# Health value will be set by the HUD when connected to player
+	pass
 
 
 func set_value_with_aooni_font(value: int) -> void:

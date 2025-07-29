@@ -952,4 +952,5 @@ autoplay = "RESET"
 
 [node name="HealthComponent" type="Node" parent="."]
 script = ExtResource("42_genst")
+current_health = 60
 metadata/_custom_type_script = "uid://b52p00nh72vus"

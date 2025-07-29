@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://daxk8n3m5vqpe"]
+
+[ext_resource type="Script" path="res://scenes/items/ammo.gd" id="1_ammo"]
+[ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_pickup_sound"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pistol_ammo"]
+size = Vector3(0.4, 0.2, 0.4)
+
+[node name="PistolAmmo" type="Area3D" groups=["item"]]
+collision_layer = 8
+script = ExtResource("1_ammo")
+ammo_value = 30
+pickup_sound = ExtResource("2_pickup_sound")
+event_string = "Picked up pistol ammo."
+target_weapon_name = "Hiroshi pistol"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.1, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pistol_ammo")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

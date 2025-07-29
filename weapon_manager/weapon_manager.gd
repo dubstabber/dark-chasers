@@ -163,6 +163,18 @@ func _get_slot_array(slot_index: int) -> Array[WeaponResource]:
 	return []
 
 
+func get_slot_weapons(slot_index: int) -> Array[WeaponResource]:
+	"""Get weapons in a specific slot (public method for ammo management)
+
+	Args:
+		slot_index: Slot number (1-9)
+
+	Returns:
+		Array[WeaponResource]: Array of weapons in the slot
+	"""
+	return _get_slot_array(slot_index)
+
+
 func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	if not new_weapon:
 		return

@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://btest_ammo_pickup"]
+
+[ext_resource type="PackedScene" uid="uid://b8xk7n2m4vqpd" path="res://scenes/items/ammo.tscn" id="1_generic_ammo"]
+[ext_resource type="PackedScene" uid="uid://c9xk8n3m5vqpe" path="res://scenes/items/pistol_ammo.tscn" id="2_pistol_ammo"]
+[ext_resource type="PackedScene" uid="uid://d0xl9n4m6vrpf" path="res://scenes/items/lighter_fuel.tscn" id="3_lighter_fuel"]
+[ext_resource type="PackedScene" uid="uid://e1ym0o5n7wsqg" path="res://scenes/items/universal_ammo.tscn" id="4_universal_ammo"]
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 1
+background_color = Color(0.2, 0.2, 0.3, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.8, 0.8, 1, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1"]
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[node name="TestAmmoPickup" type="Node3D"]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="Environment"]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 10)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_1")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_1")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+
+[node name="AmmoPickups" type="Node3D" parent="."]
+
+[node name="GenericAmmo" parent="AmmoPickups" instance=ExtResource("1_generic_ammo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
+
+[node name="PistolAmmo" parent="AmmoPickups" instance=ExtResource("2_pistol_ammo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+
+[node name="LighterFuel" parent="AmmoPickups" instance=ExtResource("3_lighter_fuel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+
+[node name="UniversalAmmo" parent="AmmoPickups" instance=ExtResource("4_universal_ammo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.5, 0)

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://6krfm8fnpwyo"]
+
+[ext_resource type="Script" path="res://scenes/items/ammo.gd" id="1_ammo"]
+[ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_pickup_sound"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_universal"]
+size = Vector3(0.6, 0.4, 0.6)
+
+[node name="UniversalAmmo" type="Area3D" groups=["item"]]
+collision_layer = 8
+script = ExtResource("1_ammo")
+ammo_value = 50
+pickup_sound = ExtResource("2_pickup_sound")
+event_string = "Picked up universal ammo pack."
+target_all_weapons = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.2, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_universal")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

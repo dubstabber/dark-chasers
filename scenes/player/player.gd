@@ -979,3 +979,72 @@ func get_armor_percentage() -> float:
 	if armor_component:
 		return armor_component.get_armor_percentage()
 	return 0.0
+
+
+## Ammo Management Methods
+## These methods provide a clean interface to the WeaponManager for ammo operations
+
+func add_ammo(amount: int, weapon_name: String = "", target_slot: int = 0, all_weapons: bool = false) -> bool:
+	"""Add ammo to weapons using the weapon manager
+
+	Args:
+		amount: Amount of ammo to add
+		weapon_name: Name of specific weapon to target (empty = current weapon)
+		target_slot: Slot number to target (0 = ignore slot filtering)
+		all_weapons: If true, add ammo to all non-infinite weapons
+
+	Returns:
+		bool: True if ammo was added to at least one weapon, False otherwise
+	"""
+	if not weapon_manager:
+		return false
+
+	var ammo_added = false
+
+	if all_weapons:
+		# Add ammo to all non-infinite weapons
+		for slot_index in range(1, 10): # Slots 1-9
+			var slot_array = weapon_manager.get_slot_weapons(slot_index)
+			for weapon in slot_array:
+				if not weapon.infinite_ammo and weapon.max_ammo > 0:
+					if weapon.reload(amount):
+						ammo_added = true
+	elif weapon_name != "":
+		# Target specific weapon by name
+		var target_weapon = _find_weapon_by_name(weapon_name)
+		if target_weapon and not target_weapon.infinite_ammo and target_weapon.max_ammo > 0:
+			ammo_added = target_weapon.reload(amount)
+	elif target_slot > 0:
+		# Target weapons in specific slot
+		var slot_array = weapon_manager.get_slot_weapons(target_slot)
+		for weapon in slot_array:
+			if not weapon.infinite_ammo and weapon.max_ammo > 0:
+				if weapon.reload(amount):
+					ammo_added = true
+	else:
+		# Default: add ammo to current weapon
+		if weapon_manager.current_weapon and not weapon_manager.current_weapon.infinite_ammo and weapon_manager.current_weapon.max_ammo > 0:
+			ammo_added = weapon_manager.current_weapon.reload(amount)
+
+	return ammo_added
+
+
+func _find_weapon_by_name(weapon_name: String) -> WeaponResource:
+	"""Find a weapon by name across all slots
+
+	Args:
+		weapon_name: Name of the weapon to find
+
+	Returns:
+		WeaponResource: The weapon if found, null otherwise
+	"""
+	if not weapon_manager:
+		return null
+
+	for slot_index in range(1, 10): # Slots 1-9
+		var slot_array = weapon_manager.get_slot_weapons(slot_index)
+		for weapon in slot_array:
+			if weapon.name == weapon_name:
+				return weapon
+
+	return null

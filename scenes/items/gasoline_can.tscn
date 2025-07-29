@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://ds724wv0o4qb7"]
+
+[ext_resource type="Script" uid="uid://dempk5kvt13b3" path="res://scenes/items/ammo.gd" id="1_6wour"]
+[ext_resource type="Texture2D" uid="uid://blmqqhnui6org" path="res://images/items/GASOA0.png" id="1_pyplg"]
+[ext_resource type="AudioStream" uid="uid://dahb6ul6x5w5m" path="res://sounds/sfx/DSITEMUP.wav" id="2_3bxe7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pyplg"]
+size = Vector3(0.239075, 0.339844, 0.236206)
+
+[node name="GasolineCan" type="Area3D" groups=["item"]]
+collision_layer = 8
+script = ExtResource("1_6wour")
+ammo_value = 2000
+pickup_sound = ExtResource("2_3bxe7")
+event_string = "Picked Up a Gasoline Can."
+target_weapon_name = "Doom lighter"
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+billboard = 2
+shaded = true
+texture_filter = 0
+texture = ExtResource("1_pyplg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0103455, -0.00195312, 0.000305176)
+shape = SubResource("BoxShape3D_pyplg")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

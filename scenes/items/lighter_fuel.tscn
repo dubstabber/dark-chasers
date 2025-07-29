@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0xman4m6vrpf"]
+
+[ext_resource type="Script" path="res://scenes/items/ammo.gd" id="1_ammo"]
+[ext_resource type="AudioStream" uid="uid://dv86w10agao07" path="res://sounds/sfx/DSWPNUP.wav" id="2_pickup_sound"]
+[ext_resource type="Texture2D" uid="uid://b2mktx7hp4pel" path="res://images/items/GASOA0.png" id="3_gasoline"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fuel"]
+size = Vector3(0.5, 0.6, 0.5)
+
+[node name="LighterFuel" type="Area3D" groups=["item"]]
+collision_layer = 8
+script = ExtResource("1_ammo")
+ammo_value = 100
+pickup_sound = ExtResource("2_pickup_sound")
+event_string = "Picked up lighter fuel."
+target_weapon_name = "Doom lighter"
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.33, 0, 0, 0, 0.33, 0, 0, 0, 0.33, 0, 0, 0)
+billboard = 2
+shaded = true
+texture = ExtResource("3_gasoline")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_fuel")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

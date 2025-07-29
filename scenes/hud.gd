@@ -11,6 +11,7 @@ var faded: bool
 @onready var timer = $Timer
 @onready var health_ui_value_container: HBoxContainer = %HealthUIValueContainer
 @onready var ammo_ui_value_container: HBoxContainer = %AmmoUIValueContainer
+@onready var shield_ui_value_container: HBoxContainer = %ShieldUIValueContainer
 
 
 func _ready():

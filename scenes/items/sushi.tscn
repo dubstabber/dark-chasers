@@ -12,6 +12,7 @@ collision_layer = 8
 script = ExtResource("1_bbw8y")
 event_string = "Ate sushi!"
 pickup_sound = ExtResource("2_ytmuv")
+heal_value = 25
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)

@@ -205,6 +205,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
+			# TODO: open wide door
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()

@@ -9,6 +9,7 @@ var faded: bool
 @onready var event_label = $Center/VBoxContainer/EventText
 @onready var log_label_scene = preload("res://scenes/ui/log_label.tscn")
 @onready var timer = $Timer
+@onready var health_ui_value_container: HBoxContainer = %HealthUIValueContainer
 
 
 func _ready():
@@ -65,4 +66,15 @@ func _on_player_mode_changed(mode, value):
 				mode_label.text = "Clip mode enabled"
 			else:
 				mode_label.text = ""
-				
+
+
+func update_health_display(current_health: int, _max_health: int):
+	"""Update the health display in the HUD
+
+	Args:
+		current_health: Current health value to display
+		_max_health: Maximum health value (for future use with health bars)
+	"""
+	if health_ui_value_container and health_ui_value_container.has_method("set_value_with_aooni_font"):
+		health_ui_value_container.set_value_with_aooni_font(current_health)
+		print("Health display updated: ", current_health) # Debug - remove in production

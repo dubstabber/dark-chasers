@@ -78,7 +78,8 @@ texture = ExtResource("2_5ysmq")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="UIValueContainer" parent="BottomLeft/VBoxContainer/HealthHBoxContainer" instance=ExtResource("3_6fi6k")]
+[node name="HealthUIValueContainer" parent="BottomLeft/VBoxContainer/HealthHBoxContainer" instance=ExtResource("3_6fi6k")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="BottomRight" type="MarginContainer" parent="."]

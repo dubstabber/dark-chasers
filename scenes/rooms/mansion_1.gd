@@ -1,6 +1,6 @@
 extends Level
 
-var keys_collected: Array
+# keys_collected is now inherited from the base Level class
 
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 
@@ -58,10 +58,8 @@ func _on_ladder_body_exited(body):
 		body.is_climbing = false
 
 
-func _key_body_entered(body, key_type, event, message_text):
-	hud.add_log(message_text)
-	if key_type and key_type not in keys_collected:
-		keys_collected.push_back(key_type)
+func _handle_key_event(body, _key_type, event, _message_text):
+	"""Handle mansion-specific key events"""
 	match event:
 		"spawn ao oni in library":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
@@ -277,6 +275,8 @@ func _door_locked(text):
 # For testing purposes
 func open_all_doors():
 	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	# Update the key display when keys are added programmatically
+	refresh_key_display()
 	var doors = get_tree().get_nodes_in_group("door")
 	for door in doors:
 		door.open()

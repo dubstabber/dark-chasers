@@ -28,89 +28,53 @@ func update_keys_ui(collected_keys: Array) -> void:
 		return
 
 	# collected_keys array: index 0 = oldest, last index = newest
-	var total_keys = collected_keys.size()
+	var total_keys := collected_keys.size()
 
-	# Special distribution logic based on examples:
-	# 2 keys (A, B): Column 1 = [A, B]
-	# 3 keys (A, B, C): Column 1 = [A at bottom, B, C at top]
-	# 4 keys (A, B, C, D): Column 1 = [A], Column 2 = [B, C, D] with B at bottom and D at top
-	# 5 keys (A, B, C, D, E): Column 1 = [A at bottom, B at top], Column 2 = [E at top, D, C at bottom]
+	# Determine how many keys should go into the first (left-most) column.
+	# The goal is to keep columns balanced while ensuring that each column
+	# contains at most MAX_KEYS_PER_COLUMN keys.
+	var first_col_size: int = total_keys % MAX_KEYS_PER_COLUMN
+	if first_col_size == 0:
+		first_col_size = min(total_keys, MAX_KEYS_PER_COLUMN) # Handles 1-3, 3, 6, 9 … keys
 
-	if total_keys <= 3:
-		# Single column for 1-3 keys
-		var column_container = _create_key_column()
-		var column = column_container.get_child(0) as VBoxContainer
-		add_child(column_container)
+	var start_idx: int = 0
+	while start_idx < total_keys:
+		var column_capacity: int = first_col_size if start_idx == 0 else MAX_KEYS_PER_COLUMN
+		var end_idx: int = min(start_idx + column_capacity, total_keys)
 
-		# Reverse keys so newest is at top, oldest at bottom
-		var column_keys = collected_keys.duplicate()
-		column_keys.reverse()
+		var column_keys := collected_keys.slice(start_idx, end_idx)
+		_create_and_populate_column(column_keys)
 
-		for key_type in column_keys:
-			if key_type in key_textures:
-				var key_texture_rect = _create_key_texture_rect(key_type)
-				column.add_child(key_texture_rect)
+		start_idx = end_idx
 
-	elif total_keys == 4:
-		# Special case: First column gets only oldest key, second column gets remaining 3
-		# Column 1: [A]
-		var first_column_container = _create_key_column()
-		var first_column = first_column_container.get_child(0) as VBoxContainer
-		add_child(first_column_container)
 
-		var oldest_key = collected_keys[0]
-		if oldest_key in key_textures:
-			var key_texture_rect = _create_key_texture_rect(oldest_key)
-			first_column.add_child(key_texture_rect)
+func _create_and_populate_column(keys: Array) -> void:
+	"""Create a column and populate it with the given keys (newest at top, oldest at bottom)"""
+	var column_container = _create_key_column()
+	var column = column_container.get_child(0) as VBoxContainer
+	add_child(column_container)
 
-		# Column 2: [B, C, D] with B at bottom and D at top
-		var second_column_container = _create_key_column()
-		var second_column = second_column_container.get_child(0) as VBoxContainer
-		add_child(second_column_container)
+	# Reverse keys so newest is at top, oldest at bottom
+	var column_keys = keys.duplicate()
+	column_keys.reverse()
 
-		var remaining_keys = collected_keys.slice(1) # [B, C, D]
-		remaining_keys.reverse() # [D, C, B] - newest to oldest
+	for key_type in column_keys:
+		if key_type in key_textures:
+			var key_texture_rect = _create_key_texture_rect(key_type)
+			column.add_child(key_texture_rect)
 
-		for key_type in remaining_keys:
-			if key_type in key_textures:
-				var key_texture_rect = _create_key_texture_rect(key_type)
-				second_column.add_child(key_texture_rect)
 
-	else:
-		# For 5+ keys: First column gets first 2 keys, remaining keys distributed in subsequent columns
-		# Column 1: [A at bottom, B at top]
-		var first_column_container = _create_key_column()
-		var first_column = first_column_container.get_child(0) as VBoxContainer
-		add_child(first_column_container)
+func _distribute_remaining_keys(remaining_keys: Array) -> void:
+	"""Distribute remaining keys across subsequent columns (3 keys max per column)"""
+	var remaining_count = remaining_keys.size()
+	var additional_columns = ceili(float(remaining_count) / float(MAX_KEYS_PER_COLUMN))
 
-		var first_two_keys = collected_keys.slice(0, 2) # [A, B]
-		first_two_keys.reverse() # [B, A] - newest to oldest
+	for column_index in range(additional_columns):
+		var start_key_index = column_index * MAX_KEYS_PER_COLUMN
+		var end_key_index = min(start_key_index + MAX_KEYS_PER_COLUMN, remaining_count)
 
-		for key_type in first_two_keys:
-			if key_type in key_textures:
-				var key_texture_rect = _create_key_texture_rect(key_type)
-				first_column.add_child(key_texture_rect)
-
-		# Remaining keys distributed in subsequent columns
-		var remaining_keys = collected_keys.slice(2) # All keys from index 2 onwards
-		var remaining_count = remaining_keys.size()
-		var additional_columns = ceili(float(remaining_count) / float(MAX_KEYS_PER_COLUMN))
-
-		for column_index in range(additional_columns):
-			var column_container = _create_key_column()
-			var column = column_container.get_child(0) as VBoxContainer
-			add_child(column_container)
-
-			var start_key_index = column_index * MAX_KEYS_PER_COLUMN
-			var end_key_index = min(start_key_index + MAX_KEYS_PER_COLUMN, remaining_count)
-
-			var column_keys = remaining_keys.slice(start_key_index, end_key_index)
-			column_keys.reverse() # Newest to oldest
-
-			for key_type in column_keys:
-				if key_type in key_textures:
-					var key_texture_rect = _create_key_texture_rect(key_type)
-					column.add_child(key_texture_rect)
+		var column_keys = remaining_keys.slice(start_key_index, end_key_index)
+		_create_and_populate_column(column_keys)
 
 
 func _create_key_column() -> MarginContainer:

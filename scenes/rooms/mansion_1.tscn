@@ -14175,8 +14175,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.294, 202.372, -38.9265)
 key_type = "gold"
 
 [node name="TestEmeraldKey" parent="Items" instance=ExtResource("143_ui4j0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.0068, 202.372, -38.9265)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.2742, 202.372, -38.9265)
 key_type = "emerald"
+
+[node name="TestSilverKey" parent="Items" instance=ExtResource("143_ui4j0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.7463, 202.372, -38.9265)
+key_type = "silver"
 
 [node name="Sushi" parent="Items" instance=ExtResource("177_qeaeg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.3032, 202.735, -33.3243)

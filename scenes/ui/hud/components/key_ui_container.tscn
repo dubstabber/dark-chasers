@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://c87u0y4d0ssix"]
+
+[ext_resource type="Script" uid="uid://cw750sp4c0uru" path="res://scenes/ui/hud/components/key_ui_container.gd" id="1_c755g"]
+
+[node name="KeyUIContainer" type="HBoxContainer"]
+alignment = 1
+script = ExtResource("1_c755g")

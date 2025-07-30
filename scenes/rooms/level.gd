@@ -1,5 +1,8 @@
 class_name Level extends Node3D
 
+# Base key collection system - can be overridden by specific maps
+var keys_collected: Array = []
+
 @onready var hud = $HUD
 @onready var transitions = get_node_or_null("%Transitions")
 @onready var player_spawners = get_node_or_null("%PlayerSpawners")
@@ -8,6 +11,9 @@ class_name Level extends Node3D
 
 
 func _ready():
+	# Add this level to the "level" group so UI components can find it
+	add_to_group("level")
+
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	var doors = get_tree().get_nodes_in_group("door")
@@ -73,7 +79,32 @@ func _on_transition_exited(body):
 			body.transit_pos = null
 
 
-func _key_body_entered(_body, _key_type, _event, _message_text): pass
+func _key_body_entered(body, key_type, event, message_text):
+	# Add log message to HUD
+	if hud and hud.has_method("add_log"):
+		hud.add_log(message_text)
+
+	# Add key to collection if not already collected
+	if key_type and key_type not in keys_collected:
+		keys_collected.push_back(key_type)
+
+		# Update the key display in the HUD
+		if hud and hud.has_method("update_keys_display"):
+			hud.update_keys_display(keys_collected)
+
+	# Handle any specific events (can be overridden by child classes)
+	_handle_key_event(body, key_type, event, message_text)
+
+
+func _handle_key_event(_body, _key_type, _event, _message_text):
+	"""Override this method in specific maps to handle key-specific events"""
+	pass
+
+
+func refresh_key_display():
+	"""Manually refresh the key display - useful for testing or when keys are added programmatically"""
+	if hud and hud.has_method("update_keys_display"):
+		hud.update_keys_display(keys_collected)
 func _handle_button_event(_body, _event): pass
 func _handle_area_event(_body: CharacterBody3D, _event): pass
 func _door_locked(_text): pass

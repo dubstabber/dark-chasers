@@ -12,10 +12,14 @@ var faded: bool
 @onready var health_ui_value_container: HBoxContainer = %HealthUIValueContainer
 @onready var ammo_ui_value_container: HBoxContainer = %AmmoUIValueContainer
 @onready var shield_ui_value_container: HBoxContainer = %ShieldUIValueContainer
+@onready var key_ui_container: HBoxContainer = $TopRight/KeyUIContainer
 
 
 func _ready():
 	timer.connect("timeout", hide_event_text)
+
+	# Initialize key display if keys are already collected
+	call_deferred("_initialize_key_display")
 
 
 func show_black_screen():
@@ -101,3 +105,19 @@ func update_armor_display(current_armor: int, _max_armor: int):
 	"""
 	if shield_ui_value_container and shield_ui_value_container.has_method("set_value_with_aooni_font"):
 		shield_ui_value_container.set_value_with_aooni_font(current_armor)
+
+
+func update_keys_display(collected_keys: Array):
+	"""Update the keys display in the HUD
+
+	Args:
+		collected_keys: Array of key types that have been collected
+	"""
+	if key_ui_container and key_ui_container.has_method("update_keys_ui"):
+		key_ui_container.update_keys_ui(collected_keys)
+
+
+func _initialize_key_display():
+	"""Initialize the key display by getting keys from the current level"""
+	if key_ui_container and key_ui_container.has_method("refresh_display"):
+		key_ui_container.refresh_display()

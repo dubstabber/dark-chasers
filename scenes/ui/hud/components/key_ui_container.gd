@@ -11,9 +11,9 @@ var key_textures := {
 }
 
 # Size for key icons in the UI
-const KEY_ICON_SIZE := Vector2(18, 18)
-const KEY_SPACING := 4
-const COLUMN_SPACING := 8
+const KEY_ICON_SIZE := Vector2(14, 14)
+const KEY_SPACING := 2
+const COLUMN_SPACING := 2
 const MAX_KEYS_PER_COLUMN := 3
 
 

@@ -110,6 +110,7 @@ var debug_camera: Camera3D # temporary
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var armor_component = $ArmorComponent
+@onready var ammo_component: PlayerAmmoComponent = $PlayerAmmoComponent
 @onready var weapon_manager: WeaponManager = $WeaponManager
 
 
@@ -149,6 +150,13 @@ func _ready():
 	if weapon_manager:
 		weapon_manager.weapon_ammo_changed.connect(_on_weapon_ammo_changed)
 		weapon_manager.weapon_switched.connect(_on_weapon_switched)
+
+		# Set up ammo component reference for all weapons
+		_setup_weapon_ammo_components()
+
+	# Connect ammo component signals to update HUD when ammo changes
+	if ammo_component:
+		ammo_component.ammo_changed.connect(_on_ammo_component_ammo_changed)
 
 
 func _update_animation_state():
@@ -526,7 +534,8 @@ func set_hud(new_hud: CanvasLayer):
 	hud = new_hud
 	_initialize_health_display()
 	_initialize_armor_display()
-	_initialize_ammo_display()
+	# Defer ammo display initialization to ensure AmmoManager is ready
+	call_deferred("_initialize_ammo_display")
 
 
 ## Weapon System Signal Handlers
@@ -547,7 +556,31 @@ func _on_weapon_switched(weapon: WeaponResource):
 	Updates the HUD to show the new weapon's ammo count.
 	"""
 	if hud and hud.has_method("update_ammo_display"):
-		hud.update_ammo_display(weapon.current_ammo, weapon.max_ammo)
+		hud.update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
+
+
+func _on_ammo_component_ammo_changed(ammo_type: String, current_amount: int, max_amount: int):
+	"""Called when player's ammo component ammo changes
+
+	Updates the HUD if the changed ammo type matches the current weapon's ammo type.
+	"""
+	if weapon_manager and weapon_manager.current_weapon:
+		var weapon = weapon_manager.current_weapon
+		if not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
+			if hud and hud.has_method("update_ammo_display"):
+				hud.update_ammo_display(current_amount, max_amount)
+
+
+func _setup_weapon_ammo_components():
+	"""Set up ammo component references for all weapons in the weapon manager"""
+	if not weapon_manager or not ammo_component:
+		return
+
+	# Set ammo component reference for all weapons in all slots
+	for slot_index in range(1, 10): # Slots 1-9
+		var slot_weapons = weapon_manager.get_slot_weapons(slot_index)
+		for weapon in slot_weapons:
+			weapon.ammo_component = ammo_component
 
 
 func _initialize_ammo_display():
@@ -558,7 +591,7 @@ func _initialize_ammo_display():
 	"""
 	if hud and hud.has_method("update_ammo_display") and weapon_manager and weapon_manager.current_weapon:
 		var weapon = weapon_manager.current_weapon
-		hud.update_ammo_display(weapon.current_ammo, weapon.max_ammo)
+		hud.update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
 
 
 func _handle_weapon_death_animations():
@@ -984,47 +1017,41 @@ func get_armor_percentage() -> float:
 ## Ammo Management Methods
 ## These methods provide a clean interface to the WeaponManager for ammo operations
 
-func add_ammo(amount: int, weapon_name: String = "", target_slot: int = 0, all_weapons: bool = false) -> bool:
-	"""Add ammo to weapons using the weapon manager
+func add_ammo(amount: int, _weapon_name: String = "", _target_slot: int = 0, all_weapons: bool = false) -> bool:
+	"""Add ammo to weapons using the component-based ammo system
 
 	Args:
 		amount: Amount of ammo to add
-		weapon_name: Name of specific weapon to target (empty = current weapon)
-		target_slot: Slot number to target (0 = ignore slot filtering)
+		weapon_name: Name of specific weapon to target (empty = current weapon) - DEPRECATED
+		target_slot: Slot number to target (0 = ignore slot filtering) - DEPRECATED
 		all_weapons: If true, add ammo to all non-infinite weapons
 
 	Returns:
 		bool: True if ammo was added to at least one weapon, False otherwise
 	"""
-	if not weapon_manager:
+	if not weapon_manager or not ammo_component:
 		return false
 
 	var ammo_added = false
+	var ammo_types_added = {} # Track which ammo types we've already added to
 
 	if all_weapons:
-		# Add ammo to all non-infinite weapons
+		# Add ammo to all non-infinite weapons by ammo type
 		for slot_index in range(1, 10): # Slots 1-9
 			var slot_array = weapon_manager.get_slot_weapons(slot_index)
 			for weapon in slot_array:
-				if not weapon.infinite_ammo and weapon.max_ammo > 0:
-					if weapon.reload(amount):
-						ammo_added = true
-	elif weapon_name != "":
-		# Target specific weapon by name
-		var target_weapon = _find_weapon_by_name(weapon_name)
-		if target_weapon and not target_weapon.infinite_ammo and target_weapon.max_ammo > 0:
-			ammo_added = target_weapon.reload(amount)
-	elif target_slot > 0:
-		# Target weapons in specific slot
-		var slot_array = weapon_manager.get_slot_weapons(target_slot)
-		for weapon in slot_array:
-			if not weapon.infinite_ammo and weapon.max_ammo > 0:
-				if weapon.reload(amount):
-					ammo_added = true
+				if not weapon.infinite_ammo and weapon.ammo_type != "":
+					if not ammo_types_added.has(weapon.ammo_type):
+						if ammo_component.add_ammo(weapon.ammo_type, amount):
+							ammo_added = true
+							ammo_types_added[weapon.ammo_type] = true
 	else:
-		# Default: add ammo to current weapon
-		if weapon_manager.current_weapon and not weapon_manager.current_weapon.infinite_ammo and weapon_manager.current_weapon.max_ammo > 0:
-			ammo_added = weapon_manager.current_weapon.reload(amount)
+		# Default: add ammo to current weapon's ammo type
+		if weapon_manager.current_weapon and not weapon_manager.current_weapon.infinite_ammo:
+			if weapon_manager.current_weapon.ammo_type != "":
+				ammo_added = ammo_component.add_ammo(weapon_manager.current_weapon.ammo_type, amount)
+			else:
+				print("Current weapon '%s' has no ammo_type specified!" % weapon_manager.current_weapon.name)
 
 	return ammo_added
 

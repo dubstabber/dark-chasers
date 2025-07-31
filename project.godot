@@ -32,12 +32,14 @@ enabled=PackedStringArray("res://addons/Mirror/plugin.cfg")
 [file_customization]
 
 folder_colors={
+"res://docs/": "yellow",
 "res://fonts/": "orange",
 "res://images/": "red",
 "res://models/": "blue",
 "res://scenes/": "green",
 "res://shaders/": "pink",
 "res://sounds/": "yellow",
+"res://tests/": "purple",
 "res://utils/": "gray",
 "res://weapon_manager/": "gray"
 }

@@ -6,29 +6,36 @@ signal item_pickedup(event_string)
 @export var pickup_sound: AudioStream
 @export var event_string: String
 
-# Weapon targeting options
-@export_group("Weapon Targeting")
-@export var target_weapon_name: String = "" # Target specific weapon by name (e.g., "Hiroshi pistol")
-@export var target_weapon_slot: int = 0 # Target weapons in specific slot (0 = any slot)
-@export var target_all_weapons: bool = false # Add ammo to all non-infinite weapons
+# Centralized ammo system options
+@export_group("Ammo Type")
+@export var ammo_type: String = "" # Ammo type for centralized system (e.g., "pistol_ammo", "lighter_fuel")
+
+# Special targeting options
+@export_group("Special Targeting")
+@export var target_all_weapons: bool = false # Add ammo to all non-infinite weapons (uses legacy system)
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group('player'):
-		# Try to add ammo using the player's add_ammo method
 		var ammo_added = false
-		
-		if body.has_method("add_ammo"):
-			if target_all_weapons:
-				ammo_added = body.add_ammo(ammo_value, "", 0, true)
-			elif target_weapon_name != "":
-				ammo_added = body.add_ammo(ammo_value, target_weapon_name)
-			elif target_weapon_slot > 0:
-				ammo_added = body.add_ammo(ammo_value, "", target_weapon_slot)
+
+		# Use component-based ammo system if ammo_type is specified
+		if ammo_type != "":
+			# Get the player's ammo component
+			var player_ammo_component = body.get("ammo_component")
+			if player_ammo_component and player_ammo_component.has_method("add_ammo"):
+				ammo_added = player_ammo_component.add_ammo(ammo_type, ammo_value)
 			else:
-				# Default: add ammo to current weapon
-				ammo_added = body.add_ammo(ammo_value)
-		
+				print("Player has no ammo_component!")
+				return
+		elif target_all_weapons:
+			# Special case: universal ammo that adds to all weapon types
+			if body.has_method("add_ammo"):
+				ammo_added = body.add_ammo(ammo_value, "", 0, true)
+		else:
+			print("Ammo pickup has no ammo_type specified and is not universal ammo!")
+			return
+
 		# Only consume the item if ammo was successfully added
 		if ammo_added:
 			if pickup_sound:
@@ -36,4 +43,7 @@ func _on_body_entered(body: Node3D) -> void:
 			item_pickedup.emit(event_string)
 			queue_free()
 		else:
-			print("Could not add ammo - weapon at maximum or not found!")
+			if ammo_type != "":
+				print("Could not add ammo - %s at maximum!" % ammo_type)
+			else:
+				print("Could not add universal ammo - all weapons at maximum!")

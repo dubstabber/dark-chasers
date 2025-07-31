@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://btest_health_component"]
+
+[ext_resource type="Script" path="res://tests/test_health_component.gd" id="1_health_basic"]
+[ext_resource type="Script" path="res://tests/test_health_component_extended.gd" id="2_health_extended"]
+[ext_resource type="Script" path="res://tests/test_health_component_armor.gd" id="3_health_armor"]
+
+[node name="HealthComponentTestRunner" type="Node"]
+
+[node name="BasicTests" type="Node" parent="."]
+script = ExtResource("1_health_basic")
+
+[node name="ExtendedTests" type="Node" parent="."]
+script = ExtResource("2_health_extended")
+
+[node name="ArmorTests" type="Node" parent="."]
+script = ExtResource("3_health_armor")

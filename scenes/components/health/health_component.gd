@@ -222,7 +222,12 @@ func _play_sound(sound: AudioStream):
 		audio_player.play()
 	else:
 		# Create a temporary audio player
-		Utils.play_sound(sound, get_tree().root, parent.global_position if parent.has_method("get_global_position") else Vector3.ZERO)
+		var pos = Vector3.ZERO
+		if parent.has_method("get_global_position"):
+			pos = parent.get_global_position()
+		elif "global_position" in parent:
+			pos = parent.global_position
+		Utils.play_sound(sound, get_tree().root, pos)
 
 # Convenience methods for common use cases
 func damage(amount: int) -> bool:

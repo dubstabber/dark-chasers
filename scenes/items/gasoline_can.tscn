@@ -13,7 +13,7 @@ script = ExtResource("1_6wour")
 ammo_value = 2000
 pickup_sound = ExtResource("2_3bxe7")
 event_string = "Picked Up a Gasoline Can."
-target_weapon_name = "Doom lighter"
+ammo_type = "lighter_fuel"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 billboard = 2

@@ -28,6 +28,7 @@ var current_weapon: WeaponResource
 
 var is_auto_hitting := false
 var bobbing_enabled := true # Controls whether weapon bobbing is active
+var _ammo_components_initialized := false # Track if ammo components have been set up
 
 # --------------------------------------------------------------------------
 # Weapon switching state management
@@ -79,11 +80,51 @@ func _ready() -> void:
 	right_hand = gun_base.get_node_or_null("RightHandSlot")
 	base_gun_position = gun_base.position
 	
+	# Initialize ammo component references for all weapons
+	_setup_weapon_ammo_components()
+	
 	# Connect to player's weapon pickup signal
 	if player and player.has_signal("weapon_added"):
 		player.weapon_added.connect(_on_weapon_added)
 	
 	switch_weapon(2) # default
+
+
+func _setup_weapon_ammo_components() -> void:
+	"""Initialize ammo component references for all weapons in all slots"""
+	var player_ammo_component = _get_player_ammo_component()
+	if not player_ammo_component:
+		print("WeaponManager: PlayerAmmoComponent not ready yet, will retry when equipping weapons")
+		_ammo_components_initialized = false
+		return
+	
+	# Set up ammo component reference for all weapons in all slots
+	var all_slots = [slot_1, slot_2, slot_3, slot_4, slot_5, slot_6, slot_7, slot_8, slot_9]
+	for slot in all_slots:
+		for weapon in slot:
+			if weapon:
+				weapon.ammo_component = player_ammo_component
+				weapon.weapon_manager = self
+	
+	_ammo_components_initialized = true
+	print("WeaponManager: Ammo components initialized for all weapons")
+
+
+func _get_player_ammo_component() -> PlayerAmmoComponent:
+	"""Get the player's ammo component with robust detection
+	
+	Returns:
+		PlayerAmmoComponent: The player's ammo component, or null if not found
+	"""
+	if not player:
+		return null
+	
+	# Check if player has ammo_component property and it's not null
+	if player.has_method("get") and "ammo_component" in player and player.ammo_component:
+		return player.ammo_component
+	
+	# Try to find ammo component as a child node
+	return player.get_node_or_null("PlayerAmmoComponent")
 
 
 func _process(delta: float) -> void:
@@ -179,6 +220,12 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	if not new_weapon:
 		return
 	
+	# Set up ammo component reference for the new weapon
+	var player_ammo_component = _get_player_ammo_component()
+	if player_ammo_component:
+		new_weapon.ammo_component = player_ammo_component
+		new_weapon.weapon_manager = self
+	
 	var slot_index: int = clamp(new_weapon.slot, 1, 9)
 	var slot_array: Array[WeaponResource] = _get_slot_array(slot_index)
 	
@@ -247,7 +294,7 @@ func hit() -> void:
 		# Consume ammo before hitting (for non-melee weapons)
 		if not current_weapon.melee_attack:
 			if not current_weapon.consume_ammo():
-				print("Cannot fire ", current_weapon.name, " - insufficient ammo (need ", current_weapon.ammo_per_shot, ", have ", current_weapon.current_ammo, ")") # Debug - remove in production
+				print("Cannot fire ", current_weapon.name, " - insufficient ammo (need ", current_weapon.ammo_per_shot, ", have ", current_weapon.get_current_ammo(), ")") # Debug - remove in production
 				return # Don't hit if insufficient ammo
 		current_weapon.hit()
 
@@ -345,6 +392,16 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
 	hit_sound_player.stream = current_weapon.hit_sound if current_weapon.hit_sound else null
 	current_weapon.weapon_manager = self
+	
+	# Retry setting up all ammo components if they weren't initialized during _ready
+	if not _ammo_components_initialized:
+		_setup_weapon_ammo_components()
+	
+	# Ensure ammo component is set (in case it wasn't set during initialization)
+	if not current_weapon.ammo_component:
+		var player_ammo_component = _get_player_ammo_component()
+		if player_ammo_component:
+			current_weapon.ammo_component = player_ammo_component
 
 	# Connect to weapon's ammo signals
 	if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
@@ -358,7 +415,7 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 
 	# Emit weapon switched signal and initial ammo state
 	weapon_switched.emit(current_weapon)
-	weapon_ammo_changed.emit(current_weapon.current_ammo, current_weapon.max_ammo)
+	weapon_ammo_changed.emit(current_weapon.get_current_ammo(), current_weapon.get_max_ammo_amount())
 
 	# Play draw animation for new weapon
 	if current_weapon.pullout_anim_name:

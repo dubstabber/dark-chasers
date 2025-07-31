@@ -104,7 +104,11 @@ func update_armor_display(current_armor: int, _max_armor: int):
 		_max_armor: Maximum armor value (for future use with armor bars)
 	"""
 	if shield_ui_value_container and shield_ui_value_container.has_method("set_value_with_aooni_font"):
-		shield_ui_value_container.set_value_with_aooni_font(current_armor)
+		# When armor is 0, we don't want to show any digits in the HUD. The
+		# ui_bitmap_text script treats negative values (e.g. -1) as a sentinel
+		# to hide the value completely. Re-use that convention here.
+		var display_value := -1 if current_armor == 0 else current_armor
+		shield_ui_value_container.set_value_with_aooni_font(display_value)
 
 
 func update_keys_display(collected_keys: Array):

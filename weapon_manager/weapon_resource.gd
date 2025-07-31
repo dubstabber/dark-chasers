@@ -204,7 +204,7 @@ func get_current_ammo() -> int:
 		int: Current ammo amount
 	"""
 	if infinite_ammo:
-		return 999999 # Large number to represent infinite
+		return -1 # Sentinel value representing infinite ammo
 
 	# All weapons must have ammo_type specified
 	if ammo_type == "":
@@ -226,7 +226,7 @@ func get_max_ammo_amount() -> int:
 		int: Maximum ammo amount
 	"""
 	if infinite_ammo:
-		return 999999 # Large number to represent infinite
+		return -1 # Sentinel value representing infinite ammo
 
 	# All weapons must have ammo_type specified
 	if ammo_type == "":

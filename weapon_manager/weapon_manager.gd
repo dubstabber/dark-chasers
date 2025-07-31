@@ -107,7 +107,6 @@ func _setup_weapon_ammo_components() -> void:
 				weapon.weapon_manager = self
 	
 	_ammo_components_initialized = true
-	print("WeaponManager: Ammo components initialized for all weapons")
 
 
 func _get_player_ammo_component() -> PlayerAmmoComponent:
@@ -294,7 +293,6 @@ func hit() -> void:
 		# Consume ammo before hitting (for non-melee weapons)
 		if not current_weapon.melee_attack:
 			if not current_weapon.consume_ammo():
-				print("Cannot fire ", current_weapon.name, " - insufficient ammo (need ", current_weapon.ammo_per_shot, ", have ", current_weapon.get_current_ammo(), ")") # Debug - remove in production
 				return # Don't hit if insufficient ammo
 		current_weapon.hit()
 

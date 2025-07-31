@@ -27,8 +27,8 @@ func set_value_with_aooni_font(value: int) -> void:
 		remove_child(node)
 		node.queue_free()
 	
-	# Hide value display when the value represents **infinite** (sentinel 999999)
-	if value >= 999999:
+	# Hide value display when the value represents **infinite** (sentinel -1)
+	if value < 0:
 		return
 	var value_text := str(value)
 	

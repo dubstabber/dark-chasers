@@ -67,7 +67,9 @@ func hit() -> void:
 					Utils.play_sound(damage_entity_sound, weapon_manager.get_tree().root, hit_pos)
 			elif damage_wall_sound:
 				Utils.play_sound(damage_wall_sound, weapon_manager.get_tree().root, hit_pos)
-			if collider.has_method("take_damage"):
+			if collider.has_method("take_damage_at_position"):
+				collider.take_damage_at_position(damage, hit_pos)
+			elif collider.has_method("take_damage"):
 				collider.take_damage(damage)
 			if collider.is_in_group("destroyable"):
 				collider.queue_free()

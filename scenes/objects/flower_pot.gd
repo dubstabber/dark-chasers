@@ -6,7 +6,7 @@ var is_destroyed := false
 @onready var animated_sprite_3d = $AnimatedSprite3D
 
 
-func take_damage(dmg: int):
+func take_damage(dmg: int) -> void:
 	if not is_destroyed:
 		health -= dmg
 		if health <= 0:

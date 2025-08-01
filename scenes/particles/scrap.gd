@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 var scrap_type: String
+
 var grounded_frame: int
 var is_moving: bool = true
 var last_texture_change_time: float = 0.0

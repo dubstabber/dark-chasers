@@ -1,10 +1,9 @@
-[gd_scene load_steps=1168 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1159 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
 [ext_resource type="Texture2D" uid="uid://c3gelyre81mwo" path="res://models/mansion1/mansion1_HRBBR.png" id="3_rlmmp"]
 [ext_resource type="Texture2D" uid="uid://dy3wiskoj45x1" path="res://models/mansion1/mansion1_HRBBRSWP.png" id="4_ggtmc"]
-[ext_resource type="Texture2D" uid="uid://d1hq7omktggva" path="res://images/textures/HRBBR.png" id="4_sl7bf"]
 [ext_resource type="Texture2D" uid="uid://cy6lclc2hvknr" path="res://models/mansion1/mansion1_HRBBRFWP.png" id="5_advm2"]
 [ext_resource type="Texture2D" uid="uid://ybsvndt7a357" path="res://models/mansion1/mansion1_HRWOOD02.png" id="6_r37fa"]
 [ext_resource type="Texture2D" uid="uid://20cvpr7vyqa4" path="res://models/mansion1/mansion1_HRLAMPED.png" id="7_u2ml1"]
@@ -40,12 +39,10 @@
 [ext_resource type="Texture2D" uid="uid://cv4enf4vwt8sv" path="res://models/mansion1/mansion1_BBRPTN01.png" id="34_yc35j"]
 [ext_resource type="Texture2D" uid="uid://btriw2e4qlijx" path="res://models/mansion1/mansion1_HRROOF.png" id="35_bom2y"]
 [ext_resource type="Texture2D" uid="uid://r701d6ka6185" path="res://models/mansion1/mansion1_OSFENCE.png" id="36_2t7qr"]
-[ext_resource type="Texture2D" uid="uid://cuqrte7ckujdf" path="res://images/textures/DJDOOR01.png" id="36_n1n0t"]
 [ext_resource type="Texture2D" uid="uid://bg06p44uohnpn" path="res://models/mansion1/mansion1_BLDWL01.png" id="37_nyui8"]
 [ext_resource type="Texture2D" uid="uid://dvlvk65jfydc2" path="res://models/mansion1/mansion1_DJWALL.png" id="38_80d78"]
 [ext_resource type="Texture2D" uid="uid://cubjdrueu38g4" path="res://models/mansion1/mansion1_BTEPPI07.png" id="39_3nkn1"]
 [ext_resource type="Texture2D" uid="uid://bgnh2ehc27njj" path="res://models/mansion1/mansion1_HRWINDOW.png" id="40_vdtf3"]
-[ext_resource type="Texture2D" uid="uid://choa82rlwprth" path="res://images/textures/DJDOOR02.png" id="41_7xeps"]
 [ext_resource type="Texture2D" uid="uid://cun1shx01b11d" path="res://models/mansion1/mansion1_BMIDG09.png" id="41_bdxgr"]
 [ext_resource type="Texture2D" uid="uid://bs1ht2wcbu8x8" path="res://models/mansion1/mansion1_BMIDG10.png" id="42_ee2a4"]
 [ext_resource type="Texture2D" uid="uid://dp1q3p26lyoya" path="res://models/mansion1/mansion1_BMIDG10B.png" id="43_vflsl"]
@@ -112,7 +109,6 @@
 [ext_resource type="Texture2D" uid="uid://dnwahasdruxy" path="res://models/mansion1/mansion1_CBLFL.png" id="99_4i2mb"]
 [ext_resource type="Texture2D" uid="uid://bfirjgyvcirk6" path="res://models/mansion1/mansion1_CSLOTH.png" id="100_5ys4s"]
 [ext_resource type="Texture2D" uid="uid://chj8f13htv0bk" path="res://models/mansion1/mansion1_BSIGN27.png" id="101_t6met"]
-[ext_resource type="Texture2D" uid="uid://dsdqyv5fxd6q1" path="res://images/textures/PNRCL01.png" id="102_iyaks"]
 [ext_resource type="Texture2D" uid="uid://cdd7d6c8oejrk" path="res://models/mansion1/mansion1_HL2BRCK3.png" id="102_v2ejs"]
 [ext_resource type="Texture2D" uid="uid://drddvbi1ksh67" path="res://models/mansion1/mansion1_PICTURE0.png" id="103_71ttb"]
 [ext_resource type="Texture2D" uid="uid://bauijb03et7ic" path="res://models/mansion1/mansion1_SECRET01.png" id="104_qj3fa"]
@@ -187,19 +183,22 @@
 [ext_resource type="PackedScene" uid="uid://b4l0xb0padsci" path="res://scenes/objects/moving_bars_1.tscn" id="161_2it1x"]
 [ext_resource type="PackedScene" uid="uid://gvoggmm2d6m6" path="res://scenes/objects/glass_8.tscn" id="161_82x3n"]
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="161_b5j3m"]
+[ext_resource type="PackedScene" uid="uid://b3i6kpi8hnf7k" path="res://scenes/objects/ao_wardrobe_door_1.tscn" id="161_dbtwi"]
 [ext_resource type="PackedScene" uid="uid://blrk5cmrsprvt" path="res://scenes/objects/glass_9.tscn" id="162_ed5mj"]
 [ext_resource type="PackedScene" uid="uid://bv5ktpmwow0o7" path="res://scenes/objects/glass_10.tscn" id="163_j7t44"]
 [ext_resource type="PackedScene" uid="uid://sghn46iuhcvs" path="res://scenes/objects/glass_11.tscn" id="164_702xm"]
+[ext_resource type="PackedScene" uid="uid://cwk4n5vhjkkg8" path="res://scenes/objects/ao_moving_wall_1.tscn" id="164_dbtwi"]
+[ext_resource type="PackedScene" uid="uid://pjf1sag7cu3s" path="res://scenes/objects/ao_moving_wall_2.tscn" id="165_dbtwi"]
+[ext_resource type="PackedScene" uid="uid://b2flieo7td8qg" path="res://scenes/objects/blink_wall.tscn" id="165_qrnci"]
 [ext_resource type="PackedScene" uid="uid://bxcoqwwtje00u" path="res://scenes/objects/glass_12.tscn" id="165_w3xux"]
 [ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
 [ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
 [ext_resource type="PackedScene" uid="uid://bo5dwiemer8k4" path="res://scenes/objects/candle.tscn" id="168_mswtm"]
 [ext_resource type="PackedScene" uid="uid://coi5t3tlf2d2p" path="res://scenes/objects/ao_door2.tscn" id="170_0l5v2"]
+[ext_resource type="PackedScene" uid="uid://b4uj6yake77iy" path="res://scenes/objects/ao_wide_door_1.tscn" id="170_dbtwi"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
-[ext_resource type="Shader" uid="uid://c4jx80hgp3v5y" path="res://shaders/adjust_mansion_wall.gdshader" id="178_1x7r2"]
 [ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
-[ext_resource type="Shader" uid="uid://hxptfitnb8b4" path="res://shaders/adjust_blink_wall.gdshader" id="183_veal5"]
 [ext_resource type="Script" uid="uid://cgtyip2baqmg2" path="res://addons/Mirror/Mirror/Mirror.gd" id="194_0vynp"]
 [ext_resource type="Shader" uid="uid://d2c2nnw51eg2a" path="res://shaders/see-through.gdshader" id="203_4phr8"]
 [ext_resource type="PackedScene" uid="uid://hb2sga12bblt" path="res://scenes/items/ao_shield.tscn" id="205_0l5v2"]
@@ -9317,45 +9316,11 @@ transparency = 1
 depth_draw_mode = 1
 albedo_texture = ExtResource("15_emvb5")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0j3w"]
-transparency = 1
-albedo_texture = ExtResource("10_ls102")
-uv1_scale = Vector3(1.65, 1.6, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emxvj"]
-transparency = 1
-albedo_texture = ExtResource("10_ls102")
-uv1_scale = Vector3(1.65, 1.6, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33lod"]
-render_priority = 2
-transparency = 1
-albedo_texture = ExtResource("10_ls102")
-uv1_scale = Vector3(1.65, 1.6, 1)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kjtp1"]
 render_priority = 1
 transparency = 1
 albedo_texture = ExtResource("10_ls102")
 uv1_scale = Vector3(1.65, 1.6, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2djrd"]
-render_priority = 0
-shader = ExtResource("178_1x7r2")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("4_sl7bf")
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dkqpe"]
-albedo_texture = ExtResource("102_iyaks")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nbaw7"]
 transparency = 1
@@ -9369,34 +9334,9 @@ albedo_texture = ExtResource("14_rgpi8")
 transparency = 1
 albedo_texture = ExtResource("57_ldj56")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8l7s3"]
-render_priority = 1
-transparency = 1
-albedo_texture = ExtResource("36_n1n0t")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s46jb"]
-render_priority = 1
-transparency = 1
-albedo_texture = ExtResource("41_7xeps")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d2ngu"]
 transparency = 1
 albedo_texture = ExtResource("181_jptga")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dgm2s"]
-render_priority = 0
-shader = ExtResource("183_veal5")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("4_sl7bf")
-shader_parameter/point_size = 1.0
-shader_parameter/roughness = 1.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.5
-shader_parameter/metallic = 0.0
-shader_parameter/uv1_scale = Vector3(1, 1, 1)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(1, 1, 1)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5yjcn"]
 transparency = 1
@@ -12616,6 +12556,11 @@ current_room = "BigHall"
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 21.4969, 202.195, 79.9931)
 current_room = "BigHall"
 
+[node name="Ao mika2" parent="NavigationRegion3D/Enemies" instance=ExtResource("142_dc1jo")]
+transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -48.6751, 202.197, -31.5108)
+current_room = "FirstFloor"
+chase_player = false
+
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Blockers"]
@@ -12908,7 +12853,7 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "circle"
-door_to_open = NodePath("../../../Doors/MovingWall")
+door_to_open = NodePath("../../../Doors/AoMovingWall1")
 press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button2"]
@@ -13047,11 +12992,10 @@ event_name = "piano alarm"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent2"]
 shape = SubResource("BoxShape3D_rps76")
 
-[node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
+[node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.896, 203.717, 83.9186)
 script = ExtResource("146_vhxkd")
 event_name = "open ao oni behind wide door"
-door_to_open = NodePath("../../../Doors/WideDoorLegacy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent3"]
 shape = SubResource("BoxShape3D_ihf32")
@@ -13394,185 +13338,86 @@ key_needed = "ruby"
 locked_message = "You need the ruby key!"
 locked_sound = ExtResource("160_qbtei")
 
-[node name="Door3" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.9699, 203.474, -27.042)
+[node name="AoDoor3" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.963, 203.48, -27.05)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door3"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.16)
+[node name="AoDoor4" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.96, 203.48, -29.772)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.16)
+[node name="AoDoor5" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.28, 203.48, -17.449)
 
-[node name="Door4" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.9401, 203.474, -29.7663)
+[node name="AoWardrobeDoor1" parent="Doors" instance=ExtResource("161_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.8, 203.723, -14.386)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door4"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor6" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.319, 206.04, 120.47)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoWardrobeDoor2" parent="Doors" instance=ExtResource("161_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16, 206.278, 126.416)
 
-[node name="Door5" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.2851, 203.49, -17.5925)
+[node name="AoDoor7" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 206.04, 120.47)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door5"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoMovingWall1" parent="Doors" instance=ExtResource("164_dbtwi")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 8.265, 206.041, 108.156)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor8" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.799, 206.04, 110.55)
 
-[node name="Door6" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.317431, 206.061, 120.363)
+[node name="AoDoor9" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.68, 206.04, 108.95)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door6"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor10" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.241, 206.04, 103.511)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor11" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.32, 203.48, 116.79)
 
-[node name="Door7" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2077, 206.048, 120.415)
+[node name="AoDoor12" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.04, 203.48, 125.59)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door7"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor13" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.401, 203.48, 136.79)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor14" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.401, 203.48, 138.39)
+allow_front = false
+allow_back = false
 
-[node name="Door8" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.80143, 206.048, 110.495)
+[node name="AoWardrobeDoor3" parent="Doors" instance=ExtResource("161_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.199, 203.724, 135.374)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door8"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoMovingWall2" parent="Doors" instance=ExtResource("165_dbtwi")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -87.361, 203.479, 122.235)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door8"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor15" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.162, 203.48, 74.07)
 
-[node name="Door9" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.3677, 203.477, 116.797)
+[node name="AoWideDoor1" parent="Doors" instance=ExtResource("170_dbtwi")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 38.12, 203.722, 88.466)
+allow_front = false
+allow_back = false
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door9"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoWideDoor2" parent="Doors" instance=ExtResource("170_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.12, 203.722, 88.466)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door9"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoWideDoor3" parent="Doors" instance=ExtResource("170_dbtwi")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 33.64, 203.722, 88.466)
+allow_front = false
+allow_back = false
 
-[node name="Door10" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.0481, 203.474, 125.53)
+[node name="AoWideDoor4" parent="Doors" instance=ExtResource("170_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.64, 203.722, 88.466)
+open_only = true
+allow_front = false
+allow_back = false
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door10"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor16" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.077, 203.48, 73.749)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door10"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="Door11" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.4104, 203.492, 136.688)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door11"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door11"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="Door12" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.074, 203.492, 73.5285)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door12"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door12"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoBlinkWall" parent="Doors" instance=ExtResource("165_qrnci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.079, 203.48, 73.27)
 
 [node name="Door13" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5583, 203.498, 83.2352)
@@ -13585,24 +13430,6 @@ collision_mask = 0
 size = Vector3(1.292, 2.503, 0.1)
 
 [node name="BackSide" type="CSGBox3D" parent="Doors/Door13"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="Door14" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.1624, 203.482, 74.012)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door14"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door14"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
 material_override = SubResource("StandardMaterial3D_7cfyp")
 use_collision = true
@@ -13700,72 +13527,6 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.292, 2.503, 0.1)
 
-[node name="Door20" type="Node3D" parent="Doors"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.68225, 206.046, 109.005)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door20"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door20"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="Door21" type="Node3D" parent="Doors"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.2397, 206.046, 103.571)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door21"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door21"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="WardrobeDoor" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68.802, 203.723, -14.383)
-
-[node name="CSGBox" type="CSGBox3D" parent="Doors/WardrobeDoor"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.39941, 2.07501, 0.0505478)
-material = SubResource("StandardMaterial3D_n0j3w")
-
-[node name="WardrobeDoor2" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16013, 206.278, 126.41)
-
-[node name="CSGBox" type="CSGBox3D" parent="Doors/WardrobeDoor2"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.39941, 2.07501, 0.0505478)
-material = SubResource("StandardMaterial3D_emxvj")
-
-[node name="WardrobeDoor3" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.1947, 203.724, 135.374)
-
-[node name="CSGBox" type="CSGBox3D" parent="Doors/WardrobeDoor3"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.39941, 2.07501, 0.0505478)
-material = SubResource("StandardMaterial3D_33lod")
-
 [node name="WardrobeDoor4" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7995, 203.721, 100.174)
 
@@ -13775,27 +13536,6 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(2.39941, 2.07501, 0.0505478)
 material = SubResource("StandardMaterial3D_kjtp1")
-
-[node name="MovingWall" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 8.134, 206.034, 108.155)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.130421, 0.00799561, 0)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(0.531349, 2.55603, 3.18774)
-material = SubResource("ShaderMaterial_2djrd")
-
-[node name="MovingWall2" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, -87.3555, 203.471, 122.233)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall2"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.57715, 2.556, 0.630859)
-material = SubResource("StandardMaterial3D_dkqpe")
 
 [node name="MovingWall3" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 26.5131, 203.006, 82.4743)
@@ -13850,25 +13590,6 @@ collision_mask = 0
 size = Vector3(0.2, 2.561, 1.271)
 material = SubResource("StandardMaterial3D_gkyc3")
 
-[node name="WideDoorLegacy" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 31.6326, 203.718, 88.4496)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/WideDoorLegacy"]
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.86426, 2.43774, 0.302734)
-material = SubResource("StandardMaterial3D_8l7s3")
-
-[node name="WideDoor2" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 38.1201, 203.718, 88.4496)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/WideDoor2"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.86426, 2.43774, 0.302734)
-material = SubResource("StandardMaterial3D_s46jb")
-
 [node name="CryptDoor" type="Node3D" parent="Doors"]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9958, 202.993, 93.5405)
 
@@ -13878,14 +13599,6 @@ collision_layer = 4
 collision_mask = 0
 size = Vector3(1.91309, 1.59375, 0.09375)
 material = SubResource("StandardMaterial3D_d2ngu")
-
-[node name="BlinkWall" type="CSGBox3D" parent="Doors" groups=["destroyable"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0785, 203.474, 73.273)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.28233, 2.56445, 0.01)
-material = SubResource("ShaderMaterial_dgm2s")
 
 [node name="Decorations" type="Node3D" parent="."]
 

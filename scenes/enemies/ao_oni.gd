@@ -1,7 +1,5 @@
 extends Enemy
 
-var current_anim := ""
-
 @onready var animation_player = $Graphics/AnimationPlayer
 
 
@@ -16,7 +14,6 @@ func _physics_process(delta: float) -> void:
 
 
 func _update_animation_state():
-	"""Update animation state based on movement velocity"""
 	if velocity.length() > 0.1:
 		moving_state = "run"
 		if animation_player:

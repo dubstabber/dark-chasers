@@ -6,10 +6,10 @@ extends Level
 
 func _ready():
 	super._ready()
-	var destroyables = get_tree().get_nodes_in_group("destroyable")
-	for destroyable in destroyables:
-		if destroyable.name == 'BlinkWall':
-			destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
+	#var destroyables = get_tree().get_nodes_in_group("destroyable")
+	#for destroyable in destroyables:
+		#if destroyable.name == 'BlinkWall':
+			#destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 			
 	spawn_player()
 	# open_all_doors()
@@ -203,6 +203,8 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
 			# TODO: open wide door
+			var wide_door = $Doors/AoWideDoor4
+			wide_door.open()
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()

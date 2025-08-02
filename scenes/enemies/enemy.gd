@@ -53,6 +53,13 @@ func _physics_process(delta):
 		elif is_wandering:
 			if wandering_timer.is_stopped():
 				wandering_timer.start()
+			# Check for wall collision during wandering
+			if debug_prints:
+				print("Checking wall collision during wandering...")
+			if _check_wall_collision():
+				if debug_prints:
+					print("Wall collision detected! Changing direction...")
+				_change_wandering_direction()
 			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
 			if is_on_floor() or is_flying:
 				look_forward()
@@ -156,6 +163,40 @@ func _on_interaction_timer_timeout():
 				root_node.open_with_point(interaction_ray.get_collision_point())
 			elif is_wandering:
 				direction = Vector3(-direction.x, 0, -direction.z)
+
+
+func _check_wall_collision() -> bool:
+	"""Check if the enemy is about to collide with a wall during wandering using interaction_ray"""
+	if not interaction_ray:
+		if debug_prints:
+			print("No interaction_ray available")
+		return false
+	
+	# Check if ray is currently colliding with something
+	if interaction_ray.is_colliding():
+		var collider = interaction_ray.get_collider()
+		if debug_prints:
+			print("Ray collision detected with: ", collider.name if collider else "null")
+			if collider:
+				print("Collider groups: ", collider.get_groups())
+		
+		# Return true if it's a wall (not a player)
+		if collider != null and not collider.is_in_group("player"):
+			return true
+	else:
+		if debug_prints:
+			print("No ray collision detected")
+	
+	return false
+
+
+func _change_wandering_direction() -> void:
+	"""Change wandering direction when hitting a wall - simple turn around approach"""
+	# Simple approach: turn around 180 degrees
+	direction = -direction.normalized()
+	
+	if debug_prints:
+		print("Enemy turned around to avoid wall, new direction: ", direction)
 
 
 func _on_wandering_timer_timeout():

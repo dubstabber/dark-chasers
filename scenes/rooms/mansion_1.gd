@@ -1,6 +1,5 @@
 extends Level
 
-# keys_collected is now inherited from the base Level class
 
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 

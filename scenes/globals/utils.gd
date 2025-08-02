@@ -23,13 +23,13 @@ func safe_look_at(node: Node3D, target: Vector3) -> void:
 
 func play_sound(sound_source: AudioStream, parent_node:Node = self, pos: Vector3 = Vector3.ZERO, volume: float = -25):
 	var sound = AudioStreamPlayer3D.new()
-	parent_node.add_child(sound)
+	parent_node.add_child.call_deferred(sound)
 	sound.position = pos
 	sound.stream = sound_source
 	sound.attenuation_model = AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC
 	sound.volume_db = volume
 	sound.connect("finished", sound.queue_free)
-	sound.play()
+	sound.play.call_deferred()
 	return sound
 
 

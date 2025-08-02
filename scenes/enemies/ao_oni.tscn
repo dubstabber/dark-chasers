@@ -59,22 +59,10 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("DirectionalSprite3D:material_override:shader_parameter/current_frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_iaafa")]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("DirectionalSprite3D:material_override:shader_parameter/current_frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
@@ -85,25 +73,13 @@ tracks/1/keys = {
 resource_name = "run-back"
 length = 0.4
 loop_mode = 1
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("../FootstepSurfaceDetector")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("2_u6v1l"), ExtResource("2_bgw0k"), ExtResource("4_c3h1a"), ExtResource("2_bgw0k")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
@@ -119,25 +95,13 @@ tracks/1/keys = {
 resource_name = "run-front"
 length = 0.4
 loop_mode = 1
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("../FootstepSurfaceDetector")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("2_xkk46"), ExtResource("2_iaafa"), ExtResource("4_y64dm"), ExtResource("2_iaafa")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
@@ -153,25 +117,13 @@ tracks/1/keys = {
 resource_name = "run-side"
 length = 0.4
 loop_mode = 1
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/path = NodePath("../FootstepSurfaceDetector")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [ExtResource("7_aoo63"), ExtResource("3_bu3lp"), ExtResource("5_k2h66"), ExtResource("3_bu3lp")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../FootstepSurfaceDetector")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
@@ -187,52 +139,16 @@ tracks/1/keys = {
 resource_name = "stay-back"
 length = 0.1
 loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_bgw0k")]
-}
 
 [sub_resource type="Animation" id="Animation_7ib5g"]
 resource_name = "stay-front"
 length = 0.1
 loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_iaafa")]
-}
 
 [sub_resource type="Animation" id="Animation_myl4e"]
 resource_name = "stay-side"
 length = 0.1
 loop_mode = 2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite3D:texture")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("3_bu3lp")]
-}
 
 [sub_resource type="Animation" id="Animation_griqp"]
 resource_name = "move"
@@ -323,15 +239,6 @@ front_movement_sprites = [ExtResource("2_xkk46"), ExtResource("4_y64dm")]
 side_movement_sprites = [ExtResource("7_aoo63"), ExtResource("5_k2h66")]
 back_movement_sprites = [ExtResource("2_u6v1l"), ExtResource("4_c3h1a")]
 metadata/_custom_type_script = "uid://ccvuru3xjtx3k"
-
-[node name="Sprite3D" type="Sprite3D" parent="Graphics"]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-visible = false
-offset = Vector2(0, 194)
-billboard = 2
-shaded = true
-render_priority = 1
-texture = ExtResource("2_iaafa")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics"]
 libraries = {

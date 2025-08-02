@@ -7,11 +7,11 @@ var cur_anim := ""
 
 func _physics_process(delta):
 	super._physics_process(delta)
-	animate_sprite()
+	_animate_sprite()
 
 
-func animate_sprite():
-	if velocity:
+func _animate_sprite():
+	if velocity.length() > 0.1:
 		cur_anim = 'run'
 	else:
 		cur_anim = 'stay'

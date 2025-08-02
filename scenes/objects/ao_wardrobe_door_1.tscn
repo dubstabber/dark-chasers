@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=4 uid="uid://b3i6kpi8hnf7k"]
+
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_bptr3"]
+[ext_resource type="Texture2D" uid="uid://dj0c38k5n315o" path="res://images/textures/HRWDFLR.png" id="1_ix1db"]
+[ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="2_amc6y"]
+[ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="3_2qkdm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0j3w"]
+render_priority = 1
+transparency = 1
+albedo_texture = ExtResource("1_ix1db")
+uv1_scale = Vector3(1.65, 1.6, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ix1db"]
+_surfaces = [{
+"aabb": AABB(-1.20001, -1.03751, -0.0252739, 2.40002, 2.07501, 0.0505478),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAIA/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/"),
+"format": 34359738391,
+"material": SubResource("StandardMaterial3D_n0j3w"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("+JmZv/fMhL82C888+JmZv/fMhL82C8+8+JmZv/fMhD82C8+8+JmZP/fMhL82C8+8+JmZv/fMhL82C8+8+JmZv/fMhL82C888+JmZv/fMhD82C8+8+JmZv/fMhL82C8+8+JmZP/fMhL82C8+8+JmZv/fMhD82C8+8+JmZv/fMhD82C888+JmZv/fMhL82C888+JmZv/fMhL82C888+JmZv/fMhD82C888+JmZP/fMhD82C888+JmZP/fMhD82C888+JmZv/fMhD82C888+JmZv/fMhD82C8+8+JmZv/fMhL82C888+JmZP/fMhL82C888+JmZP/fMhL82C8+8+JmZP/fMhD82C888+JmZP/fMhL82C888+JmZv/fMhL82C888+JmZP/fMhL82C8+8+JmZP/fMhL82C888+JmZP/fMhD82C888+JmZP/fMhL82C8+8+JmZP/fMhD82C8+8+JmZv/fMhD82C8+8+JmZv/fMhD82C8+8+JmZP/fMhD82C8+8+JmZP/fMhD82C888+JmZP/fMhD82C888+JmZP/fMhD82C8+8+JmZP/fMhL82C8+8AAD/f/9//n8AAP9//3/+fwAA/3//f/5//38AAP//AAD/fwAA//8AAP9/AAD//wAA/////wAA/z//////AAD/P/////8AAP8/AAD/f/9//n8AAP9//3/+fwAA/3//f/5//3//fwAA/z//f/9/AAD/P/9//38AAP8//3//////AAD/f/////8AAP9//////wAA/38AAP//AAD/fwAA//8AAP9/AAD//wAA/3//fwAA/z//f/9/AAD/P/9//38AAP8/////f/9//n////9//3/+f////3//f/5//////wAA/z//////AAD/P/////8AAP8//3//////AAD/f/////8AAP9//////wAA////f/9//n////9//3/+f////3//f/5/")
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ix1db"]
+size = Vector3(2.40002, 2.07501, 0.0505478)
+
+[sub_resource type="Animation" id="Animation_ix1db"]
+resource_name = "Open"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 1.97, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bptr3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bptr3"]
+_data = {
+&"Open": SubResource("Animation_ix1db"),
+&"RESET": SubResource("Animation_bptr3")
+}
+
+[node name="AoWardrobeDoor1" type="Node3D"]
+script = ExtResource("1_bptr3")
+open_sound = ExtResource("2_amc6y")
+close_sound = ExtResource("3_2qkdm")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000305176, 0, 0)
+mesh = SubResource("ArrayMesh_ix1db")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
+shape = SubResource("BoxShape3D_ix1db")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bptr3")
+}

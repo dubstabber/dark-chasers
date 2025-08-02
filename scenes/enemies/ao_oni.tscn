@@ -300,7 +300,7 @@ floor_snap_length = 0.31
 script = ExtResource("1_xmjcu")
 
 [node name="Interaction" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.161787, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.338966, 0)
 target_position = Vector3(0, 0, -1.1)
 collision_mask = 12
 

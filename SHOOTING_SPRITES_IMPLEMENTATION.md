@@ -74,12 +74,48 @@ All sprites are arranged horizontally by frame and vertically by direction, with
 - Verification script: `verify_shooting_sprites.gd`
 - Both scripts validate the shooting sprite implementation
 
+## Shooting Animation Logic
+
+### Player Class Updates (`scenes/player/player.gd`)
+
+#### New Method: `_update_shooting_state()`
+- **Purpose**: Detects when the player is shooting based on weapon manager animation state
+- **Logic**: 
+  - Checks if weapon manager, animation player, and current weapon exist
+  - Determines if a shooting animation is currently playing
+  - Compares current animation with `shoot_anim_name` or `repeat_shoot_anim_name`
+  - Updates `shooting_state` to "shoot" or "idle" accordingly
+
+#### Updated Method: `_update_animation_state()`
+- **Enhanced Logic**: Now handles both movement and shooting states
+- **Animation Priority System**:
+  1. **Shooting** (highest priority): Plays "shoot" sprite animation
+  2. **Movement**: Plays "move" sprite animation when running
+  3. **Idle** (default): Plays "RESET" animation
+
+### Animation Flow
+
+1. **Frame Update**: `_update_animation_state()` called every physics frame
+2. **State Detection**: 
+   - Movement state updated based on velocity
+   - Shooting state updated via `_update_shooting_state()`
+3. **Animation Selection**: Priority system determines which animation to play
+4. **Sprite Animation**: `SpriteAnimationPlayer` plays the appropriate animation
+5. **DirectionalSprite3D**: Responds to state changes and displays correct sprites
+
+### Integration with Weapon System
+
+- **Weapon Manager**: Existing weapon system handles shooting input and weapon animations
+- **Animation Detection**: Player monitors weapon animation player state
+- **Automatic Sync**: Shooting state automatically syncs with weapon animations
+- **No Manual Triggers**: No need to manually set shooting state - it's detected automatically
+
 ## Next Steps
 
-The shooting sprite system is now ready for:
-1. **Sprite Assignment**: Add shooting sprite textures through the inspector
-2. **Shader Integration**: Update shaders to handle shooting sprite selection based on `shooting_state`
-3. **Animation Logic**: Implement shooting state management in the player controller
+The complete shooting sprite and animation system is now implemented:
+1. ✅ **Sprite Assignment**: Add shooting sprite textures through the inspector
+2. ✅ **Animation Logic**: Shooting state management implemented in player controller
+3. **Shader Integration**: Update shaders to handle shooting sprite selection based on `shooting_state`
 4. **Visual Testing**: Test the complete pipeline with actual sprite assets
 
 ## Notes

@@ -83,6 +83,9 @@ var blocked_movement := false
 
 var moving_state := "idle"
 var shooting_state := "idle"
+var is_playing_shoot_animation := false
+var previous_shooting_state := "idle"
+var last_weapon_animation := ""
 
 # Fall damage tracking
 var was_airborne := false # Track if player was in the air last frame
@@ -158,6 +161,10 @@ func _ready():
 	# Connect ammo component signals to update HUD when ammo changes
 	if ammo_component:
 		ammo_component.ammo_changed.connect(_on_ammo_component_ammo_changed)
+	
+	# Connect sprite animation player signals
+	if sprite_animation_player:
+		sprite_animation_player.animation_finished.connect(_on_sprite_animation_finished)
 
 
 func _update_animation_state():
@@ -169,15 +176,26 @@ func _update_animation_state():
 	
 	# Update shooting state
 	_update_shooting_state()
-	
-	# Play appropriate sprite animation based on priority
-	# Shooting animation takes priority over movement
-	if shooting_state == "shoot":
+
+	# Detect shooting state transition or new shot
+	if shooting_state == "shoot" and previous_shooting_state == "idle":
+		# New shot started - play shoot animation
 		sprite_animation_player.play("shoot")
+		is_playing_shoot_animation = true
+	elif shooting_state == "shoot" and is_playing_shoot_animation:
+		# Still shooting and animation is playing - do nothing
+		pass
 	elif moving_state == "run":
+		# Not shooting, play movement animation
 		sprite_animation_player.play("move")
+		is_playing_shoot_animation = false
 	else:
+		# Not shooting, play idle animation
 		sprite_animation_player.play("RESET")
+		is_playing_shoot_animation = false
+	
+	# Update previous state for next frame
+	previous_shooting_state = shooting_state
 
 
 func _update_shooting_state():
@@ -189,12 +207,22 @@ func _update_shooting_state():
 			weapon_manager.animation_player.current_animation == weapon_manager.current_weapon.repeat_shoot_anim_name
 		)
 		
+		# Track current weapon animation for detecting new shots
+		var current_weapon_animation = weapon_manager.animation_player.current_animation if weapon_manager.animation_player.is_playing() else ""
+
 		if is_shooting:
 			shooting_state = "shoot"
+			# Check if this is a new weapon animation (new shot)
+			if current_weapon_animation != last_weapon_animation and current_weapon_animation != "":
+				# New shot detected - reset sprite animation flag to allow new animation
+				is_playing_shoot_animation = false
 		else:
 			shooting_state = "idle"
+		
+		last_weapon_animation = current_weapon_animation
 	else:
 		shooting_state = "idle"
+		last_weapon_animation = ""
 
 
 func _input(event):
@@ -598,6 +626,13 @@ func _on_ammo_component_ammo_changed(ammo_type: String, current_amount: int, max
 		if not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
 			if hud and hud.has_method("update_ammo_display"):
 				hud.update_ammo_display(current_amount, max_amount)
+
+
+func _on_sprite_animation_finished(anim_name: String):
+	"""Called when sprite animation player finishes an animation"""
+	if anim_name == "shoot":
+		# Reset the shooting animation flag when shoot animation finishes
+		is_playing_shoot_animation = false
 
 
 func _setup_weapon_ammo_components():

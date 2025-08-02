@@ -82,6 +82,7 @@ var head_bobbing_current_intensity = 0.0
 var blocked_movement := false
 
 var moving_state := "idle"
+var shooting_state := "idle"
 
 # Fall damage tracking
 var was_airborne := false # Track if player was in the air last frame

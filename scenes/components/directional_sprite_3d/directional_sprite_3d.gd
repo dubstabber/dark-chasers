@@ -11,6 +11,7 @@ enum DirectionMode {
 
 const IDLE_SUFFIX = "_idle_sprite"
 const MOVEMENT_SUFFIX = "_movement_sprites"
+const SHOOTING_SUFFIX = "_shooting_sprites"
 
 # Direction definitions for each mode
 const DIRECTION_SETS = {
@@ -23,8 +24,10 @@ const DIRECTION_SETS = {
 #region Internal Variables
 
 var has_moving_state := false
+var has_shooting_state := false
 var idle_sprites := {}
 var movement_sprites := {}
+var shooting_sprites := {}
 var atlas_texture: Texture2D
 
 # Shader material for directional rendering
@@ -110,6 +113,12 @@ func _get(property: StringName):
 			movement_sprites[direction] = []
 		return movement_sprites[direction]
 	
+	if prop_name.ends_with(SHOOTING_SUFFIX):
+		var direction = prop_name.replace(SHOOTING_SUFFIX, "")
+		if not shooting_sprites.has(direction):
+			shooting_sprites[direction] = []
+		return shooting_sprites[direction]
+	
 	return null
 
 
@@ -140,6 +149,13 @@ func _set(property: StringName, value) -> bool:
 			generate_atlas()
 			return true
 	
+	if prop_name.ends_with(SHOOTING_SUFFIX):
+		var direction = prop_name.replace(SHOOTING_SUFFIX, "")
+		if direction in _get_current_directions():
+			shooting_sprites[direction] = value
+			generate_atlas()
+			return true
+	
 	return false
 
 
@@ -151,6 +167,9 @@ func _get_property_list():
 	
 	if has_moving_state:
 		_add_sprite_group_properties(properties, "Movement sprites", directions, MOVEMENT_SUFFIX, TYPE_ARRAY, "%d/%d:Texture2D" % [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE])
+	
+	if has_shooting_state:
+		_add_sprite_group_properties(properties, "Shooting sprites", directions, SHOOTING_SUFFIX, TYPE_ARRAY, "%d/%d:Texture2D" % [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE])
 	
 	return properties
 
@@ -188,7 +207,10 @@ func _get_target_node() -> Node3D:
 	if target_node and target_node.get_script():
 		var script_properties = target_node.get_script().get_script_property_list()
 		has_moving_state = script_properties.any(func(prop): return prop.name == "moving_state")
-	else: has_moving_state = false
+		has_shooting_state = script_properties.any(func(prop): return prop.name == "shooting_state")
+	else: 
+		has_moving_state = false
+		has_shooting_state = false
 	return target_node
 
 
@@ -268,6 +290,14 @@ func _has_any_sprites() -> bool:
 				if sprite != null and sprite is Texture2D:
 					return true
 	
+	# Check shooting sprites
+	for direction in shooting_sprites:
+		var sprite_array = shooting_sprites[direction]
+		if sprite_array is Array and sprite_array.size() > 0:
+			for sprite in sprite_array:
+				if sprite != null and sprite is Texture2D:
+					return true
+	
 	return false
 
 ## Validates that all sprites have reasonable dimensions for atlas generation
@@ -304,6 +334,14 @@ func _get_sprite_max_dimensions(directions: Array) -> Vector2i:
 				var dimensions = _get_texture_dimensions(sprite)
 				max_width = max(max_width, dimensions.x)
 				max_height = max(max_height, dimensions.y)
+		
+		# Check shooting sprites
+		var shooting_sprites_array = shooting_sprites.get(direction, [])
+		for sprite in shooting_sprites_array:
+			if sprite is Texture2D:
+				var dimensions = _get_texture_dimensions(sprite)
+				max_width = max(max_width, dimensions.x)
+				max_height = max(max_height, dimensions.y)
 	
 	return Vector2i(max_width, max_height)
 
@@ -333,6 +371,13 @@ func _collect_direction_sprites(direction: String) -> Array[Texture2D]:
 	var movement_sprite_array = movement_sprites.get(direction, [])
 	if movement_sprite_array is Array:
 		for sprite in movement_sprite_array:
+			if sprite is Texture2D:
+				direction_sprites.append(sprite)
+	
+	# Add shooting sprites
+	var shooting_sprite_array = shooting_sprites.get(direction, [])
+	if shooting_sprite_array is Array:
+		for sprite in shooting_sprite_array:
 			if sprite is Texture2D:
 				direction_sprites.append(sprite)
 	

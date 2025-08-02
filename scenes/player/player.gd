@@ -161,12 +161,40 @@ func _ready():
 
 
 func _update_animation_state():
+	# Update movement state
 	if velocity.length() > 0.1:
 		moving_state = "run"
-		sprite_animation_player.play("move")
 	else:
 		moving_state = "idle"
+	
+	# Update shooting state
+	_update_shooting_state()
+	
+	# Play appropriate sprite animation based on priority
+	# Shooting animation takes priority over movement
+	if shooting_state == "shoot":
+		sprite_animation_player.play("shoot")
+	elif moving_state == "run":
+		sprite_animation_player.play("move")
+	else:
 		sprite_animation_player.play("RESET")
+
+
+func _update_shooting_state():
+	"""Update the shooting state based on weapon manager animation"""
+	if weapon_manager and weapon_manager.animation_player and weapon_manager.current_weapon:
+		# Check if a shooting animation is currently playing
+		var is_shooting = weapon_manager.animation_player.is_playing() and (
+			weapon_manager.animation_player.current_animation == weapon_manager.current_weapon.shoot_anim_name or
+			weapon_manager.animation_player.current_animation == weapon_manager.current_weapon.repeat_shoot_anim_name
+		)
+		
+		if is_shooting:
+			shooting_state = "shoot"
+		else:
+			shooting_state = "idle"
+	else:
+		shooting_state = "idle"
 
 
 func _input(event):

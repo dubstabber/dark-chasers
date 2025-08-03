@@ -41,12 +41,12 @@ func _ready():
 				if m.is_in_group("manual_spawn_point"):
 					t.connect("body_entered", _on_transition_entered.bind(m))
 					t.connect("body_exited", _on_transition_exited)
-	for mesh in %Map.get_children():
-		if mesh is not MeshInstance3D: continue
-		var material = mesh.get_active_material(0)
-		if material and material.has_method('set_transparency') and material.transparency == 0:
-			material.transparency = 1
-			material.depth_draw_mode = 1
+	#for mesh in %Map.get_children():
+		#if mesh is not MeshInstance3D: continue
+		#var material = mesh.get_active_material(0)
+		#if material and material.has_method('set_transparency') and material.transparency == 0:
+			#material.transparency = 1
+			#material.depth_draw_mode = 1
 	
 
 func _physics_process(_delta):

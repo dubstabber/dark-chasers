@@ -46,6 +46,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.261483, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.286, 0)
 billboard = 2
 shaded = true
+render_priority = 1
 sprite_frames = SubResource("SpriteFrames_rpvyw")
 animation = &"run"
 

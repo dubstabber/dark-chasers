@@ -19,6 +19,7 @@ ammo_type = "lighter_fuel"
 billboard = 2
 shaded = true
 texture_filter = 0
+render_priority = 1
 texture = ExtResource("1_pyplg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

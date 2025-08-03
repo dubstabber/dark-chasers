@@ -9,7 +9,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jb6mv"]
 resource_name = "FakeWall"
+render_priority = 1
 cull_mode = 2
+depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_w3cdm")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mu4bk"]

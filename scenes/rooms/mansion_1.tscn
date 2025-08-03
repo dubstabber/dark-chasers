@@ -1,4 +1,4 @@
-[gd_scene load_steps=1159 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1158 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -200,7 +200,6 @@
 [ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 [ext_resource type="Script" uid="uid://cgtyip2baqmg2" path="res://addons/Mirror/Mirror/Mirror.gd" id="194_0vynp"]
-[ext_resource type="Shader" uid="uid://d2c2nnw51eg2a" path="res://shaders/see-through.gdshader" id="203_4phr8"]
 [ext_resource type="PackedScene" uid="uid://hb2sga12bblt" path="res://scenes/items/ao_shield.tscn" id="205_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://fhuxv6yp4vyg" path="res://scenes/items/ao_health.tscn" id="205_qrnci"]
 [ext_resource type="PackedScene" uid="uid://ds724wv0o4qb7" path="res://scenes/items/gasoline_can.tscn" id="207_vt3lu"]
@@ -520,7 +519,6 @@ data = PackedVector3Array(30.64, 204.12, 73.27, 30.64, 204.6, 73.59, 30.64, 204.
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4mtef"]
 resource_name = "HRWDFLR"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("9_x1txo")
 
@@ -1078,7 +1076,6 @@ data = PackedVector3Array(-29.6, 202.2, -23.37, -29.6, 202.68, -26.57, -29.6, 20
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgegs"]
 resource_name = "HRGLASS"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_color = Color(0.462291, 0.462291, 0.462291, 1)
 albedo_texture = ExtResource("22_b5lwh")
@@ -1165,7 +1162,6 @@ data = PackedVector3Array(-56.26, 202.2, -111.07, -56.56, 213.72, -107.69, -56.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndhqo"]
 resource_name = "COMGRAS1"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("24_45ana")
 
@@ -1552,7 +1548,6 @@ data = PackedVector3Array(-74.6, 202.2, -18.89, -74.6, 204.44, -18.25, -74.6, 20
 resource_name = "CCLOCK"
 render_priority = 1
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("33_4o7af")
 uv1_scale = Vector3(2, 1, 1)
@@ -1726,7 +1721,6 @@ data = PackedVector3Array(-81.32, 202.2, -36.17, -82.6, 204.713, -36.17, -81.32,
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kj3a2"]
 resource_name = "BLDWL01"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("37_nyui8")
 uv1_scale = Vector3(0.5, 0.5, 1)
@@ -5309,7 +5303,6 @@ data = PackedVector3Array(-72.12, 202.2, 114.29, -72.1, 202.2, 114.37, -72.18, 2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rhbl0"]
 resource_name = "COMGRAS2"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("121_wcrdx")
 
@@ -5826,7 +5819,6 @@ data = PackedVector3Array(-44.64, 202.2, -89.93, -49.44, 202.2, -89.29, -49.44, 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vmp5t"]
 resource_name = "CGRASO1"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("133_qltbx")
 
@@ -5868,7 +5860,6 @@ data = PackedVector3Array(-36.16, 202.2, -38.41, -37.44, 202.2, -89.29, -36.16, 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ity22"]
 resource_name = "CGRASO2"
 transparency = 1
-cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("134_t7ufm")
 
@@ -6247,7 +6238,7 @@ resource_name = "HRGLASS-TRANSPARENT"
 transparency = 1
 cull_mode = 2
 depth_draw_mode = 1
-albedo_color = Color(1, 1, 1, 0.25)
+albedo_color = Color(1, 1, 1, 0.121569)
 albedo_texture = ExtResource("22_b5lwh")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_kkb51"]
@@ -9338,18 +9329,23 @@ albedo_texture = ExtResource("57_ldj56")
 transparency = 1
 albedo_texture = ExtResource("181_jptga")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5yjcn"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qrnci"]
+render_priority = -99
 transparency = 1
+cull_mode = 2
 depth_draw_mode = 1
 albedo_color = Color(1, 1, 1, 0)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wub4h"]
-material = SubResource("StandardMaterial3D_5yjcn")
+material = SubResource("StandardMaterial3D_qrnci")
 size = Vector3(2, 1.4, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_vrhyf"]
-render_priority = -100
-shader = ExtResource("203_4phr8")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0l5v2"]
+render_priority = -99
+transparency = 1
+cull_mode = 2
+depth_draw_mode = 1
+albedo_color = Color(1, 1, 1, 0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8a4wf"]
 resource_name = "HRBBR.002"
@@ -13816,13 +13812,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 105.265, 187.498, 105.259)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9658, 206.027, 105.75)
 mesh = SubResource("BoxMesh_wub4h")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_vrhyf")
 
 [node name="HidingArea2" type="MeshInstance3D" parent="Decorations"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5725, 206.027, 105.67)
 mesh = SubResource("BoxMesh_wub4h")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ShaderMaterial_vrhyf")
+surface_material_override/0 = SubResource("StandardMaterial3D_0l5v2")
 
 [node name="MAP01_203" type="MeshInstance3D" parent="Decorations"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.04, 206.04, 111.99)

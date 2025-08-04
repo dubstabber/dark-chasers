@@ -29,7 +29,7 @@ data = {
 image = SubResource("Image_vkm7h")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d2628"]
-render_priority = 1
+render_priority = 2
 shader = ExtResource("3_vkm7h")
 shader_parameter/atlas_texture = SubResource("ImageTexture_7siwy")
 shader_parameter/atlas_dimensions = Vector2(156, 318)
@@ -218,7 +218,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.4, 0)
 material_override = SubResource("ShaderMaterial_d2628")
 offset = Vector2(0, 33)
 billboard = 2
-render_priority = 1
+render_priority = 2
 texture = SubResource("ImageTexture_xjyxq")
 script = ExtResource("4_7siwy")
 sprite_alpha_cut_mode = 2

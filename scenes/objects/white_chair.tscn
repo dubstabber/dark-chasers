@@ -28,7 +28,7 @@ data = {
 image = SubResource("Image_7ouns")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4baa2"]
-render_priority = 1
+render_priority = 2
 shader = ExtResource("10_7ouns")
 shader_parameter/atlas_texture = SubResource("ImageTexture_5m1i2")
 shader_parameter/atlas_dimensions = Vector2(89, 944)
@@ -68,7 +68,7 @@ shape = SubResource("BoxShape3D_xpsgd")
 material_override = SubResource("ShaderMaterial_4baa2")
 billboard = 2
 shaded = true
-render_priority = 1
+render_priority = 2
 texture = SubResource("ImageTexture_p6unu")
 script = ExtResource("11_5m1i2")
 direction_mode = 3

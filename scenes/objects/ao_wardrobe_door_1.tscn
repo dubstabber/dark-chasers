@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://67q3wjejm6q1" path="res://sounds/sfx/DSDORCLS.ogg" id="3_2qkdm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0j3w"]
-render_priority = 1
+render_priority = 2
 transparency = 1
 albedo_texture = ExtResource("1_ix1db")
 uv1_scale = Vector3(1.65, 1.6, 1)

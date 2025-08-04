@@ -10,7 +10,10 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3u0au"]
 resource_name = "Material"
+render_priority = 1
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_xicr1")
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_daqbc"]
@@ -20,12 +23,15 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xyl2a"]
 resource_name = "Bottom"
+render_priority = 1
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_daqbc")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_8slir"]
 _surfaces = [{
-"aabb": AABB(-0.1585, -1.2805, -0.6355, 0.317, 2.561, 1.271),
+"aabb": AABB(-0.1585, -1.2805, -0.64, 0.317, 2.561, 1.28),
 "format": 34896613377,
 "index_count": 24,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIAAwAFAAEABAACAAYAAwAHAAUABwAEAAYABwAGAAUA"),
@@ -35,7 +41,7 @@ _surfaces = [{
 "vertex_count": 8,
 "vertex_data": PackedByteArray("AAAAAAAAAAD+////AAAAAAAA//8AAAAA/v8AAAAAAAAAAAAA//8AAP///////wAAAAD/////AAD//wAA//8AAA==")
 }, {
-"aabb": AABB(-0.1585, -1.2805, -0.6355, 0.317, 2.561, 1.271),
+"aabb": AABB(-0.1585, -1.2805, -0.64, 0.317, 2.561, 1.28),
 "format": 34896613377,
 "index_count": 12,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUA"),
@@ -50,7 +56,7 @@ blend_shape_mode = 0
 [sub_resource type="ArrayMesh" id="ArrayMesh_up1rf"]
 resource_name = "moving_wall6_Cube"
 _surfaces = [{
-"aabb": AABB(-0.1585, -1.2805, -0.6355, 0.317, 2.561, 1.271),
+"aabb": AABB(-0.1585, -1.2805, -0.64, 0.317, 2.561, 1.28),
 "attribute_data": PackedByteArray("/6//n//P/3//z/+f/6//f/+/////gP9//7//f/+A/v/+/////8D/f////3//wP7//6//3//P/7//z//f/6//vw=="),
 "format": 34896613399,
 "index_count": 24,
@@ -62,7 +68,7 @@ _surfaces = [{
 "vertex_count": 16,
 "vertex_data": PackedByteArray("AAAAAAAA///+////AAD//wAA//8AAP///v8AAAAA///+/wAAAAD/v/////////+//v///wAA/7///wAA////vwAAAAD///+/AAD//wAA/78AAP//////vwAAAAAAAP+///8AAP///78AAP//////v/////////+/AAAAAP///7//v/+//7//v/+//7//v/+//38AAP9/AAD/fwAA/38AAP9//v//f/7//3/+//9//v//////////////////////")
 }, {
-"aabb": AABB(-0.1585, -1.2805, -0.6355, 0.317, 2.561, 1.271),
+"aabb": AABB(-0.1585, -1.2805, -0.64, 0.317, 2.561, 1.28),
 "attribute_data": PackedByteArray("/////7dytyy3cpX///8gLf////+3crcst3KV////IC0="),
 "format": 34896613399,
 "index_count": 12,
@@ -72,7 +78,7 @@ _surfaces = [{
 "primitive": 3,
 "uv_scale": Vector4(0.828126, 2.4375, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray("AAD/////OQD+////AAA5AP///////zkAAAD//wAAOQD//wAA////PwAAAAAAAP8/AAAAAP///z/+/wAAAAD/Px/APwAfwD8AH8A/AB/APwD9AIB//QCAf/0AgH/9AIB/")
+"vertex_data": PackedByteArray("AAD/////OQD+////AAA5AP///////zkAAAD//wAAOQD//wAA////PwAAAAAAAP8/AAAAAP///z/+/wAAAAD/Px/AQAAfwEAAH8BAAB/AQAD/AH9//wB/f/8Af3//AH9/")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_8slir")

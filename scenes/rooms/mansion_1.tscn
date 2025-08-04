@@ -1,4 +1,4 @@
-[gd_scene load_steps=1151 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1150 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -174,7 +174,6 @@
 [ext_resource type="PackedScene" uid="uid://imvpdy3i31ge" path="res://scenes/objects/pot.tscn" id="158_lc1o7"]
 [ext_resource type="PackedScene" uid="uid://cwc87yv1gw6g2" path="res://scenes/objects/pot_2.tscn" id="159_7lfi8"]
 [ext_resource type="PackedScene" uid="uid://5cy801rr43wb" path="res://scenes/objects/glass_7.tscn" id="160_0x3ry"]
-[ext_resource type="AudioStream" uid="uid://cwtqpiklh7vhx" path="res://sounds/sfx/DOORLOCK.ogg" id="160_qbtei"]
 [ext_resource type="PackedScene" uid="uid://b4l0xb0padsci" path="res://scenes/objects/moving_bars_1.tscn" id="161_2it1x"]
 [ext_resource type="PackedScene" uid="uid://gvoggmm2d6m6" path="res://scenes/objects/glass_8.tscn" id="161_82x3n"]
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="161_b5j3m"]
@@ -1892,7 +1891,6 @@ data = PackedVector3Array(-45.12, 207.84, -39.87, -43.84, 209.12, -39.87, -45.12
 resource_name = "BMIDG09"
 render_priority = 1
 transparency = 1
-depth_draw_mode = 1
 albedo_texture = ExtResource("41_bdxgr")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_vq1qe"]
@@ -1932,7 +1930,7 @@ data = PackedVector3Array(18.88, 202.2, 87.19, 25.28, 204.76, 87.19, 18.88, 204.
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_th07a"]
 resource_name = "BMIDG10"
-render_priority = 1
+render_priority = 2
 transparency = 1
 depth_draw_mode = 1
 albedo_texture = ExtResource("42_ee2a4")
@@ -1974,10 +1972,9 @@ data = PackedVector3Array(25.28, 202.2, 87.19, 26.56, 204.76, 87.19, 25.28, 204.
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ncwgw"]
 resource_name = "BMIDG10B"
-render_priority = 1
+render_priority = 2
 transparency = 1
 cull_mode = 2
-depth_draw_mode = 1
 albedo_texture = ExtResource("43_vflsl")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_63o07"]
@@ -3597,6 +3594,7 @@ data = PackedVector3Array(44.48, 202.04, 100.15, 44.48, 202.2, 101.43, 44.48, 20
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5pev"]
 resource_name = "BMIDSEIL"
+render_priority = 1
 transparency = 1
 cull_mode = 2
 depth_draw_mode = 1
@@ -3767,9 +3765,9 @@ data = PackedVector3Array(47.04, 204.76, 110.39, 43.36, 202.84, 110.39, 43.36, 2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mok0a"]
 resource_name = "WRFENCE"
+render_priority = 1
 transparency = 1
 cull_mode = 2
-depth_draw_mode = 1
 albedo_texture = ExtResource("85_6lfa6")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_88cu8"]
@@ -8370,7 +8368,6 @@ resource_name = "BMIDG09.001"
 render_priority = 1
 transparency = 1
 cull_mode = 2
-depth_draw_mode = 1
 albedo_texture = ExtResource("41_bdxgr")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_26yp0"]
@@ -12823,12 +12820,13 @@ transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.00014495
 shaded = true
 texture = ExtResource("56_lu5ku")
 
-[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
+[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.037, 93.7284)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
+door_to_open = NodePath("../../../Doors/AoDoor18")
 press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button3"]
@@ -13293,13 +13291,16 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -71.55
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9585, 203.48, -27.0564)
 key_needed = "ruby"
 locked_message = "You need the ruby key!"
-locked_sound = ExtResource("160_qbtei")
 
 [node name="AoDoor3" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.963, 203.48, -27.05)
+key_needed = "ruby"
+locked_message = "You need the ruby key!"
 
 [node name="AoDoor4" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.96, 203.48, -29.772)
+key_needed = "ruby"
+locked_message = "You need the ruby key!"
 
 [node name="AoDoor5" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73.28, 203.48, -17.449)
@@ -13315,6 +13316,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.16, 206.278, 126.416)
 
 [node name="AoDoor7" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 206.04, 120.47)
+key_needed = "weird"
+locked_message = "You need the weird key!"
 
 [node name="AoMovingWall1" parent="Doors" instance=ExtResource("164_dbtwi")]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 8.265, 206.041, 108.156)
@@ -13324,22 +13327,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.799, 206.04, 110.55)
 
 [node name="AoDoor9" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.68, 206.04, 108.95)
+time_to_close = 3.0
+key_needed = "emerald"
+locked_message = "You need the emerald key!"
 
 [node name="AoDoor10" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -10.241, 206.04, 103.511)
+open_only = true
 
 [node name="AoDoor11" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -28.32, 203.48, 116.79)
+key_needed = "weird"
+locked_message = "You need the weird key!"
 
 [node name="AoDoor12" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.04, 203.48, 125.59)
+key_needed = "ruby"
+locked_message = "You need the ruby key!"
 
 [node name="AoDoor13" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.401, 203.48, 136.79)
+key_needed = "brown"
+locked_message = "You need the brown key!"
 
 [node name="AoDoor14" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.401, 203.48, 138.39)
-allow_front = false
+time_to_close = 3.0
 allow_back = false
 
 [node name="AoWardrobeDoor3" parent="Doors" instance=ExtResource("161_dbtwi")]
@@ -13350,6 +13363,8 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -87.36
 
 [node name="AoDoor15" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.162, 203.48, 74.07)
+key_needed = "emerald"
+locked_message = "You need the emerald key!"
 
 [node name="AoWideDoor1" parent="Doors" instance=ExtResource("170_dbtwi")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 38.12, 203.722, 88.466)
@@ -13372,6 +13387,8 @@ allow_back = false
 
 [node name="AoDoor16" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.077, 203.48, 73.749)
+key_needed = "gold"
+locked_message = "You need the gold key!"
 
 [node name="AoBlinkWall" parent="Doors" instance=ExtResource("165_qrnci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.079, 203.48, 73.27)
@@ -13387,9 +13404,16 @@ transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.999, 
 
 [node name="AoCryptDoor" parent="Doors" instance=ExtResource("168_qrnci")]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 44, 203, 93.346)
+key_needed = "silver"
+locked_message = "You need the silver key!"
 
 [node name="AoDoor18" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.759, 203.48, 91.829)
+open_only = true
+locked_sound = null
+can_interrupt = false
+allow_front = false
+allow_back = false
 
 [node name="AoDoor19" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 56.799, 203.48, 91.19)
@@ -13399,6 +13423,7 @@ transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 95.685, 
 
 [node name="AoDoor20" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 96.162, 203.48, 91.19)
+open_only = true
 
 [node name="AoDoor21" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.36, 203.48, 93.269)
@@ -13414,9 +13439,11 @@ allow_back = false
 
 [node name="AoDoor22" parent="Doors" instance=ExtResource("161_b5j3m")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.72, 203.48, 97.59)
+open_only = true
+can_interrupt = false
 
 [node name="AoMovingWall6" parent="Doors" instance=ExtResource("170_qrnci")]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.36, 203.48, 100.785)
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.3594, 203.48, 100.79)
 
 [node name="AoMovingWall7" parent="Doors" instance=ExtResource("171_0l5v2")]
 transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.36, 203.48, 101.746)

@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://dahb6ul6x5w5m" path="res://sounds/sfx/DSITEMUP.wav" id="2_3bxe7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pyplg"]
-size = Vector3(0.239075, 0.339844, 0.236206)
+size = Vector3(0.717974, 0.603134, 0.727343)
 
 [node name="GasolineCan" type="Area3D" groups=["item"]]
 collision_layer = 8
@@ -16,6 +16,7 @@ event_string = "Picked Up a Gasoline Can."
 ammo_type = "lighter_fuel"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 billboard = 2
 shaded = true
 texture_filter = 0
@@ -23,7 +24,7 @@ render_priority = 1
 texture = ExtResource("1_pyplg")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0103455, -0.00195312, 0.000305176)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0214524, 0.0225296, 0.010595)
 shape = SubResource("BoxShape3D_pyplg")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

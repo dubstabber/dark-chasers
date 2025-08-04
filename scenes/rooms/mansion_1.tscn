@@ -12430,10 +12430,11 @@ collision_layer = 8
 collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/BasementGap"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1228, 0)
 shape = SubResource("CylinderShape3D_m48fq")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementGap" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 10.8898, 13.3726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 7.49007, 13.3726)
 
 [node name="BasementLadder" type="Area3D" parent="NavigationRegion3D/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 208.035, 118.057)
@@ -12441,7 +12442,7 @@ collision_layer = 8
 collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/BasementLadder"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.89096, 2.84669, -3.91628)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.89096, 0.576065, -3.91628)
 shape = SubResource("CylinderShape3D_xdisi")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementLadder" groups=["spawn_point"]]
@@ -13758,7 +13759,10 @@ transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.769, 202.529, -84.7809)
 
 [node name="GasolineCan" parent="Items" instance=ExtResource("207_vt3lu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8182, 202.372, -31.3937)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.8598, 206.799, 127.355)
+
+[node name="GasolineCan2" parent="Items" instance=ExtResource("207_vt3lu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.6604, 204.387, 74.8547)
 
 [node name="DebugCamera3D" type="Camera3D" parent="."]
 unique_name_in_owner = true

@@ -224,6 +224,8 @@ func _handle_area_event(body: CharacterBody3D, event):
 			ilopulu.current_target = body
 			ilopulu.add_disappear_zone($NavigationRegion3D/DisappearZones/ExitBigHallway)
 		"open ao mika wardrobe":
+			var wardrobe_door = $Doors/AoWardrobeDoor4
+			wardrobe_door.open()
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()

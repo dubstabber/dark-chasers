@@ -1,4 +1,4 @@
-[gd_scene load_steps=1158 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=1151 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/rooms/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="Texture2D" uid="uid://bdv0mkbkcp78x" path="res://models/mansion1/mansion1_HRLAMP.png" id="2_vud33"]
@@ -10,13 +10,10 @@
 [ext_resource type="Texture2D" uid="uid://6yviy8p14arh" path="res://models/mansion1/mansion1_VOID.png" id="8_1dp58"]
 [ext_resource type="Texture2D" uid="uid://bvcyw3k14f5yt" path="res://models/mansion1/mansion1_HRWDFLR.png" id="9_x1txo"]
 [ext_resource type="Texture2D" uid="uid://j6ys31vfkf1" path="res://models/mansion1/mansion1_BPICT01.png" id="10_ac213"]
-[ext_resource type="Texture2D" uid="uid://dj0c38k5n315o" path="res://images/textures/HRWDFLR.png" id="10_ls102"]
 [ext_resource type="Texture2D" uid="uid://cn6mr0miekhuk" path="res://models/mansion1/mansion1_BPICT08.png" id="11_gkkbq"]
 [ext_resource type="Texture2D" uid="uid://b3tek3hjv2l0x" path="res://models/mansion1/mansion1_HRBBRPLN.png" id="12_mmwcr"]
 [ext_resource type="Texture2D" uid="uid://cw06df331v1py" path="res://models/mansion1/mansion1_HRCBWALL.png" id="13_uoicy"]
-[ext_resource type="Texture2D" uid="uid://b5ni4p0ucyq1o" path="res://images/textures/HRCBWALL.png" id="14_rgpi8"]
 [ext_resource type="Texture2D" uid="uid://cacxbih7vo45" path="res://models/mansion1/mansion1_HRCMDOOR.png" id="14_rnvtm"]
-[ext_resource type="Texture2D" uid="uid://cf3aaghbhfem" path="res://images/textures/HRCMDOOR.png" id="15_emvb5"]
 [ext_resource type="Texture2D" uid="uid://deufyt3t8ao1m" path="res://models/mansion1/mansion1_N_WOOD04.png" id="15_yk8pk"]
 [ext_resource type="Texture2D" uid="uid://c84mu02dhs1ak" path="res://models/mansion1/mansion1_BTHWALL.png" id="16_jbmbj"]
 [ext_resource type="Texture2D" uid="uid://owe6w0ix37fg" path="res://models/mansion1/mansion1_CDORTRAK.png" id="17_qm4oi"]
@@ -60,7 +57,6 @@
 [ext_resource type="Texture2D" uid="uid://dmv0tr5wg6rm8" path="res://models/mansion1/mansion1_BPICT09.png" id="55_w6yvw"]
 [ext_resource type="Texture2D" uid="uid://b13ckylns3c0m" path="res://models/mansion1/mansion1_CMDRWR01.png" id="56_60446"]
 [ext_resource type="Texture2D" uid="uid://cche7hts27gxi" path="res://images/textures/BSW01A.png" id="56_lu5ku"]
-[ext_resource type="Texture2D" uid="uid://pirwjhc27ghn" path="res://images/textures/LBOOKS01.png" id="57_ldj56"]
 [ext_resource type="Texture2D" uid="uid://dvtnufpla002a" path="res://models/mansion1/mansion1_POSTER02.png" id="57_qjdjg"]
 [ext_resource type="Texture2D" uid="uid://dirv2hhu4ayff" path="res://models/mansion1/mansion1_HPICT01.png" id="58_jstps"]
 [ext_resource type="Texture2D" uid="uid://b0hsoc68gw8s3" path="res://models/mansion1/mansion1_BSW05A.png" id="59_mo7o1"]
@@ -98,7 +94,6 @@
 [ext_resource type="Texture2D" uid="uid://hi6p5ce06wg3" path="res://models/mansion1/mansion1_CMTVWOOD.png" id="89_qcc4y"]
 [ext_resource type="Texture2D" uid="uid://bi42cxym38dgy" path="res://models/mansion1/mansion1_CMTVTEX.png" id="90_nelsu"]
 [ext_resource type="Texture2D" uid="uid://3mls583na0a4" path="res://models/mansion1/mansion1_LADV04.png" id="91_hp63l"]
-[ext_resource type="Texture2D" uid="uid://r7m0vsuwastq" path="res://images/textures/BBOOKS03.png" id="91_o1rs0"]
 [ext_resource type="Texture2D" uid="uid://ddrr7ff7aodk5" path="res://models/mansion1/mansion1_LADV01.png" id="92_ftkl1"]
 [ext_resource type="Texture2D" uid="uid://cantp3oy6bv8j" path="res://models/mansion1/mansion1_PICTURE1.png" id="93_t6t6y"]
 [ext_resource type="Texture2D" uid="uid://cn7ufg02mix7h" path="res://models/mansion1/mansion1_BBRPTN03.png" id="94_4u6ed"]
@@ -192,12 +187,17 @@
 [ext_resource type="PackedScene" uid="uid://b2flieo7td8qg" path="res://scenes/objects/blink_wall.tscn" id="165_qrnci"]
 [ext_resource type="PackedScene" uid="uid://bxcoqwwtje00u" path="res://scenes/objects/glass_12.tscn" id="165_w3xux"]
 [ext_resource type="PackedScene" uid="uid://drk3vmes6g65u" path="res://scenes/objects/flower_pot_static.tscn" id="166_tdbpd"]
+[ext_resource type="PackedScene" uid="uid://bnstoxt6sla53" path="res://scenes/objects/ao_moving_wall_4.tscn" id="167_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://b8jy1kdvcroa8" path="res://scenes/objects/box_static.tscn" id="167_rih4a"]
+[ext_resource type="PackedScene" uid="uid://c8ph34obs6pvu" path="res://scenes/objects/ao_moving_wall_3.tscn" id="168_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://bo5dwiemer8k4" path="res://scenes/objects/candle.tscn" id="168_mswtm"]
+[ext_resource type="PackedScene" uid="uid://cx3yuy3wirqdh" path="res://scenes/objects/ao_crypt_door.tscn" id="168_qrnci"]
+[ext_resource type="PackedScene" uid="uid://feu54vqend31" path="res://scenes/objects/ao_moving_wall_8.tscn" id="169_qrnci"]
 [ext_resource type="PackedScene" uid="uid://coi5t3tlf2d2p" path="res://scenes/objects/ao_door2.tscn" id="170_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://b4uj6yake77iy" path="res://scenes/objects/ao_wide_door_1.tscn" id="170_dbtwi"]
+[ext_resource type="PackedScene" uid="uid://w1g0kuukrgj8" path="res://scenes/objects/ao_moving_wall_6.tscn" id="170_qrnci"]
+[ext_resource type="PackedScene" uid="uid://8hwyygyn6mxm" path="res://scenes/objects/ao_moving_wall_7.tscn" id="171_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
-[ext_resource type="Texture2D" uid="uid://fogmoanbj40g" path="res://images/textures/CLOCKER.png" id="181_jptga"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
 [ext_resource type="Script" uid="uid://cgtyip2baqmg2" path="res://addons/Mirror/Mirror/Mirror.gd" id="194_0vynp"]
 [ext_resource type="PackedScene" uid="uid://hb2sga12bblt" path="res://scenes/items/ao_shield.tscn" id="205_0l5v2"]
@@ -5045,9 +5045,9 @@ data = PackedVector3Array(-45.5, 202.16, -132.11, -95.04, 202.16, -132.17, -45.7
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5ml6u"]
 resource_name = "HRWATR02"
+render_priority = 1
 transparency = 1
 cull_mode = 2
-depth_draw_mode = 1
 albedo_color = Color(1, 1, 1, 0.322835)
 albedo_texture = ExtResource("115_3rxcq")
 
@@ -5082,9 +5082,6 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_4mw6e")
-
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_vf3a8"]
-data = PackedVector3Array(-27.28, 202.36, -35.07, -27.16, 202.36, -35.21, -27.36, 202.36, -34.97, 57.28, 199.8, 115.23, 55.28, 199.8, 113.23, 57.28, 199.8, 113.23, 56.56, 199.8, 114.87, 57.28, 199.8, 115.23, 56.56, 199.8, 115.23, 55.28, 199.8, 115.23, 56, 199.8, 114.87, 56, 199.8, 115.23, 55.28, 199.8, 113.23, 56, 199.8, 114.87, 55.28, 199.8, 115.23, 56.56, 199.8, 114.87, 55.28, 199.8, 113.23, 57.28, 199.8, 115.23, 55.28, 199.8, 113.23, 56.56, 199.8, 114.87, 56, 199.8, 114.87, 43.36, 199.8, 116.79, 47.04, 199.8, 118.07, 43.36, 199.8, 118.07, 45.92, 199.8, 116.79, 47.04, 199.8, 118.07, 43.36, 199.8, 116.79, 43.36, 199.8, 116.79, 44.64, 199.8, 115.51, 44.64, 199.8, 116.79, 43.36, 199.8, 114.55, 44.64, 199.8, 115.51, 43.36, 199.8, 116.79, 43.52, 199.8, 114.55, 44.64, 199.8, 115.51, 43.36, 199.8, 114.55, 43.36, 199.8, 114.55, 43.44, 199.8, 113.91, 43.44, 199.8, 114.55, 43.36, 199.8, 112.95, 43.44, 199.8, 113.91, 43.36, 199.8, 114.55, 43.36, 199.8, 112.95, 44.64, 199.8, 111.67, 44.64, 199.8, 112.95, 43.36, 199.8, 110.39, 44.64, 199.8, 111.67, 43.36, 199.8, 112.95, 45.92, 199.8, 116.79, 47.04, 199.8, 110.39, 47.04, 199.8, 118.07, 45.92, 199.8, 115.51, 47.04, 199.8, 110.39, 45.92, 199.8, 116.79, 43.52, 199.8, 114.55, 45.92, 199.8, 115.51, 44.64, 199.8, 115.51, 43.52, 199.8, 113.91, 45.92, 199.8, 115.51, 43.52, 199.8, 114.55, 43.36, 199.8, 112.95, 43.52, 199.8, 113.91, 43.44, 199.8, 113.91, 45.92, 199.8, 112.95, 43.52, 199.8, 113.91, 43.36, 199.8, 112.95, 43.36, 199.8, 110.39, 45.92, 199.8, 111.67, 44.64, 199.8, 111.67, 47.04, 199.8, 110.39, 45.92, 199.8, 111.67, 43.36, 199.8, 110.39, 45.92, 199.8, 112.95, 45.92, 199.8, 115.51, 43.52, 199.8, 113.91, 47.04, 199.8, 110.39, 45.92, 199.8, 112.95, 45.92, 199.8, 111.67, 45.92, 199.8, 112.95, 47.04, 199.8, 110.39, 45.92, 199.8, 115.51, 50.24, 199.8, 119.35, 48.96, 199.8, 118.71, 50.24, 199.8, 118.71, 48.96, 199.8, 119.35, 48.96, 199.8, 118.71, 50.24, 199.8, 119.35, 50.24, 199.8, 118.11, 48.96, 199.8, 118.07, 50.24, 199.8, 118.07, 48.96, 199.8, 118.11, 48.96, 199.8, 118.07, 50.24, 199.8, 118.11, 50.24, 199.8, 118.71, 48.96, 199.8, 118.11, 50.24, 199.8, 118.11, 48.96, 199.8, 118.71, 48.96, 199.8, 118.11, 50.24, 199.8, 118.71, 50.24, 199.8, 121.07, 48.96, 199.8, 120.63, 50.24, 199.8, 120.63, 48.96, 199.8, 121.07, 48.96, 199.8, 120.63, 50.24, 199.8, 121.07, 50.24, 199.8, 119.99, 48.96, 199.8, 119.35, 50.24, 199.8, 119.35, 48.96, 199.8, 119.99, 48.96, 199.8, 119.35, 50.24, 199.8, 119.99, 50.24, 199.8, 119.99, 48.96, 199.8, 120.63, 48.96, 199.8, 119.99, 50.24, 199.8, 120.63, 48.96, 199.8, 120.63, 50.24, 199.8, 119.99, 50.24, 199.8, 109.75, 48.96, 199.8, 109.11, 50.24, 199.8, 109.11, 48.96, 199.8, 109.75, 48.96, 199.8, 109.11, 50.24, 199.8, 109.75, 50.24, 199.8, 110.35, 48.96, 199.8, 110.39, 48.96, 199.8, 110.35, 50.24, 199.8, 110.39, 48.96, 199.8, 110.39, 50.24, 199.8, 110.35, 50.24, 199.8, 109.75, 48.96, 199.8, 110.35, 48.96, 199.8, 109.75, 50.24, 199.8, 110.35, 48.96, 199.8, 110.35, 50.24, 199.8, 109.75, 50.24, 199.8, 107.39, 48.96, 199.8, 107.83, 48.96, 199.8, 107.39, 50.24, 199.8, 107.83, 48.96, 199.8, 107.83, 50.24, 199.8, 107.39, 50.24, 199.8, 108.47, 48.96, 199.8, 109.11, 48.96, 199.8, 108.47, 50.24, 199.8, 109.11, 48.96, 199.8, 109.11, 50.24, 199.8, 108.47, 50.24, 199.8, 107.83, 48.96, 199.8, 108.47, 48.96, 199.8, 107.83, 50.24, 199.8, 108.47, 48.96, 199.8, 108.47, 50.24, 199.8, 107.83, 53.92, 199.8, 116.79, 47.04, 199.8, 118.07, 47.04, 199.8, 116.79, 47.04, 199.8, 116.79, 52.64, 199.8, 115.51, 52.64, 199.8, 116.79, 47.04, 199.8, 115.23, 52.64, 199.8, 115.51, 47.04, 199.8, 116.79, 47.04, 199.8, 114.87, 55.28, 199.8, 115.23, 47.04, 199.8, 115.23, 49.92, 199.8, 114.87, 55.28, 199.8, 115.23, 47.04, 199.8, 114.87, 47.04, 199.8, 114.87, 48.64, 199.8, 113.59, 48.64, 199.8, 114.87, 47.04, 199.8, 112.95, 48.64, 199.8, 113.59, 47.04, 199.8, 114.87, 47.04, 199.8, 112.95, 52.64, 199.8, 111.67, 52.64, 199.8, 112.95, 47.04, 199.8, 110.39, 52.64, 199.8, 111.67, 47.04, 199.8, 112.95, 57.44, 199.8, 110.39, 52.64, 199.8, 111.67, 47.04, 199.8, 110.39, 53.92, 199.8, 116.79, 57.44, 199.8, 118.07, 47.04, 199.8, 118.07, 47.04, 199.8, 115.23, 53.92, 199.8, 115.51, 52.64, 199.8, 115.51, 57.28, 199.8, 115.23, 53.92, 199.8, 115.51, 47.04, 199.8, 115.23, 49.92, 199.8, 114.87, 55.28, 199.8, 113.23, 55.28, 199.8, 115.23, 49.92, 199.8, 113.59, 55.28, 199.8, 113.23, 49.92, 199.8, 114.87, 47.04, 199.8, 112.95, 49.92, 199.8, 113.59, 48.64, 199.8, 113.59, 53.92, 199.8, 112.95, 49.92, 199.8, 113.59, 47.04, 199.8, 112.95, 57.44, 199.8, 110.39, 53.92, 199.8, 111.67, 52.64, 199.8, 111.67, 53.92, 199.8, 115.51, 57.44, 199.8, 118.07, 53.92, 199.8, 116.79, 57.28, 199.8, 115.23, 57.44, 199.8, 118.07, 53.92, 199.8, 115.51, 53.92, 199.8, 112.95, 55.28, 199.8, 113.23, 49.92, 199.8, 113.59, 57.44, 199.8, 110.39, 53.92, 199.8, 112.95, 53.92, 199.8, 111.67, 57.28, 199.8, 115.23, 57.44, 199.8, 110.39, 57.44, 199.8, 118.07, 57.28, 199.8, 113.23, 57.44, 199.8, 110.39, 57.28, 199.8, 115.23, 53.92, 199.8, 112.95, 57.28, 199.8, 113.23, 55.28, 199.8, 113.23, 57.44, 199.8, 110.39, 57.28, 199.8, 113.23, 53.92, 199.8, 112.95, 52.16, 199.8, 109.11, 51.52, 199.8, 109.11, 51.52, 199.8, 109.75, 52.16, 199.8, 109.75, 52.16, 199.8, 109.11, 51.52, 199.8, 109.75, 53.44, 199.8, 109.75, 53.44, 199.8, 109.11, 52.8, 199.8, 109.11, 52.8, 199.8, 109.75, 53.44, 199.8, 109.75, 52.8, 199.8, 109.11)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oo6r8"]
 resource_name = "SSRFLR02"
@@ -9302,33 +9299,6 @@ size = Vector3(0.28, 1.886, 2.19434)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwmtc"]
 size = Vector3(1.255, 1.88648, 0.279541)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7cfyp"]
-transparency = 1
-depth_draw_mode = 1
-albedo_texture = ExtResource("15_emvb5")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kjtp1"]
-render_priority = 1
-transparency = 1
-albedo_texture = ExtResource("10_ls102")
-uv1_scale = Vector3(1.65, 1.6, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nbaw7"]
-transparency = 1
-albedo_texture = ExtResource("91_o1rs0")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gkyc3"]
-transparency = 1
-albedo_texture = ExtResource("14_rgpi8")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ghc2"]
-transparency = 1
-albedo_texture = ExtResource("57_ldj56")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d2ngu"]
-transparency = 1
-albedo_texture = ExtResource("181_jptga")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qrnci"]
 render_priority = -99
 transparency = 1
@@ -10643,13 +10613,6 @@ shape = SubResource("ConcavePolygonShape3D_2uesv")
 [node name="MAP01_117" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_b64px")
 skeleton = NodePath("")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Map/MAP01_117"]
-collision_layer = 4
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Map/MAP01_117/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_vf3a8")
 
 [node name="MAP01_118" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_mveya")
@@ -12465,7 +12428,7 @@ shape = SubResource("BoxShape3D_tmodv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4353, -1.25101, -84.2516)
 
 [node name="BasementGap" type="Area3D" parent="NavigationRegion3D/Transitions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 194.815, 100.759)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 198.996, 100.759)
 collision_layer = 8
 collision_mask = 3
 
@@ -12473,7 +12436,7 @@ collision_mask = 3
 shape = SubResource("CylinderShape3D_m48fq")
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementGap" groups=["spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 14.582, 13.3726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 10.8898, 13.3726)
 
 [node name="BasementLadder" type="Area3D" parent="NavigationRegion3D/Transitions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.7045, 208.035, 118.057)
@@ -12860,13 +12823,12 @@ transform = Transform3D(1.97852, 0, 0, 0, 1.94238, 0, 0, 0, 1, 0, 0, -0.00014495
 shaded = true
 texture = ExtResource("56_lu5ku")
 
-[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.037, 93.7284)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
-door_to_open = NodePath("../../../Doors/Door16")
 press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button3"]
@@ -12884,7 +12846,7 @@ collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "circle"
 event_name = "show open exit"
-door_to_open = NodePath("../../../Doors/MovingWall6")
+door_to_open = NodePath("../../../Doors/AoMovingWall7")
 temporary_camera = NodePath("../../Cameras/ExitCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button4"]
@@ -12912,7 +12874,7 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 event_name = "show secret door"
-door_to_open = NodePath("../../../Doors/MovingWall4")
+door_to_open = NodePath("../../../Doors/AoMovingWall8")
 temporary_camera = NodePath("../../Cameras/SecretDoorCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/ToiletFlush"]
@@ -13021,11 +12983,10 @@ event_name = "change to next map"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent7"]
 shape = SubResource("BoxShape3D_nes26")
 
-[node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/AreaEvents" node_paths=PackedStringArray("door_to_open") groups=["area_event"]]
+[node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 94.5008)
 script = ExtResource("146_vhxkd")
 event_name = "open ao mika wardrobe"
-door_to_open = NodePath("../../../Doors/WardrobeDoor4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent8"]
 shape = SubResource("BoxShape3D_3d1tp")
@@ -13415,186 +13376,50 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.077, 203.48, 73.749)
 [node name="AoBlinkWall" parent="Doors" instance=ExtResource("165_qrnci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.079, 203.48, 73.27)
 
-[node name="Door13" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5583, 203.498, 83.2352)
+[node name="AoMovingWall3" parent="Doors" instance=ExtResource("168_0l5v2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5131, 203.418, 82.4743)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door13"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor17" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.56, 203.48, 83.352)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door13"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoMovingWall4" parent="Doors" instance=ExtResource("167_0l5v2")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.999, 203.164, 92.791)
 
-[node name="Door15" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 56.7465, 203.477, 91.1931)
+[node name="AoCryptDoor" parent="Doors" instance=ExtResource("168_qrnci")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 44, 203, 93.346)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door15"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor18" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.759, 203.48, 91.829)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door15"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor19" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 56.799, 203.48, 91.19)
 
-[node name="Door16" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 41.8189, 203.482, 91.8116)
+[node name="AoMovingWall8" parent="Doors" instance=ExtResource("169_qrnci")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 95.685, 203.48, 91.19)
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door16"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor20" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 96.162, 203.48, 91.19)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door16"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor21" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.36, 203.48, 93.269)
+open_only = true
+can_interrupt = false
 
-[node name="Door17" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3656, 203.495, 93.2148)
+[node name="AoWardrobeDoor4" parent="Doors" instance=ExtResource("161_dbtwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.8, 203.717, 100.175)
+open_only = true
+can_interrupt = false
+allow_front = false
+allow_back = false
 
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door17"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoDoor22" parent="Doors" instance=ExtResource("161_b5j3m")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.72, 203.48, 97.59)
 
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door17"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
+[node name="AoMovingWall6" parent="Doors" instance=ExtResource("170_qrnci")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.36, 203.48, 100.785)
 
-[node name="Door18" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 34.7715, 203.497, 97.5866)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door18"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door18"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="Door19" type="Node3D" parent="Doors"]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 95.9986, 203.502, 91.184)
-
-[node name="FrontSide" type="CSGBox3D" parent="Doors/Door19"]
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="BackSide" type="CSGBox3D" parent="Doors/Door19"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
-material_override = SubResource("StandardMaterial3D_7cfyp")
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.292, 2.503, 0.1)
-
-[node name="WardrobeDoor4" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7995, 203.721, 100.174)
-
-[node name="CSGBox" type="CSGBox3D" parent="Doors/WardrobeDoor4"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.39941, 2.07501, 0.0505478)
-material = SubResource("StandardMaterial3D_kjtp1")
-
-[node name="MovingWall3" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 26.5131, 203.006, 82.4743)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall3"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.393677, 0)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.4101, 2.43579, 0.311384)
-material = SubResource("StandardMaterial3D_nbaw7")
-
-[node name="MovingWall4" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 95.6842, 203.47, 91.1919)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall4"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(0.01, 2.561, 1.30273)
-material = SubResource("StandardMaterial3D_gkyc3")
-
-[node name="MovingWall5" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9988, 203.146, 92.7906)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall5"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(2.23804, 1.92871, 0.631836)
-material = SubResource("StandardMaterial3D_1ghc2")
-
-[node name="MovingWall6" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.361, 203.416, 101.587)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0625, 0.261681)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.27905, 2.56079, 0.834743)
-material = SubResource("StandardMaterial3D_gkyc3")
-
-[node name="MovingWall7" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.842, 203.473, 100.785)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/MovingWall7"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.540733, 0, 0)
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(0.2, 2.561, 1.271)
-material = SubResource("StandardMaterial3D_gkyc3")
-
-[node name="CryptDoor" type="Node3D" parent="Doors"]
-transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 43.9958, 202.993, 93.5405)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Doors/CryptDoor"]
-use_collision = true
-collision_layer = 4
-collision_mask = 0
-size = Vector3(1.91309, 1.59375, 0.09375)
-material = SubResource("StandardMaterial3D_d2ngu")
+[node name="AoMovingWall7" parent="Doors" instance=ExtResource("171_0l5v2")]
+transform = Transform3D(1, 0, 3.69553e-07, 0, 1, 0, -3.69553e-07, 0, 1, 39.36, 203.48, 101.746)
 
 [node name="Decorations" type="Node3D" parent="."]
 

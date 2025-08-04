@@ -11,7 +11,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wfks5"]
 resource_name = "Front"
-cull_mode = 2
+render_priority = 1
+transparency = 1
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_lbduo")
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_uyj3x"]
@@ -21,7 +23,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ettn7"]
 resource_name = "Side"
-cull_mode = 2
+render_priority = 1
+transparency = 1
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_uyj3x")
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_gyjwq"]
@@ -31,7 +35,9 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ffdu5"]
 resource_name = "Back"
-cull_mode = 2
+render_priority = 1
+transparency = 1
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_gyjwq")
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_p8ols"]
@@ -41,7 +47,10 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aihf0"]
 resource_name = "Top"
+render_priority = 1
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_p8ols")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_i52i5"]

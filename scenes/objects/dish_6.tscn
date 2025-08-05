@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dnm0ifnebpvig"]
+[gd_scene load_steps=4 format=3 uid="uid://dnm0ifnebpvig"]
 
+[ext_resource type="Script" uid="uid://bmwkeugmdbtge" path="res://scenes/objects/dish_1.gd" id="1_1hwt0"]
 [ext_resource type="Texture2D" uid="uid://r6y7pdjj5mrw" path="res://images/objects/static/1156A0.png" id="1_3d4wv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yxg58"]
@@ -8,10 +9,13 @@ size = Vector3(0.255859, 0.0585938, 0.251953)
 [node name="Dish6" type="StaticBody3D"]
 collision_layer = 4
 collision_mask = 7
+script = ExtResource("1_1hwt0")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 billboard = 2
 shaded = true
+texture_filter = 2
+render_priority = 2
 texture = ExtResource("1_3d4wv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

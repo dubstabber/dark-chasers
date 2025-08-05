@@ -241,9 +241,6 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65371, 0)
 shape = SubResource("CapsuleShape3D_jjbyh")
 
-[node name="NavigationAgent3D" parent="." index="3"]
-path_postprocessing = 1
-
 [node name="KillZone" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08321, 0)
 

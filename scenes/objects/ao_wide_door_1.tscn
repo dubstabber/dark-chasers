@@ -11,7 +11,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lxw0o"]
 resource_name = "Front1"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_ibxyv")
 
@@ -22,13 +22,13 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8rs48"]
 resource_name = "Front2"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_cway4")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_705sp"]
 resource_name = "Sides"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_color = Color(0, 0, 0, 1)
 

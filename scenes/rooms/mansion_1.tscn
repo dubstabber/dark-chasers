@@ -12494,29 +12494,28 @@ current_room = "BigHall"
 disappear_zones = [NodePath("../../DisappearZones/SmallHallway")]
 
 [node name="Rat" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -75.9618, 202.198, -29.1142)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -75.9618, 202.197, -29.1142)
 current_room = "FirstFloor"
 
 [node name="Rat2" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -26.541, 202.678, 136.024)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -26.541, 202.677, 136.024)
 current_room = "ThirdFloor"
 
 [node name="Rat3" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -24.6666, 202.195, -32.7973)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -24.6666, 202.197, -32.7973)
 current_room = "FirstFloor"
 
 [node name="Rat4" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 37.9792, 202.515, 89.6282)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 37.9792, 202.517, 89.6282)
 current_room = "BigHall"
 
 [node name="Rat5" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_fu78y")]
-transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 21.4969, 202.195, 79.9931)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 21.4969, 202.197, 79.9931)
 current_room = "BigHall"
 
 [node name="Ao mika2" parent="NavigationRegion3D/Enemies" instance=ExtResource("142_dc1jo")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -48.6751, 202.197, -31.5108)
 current_room = "FirstFloor"
-chase_player = false
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 
@@ -13587,10 +13586,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.1756, 202.879, -20.8656)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76.4782, 202.913, -21.0393)
 
 [node name="Glass4" parent="Decorations" instance=ExtResource("148_lbmbt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.5041, 202.879, -21.5546)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -77.5041, 202.891, -21.5546)
 
 [node name="Glass5" parent="Decorations" instance=ExtResource("149_0t414")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4248, 202.96, -21.2016)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.4248, 202.933, -21.2016)
 
 [node name="Glass6" parent="Decorations" instance=ExtResource("150_080qd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78.5863, 202.864, -20.8028)

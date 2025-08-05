@@ -10,7 +10,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kbiir"]
 resource_name = "PillarSide"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_eab58")
 roughness = 0.9
@@ -22,7 +22,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npnwq"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_oeqx6")
 roughness = 0.5
@@ -92,7 +92,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oeqx6"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_nhaao")
 roughness = 0.5
@@ -162,7 +162,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33kgk"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_kpp4c")
 roughness = 0.5
@@ -232,7 +232,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fygvl"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_33kgk")
 roughness = 0.5
@@ -302,7 +302,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bee53"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_fygvl")
 roughness = 0.5
@@ -372,7 +372,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kpp4c"]
 resource_name = "PillarFrame"
-render_priority = 1
+render_priority = 2
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_npnwq")
 roughness = 0.5

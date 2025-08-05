@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dg47h20poxtdy"]
+[gd_scene load_steps=4 format=3 uid="uid://dg47h20poxtdy"]
 
 [ext_resource type="Script" uid="uid://bwgudo4rfs7ny" path="res://scenes/items/key.gd" id="1_uba48"]
+[ext_resource type="Texture2D" uid="uid://vh1db8eek3bo" path="res://images/items/SILVA0.png" id="2_lutsq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_25uie"]
 radius = 0.120276
 height = 0.680882
 
 [node name="Key" type="Area3D" groups=["key"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0677024, 0)
 collision_layer = 8
 script = ExtResource("1_uba48")
 
@@ -16,6 +16,8 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 billboard = 2
 shaded = true
 alpha_scissor_threshold = 0.575
+texture_filter = 2
+texture = ExtResource("2_lutsq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(-4.37114e-08, 1, -4.37114e-08, 0, -4.37114e-08, -1, -1, -4.37114e-08, 1.91069e-15, 0, 0, 0)

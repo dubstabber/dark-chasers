@@ -1,3 +1,4 @@
+@tool
 extends Area3D
 
 signal key_collected(body, type, event_name, message_text)

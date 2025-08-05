@@ -1161,6 +1161,7 @@ data = PackedVector3Array(-56.26, 202.2, -111.07, -56.56, 213.72, -107.69, -56.2
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndhqo"]
 resource_name = "COMGRAS1"
 transparency = 1
+cull_mode = 2
 depth_draw_mode = 1
 albedo_texture = ExtResource("24_45ana")
 

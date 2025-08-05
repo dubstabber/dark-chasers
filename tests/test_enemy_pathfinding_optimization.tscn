@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqr5yxvjcwcqg"]
+
+[ext_resource type="Script" path="res://tests/test_enemy_pathfinding_optimization.gd" id="1_8h4kv"]
+
+[node name="TestEnemyPathfindingOptimization" type="Node3D"]
+script = ExtResource("1_8h4kv")
+num_test_enemies = 15
+test_duration = 30.0
+spawn_radius = 100.0

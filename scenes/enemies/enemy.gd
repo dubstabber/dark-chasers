@@ -43,8 +43,13 @@ func _physics_process(delta):
 			check_targets()
 		if current_target or not waypoints.is_empty():
 			var next_pos = nav.get_next_path_position()
-			direction = (next_pos - global_position).normalized()
-			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+			# Only use horizontal movement for ground-based enemies to prevent Y drift
+			var horizontal_direction = Vector3(next_pos.x - global_position.x, 0, next_pos.z - global_position.z).normalized()
+			direction = horizontal_direction
+			# Preserve Y velocity for gravity/jumping, only lerp X and Z components
+			var target_velocity = horizontal_direction * (speed + jump_speed)
+			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
+			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
 			if current_target and current_target.has_method("is_dead") and current_target.is_dead():
 				current_target = null
 				velocity = Vector3.ZERO
@@ -62,7 +67,10 @@ func _physics_process(delta):
 				if debug_prints:
 					print("Wall collision detected! Changing direction...")
 				_change_wandering_direction()
-			velocity = velocity.lerp(direction * (speed + jump_speed), accel * delta)
+			# Apply same horizontal-only movement for wandering
+			var target_velocity = direction * (speed + jump_speed)
+			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
+			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
 			if is_on_floor() or is_flying:
 				look_forward()
 		else:

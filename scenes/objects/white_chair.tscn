@@ -68,6 +68,7 @@ shape = SubResource("BoxShape3D_xpsgd")
 material_override = SubResource("ShaderMaterial_4baa2")
 billboard = 2
 shaded = true
+texture_filter = 2
 render_priority = 2
 texture = SubResource("ImageTexture_p6unu")
 script = ExtResource("11_5m1i2")

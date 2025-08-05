@@ -28,7 +28,7 @@ data = {
 image = SubResource("Image_griqp")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_w4hew"]
-render_priority = 1
+render_priority = 2
 shader = ExtResource("2_griqp")
 shader_parameter/atlas_texture = SubResource("ImageTexture_8msnx")
 shader_parameter/atlas_dimensions = Vector2(600, 1200)
@@ -228,7 +228,7 @@ material_override = SubResource("ShaderMaterial_w4hew")
 offset = Vector2(0, 194)
 billboard = 2
 shaded = true
-render_priority = 1
+render_priority = 2
 texture = SubResource("ImageTexture_c705j")
 script = ExtResource("2_3a3lr")
 target_node_path = NodePath("../..")

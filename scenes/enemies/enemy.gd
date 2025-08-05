@@ -48,6 +48,8 @@ func _physics_process(delta):
 			if current_target and current_target.has_method("is_dead") and current_target.is_dead():
 				current_target = null
 				velocity = Vector3.ZERO
+				# Reset timer to be more responsive when looking for new targets
+				find_path_timer.wait_time = 0.1
 			if is_on_floor() or is_flying:
 				look_forward()
 		elif is_wandering:
@@ -89,7 +91,13 @@ func check_targets() -> void:
 				and result.collider.is_in_group("player")
 				and not (target.has_method("is_dead") and target.is_dead())
 			):
+				var was_target_null = current_target == null
 				current_target = result.collider
+				# Immediately calculate path when target is first detected to eliminate delay
+				if was_target_null:
+					makepath()
+					if debug_prints:
+						print("Enemy detected new target, immediately calculating path")
 
 
 func makepath() -> void:
@@ -136,14 +144,15 @@ func add_disappear_zone(area):
 
 func _on_find_path_timer_timeout():
 	var distance_to_target = nav.distance_to_target()
+	# More responsive timer intervals, especially for distant targets
 	if distance_to_target < 20 or not waypoints.is_empty():
 		find_path_timer.wait_time = 0.1
 	elif distance_to_target < 35:
-		find_path_timer.wait_time = 0.5
+		find_path_timer.wait_time = 0.3 # Reduced from 0.5
 	elif distance_to_target < 50:
-		find_path_timer.wait_time = 0.8
+		find_path_timer.wait_time = 0.5 # Reduced from 0.8
 	else:
-		find_path_timer.wait_time = 1.7
+		find_path_timer.wait_time = 0.8 # Significantly reduced from 1.7
 	makepath()
 
 

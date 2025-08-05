@@ -3,7 +3,7 @@ extends Node3D
 class_name Openable
 
 
-signal door_locked(text)
+signal door_locked(text, triggering_player)
 
 @export var time_to_close := 1.2
 @export var open_only := false
@@ -41,6 +41,7 @@ var _playing_forward := true
 var _has_reversed_due_block := false
 var _current_open_sound: AudioStreamPlayer3D
 var _current_close_sound: AudioStreamPlayer3D
+var _triggering_player: CharacterBody3D = null # Track which player is interacting with the door
 
 # Debug visualization variables
 var _debug_face_meshes: Array[MeshInstance3D] = []
@@ -106,7 +107,7 @@ func _toggle_door(force := false) -> void:
 		is_unlocked = false
 
 	if not is_unlocked:
-		door_locked.emit(locked_message)
+		door_locked.emit(locked_message, _triggering_player)
 		if locked_sound:
 			Utils.play_sound(locked_sound, self)
 		return
@@ -286,7 +287,8 @@ func _get_side_from_local_point(local_p: Vector3) -> String:
 	return best_side
 
 
-func open_with_point(hit_pos: Vector3) -> void:
+func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null) -> void:
+	_triggering_player = triggering_player
 	var local_p: Vector3 = _body.to_local(hit_pos)
 
 	var side: String = _get_side_from_local_point(local_p)
@@ -296,7 +298,7 @@ func open_with_point(hit_pos: Vector3) -> void:
 	else:
 		if locked_sound:
 			Utils.play_sound(locked_sound, self)
-		door_locked.emit(locked_message)
+		door_locked.emit(locked_message, _triggering_player)
 
 
 # --- Blocking & Auto-reopen logic -------------------------------------------------

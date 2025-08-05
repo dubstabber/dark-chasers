@@ -107,4 +107,4 @@ func refresh_key_display():
 		hud.update_keys_display(keys_collected)
 func _handle_button_event(_body, _event): pass
 func _handle_area_event(_body: CharacterBody3D, _event): pass
-func _door_locked(_text): pass
+func _door_locked(_text, _triggering_player): pass

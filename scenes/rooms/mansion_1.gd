@@ -12,7 +12,7 @@ func _ready():
 			#destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
 			
 	spawn_player()
-	# open_all_doors()
+	open_all_doors()
 
 
 func spawn_player():
@@ -271,8 +271,11 @@ func _on_custom_event(event):
 			prints("unknown event: '", event, "'")
 
 
-func _door_locked(text):
-	hud.show_event_text(text, false, 3.0)
+func _door_locked(text, triggering_player):
+	if triggering_player:
+		# Show event text only to the specific player who triggered the interaction
+		hud.show_event_text_for_player(triggering_player, text, false, 3.0)
+	# If no triggering player is specified (e.g., enemy interaction), don't show any message
 
 
 # For testing purposes

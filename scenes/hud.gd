@@ -56,6 +56,44 @@ func show_event_text(text: String, _faded: bool = true, text_time: float = 0.0):
 		timer.start()
 
 
+func show_event_text_for_player(player: CharacterBody3D, text: String, _faded: bool = true, text_time: float = 0.0):
+	"""Show event text only if this HUD belongs to the specified player
+
+	This method allows for player-specific event text display in multiplayer scenarios.
+	If the HUD doesn't belong to the specified player, the text won't be shown.
+
+	Args:
+		player: The player who should see this event text
+		text: The text to display
+		_faded: Whether to use fade animation
+		text_time: How long to display the text (0 = indefinite)
+	"""
+	# Get the player that owns this HUD by traversing up the scene tree
+	var hud_owner = _get_hud_owner()
+
+	# Only show the text if this HUD belongs to the specified player
+	if hud_owner == player:
+		show_event_text(text, _faded, text_time)
+
+
+func _get_hud_owner() -> CharacterBody3D:
+	"""Get the player that owns this HUD instance
+
+	Returns:
+		The player CharacterBody3D that this HUD belongs to, or null if not found
+	"""
+	# The HUD is typically a child of the level, and players have a reference to it
+	# We need to find which player has this HUD as their hud property
+	var level = get_parent()
+	if level and "players" in level:
+		var players_node = level.players
+		if players_node:
+			for player in players_node.get_children():
+				if player.has_method("get") and player.get("hud") == self:
+					return player
+	return null
+
+
 func hide_event_text():
 	if faded:
 		tween = create_tween()

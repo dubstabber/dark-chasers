@@ -160,6 +160,7 @@ func _on_interaction_timer_timeout():
 		var root_node = collider.get_parent()
 		if root_node is Openable:
 			if root_node.has_method("open_with_point") and can_open_door:
+				# Don't pass a triggering player - enemies shouldn't show door locked messages to players
 				root_node.open_with_point(interaction_ray.get_collision_point())
 			elif is_wandering:
 				direction = Vector3(-direction.x, 0, -direction.z)
@@ -193,7 +194,7 @@ func _check_wall_collision() -> bool:
 func _change_wandering_direction() -> void:
 	"""Change wandering direction when hitting a wall - simple turn around approach"""
 	# Simple approach: turn around 180 degrees
-	direction = -direction.normalized()
+	direction = - direction.normalized()
 	
 	if debug_prints:
 		print("Enemy turned around to avoid wall, new direction: ", direction)

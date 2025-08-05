@@ -2,7 +2,7 @@
 extends Node3D
 
 
-signal door_locked(text)
+signal door_locked(text, triggering_player)
 
 @export var time_to_close := 1.2
 @export var open_only := false
@@ -105,7 +105,7 @@ func _toggle_door(force := false) -> void:
 		is_unlocked = false
 
 	if not is_unlocked:
-		door_locked.emit(locked_message)
+		door_locked.emit(locked_message, null)
 		if locked_sound:
 			Utils.play_sound(locked_sound, self)
 		return
@@ -295,7 +295,7 @@ func open_with_point(hit_pos: Vector3) -> void:
 	else:
 		if locked_sound:
 			Utils.play_sound(locked_sound, self)
-		door_locked.emit(locked_message)
+		door_locked.emit(locked_message, null)
 
 
 # --- Blocking & Auto-reopen logic -------------------------------------------------

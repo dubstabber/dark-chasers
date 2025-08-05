@@ -1889,7 +1889,7 @@ data = PackedVector3Array(-45.12, 207.84, -39.87, -43.84, 209.12, -39.87, -45.12
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lck0n"]
 resource_name = "BMIDG09"
-render_priority = 1
+render_priority = 2
 transparency = 1
 albedo_texture = ExtResource("41_bdxgr")
 
@@ -12516,6 +12516,7 @@ current_room = "BigHall"
 [node name="Ao mika2" parent="NavigationRegion3D/Enemies" instance=ExtResource("142_dc1jo")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -48.6751, 202.197, -31.5108)
 current_room = "FirstFloor"
+chase_player = false
 
 [node name="Blockers" type="Node3D" parent="NavigationRegion3D"]
 

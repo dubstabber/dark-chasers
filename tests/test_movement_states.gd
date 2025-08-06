@@ -1,19 +1,18 @@
-@tool
-extends EditorScript
+extends Node
 
 ## Test script to verify DirectionalSprite3D movement state recognition
 ## This test verifies that all valid movement states are properly recognized
 
-func _run():
+func _ready():
 	print("=== DirectionalSprite3D Movement States Test ===")
-	
+
 	# Create a test DirectionalSprite3D instance
 	var sprite_3d = DirectionalSprite3D.new()
-	
+
 	# Create a mock target node with moving_state property
 	var mock_target = Node.new()
 	mock_target.set_script(preload("res://tests/mock_entity_with_states.gd"))
-	
+
 	# Add the mock target as a child so DirectionalSprite3D can find it
 	add_child(mock_target)
 	add_child(sprite_3d)

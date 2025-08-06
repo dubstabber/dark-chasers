@@ -9,9 +9,9 @@ var failed_tests = []
 var test_start_time: float
 
 func _ready():
-	print("=" * 60)
+	print("=".repeat(60))
 	print("HEALTH COMPONENT COMPREHENSIVE TEST SUITE")
-	print("=" * 60)
+	print("=".repeat(60))
 	test_start_time = Time.get_time_dict_from_system()["second"] + Time.get_time_dict_from_system()["minute"] * 60
 	
 	# Run all test suites
@@ -32,7 +32,7 @@ func run_basic_tests():
 	await get_tree().process_frame
 	
 	basic_tests.queue_free()
-	total_tests_run += 8  # Number of test methods in basic tests
+	total_tests_run += 8 # Number of test methods in basic tests
 
 func run_extended_tests():
 	print("\n🔬 RUNNING EXTENDED HEALTH COMPONENT TESTS...")
@@ -44,7 +44,7 @@ func run_extended_tests():
 	await get_tree().process_frame
 	
 	extended_tests.queue_free()
-	total_tests_run += 7  # Number of test methods in extended tests
+	total_tests_run += 7 # Number of test methods in extended tests
 
 func run_armor_tests():
 	print("\n⚔️ RUNNING ARMOR INTEGRATION TESTS...")
@@ -56,15 +56,15 @@ func run_armor_tests():
 	await get_tree().process_frame
 	
 	armor_tests.queue_free()
-	total_tests_run += 9  # Number of test methods in armor tests
+	total_tests_run += 9 # Number of test methods in armor tests
 
 func print_test_summary():
 	var end_time = Time.get_time_dict_from_system()["second"] + Time.get_time_dict_from_system()["minute"] * 60
 	var duration = end_time - test_start_time
 	
-	print("\n" + "=" * 60)
+	print("\n" + "=".repeat(60))
 	print("TEST SUITE SUMMARY")
-	print("=" * 60)
+	print("=".repeat(60))
 	
 	if failed_tests.is_empty():
 		print("🎉 ALL TESTS PASSED!")
@@ -97,7 +97,7 @@ func print_test_summary():
 	print("  - Signal System")
 	print("  - Property Setters/Getters")
 	
-	print("\n" + "=" * 60)
+	print("\n" + "=".repeat(60))
 	
 	# Exit after a short delay to allow reading the summary
 	await get_tree().create_timer(2.0).timeout

@@ -38,8 +38,8 @@ func test_auto_room_assignment():
 	level._auto_assign_room_for_body(player)
 	
 	# Verify room was assigned
-	assert("current_room" in player, "Player should have current_room property")
-	assert(player.current_room != null and player.current_room != "", "Player should have a valid room assigned")
+	test_assert("current_room" in player, "Player should have current_room property")
+	test_assert(player.current_room != null and player.current_room != "", "Player should have a valid room assigned")
 	print("✓ Player automatically assigned room: ", player.current_room)
 	
 	test_passed += 1
@@ -78,9 +78,9 @@ func test_transition_with_unassigned_room():
 	level.handle_transition(player, "FirstFloorUpstairs", marker)
 	
 	# Verify room was assigned and position changed
-	assert("current_room" in player, "Player should have current_room property after transition")
-	assert(player.current_room != null and player.current_room != "", "Player should have a valid room after transition")
-	assert(player.global_position != initial_position, "Player position should have changed")
+	test_assert("current_room" in player, "Player should have current_room property after transition")
+	test_assert(player.current_room != null and player.current_room != "", "Player should have a valid room after transition")
+	test_assert(player.global_position != initial_position, "Player position should have changed")
 	print("✓ Transition handled correctly with auto room assignment")
 	
 	test_passed += 1
@@ -121,7 +121,7 @@ func test_enemy_pathfinding_with_room_assignment():
 	enemy.makepath()
 	
 	# Should use room-based pathfinding or direct pathfinding
-	assert(nav_agent.target_position != initial_nav_target, "Navigation target should be updated")
+	test_assert(nav_agent.target_position != initial_nav_target, "Navigation target should be updated")
 	print("✓ Enemy pathfinding works with properly assigned player room")
 	
 	# Test 2: Player without room assignment (should fallback to direct pathfinding)
@@ -136,7 +136,7 @@ func test_enemy_pathfinding_with_room_assignment():
 	enemy.makepath()
 	
 	# Should fallback to direct pathfinding
-	assert(nav_agent.target_position == player_no_room.global_position, "Should use direct pathfinding for player without room")
+	test_assert(nav_agent.target_position == player_no_room.global_position, "Should use direct pathfinding for player without room")
 	print("✓ Enemy pathfinding falls back to direct pathfinding for unassigned player room")
 	
 	test_passed += 2
@@ -173,11 +173,11 @@ func test_transition_safety_checks():
 	player.global_position = Vector3.ZERO
 	
 	# Test transition with invalid room (should still move player but handle gracefully)
-	var initial_position = player.global_position
+	var _initial_position = player.global_position
 	level.handle_transition(player, "InvalidTransition", marker)
 	
 	# Player should still be moved even if transition is invalid
-	assert(player.global_position == marker.global_position, "Player should be moved even with invalid transition")
+	test_assert(player.global_position == marker.global_position, "Player should be moved even with invalid transition")
 	print("✓ Invalid transitions handled gracefully - player still moved")
 	
 	test_passed += 1
@@ -187,9 +187,9 @@ func test_transition_safety_checks():
 	marker.queue_free()
 
 func print_test_summary():
-	print("\n" + "=" * 50)
+	print("\n" + "=".repeat(50))
 	print("ROOM ASSIGNMENT FIX TEST SUMMARY")
-	print("=" * 50)
+	print("=".repeat(50))
 	print("Tests Passed: ", test_passed)
 	print("Tests Failed: ", test_failed)
 	
@@ -202,11 +202,11 @@ func print_test_summary():
 		print("  ✓ Graceful handling of invalid transitions")
 	else:
 		print("❌ Some tests failed. Please review the implementation.")
-	
-	print("=" * 50)
+
+	print("=".repeat(50))
 
 # Helper assertion function
-func assert(condition: bool, message: String):
+func test_assert(condition: bool, message: String):
 	if not condition:
 		print("❌ ASSERTION FAILED: " + message)
 		test_failed += 1

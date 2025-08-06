@@ -1,43 +1,40 @@
 extends Node
 
-# Simple test script to verify AmmoManager functionality
-# Run this in the Godot editor to test the centralized ammo system
+# Simple test script to verify AmmoConfig functionality
+# Run this in the Godot editor to test the ammo configuration system
+# Note: AmmoManager has been replaced with component-based ammo system
 
 func _ready():
-	print("=== Testing Centralized Ammo System ===")
-	
-	# Test 1: Basic ammo operations
-	print("\n1. Testing basic ammo operations:")
-	print("Initial pistol ammo: ", AmmoManager.get_ammo("pistol_ammo"))
-	print("Max pistol ammo: ", AmmoManager.get_max_ammo("pistol_ammo"))
-	
-	# Test 2: Add ammo
-	print("\n2. Testing add ammo:")
-	var added = AmmoManager.add_ammo("pistol_ammo", 50)
-	print("Added 50 pistol ammo: ", added)
-	print("Current pistol ammo: ", AmmoManager.get_ammo("pistol_ammo"))
-	
-	# Test 3: Consume ammo
-	print("\n3. Testing consume ammo:")
-	var consumed = AmmoManager.consume_ammo("pistol_ammo", 10)
-	print("Consumed 10 pistol ammo: ", consumed)
-	print("Current pistol ammo: ", AmmoManager.get_ammo("pistol_ammo"))
-	
-	# Test 4: Check ammo availability
-	print("\n4. Testing ammo availability:")
-	print("Has 5 pistol ammo: ", AmmoManager.has_ammo("pistol_ammo", 5))
-	print("Has 1000 pistol ammo: ", AmmoManager.has_ammo("pistol_ammo", 1000))
-	
-	# Test 5: Ammo percentage
-	print("\n5. Testing ammo percentage:")
-	print("Pistol ammo percentage: ", AmmoManager.get_ammo_percentage("pistol_ammo"))
-	
-	# Test 6: All ammo types
-	print("\n6. All registered ammo types:")
-	for ammo_type in AmmoManager.get_all_ammo_types():
-		print("  %s: %d/%d" % [ammo_type, AmmoManager.get_ammo(ammo_type), AmmoManager.get_max_ammo(ammo_type)])
-	
+	print("=== Testing AmmoConfig System ===")
+	print("Note: AmmoManager has been replaced with component-based ammo system.")
+	print("This test now verifies AmmoConfig functionality.")
+
+	# Test 1: Basic ammo config operations
+	print("\n1. Testing basic ammo config operations:")
+	var config = AmmoConfig.get_instance()
+	var pistol_config = config.get_ammo_config("pistol_ammo")
+	print("Pistol ammo config: ", pistol_config)
+
+	# Test 2: All ammo types
+	print("\n2. All registered ammo types:")
+	var all_configs = config.get_default_ammo_configs()
+	for ammo_type in all_configs:
+		var ammo_config = all_configs[ammo_type]
+		print("  %s: max=%d, default=%d" % [ammo_type, ammo_config.max, ammo_config.default])
+
+	# Test 3: Register new ammo type
+	print("\n3. Testing ammo type registration:")
+	config.register_ammo_type("test_ammo", 50, 10)
+	var test_config = config.get_ammo_config("test_ammo")
+	print("Test ammo config: ", test_config)
+
+	# Test 4: Check ammo type existence
+	print("\n4. Testing ammo type existence:")
+	print("Has pistol_ammo: ", config.has_ammo_type("pistol_ammo"))
+	print("Has nonexistent_ammo: ", config.has_ammo_type("nonexistent_ammo"))
+
 	print("\n=== Test Complete ===")
-	
+	print("For component-based ammo testing, see test_component_ammo_system.gd")
+
 	# Clean up
 	queue_free()

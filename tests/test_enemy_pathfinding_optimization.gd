@@ -89,7 +89,6 @@ func _process(_delta):
 	
 	# Move the player around to test line-of-sight changes
 	if test_player:
-		var move_speed = 5.0
 		var time_factor = elapsed * 0.5
 		test_player.global_position = Vector3(
 			sin(time_factor) * 20,
@@ -107,8 +106,16 @@ func _process(_delta):
 
 func print_optimization_status(elapsed: float):
 	print("\n=== Optimization Status at ", elapsed, " seconds ===")
-	print("Total enemies: ", Enemy.total_enemy_count)
-	print("Enemy count scale factor: ", test_enemies[0].enemy_count_scale_factor if test_enemies.size() > 0 else "N/A")
+
+	# Check if optimization properties exist
+	var total_count = str(test_enemies.size()) + " (local count)"
+	# Note: total_enemy_count optimization not yet implemented
+
+	var scale_factor = "N/A (optimization not implemented)"
+	# Note: enemy_count_scale_factor optimization not yet implemented
+
+	print("Total enemies: ", total_count)
+	print("Enemy count scale factor: ", scale_factor)
 	
 	# Show interval distribution
 	var interval_counts = {"very_close": 0, "close": 0, "medium": 0, "far": 0}
@@ -128,7 +135,8 @@ func print_optimization_status(elapsed: float):
 		else:
 			interval_counts["far"] += 1
 			
-		if enemy.has_line_of_sight:
+		# Check if line of sight optimization is implemented
+		if "has_line_of_sight" in enemy and enemy.has_line_of_sight:
 			los_count += 1
 	
 	print("Distance distribution - Very close: ", interval_counts["very_close"],

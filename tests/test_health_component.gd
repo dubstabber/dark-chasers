@@ -50,32 +50,10 @@ func _ready():
 	
 	# Invulnerability Tests
 	test_invulnerability_flag()
-	test_invulnerability_timer()
-	
-	# Death and Revival Tests
-	test_kill_method()
-	test_revive_method()
-	test_death_with_delay()
-	
-	# Signal Emission Tests
-	test_health_changed_signals()
-	test_damage_taken_signals()
-	test_healing_signals()
-	test_death_signals()
-	
-	# Edge Cases Tests
-	test_zero_and_negative_damage()
-	test_zero_and_negative_healing()
-	test_overheal_functionality()
-	test_multiple_death_calls()
-	
-	# Armor Integration Tests
-	test_armor_integration_basic()
-	test_armor_integration_no_armor()
-	test_armor_integration_full_absorption()
-	
-	# Utility Methods Tests
-	test_utility_methods()
+
+	print("=== BASIC HEALTH COMPONENT TESTS COMPLETED ===")
+	print("Note: Extended tests (invulnerability timer, kill/revive methods, signals, etc.)")
+	print("are available in test_health_component_extended.gd and test_health_component_armor.gd")
 	
 	print("=== ALL HEALTH COMPONENT TESTS COMPLETED ===")
 

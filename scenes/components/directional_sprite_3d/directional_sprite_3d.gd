@@ -37,7 +37,7 @@ var directional_material: ShaderMaterial
 
 
 # Alpha cut mode: 0 Disabled,1 Discard,2 Opaque Pre-Pass,3 Alpha Hash
-@export_enum("Disabled","Discard","Opaque Pre-Pass","Alpha Hash") var sprite_alpha_cut_mode: int = 0:
+@export_enum("Disabled", "Discard", "Opaque Pre-Pass", "Alpha Hash") var sprite_alpha_cut_mode: int = 0:
 	set(value):
 		sprite_alpha_cut_mode = value
 		if directional_material:
@@ -72,7 +72,6 @@ var directional_material: ShaderMaterial
 		debug_mode = value
 		if directional_material:
 			directional_material.set_shader_parameter("debug_mode", debug_mode)
-
 
 
 func _ready() -> void:
@@ -132,7 +131,6 @@ func _set(property: StringName, value) -> bool:
 	if prop_name == "render_priority":
 		if directional_material:
 			directional_material.render_priority = value
-
 
 
 	if prop_name.ends_with(IDLE_SUFFIX):
@@ -208,10 +206,32 @@ func _get_target_node() -> Node3D:
 		var script_properties = target_node.get_script().get_script_property_list()
 		has_moving_state = script_properties.any(func(prop): return prop.name == "moving_state")
 		has_shooting_state = script_properties.any(func(prop): return prop.name == "shooting_state")
-	else: 
+	else:
 		has_moving_state = false
 		has_shooting_state = false
 	return target_node
+
+
+func _get_current_sprite_state(target_node: Node) -> int:
+	"""Get the current sprite state for the target node.
+	Returns 0 for idle states, 1 for movement states, 2 for shooting states."""
+
+	if not target_node:
+		return 0
+
+	# Check for shooting state first (highest priority)
+	if "shooting_state" in target_node and target_node.shooting_state != "":
+		return 2
+
+	# Check for movement state
+	if "moving_state" in target_node:
+		var state = target_node.moving_state
+		# Movement states that should return 1
+		if state in ["run", "moving", "move", "walk", "sprint"]:
+			return 1
+
+	# Default to idle state
+	return 0
 
 
 func generate_atlas():

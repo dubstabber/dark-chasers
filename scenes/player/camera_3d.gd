@@ -1,6 +1,6 @@
 extends Camera3D
 
-@onready var gun_base: Node2D = $GunBase2D
+@onready var gun_base: Node2D = $LegacyGunBase2D
 @onready var crosshair_rect: TextureRect = $CrosshairRect
 
 

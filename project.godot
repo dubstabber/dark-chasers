@@ -27,7 +27,7 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/Mirror/plugin.cfg")
+enabled=PackedStringArray("res://addons/Mirror/plugin.cfg", "res://addons/hide_layer_in_editor/plugin.cfg")
 
 [file_customization]
 

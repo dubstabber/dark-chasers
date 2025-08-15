@@ -997,6 +997,7 @@ material_override = SubResource("ShaderMaterial_upxxc")
 cast_shadow = 0
 shaded = true
 alpha_cut = 1
+alpha_antialiasing_mode = 2
 texture_filter = 1
 render_priority = 3
 texture = ExtResource("2_rkwwq")

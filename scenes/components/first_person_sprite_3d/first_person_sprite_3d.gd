@@ -54,8 +54,9 @@ func setup_sprite_shader():
 	
 	# Configure Sprite3D properties for first-person sprites
 	billboard = BaseMaterial3D.BILLBOARD_DISABLED # Keep sprite oriented properly
-	alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD # Handle transparency
+	alpha_cut = SpriteBase3D.ALPHA_CUT_DISABLED # Let shader handle transparency
 	no_depth_test = false # We want depth testing for proper 3D integration
+	transparency = BaseMaterial3D.TRANSPARENCY_ALPHA # Enable alpha blending
 	
 	# Apply material to the Sprite3D
 	material_override = sprite_material

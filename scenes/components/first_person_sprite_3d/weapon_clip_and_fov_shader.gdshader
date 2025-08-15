@@ -116,8 +116,11 @@ void fragment() {
 
 	// Apply lighting based on Sprite3D shaded property
 	if (use_sprite3d_shaded) {
-		// Shaded mode - let 3D lighting affect the texture
-		ALBEDO = albedo_tex.rgb;
+		// Shaded mode - blend between lit and unlit using lighting_influence
+		// When lighting_influence = 1.0 -> fully lit by scene lights
+		// When lighting_influence = 0.0 -> fully unlit (pure emission)
+		ALBEDO = albedo_tex.rgb * lighting_influence;
+		EMISSION = albedo_tex.rgb * (1.0 - lighting_influence);
 		// ALPHA already set earlier
 	} else {
 		// Unshaded mode - use emission for pure texture display
@@ -125,4 +128,14 @@ void fragment() {
 		ALBEDO = vec3(0.0);
 		// ALPHA already set earlier
 	}
+}
+
+void light() {
+	// Two-sided, rotation-independent diffuse lighting for first-person sprite
+	// Use a constant camera-facing normal in view space so sprite rotation does not affect lighting
+	vec3 N = vec3(0.0, 0.0, 1.0);
+	vec3 L = normalize(LIGHT);
+	// Symmetric response: front or back receives the same intensity
+	float ndl = abs(dot(N, L));
+	DIFFUSE_LIGHT += ndl * ATTENUATION * LIGHT_COLOR / PI;
 }

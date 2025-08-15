@@ -42,15 +42,15 @@ func _on_sprite3d_property_changed():
 func setup_sprite_shader():
 	"""Set up the shader material with automatic Sprite3D property synchronization"""
 	
-	# Load the first-person sprite shader
-	var shader = load("res://shaders/weapon_clip_and_fov_shader.gdshader")
-	if not shader:
-		push_error("Could not load weapon_clip_and_fov_shader.gdshader")
+	# Ensure a ShaderMaterial is already assigned to this Sprite3D
+	if not (material_override is ShaderMaterial):
 		return
-	
-	# Create shader material
-	sprite_material = ShaderMaterial.new()
-	sprite_material.shader = shader
+	# Use the assigned material as our sprite material
+	sprite_material = material_override
+	# Bail if the material has no shader attached
+	if sprite_material.shader == null:
+		return
+
 	
 	# Configure Sprite3D properties for first-person sprites
 	billboard = BaseMaterial3D.BILLBOARD_DISABLED # Keep sprite oriented properly

@@ -18,8 +18,8 @@ var bob_time := 0.0
 var smooth_movement_speed := 0.0
 var movement_speed_smoothing := 5.0
 
-var left_hand: Sprite2D
-var right_hand: Sprite2D
+var left_hand: Node
+var right_hand: Node
 
 var weapon_bob_amount: Vector2 = Vector2.ZERO
 var base_gun_position: Vector2 = Vector2.ZERO
@@ -53,7 +53,7 @@ var weapon_switch_queue: Array[int] = []
 # Scene references
 # --------------------------------------------------------------------------
 @export var player: CharacterBody3D
-@export var gun_base: Node2D
+@export var gun_base: Node
 @export var animation_player: AnimationPlayer
 @export var hit_sound_player: AudioStreamPlayer3D
 @export var weapon_sound_player: AudioStreamPlayer3D

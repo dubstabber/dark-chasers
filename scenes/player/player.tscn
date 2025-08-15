@@ -68,10 +68,10 @@ height = 0.5
 render_priority = 3
 shader = ExtResource("3_upxxc")
 shader_parameter/texture_albedo = ExtResource("2_rkwwq")
-shader_parameter/alpha_cut = 1.0
+shader_parameter/alpha_cut = 0.0
 shader_parameter/alpha_cut_threshold = 0.5
 shader_parameter/use_sprite3d_shaded = true
-shader_parameter/texture_filter_mode = 1
+shader_parameter/texture_filter_mode = 0
 shader_parameter/has_texture = true
 shader_parameter/viewmodel_fov = 85.0
 shader_parameter/weapon_distance = 0.5
@@ -737,10 +737,22 @@ tracks/4/path = NodePath("Camera3D/GunBase3D/RightHandSlot:texture")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.06),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_gu45f"), ExtResource("2_rkwwq")]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Camera3D/GunBase3D/RightHandSlot:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [ExtResource("2_gu45f")]
+"update": 0,
+"values": [Vector3(0.75, -0.95, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_4kmua"]
@@ -975,10 +987,13 @@ fov = 85.0
 script = ExtResource("2_3kmde")
 
 [node name="LegacyGunBase2D" type="Node2D" parent="nek/head/eyes/Camera3D"]
+visible = false
 
 [node name="LeftHandSlot" type="Sprite2D" parent="nek/head/eyes/Camera3D/LegacyGunBase2D"]
+visible = false
 
 [node name="RightHandSlot" type="Sprite2D" parent="nek/head/eyes/Camera3D/LegacyGunBase2D"]
+visible = false
 
 [node name="GunBase3D" type="Node3D" parent="nek/head/eyes/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
@@ -994,11 +1009,11 @@ render_priority = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, -0.95, 0)
 layers = 4
 material_override = SubResource("ShaderMaterial_upxxc")
+transparency = 1.0
 cast_shadow = 0
 shaded = true
-alpha_cut = 1
 alpha_antialiasing_mode = 2
-texture_filter = 1
+texture_filter = 0
 render_priority = 3
 texture = ExtResource("2_rkwwq")
 script = ExtResource("5_upxxc")

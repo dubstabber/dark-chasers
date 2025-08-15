@@ -7,6 +7,7 @@ var MainCamPath: NodePath
 @export var size : Vector2 = Vector2(2, 2)
 @export var ResolutionPerUnit = 100
 @export var cullMask = [] # (Array, int)
+@export_flags_3d_render var exclude_layers_bitmask : int = 4  # Excludes layer 3 (bit 2, value 4) by default
 @export var MirrorColor = whitegreen # (Color, RGB)
 @export var MirrorDistortion = 0 # (float, 0, 30, 0.01)
 @export var DistortionTexture: Texture2D
@@ -38,6 +39,11 @@ func _process(delta):
 	
 	# Cull camera layers
 	cam.cull_mask = 0xFF
+	
+	# Apply bitmask exclusion (direct bit manipulation)
+	cam.cull_mask &= ~exclude_layers_bitmask
+	
+	# Apply individual layer exclusions from cullMask array
 	for i in cullMask:
 		cam.cull_mask &= ~(1<<i)
 

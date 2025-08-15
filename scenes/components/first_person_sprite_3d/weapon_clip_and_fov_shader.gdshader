@@ -2,7 +2,7 @@
 // Optimized for weapon sprites that need to maintain visibility and proper FOV
 
 shader_type spatial;
-render_mode blend_mix,depth_prepass_alpha,cull_disabled,diffuse_burley,specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
 // Main texture control (will be automatically set from Sprite3D properties)
 uniform sampler2D texture_albedo : source_color;
@@ -91,14 +91,8 @@ void fragment() {
 		albedo_tex = texture(texture_albedo, base_uv);
 	}
 
-	// Provide the fragment alpha as early as possible so any pre-pass can use it
+	// Set alpha from texture
 	ALPHA = albedo_tex.a;
-
-	// Ensure the alpha pre-pass only writes depth where the sprite is opaque
-	// When using render_mode depth_prepass_alpha, the engine relies on ALPHA_SCISSOR_THRESHOLD
-	// to decide which fragments contribute to the depth prepass. Without setting this, the
-	// whole quad can write to depth and appear as a white/grey rectangle.
-	ALPHA_SCISSOR_THRESHOLD = (alpha_cut > 0.0) ? clamp(alpha_cut_threshold, 0.0, 1.0) : 0.01;
 
 	// Always discard fully transparent pixels to avoid drawing background quad
 	if (albedo_tex.a < 0.01) {

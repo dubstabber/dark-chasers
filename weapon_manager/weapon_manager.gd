@@ -21,8 +21,8 @@ var movement_speed_smoothing := 5.0
 var left_hand: Node
 var right_hand: Node
 
-var weapon_bob_amount: Vector2 = Vector2.ZERO
-var base_gun_position: Vector2 = Vector2.ZERO
+var weapon_bob_amount: Vector3 = Vector3.ZERO
+var base_gun_position: Vector3 = Vector3.ZERO
 
 var current_weapon: WeaponResource
 
@@ -60,13 +60,13 @@ var weapon_switch_queue: Array[int] = []
 @export var bullet_raycast: RayCast3D
 
 # --------------------------------------------------------------------------
-# Bob tuning values
+# Bob tuning values (optimized for 3D weapons)
 # --------------------------------------------------------------------------
 const WEAPON_BOB_SMOOTHING: float = 8.0
-const WEAPON_BOB_MAX_OFFSET: float = 180.0
-const WEAPON_BOB_HORIZONTAL_RANGE: float = 110.0
-const WEAPON_BOB_VERTICAL_RANGE: float = 95.0
-const WEAPON_BOB_SPEED: float = 2.5
+const WEAPON_BOB_MAX_OFFSET: float = 0.8
+const WEAPON_BOB_HORIZONTAL_RANGE: float = 0.31
+const WEAPON_BOB_VERTICAL_RANGE: float = 0.31
+const WEAPON_BOB_SPEED: float = 2.4
 const WEAPON_BOB_SPEED_REFERENCE: float = 5.0
 const WEAPON_BOB_MIN_SPEED_MULT: float = 0.5
 const WEAPON_BOB_MAX_SPEED_MULT: float = 2.5
@@ -158,7 +158,7 @@ func _update_speed(delta: float) -> void:
 func _update_bob(delta: float) -> void:
 	# If bobbing is disabled, lerp weapon_bob_amount to zero
 	if not bobbing_enabled:
-		weapon_bob_amount = weapon_bob_amount.lerp(Vector2.ZERO, delta * WEAPON_BOB_SMOOTHING)
+		weapon_bob_amount = weapon_bob_amount.lerp(Vector3.ZERO, delta * WEAPON_BOB_SMOOTHING)
 		return
 
 	var intensity: float = clamp(smooth_movement_speed / WEAPON_BOB_SPEED_REFERENCE, 0.0, 1.0)
@@ -171,14 +171,19 @@ func _update_bob(delta: float) -> void:
 
 	bob_time += delta * time_scale
 
+	# Horizontal sway (X-axis for 3D weapons)
 	var h: float = sin(bob_time * WEAPON_BOB_SPEED) * WEAPON_BOB_HORIZONTAL_RANGE
-	var curve: float = pow(h / WEAPON_BOB_HORIZONTAL_RANGE, 4)
-	var v: float = (1.0 - curve) * WEAPON_BOB_VERTICAL_RANGE
+	var curve: float = pow(abs(h) / WEAPON_BOB_HORIZONTAL_RANGE, 4)
+	# Vertical bob (Y-axis for 3D weapons) 
+	var v: float = - (1.0 - curve) * WEAPON_BOB_VERTICAL_RANGE
+	# Forward/backward subtle movement (Z-axis for 3D weapons)
+	var z: float = sin(bob_time * WEAPON_BOB_SPEED * 0.5) * (WEAPON_BOB_HORIZONTAL_RANGE * 0.2)
 
-	var target: Vector2 = Vector2(h, v) * intensity
+	var target: Vector3 = Vector3(h, v, z) * intensity
 	weapon_bob_amount = weapon_bob_amount.lerp(target, delta * WEAPON_BOB_SMOOTHING)
 	weapon_bob_amount.x = clamp(weapon_bob_amount.x, -WEAPON_BOB_MAX_OFFSET, WEAPON_BOB_MAX_OFFSET)
 	weapon_bob_amount.y = clamp(weapon_bob_amount.y, -WEAPON_BOB_MAX_OFFSET, WEAPON_BOB_MAX_OFFSET)
+	weapon_bob_amount.z = clamp(weapon_bob_amount.z, -WEAPON_BOB_MAX_OFFSET * 0.2, WEAPON_BOB_MAX_OFFSET * 0.2)
 
 
 func _apply_offsets() -> void:

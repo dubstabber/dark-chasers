@@ -13,6 +13,7 @@ func _ready() -> void:
 func light_lighter() -> void:
 	light_energy = 0.6
 	light_color = Color.YELLOW
+	
 
 
 func extinguish_lighter() -> void:

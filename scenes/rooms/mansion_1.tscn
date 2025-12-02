@@ -13782,5 +13782,7 @@ autoplay = true
 [node name="GlobalMusic" type="AudioStreamPlayer" parent="."]
 volume_db = -5.0
 
+[node name="Corpses" type="Node3D" parent="." groups=["corpse"]]
+
 [connection signal="body_entered" from="NavigationRegion3D/Ladder" to="." method="_on_ladder_body_entered"]
 [connection signal="body_exited" from="NavigationRegion3D/Ladder" to="." method="_on_ladder_body_exited"]

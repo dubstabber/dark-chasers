@@ -108,6 +108,8 @@ var debug_camera: Camera3D # temporary
 @onready var crounch_ray_cast_3d = $CrounchRayCast3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var sprite_animation_player = $SpriteAnimationPlayer
+@onready var directional_sprite: Sprite3D = $DirectionalSprite3D
+@onready var corpse_sprite: Sprite3D = $Corpse3D
 
 @onready var interaction = $nek/head/eyes/Camera3D/Interaction
 @onready var interact_sound = $InteractSound
@@ -226,6 +228,9 @@ func _update_shooting_state():
 
 
 func _input(event):
+	if event.is_action_pressed("respawn"):
+		respawn()
+		return
 	if blocked_movement:
 		return
 	if not is_dead():
@@ -483,6 +488,13 @@ func _on_health_component_died():
 		# Apply persistent death screen overlay
 		_apply_death_overlay()
 		# Note: Death sound is handled by the health component
+
+		if sprite_animation_player and sprite_animation_player.has_animation("death"):
+			sprite_animation_player.play("death")
+		if directional_sprite:
+			directional_sprite.visible = false
+		if corpse_sprite:
+			corpse_sprite.visible = true
 
 
 func _on_health_component_damage_taken(_amount: int, _current_health: int):
@@ -824,6 +836,34 @@ func _reset_death_effects():
 	# Clear death overlay and restore transparent state
 	if color_rect:
 		color_rect.modulate = DAMAGE_BLINK_ORIGINAL_MODULATE
+
+
+func respawn(health_amount: int = -1):
+	if not is_dead():
+		return
+
+	var corpses_parents = get_tree().get_nodes_in_group("corpse")
+	if corpse_sprite and corpses_parents.size() > 0:
+		var corpse_copy = corpse_sprite.duplicate()
+		if corpse_copy:
+			var corpses_parent = corpses_parents[0]
+			corpses_parent.add_child(corpse_copy)
+			corpse_copy.global_transform = corpse_sprite.global_transform
+			corpse_copy.visible = true
+			corpse_copy.layers = 1
+
+	if corpse_sprite:
+		corpse_sprite.visible = false
+	if directional_sprite:
+		directional_sprite.visible = true
+	if sprite_animation_player:
+		sprite_animation_player.play("RESET")
+
+	if health_component:
+		health_component.revive(health_amount)
+
+	killed = false
+	_handle_weapon_revival()
 
 
 func _orient_camera_toward_enemy():

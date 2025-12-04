@@ -28,6 +28,7 @@ var current_weapon: WeaponResource
 
 var is_auto_hitting := false
 var bobbing_enabled := true # Controls whether weapon bobbing is active
+var is_shooting := false # Tracks if a shooting/hit animation is playing
 var _ammo_components_initialized := false # Track if ammo components have been set up
 
 # --------------------------------------------------------------------------
@@ -86,6 +87,11 @@ func _ready() -> void:
 	# Connect to player's weapon pickup signal
 	if player and player.has_signal("weapon_added"):
 		player.weapon_added.connect(_on_weapon_added)
+	
+	# Connect animation player signals to track shooting animations
+	if animation_player:
+		animation_player.animation_started.connect(_on_animation_started)
+		animation_player.animation_finished.connect(_on_animation_finished)
 	
 	switch_weapon(2) # default
 
@@ -159,6 +165,11 @@ func _update_bob(delta: float) -> void:
 	# If bobbing is disabled, lerp weapon_bob_amount to zero
 	if not bobbing_enabled:
 		weapon_bob_amount = weapon_bob_amount.lerp(Vector3.ZERO, delta * WEAPON_BOB_SMOOTHING)
+		return
+	
+	# If shooting, immediately reset to initial position
+	if is_shooting:
+		weapon_bob_amount = Vector3.ZERO
 		return
 
 	var intensity: float = clamp(smooth_movement_speed / WEAPON_BOB_SPEED_REFERENCE, 0.0, 1.0)
@@ -498,11 +509,42 @@ func reset_weapon_on_revival() -> void:
 	"""Reset weapon state when player is revived or respawns"""
 	enable_weapon_bobbing()
 	is_auto_hitting = false
+	is_shooting = false
 
 	# If there's a current weapon, play its pullout animation to "re-equip" it
 	if current_weapon and current_weapon.pullout_anim_name and animation_player:
 		animation_player.stop()
 		animation_player.play(current_weapon.pullout_anim_name)
+
+
+# ========================================================================== #
+# Animation tracking for weapon bobbing control
+# ========================================================================== #
+func _on_animation_started(anim_name: String) -> void:
+	"""Called when an animation starts playing
+	
+	Disables weapon bobbing during shooting/hit animations to keep
+	the weapon in its initial position during the attack.
+	"""
+	if not current_weapon:
+		return
+	
+	# Check if this is a shooting animation
+	if anim_name == current_weapon.shoot_anim_name or anim_name == current_weapon.repeat_shoot_anim_name:
+		is_shooting = true
+
+
+func _on_animation_finished(anim_name: String) -> void:
+	"""Called when an animation finishes playing
+	
+	Re-enables weapon bobbing after shooting/hit animations complete.
+	"""
+	if not current_weapon:
+		return
+	
+	# Check if this was a shooting animation
+	if anim_name == current_weapon.shoot_anim_name or anim_name == current_weapon.repeat_shoot_anim_name:
+		is_shooting = false
 
 
 # ========================================================================== #

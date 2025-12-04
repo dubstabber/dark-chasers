@@ -114,9 +114,9 @@ func _handle_key_event(body, _key_type, event, _message_text):
 func _handle_button_event(body, event):
 	match event:
 		"check tv":
-			hud.show_event_text("You: The television doesn't appear to turn on. It's probably broken.", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] The television doesn't appear to turn on. It's probably broken.", false, 3.0)
 		"check map":
-			hud.show_event_text("You: The resort map of the Mansion. Nuff said...", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] The resort map of the Mansion. Nuff said...", false, 3.0)
 		"play piano":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
@@ -124,7 +124,7 @@ func _handle_button_event(body, event):
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/PianoExitArea)
-			hud.show_event_text("You: It's that monster! RUN!!!", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] It's that monster! RUN!!!", false, 3.0)
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
@@ -139,7 +139,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			hud.show_event_text("You: I should head to the 1st floor and check that out...", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] I should head to the 1st floor and check that out...", false, 3.0)
 		"show secret door":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -147,9 +147,9 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			hud.show_event_text("You: Hmm... I wonder where that passage leads to?", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] Hmm... I wonder where that passage leads to?", false, 3.0)
 		"check map 2":
-			hud.show_event_text("You: This map says that there's a hidden passage nearby.", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] This map says that there's a hidden passage nearby.", false, 3.0)
 		"show open exit":
 			for player in players.get_children():
 				player.blocked_movement = true
@@ -159,7 +159,7 @@ func _handle_button_event(body, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			hud.show_event_text("You: I activated the switch. I better get out of here quickly!", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] I activated the switch. I better get out of here quickly!", false, 3.0)
 		"": pass
 		_:
 			prints("unknown event: '", event, "'")
@@ -183,7 +183,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
-			hud.show_event_text("You: What the eff was that!?", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] What the eff was that!?", false, 3.0)
 			global_music.stream = Preloads.CREEP_AMB_SOUND
 			global_music.volume_db = -5
 			global_music.play()
@@ -202,7 +202,6 @@ func _handle_area_event(body: CharacterBody3D, event):
 				aooni.connect("tree_exited", _on_custom_event.bind("monster disappeared"))
 				aooni.connect("tree_exited", global_music.stop)
 		"open ao oni behind wide door":
-			# TODO: open wide door
 			var wide_door = $Doors/AoWideDoor4
 			wide_door.open()
 			global_music.stream = Preloads.AOSEE_SOUND
@@ -229,7 +228,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
 			global_music.play()
-			hud.show_event_text("You: WHAT THE?!?", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] WHAT THE?!?", false, 3.0)
 			var aomika = get_node_or_null("NavigationRegion3D/Enemies/Ao mika")
 			if aomika:
 				aomika.connect("tree_exited", _on_custom_event.bind("aomika disappeared"))
@@ -251,21 +250,21 @@ func _on_custom_event(event):
 			var random_text_idx = randi_range(0, 4)
 			match random_text_idx:
 				0:
-					hud.show_event_text("You: I think he dissapeared..", false, 3.0)
+					hud.show_event_text("[color=#6c6c6c]You:[/color] I think he dissapeared..", false, 3.0)
 				1:
-					hud.show_event_text("You: I have the feeling it's gone...", false, 3.0)
+					hud.show_event_text("[color=#6c6c6c]You:[/color] I have the feeling it's gone...", false, 3.0)
 				2:
-					hud.show_event_text("You: Phew, that was close...", false, 3.0)
+					hud.show_event_text("[color=#6c6c6c]You:[/color] Phew, that was close...", false, 3.0)
 				3:
-					hud.show_event_text("You: I think he's away.", false, 3.0)
+					hud.show_event_text("[color=#6c6c6c]You:[/color] I think he's away.", false, 3.0)
 				4:
-					hud.show_event_text("You: I think that thing is gone...", false, 3.0)
+					hud.show_event_text("[color=#6c6c6c]You:[/color] I think that thing is gone...", false, 3.0)
 		"ao oni gave up":
 			for player in players.get_children():
 				player.camera_3d.set_current(true)
 				player.blocked_movement = false
 		"aomika disappeared":
-			hud.show_event_text("You: Whatever that THING was... it's gone...", false, 3.0)
+			hud.show_event_text("[color=#6c6c6c]You:[/color] Whatever that THING was... it's gone...", false, 3.0)
 		"": pass
 		_:
 			prints("unknown event: '", event, "'")

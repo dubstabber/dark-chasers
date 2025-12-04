@@ -32,7 +32,7 @@ const HEAD_BOBBING_CROUNCHING_INTENSITY = 0.05
 const FALL_DAMAGE_SAFE_SPEED = 8.0 # No damage below this fall speed
 const FALL_DAMAGE_MIN_SPEED = 12.0 # Minimum speed to start taking damage
 const FALL_DAMAGE_MULTIPLIER = 2.0 # Damage scaling factor
-const FALL_DAMAGE_MAX = 50 # Maximum fall damage per impact
+const FALL_DAMAGE_MAX = 200 # Maximum fall damage per impact
 
 # Damage blink effect configuration
 const DAMAGE_BLINK_COLOR = Color(1.0, 0.0, 0.0, 0.3) # Red damage tint
@@ -93,6 +93,9 @@ var fall_start_velocity := 0.0 # Track velocity when starting to fall
 
 # Damage blink effect
 var damage_blink_tween: Tween
+
+# Fall damage death tracking
+var _died_from_fall_damage := false
 
 var hud: CanvasLayer: set = set_hud
 
@@ -475,6 +478,11 @@ func _on_health_component_died():
 	"""
 	if not killed:
 		killed = true
+
+		# Show fall damage death message if applicable
+		if _died_from_fall_damage and hud:
+			hud.add_log("Player fell too far.")
+			_died_from_fall_damage = false
 
 		# Handle weapon death animations immediately
 		_handle_weapon_death_animations()
@@ -916,6 +924,9 @@ func _check_fall_damage(fall_velocity: float):
 		damage_amount = min(damage_amount, FALL_DAMAGE_MAX)
 
 	if damage_amount > 0:
+		# Check if this damage will kill the player
+		if health_component and damage_amount >= health_component.current_health:
+			_died_from_fall_damage = true
 		take_damage(damage_amount)
 
 

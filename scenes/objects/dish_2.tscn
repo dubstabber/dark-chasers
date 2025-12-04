@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_y14fb"]
 size = Vector3(0.245117, 0.0576172, 0.211182)
 
-[node name="Dish2" type="StaticBody3D"]
+[node name="Dish2" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 

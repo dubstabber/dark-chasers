@@ -5,7 +5,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_me74p"]
 size = Vector3(0.0830078, 0.180542, 0.101318)
 
-[node name="Candle" type="StaticBody3D"]
+[node name="Candle" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 

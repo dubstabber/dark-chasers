@@ -6,7 +6,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_yxg58"]
 size = Vector3(0.255859, 0.0585938, 0.251953)
 
-[node name="Dish6" type="StaticBody3D"]
+[node name="Dish6" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_1hwt0")

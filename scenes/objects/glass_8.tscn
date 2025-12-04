@@ -6,7 +6,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_v6p01"]
 size = Vector3(0.0761719, 0.181885, 0.076416)
 
-[node name="Glass8" type="StaticBody3D"]
+[node name="Glass8" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_bga02")

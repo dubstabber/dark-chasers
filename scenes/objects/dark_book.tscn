@@ -6,7 +6,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_i1quk"]
 size = Vector3(0.243896, 0.0458984, 0.195312)
 
-[node name="DarkBook" type="StaticBody3D"]
+[node name="DarkBook" type="StaticBody3D" groups=["entity"]]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
 collision_layer = 4
 collision_mask = 7

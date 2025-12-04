@@ -6,7 +6,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_gkagf"]
 size = Vector3(0.107422, 0.0605469, 0.124023)
 
-[node name="Glass6" type="StaticBody3D"]
+[node name="Glass6" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_pidia")

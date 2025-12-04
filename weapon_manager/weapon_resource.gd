@@ -55,7 +55,7 @@ func hit() -> void:
 				weapon_manager.get_tree().root.add_child(hit_particle1)
 				hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
 				hit_particle1.connect("animation_finished", hit_particle1.queue_free)
-			if hit_decal and not collider.is_in_group("entity") and not collider.is_in_group("no_decals"):
+			if hit_decal and not collider.is_in_group("entity") and not collider.is_in_group("no_decals") and _is_wall_surface(hit_normal):
 				var hit_decal1 = hit_decal.instantiate()
 				collider.add_child(hit_decal1)
 				hit_decal1.global_transform.origin = hit_pos + hit_normal * 0.01
@@ -73,6 +73,12 @@ func hit() -> void:
 				collider.take_damage(damage)
 			if collider.is_in_group("destroyable"):
 				collider.queue_free()
+
+
+func _is_wall_surface(normal: Vector3) -> bool:
+	# Returns true if the surface is a wall (not floor or ceiling)
+	# Check if the normal is mostly horizontal (wall) vs vertical (floor/ceiling)
+	return abs(normal.y) < 0.7
 
 
 func _calculate_sprite_rotation(normal: Vector3) -> Basis:

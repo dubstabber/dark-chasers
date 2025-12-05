@@ -13133,16 +13133,22 @@ autoplay = true
 [node name="ClockSound" type="AudioStreamPlayer3D" parent="NavigationRegion3D/PlayingSounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.8172, 204.104, -29.2751)
 stream = ExtResource("154_adgyx")
-volume_db = -25.0
+attenuation_model = 1
+volume_db = -5.0
+unit_size = 100.0
 autoplay = true
-max_distance = 7.0
+max_distance = 10.0
+bus = &"SFX"
 
 [node name="ClockSound2" type="AudioStreamPlayer3D" parent="NavigationRegion3D/PlayingSounds"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -92.3302, 204.104, 115.783)
 stream = ExtResource("154_adgyx")
-volume_db = -25.0
+attenuation_model = 1
+volume_db = -5.0
+unit_size = 100.0
 autoplay = true
-max_distance = 7.0
+max_distance = 10.0
+bus = &"SFX"
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63.4349, 202.2, -29.126)

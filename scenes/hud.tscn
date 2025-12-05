@@ -144,6 +144,7 @@ layout_mode = 2
 
 [node name="EventText" parent="Center/VBoxContainer" instance=ExtResource("2_bwwjm")]
 layout_mode = 2
+font_scale = 0.2
 
 [node name="TopRight" type="MarginContainer" parent="."]
 anchors_preset = 1

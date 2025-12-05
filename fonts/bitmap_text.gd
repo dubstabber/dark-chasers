@@ -73,7 +73,7 @@ var letter_images := {
 	"?": preload("res://images/fonts/AOMFN063.png"),
 }
 
-var font_scale := 0.4
+@export var font_scale := 0.4
 var special_character_offsets: Dictionary
 
 # Predefined color names for BBCode-like tags

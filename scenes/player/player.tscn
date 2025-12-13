@@ -1081,7 +1081,7 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
-collision_mask = 14
+collision_mask = 30
 wall_min_slide_angle = 0.0
 floor_stop_on_slope = false
 floor_block_on_wall = false
@@ -1100,7 +1100,7 @@ disabled = true
 
 [node name="CrounchRayCast3D" type="RayCast3D" parent="."]
 target_position = Vector3(0, 1.22, 0)
-collision_mask = 12
+collision_mask = 28
 
 [node name="nek" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

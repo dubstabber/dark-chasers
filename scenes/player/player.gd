@@ -99,6 +99,8 @@ var _died_from_fall_damage := false
 
 var hud: CanvasLayer: set = set_hud
 
+var _initial_collision_mask: int
+
 var debug_camera: Camera3D # temporary
 
 @onready var nek = $nek
@@ -124,6 +126,9 @@ var debug_camera: Camera3D # temporary
 
 
 func _ready():
+	# Store initial collision mask to restore when exiting clip mode
+	_initial_collision_mask = collision_mask
+
 	# Configure and connect health component
 	# The HealthComponent handles all health logic, damage, healing, and death
 	if health_component:
@@ -357,10 +362,12 @@ func _physics_process(delta):
 			clip_mode = not clip_mode
 			if hud: hud._on_player_mode_changed("clip_mode", clip_mode)
 			if clip_mode:
-				collision_mask = 10
+				# Disable collision with Walls (layer 3) and Weapon Passthrough Walls (layer 5)
+				set_collision_mask_value(3, false)
+				set_collision_mask_value(5, false)
 				velocity = Vector3.ZERO
 			else:
-				collision_mask = 14
+				collision_mask = _initial_collision_mask
 
 		if Input.is_action_just_pressed("use"):
 			var collider = interaction.get_collider()

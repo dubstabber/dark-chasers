@@ -139,7 +139,8 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	# Don't process weapon actions if player is dead
+	if player.blocked_movement:
+		return
 	if player and player.has_method("is_dead") and player.is_dead():
 		return
 
@@ -271,7 +272,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if player.blocked_movement:
 		return
 
-	# Don't process weapon input if player is dead
 	if player and player.has_method("is_dead") and player.is_dead():
 		return
 

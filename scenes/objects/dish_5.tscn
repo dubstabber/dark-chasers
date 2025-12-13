@@ -16,7 +16,7 @@ billboard = 2
 shaded = true
 alpha_scissor_threshold = 0.571
 texture_filter = 2
-render_priority = 2
+render_priority = 1
 texture = ExtResource("1_t5xtt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

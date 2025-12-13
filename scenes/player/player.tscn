@@ -74,7 +74,7 @@ radius = 0.202198
 height = 0.5
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ln3h3"]
-render_priority = 3
+render_priority = 4
 shader = ExtResource("3_upxxc")
 shader_parameter/alpha_cut = 0.0
 shader_parameter/alpha_cut_threshold = 0.5
@@ -92,7 +92,7 @@ shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_upxxc"]
-render_priority = 3
+render_priority = 4
 shader = ExtResource("3_upxxc")
 shader_parameter/alpha_cut = 0.0
 shader_parameter/alpha_cut_threshold = 0.5
@@ -1126,7 +1126,7 @@ transparency = 1.0
 cast_shadow = 0
 shaded = true
 texture_filter = 0
-render_priority = 3
+render_priority = 4
 script = ExtResource("5_upxxc")
 
 [node name="RightHandSlot" type="Sprite3D" parent="nek/head/eyes/Camera3D/GunBase3D"]
@@ -1138,7 +1138,7 @@ cast_shadow = 0
 shaded = true
 alpha_antialiasing_mode = 2
 texture_filter = 0
-render_priority = 3
+render_priority = 4
 script = ExtResource("5_upxxc")
 
 [node name="DeathRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]

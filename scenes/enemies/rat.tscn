@@ -48,7 +48,7 @@ data = {
 image = SubResource("Image_htnwb")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyplo"]
-render_priority = 2
+render_priority = 1
 shader = ExtResource("34_q8b4v")
 shader_parameter/atlas_texture = SubResource("ImageTexture_q8b4v")
 shader_parameter/atlas_dimensions = Vector2(548, 160)
@@ -228,7 +228,7 @@ material_override = SubResource("ShaderMaterial_qyplo")
 billboard = 2
 shaded = true
 texture_filter = 2
-render_priority = 2
+render_priority = 1
 texture = SubResource("ImageTexture_cy5rw")
 script = ExtResource("35_qyplo")
 target_node_path = NodePath("../..")

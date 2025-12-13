@@ -10,8 +10,7 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyx4j"]
 resource_name = "Front"
-render_priority = 2
-cull_mode = 2
+render_priority = 1
 depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_5ihsf")
 

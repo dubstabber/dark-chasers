@@ -895,7 +895,7 @@ data = {
 image = SubResource("Image_gmu8b")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3chqh"]
-render_priority = 2
+render_priority = 1
 shader = ExtResource("31_vo27k")
 shader_parameter/atlas_texture = SubResource("ImageTexture_a38bk")
 shader_parameter/atlas_dimensions = Vector2(186, 135)
@@ -1218,7 +1218,7 @@ material_override = SubResource("ShaderMaterial_3chqh")
 cast_shadow = 0
 billboard = 2
 texture_filter = 2
-render_priority = 2
+render_priority = 1
 texture = SubResource("ImageTexture_kssj8")
 script = ExtResource("31_tffgl")
 front_idle_sprite = ExtResource("33_5mf0n")
@@ -1238,7 +1238,7 @@ layers = 2
 billboard = 2
 shaded = true
 texture_filter = 2
-render_priority = 2
+render_priority = 1
 
 [node name="SpriteAnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

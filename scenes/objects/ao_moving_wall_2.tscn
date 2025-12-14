@@ -133,6 +133,7 @@ collision_mask = 0
 
 [node name="Cube" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1.00117, 0, 0, 0, 1, 0, 0, 0)
+sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_lr531")
 skeleton = NodePath("")
 

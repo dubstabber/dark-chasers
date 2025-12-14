@@ -133,6 +133,7 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="MovingWall" type="MeshInstance3D" parent="AnimatableBody3D"]
+sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_rgccv")
 skeleton = NodePath("")
 

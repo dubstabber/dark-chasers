@@ -44,6 +44,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.261483, 0)
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Graphics" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.286, 0)
+sorting_offset = 5.0
 billboard = 2
 shaded = true
 render_priority = 1

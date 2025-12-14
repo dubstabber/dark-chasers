@@ -224,6 +224,7 @@ collision_mask = 12
 
 [node name="DirectionalSprite3D" type="Sprite3D" parent="Graphics"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+sorting_offset = 5.0
 material_override = SubResource("ShaderMaterial_w4hew")
 offset = Vector2(0, 194)
 billboard = 2

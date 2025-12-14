@@ -59,6 +59,7 @@ collision_mask = 0
 collision_priority = 0.1
 
 [node name="Door1" type="MeshInstance3D" parent="AnimatableBody3D"]
+sorting_offset = 5.0
 mesh = ExtResource("2_ougaw")
 skeleton = NodePath("")
 

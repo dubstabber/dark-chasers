@@ -75,6 +75,7 @@ collision_priority = 0.1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000305176, 0, 0)
+sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_ix1db")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]

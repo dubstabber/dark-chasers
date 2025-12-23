@@ -278,7 +278,7 @@ func _physics_process(delta):
 			stay_col.disabled = false
 			crounch_col.disabled = true
 			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
-			if Input.is_action_pressed("sprint") and velocity.length() > 0.1:
+			if Input.is_action_pressed("sprint") and velocity.length() > 0.1 and _can_sprint():
 				current_speed = lerp(current_speed, SPRINTING_SPEED, delta * lerp_speed)
 				camera_3d.fov += 2
 				camera_3d.fov = clamp(camera_3d.fov, 85, 110)
@@ -1073,6 +1073,19 @@ func is_dead() -> bool:
 	if health_component:
 		return health_component.is_dead
 	return killed
+
+
+const MIN_HEALTH_TO_SPRINT := 30
+
+func _can_sprint() -> bool:
+	"""Check if player has enough health to sprint
+
+	Returns:
+		bool: True if player can sprint (health >= MIN_HEALTH_TO_SPRINT)
+	"""
+	if health_component:
+		return health_component.current_health >= MIN_HEALTH_TO_SPRINT
+	return true
 
 
 ## Armor Management Methods

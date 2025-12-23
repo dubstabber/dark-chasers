@@ -217,6 +217,7 @@ is_wandering = true
 chase_player = false
 can_open_door = false
 speed = 2.6
+blood_enabled = false
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130287, 0)

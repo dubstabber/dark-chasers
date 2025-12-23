@@ -9,6 +9,20 @@ class_name Enemy extends CharacterBody3D
 @export var accel: float = 10.0
 @export var debug_prints := false
 
+@export_group("Blood Effects")
+@export var blood_enabled := true
+@export var blood_color := Color(1.0, 0.0, 0.0, 1.0)
+@export var blood_particle_scene: PackedScene
+@export var blood_decal_scene: PackedScene
+
+const BLOOD_UPWARD_VELOCITY := 0.5
+const BLOOD_Z_OFFSET_RANGE := 0.1
+const BLOOD_SURFACE_OFFSET := 0.05
+const BLOOD_TRACE_DISTANCE := 5.4
+const BLOOD_TRACE_NOISE_LOW := 0.15
+const BLOOD_TRACE_NOISE_MED := 0.18
+const BLOOD_TRACE_NOISE_HIGH := 0.20
+
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
 var current_target: CharacterBody3D
@@ -243,3 +257,115 @@ func _on_navigation_agent_3d_waypoint_reached(_details):
 func _on_disappear_area(body):
 	if body == self:
 		queue_free()
+
+
+func take_damage(_amount: int) -> void:
+	take_damage_at_position(_amount, global_position + Vector3(0, 1.0, 0))
+
+
+func take_damage_at_position(_amount: int, hit_pos: Vector3) -> void:
+	_spawn_blood_splatter(hit_pos, Vector3.ZERO)
+
+
+func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
+	_spawn_blood_splatter(hit_pos, shot_direction)
+	_trace_blood_to_walls(amount, hit_pos, shot_direction)
+
+
+func _spawn_blood_splatter(hit_pos: Vector3, shot_direction: Vector3) -> void:
+	if not blood_enabled or not blood_particle_scene:
+		return
+	
+	var particle := blood_particle_scene.instantiate()
+	get_tree().root.add_child(particle)
+	
+	# Offset blood spawn position toward the shooter (opposite of shot direction)
+	var surface_offset := Vector3.ZERO
+	if shot_direction.length_squared() > 0.01:
+		surface_offset = - shot_direction.normalized() * BLOOD_SURFACE_OFFSET
+	
+	# Spawn at hit position with surface offset and small random Y offset
+	var y_offset = randf_range(-BLOOD_Z_OFFSET_RANGE, BLOOD_Z_OFFSET_RANGE)
+	particle.global_position = hit_pos + surface_offset + Vector3(0, y_offset, 0)
+	
+	particle.linear_velocity = Vector3(0, BLOOD_UPWARD_VELOCITY, 0)
+
+
+func _trace_blood_to_walls(damage: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
+	if not blood_enabled or not blood_decal_scene:
+		return
+	
+	var decal_count: int
+	var noise: float
+	
+	if damage < 15:
+		if damage <= 10:
+			if randi() % 256 < 160:
+				return
+		decal_count = 1
+		noise = BLOOD_TRACE_NOISE_LOW
+	elif damage < 25:
+		decal_count = 2
+		noise = BLOOD_TRACE_NOISE_MED
+	else:
+		if randi() % 256 < 24:
+			decal_count = 1
+			noise = BLOOD_TRACE_NOISE_HIGH
+		else:
+			decal_count = 3
+			noise = BLOOD_TRACE_NOISE_HIGH
+	
+	for i in range(decal_count):
+		_trace_single_blood_ray(hit_pos, shot_direction, noise)
+
+
+func _trace_single_blood_ray(hit_pos: Vector3, shot_direction: Vector3, noise: float) -> void:
+	var noisy_direction = shot_direction
+	noisy_direction = noisy_direction.rotated(Vector3.UP, randf_range(-noise, noise))
+	noisy_direction = noisy_direction.rotated(Vector3.RIGHT, randf_range(-noise, noise))
+	noisy_direction = noisy_direction.normalized()
+	
+	var space_state = get_world_3d().direct_space_state
+	var ray_end = hit_pos + noisy_direction * BLOOD_TRACE_DISTANCE
+	
+	var query = PhysicsRayQueryParameters3D.create(hit_pos, ray_end)
+	query.exclude = [self]
+	query.collision_mask = 4 # Walls layer (layer 3)
+	
+	var result = space_state.intersect_ray(query)
+	
+	if result and not result.collider.is_in_group("entity") and not result.collider.is_in_group("no_decals"):
+		if _is_wall_surface(result.normal):
+			_spawn_blood_decal(result.position, result.normal, result.collider)
+
+
+func _is_wall_surface(normal: Vector3) -> bool:
+	"""Check if surface is a wall (not floor or ceiling)"""
+	return abs(normal.y) < 0.7
+
+
+func _spawn_blood_decal(hit_pos: Vector3, hit_normal: Vector3, collider: Node3D) -> void:
+	"""Spawn a blood splat decal on a wall surface"""
+	var decal := blood_decal_scene.instantiate()
+	collider.add_child(decal)
+	
+	decal.global_position = hit_pos + hit_normal * 0.01
+	decal.global_transform.basis = _calculate_decal_rotation(hit_normal)
+	
+	if decal.has_method("set_blood_color"):
+		decal.set_blood_color(blood_color)
+	else:
+		decal.modulate = Color(blood_color.r * 0.5, blood_color.g * 0.5, blood_color.b * 0.5, 1.0)
+
+
+func _calculate_decal_rotation(normal: Vector3) -> Basis:
+	"""Calculate rotation basis for decal to face outward from surface"""
+	var up_vector = Vector3.UP
+	
+	if abs(normal.dot(up_vector)) > 0.99:
+		up_vector = Vector3.FORWARD
+	
+	var right_vector = up_vector.cross(normal).normalized()
+	var decal_up_vector = normal.cross(right_vector).normalized()
+	
+	return Basis(right_vector, decal_up_vector, normal)

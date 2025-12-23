@@ -160,6 +160,7 @@ collision_mask = 0
 collision_priority = 0.1
 
 [node name="Cube" type="MeshInstance3D" parent="AnimatableBody3D"]
+sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_na66j")
 skeleton = NodePath("")
 

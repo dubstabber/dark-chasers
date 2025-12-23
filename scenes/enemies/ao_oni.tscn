@@ -214,6 +214,7 @@ floor_stop_on_slope = false
 floor_block_on_wall = false
 floor_snap_length = 0.31
 script = ExtResource("1_xmjcu")
+blood_color = Color(0, 0, 1, 1)
 
 [node name="Interaction" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.338966, 0)

@@ -1214,6 +1214,7 @@ bullet_raycast = NodePath("../nek/head/eyes/Camera3D/HitScanRayCast")
 [node name="DirectionalSprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0.604423, 0)
 layers = 2
+sorting_offset = 5.0
 material_override = SubResource("ShaderMaterial_3chqh")
 cast_shadow = 0
 billboard = 2

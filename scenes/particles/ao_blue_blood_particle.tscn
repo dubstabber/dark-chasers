@@ -1,0 +1,80 @@
+[gd_scene load_steps=8 format=3 uid="uid://dqb5x8m2kv4rl"]
+
+[ext_resource type="Texture2D" uid="uid://cgadwfimf3l3i" path="res://images/particles/BLUDC0.png" id="1_pmgxl"]
+[ext_resource type="Texture2D" uid="uid://db84hqxh4clro" path="res://images/particles/BLUDB0.png" id="2_qtynr"]
+[ext_resource type="Texture2D" uid="uid://dee8d0p1ntatd" path="res://images/particles/BLUDA0.png" id="3_f725a"]
+[ext_resource type="Shader" uid="uid://c87rhhxn7l1j8" path="res://shaders/blood_color_translation.gdshader" id="4_shader"]
+
+[sub_resource type="GDScript" id="GDScript_blood"]
+script/source = "extends Node3D
+
+## How quickly the velocity decays
+const VELOCITY_DECAY := 3.0
+
+## Velocity can be set externally (compatible with RigidBody3D interface)
+var linear_velocity := Vector3(0, 0.1, 0)
+
+@onready var animated_sprite_3d: AnimatedSprite3D = $AnimatedSprite3D
+
+
+func _ready() -> void:
+	var random_offset := randi() % 3
+	if random_offset > 0:
+		animated_sprite_3d.frame = random_offset
+	_update_shader_texture()
+	animated_sprite_3d.frame_changed.connect(_update_shader_texture)
+
+
+func _update_shader_texture() -> void:
+	var frames := animated_sprite_3d.sprite_frames
+	var anim := animated_sprite_3d.animation
+	var frame := animated_sprite_3d.frame
+	var tex := frames.get_frame_texture(anim, frame)
+	if animated_sprite_3d.material_override:
+		animated_sprite_3d.material_override.set_shader_parameter('texture_albedo', tex)
+
+
+func _process(delta: float) -> void:
+	global_position += linear_velocity * delta
+	linear_velocity = linear_velocity.lerp(Vector3.ZERO, VELOCITY_DECAY * delta)
+
+
+func _on_animated_sprite_3d_animation_finished() -> void:
+	queue_free()
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blood"]
+render_priority = 1
+shader = ExtResource("4_shader")
+shader_parameter/blood_color = Color(0, 0, 1, 1)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_blood"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_pmgxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qtynr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_f725a")
+}],
+"loop": false,
+"name": &"default",
+"speed": 3.5
+}]
+
+[node name="AoBlueBloodParticle" type="Node3D"]
+script = SubResource("GDScript_blood")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+sorting_offset = 10.0
+material_override = SubResource("ShaderMaterial_blood")
+billboard = 2
+shaded = true
+render_priority = 1
+sprite_frames = SubResource("SpriteFrames_blood")
+autoplay = "default"
+
+[connection signal="animation_finished" from="AnimatedSprite3D" to="." method="_on_animated_sprite_3d_animation_finished"]

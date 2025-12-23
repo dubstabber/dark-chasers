@@ -113,3 +113,5 @@ const DOOM_DECAL_IMAGES := [
 const SCRAP_SCENE := preload("res://scenes/particles/scrap.tscn")
 
 const AO_RED_BLOOD_PARTICLE := preload("res://scenes/particles/ao_red_blood_particle.tscn")
+const AO_BLUE_BLOOD_PARTICLE := preload("res://scenes/particles/ao_blue_blood_particle.tscn")
+const BLOOD_SPLAT_DECAL := preload("res://scenes/particles/blood_splat_decal.tscn")

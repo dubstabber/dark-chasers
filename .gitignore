@@ -24,6 +24,7 @@ shader_cache/
 # IDE & editor folders
 .vscode/
 .idea/
+.windsurf/
 
 # OS generated files
 .DS_Store
@@ -61,3 +62,5 @@ Thumbs.db
 
 # Godot export presets (usually contains machine-specific paths)
 export_presets.cfg
+
+debug-output.txt

@@ -5,6 +5,12 @@ extends Enemy
 
 func _ready():
 	super._ready()
+	# Set blue blood defaults if not configured in inspector
+	if not blood_particle_scene:
+		blood_color = Color(0.0, 0.0, 1.0, 1.0)
+		blood_particle_scene = Preloads.AO_BLUE_BLOOD_PARTICLE
+		blood_decal_scene = Preloads.BLOOD_SPLAT_DECAL
+	
 	animation_player.speed_scale = speed / 8.0
 
 

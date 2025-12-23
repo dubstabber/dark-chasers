@@ -67,7 +67,13 @@ func hit() -> void:
 					Utils.play_sound(damage_entity_sound, weapon_manager.get_tree().root, hit_pos)
 			elif damage_wall_sound:
 				Utils.play_sound(damage_wall_sound, weapon_manager.get_tree().root, hit_pos)
-			if collider.has_method("take_damage_at_position"):
+		
+			var shot_direction := -weapon_manager.bullet_raycast.global_transform.basis.z.normalized()
+		
+			if collider.has_method("take_damage_with_direction"):
+				# Pass damage, hit position, and shot direction for wall blood tracing
+				collider.take_damage_with_direction(damage, hit_pos, shot_direction)
+			elif collider.has_method("take_damage_at_position"):
 				collider.take_damage_at_position(damage, hit_pos)
 			elif collider.has_method("take_damage"):
 				collider.take_damage(damage)

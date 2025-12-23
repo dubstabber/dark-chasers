@@ -8,6 +8,15 @@ var health := 20
 @onready var sprite_animation_player: AnimationPlayer = $SpriteAnimationPlayer
 
 
+func _ready() -> void:
+	super._ready()
+	# Set red blood defaults if not configured in inspector
+	if not blood_particle_scene:
+		blood_color = Color(1.0, 0.0, 0.0, 1.0)
+		blood_particle_scene = Preloads.AO_RED_BLOOD_PARTICLE
+		blood_decal_scene = Preloads.BLOOD_SPLAT_DECAL
+
+
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)
 	_update_animation_state()
@@ -27,6 +36,20 @@ func _on_sound_interval_timeout() -> void:
 
 
 func take_damage(amount: int) -> void:
+	_apply_damage(amount)
+
+
+func take_damage_at_position(amount: int, hit_pos: Vector3) -> void:
+	super.take_damage_at_position(amount, hit_pos)
+	_apply_damage(amount)
+
+
+func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
+	super.take_damage_with_direction(amount, hit_pos, shot_direction)
+	_apply_damage(amount)
+
+
+func _apply_damage(amount: int) -> void:
 	if is_killed:
 		return
 	health -= amount

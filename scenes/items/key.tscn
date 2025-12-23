@@ -13,6 +13,7 @@ script = ExtResource("1_uba48")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+sorting_offset = 5.0
 billboard = 2
 shaded = true
 texture_filter = 2

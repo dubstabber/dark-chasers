@@ -17,7 +17,7 @@ class_name Enemy extends CharacterBody3D
 
 const BLOOD_UPWARD_VELOCITY := 0.5
 const BLOOD_Z_OFFSET_RANGE := 0.1
-const BLOOD_SURFACE_OFFSET := 0.05
+const BLOOD_SURFACE_OFFSET := 0.01
 const BLOOD_TRACE_DISTANCE := 5.4
 const BLOOD_TRACE_NOISE_LOW := 0.15
 const BLOOD_TRACE_NOISE_MED := 0.18

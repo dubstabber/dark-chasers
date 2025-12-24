@@ -205,7 +205,7 @@ height = 1.0716
 radius = 0.57991
 height = 2.05769
 
-[node name="Ao oni" type="CharacterBody3D" groups=["enemy"]]
+[node name="Ao oni" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
 collision_mask = 63
 slide_on_ceiling = false

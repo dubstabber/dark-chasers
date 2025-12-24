@@ -47,6 +47,7 @@ func _on_animated_sprite_3d_animation_finished() -> void:
 render_priority = 1
 shader = ExtResource("4_shader")
 shader_parameter/blood_color = Color(0, 0, 1, 1)
+shader_parameter/billboard_mode = 2
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_blood"]
 animations = [{
@@ -62,7 +63,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 3.5
+"speed": 8.0
 }]
 
 [node name="AoBlueBloodParticle" type="Node3D"]

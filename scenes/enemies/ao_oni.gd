@@ -1,7 +1,5 @@
 extends Enemy
 
-## AoOni has blue blood like the Cacodemon in DOOM
-
 @onready var animation_player = $Graphics/AnimationPlayer
 
 

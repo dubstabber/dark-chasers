@@ -856,6 +856,8 @@ func _reset_death_effects():
 func respawn(health_amount: int = -1):
 	if not is_dead():
 		return
+	if death_throw > 0:
+		return
 
 	var corpses_parents = get_tree().get_nodes_in_group("corpse")
 	if corpse_sprite and corpses_parents.size() > 0:

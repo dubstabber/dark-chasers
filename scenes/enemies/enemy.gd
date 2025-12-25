@@ -349,7 +349,7 @@ func _spawn_blood_decal(hit_pos: Vector3, hit_normal: Vector3, collider: Node3D)
 	var decal := blood_decal_scene.instantiate()
 	collider.add_child(decal)
 	
-	decal.global_position = hit_pos + hit_normal * 0.01
+	decal.global_position = hit_pos + hit_normal * (decal.size.y * 0.05)
 	decal.global_transform.basis = _calculate_decal_rotation(hit_normal)
 	
 	if decal.has_method("set_blood_color"):
@@ -359,13 +359,13 @@ func _spawn_blood_decal(hit_pos: Vector3, hit_normal: Vector3, collider: Node3D)
 
 
 func _calculate_decal_rotation(normal: Vector3) -> Basis:
-	"""Calculate rotation basis for decal to face outward from surface"""
-	var up_vector = Vector3.UP
+	"""Calculate rotation basis for Decal node to project onto surface"""
+	var forward = Vector3.FORWARD
 	
-	if abs(normal.dot(up_vector)) > 0.99:
-		up_vector = Vector3.FORWARD
+	if abs(normal.dot(forward)) > 0.99:
+		forward = Vector3.RIGHT
 	
-	var right_vector = up_vector.cross(normal).normalized()
-	var decal_up_vector = normal.cross(right_vector).normalized()
+	var right_vector = forward.cross(normal).normalized()
+	var forward_vector = normal.cross(right_vector).normalized()
 	
-	return Basis(right_vector, decal_up_vector, normal)
+	return Basis(right_vector, -normal, forward_vector)

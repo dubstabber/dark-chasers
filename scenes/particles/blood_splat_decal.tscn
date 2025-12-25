@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c56wlnso1mi2y" path="res://scenes/particles/blood_splat_decal.gd" id="1_splat"]
 
-[node name="BloodSplatDecal" type="Sprite3D"]
-pixel_size = 0.007
-shaded = true
-double_sided = false
+[node name="BloodSplatDecal" type="Decal"]
+size = Vector3(0.15, 0.15, 0.15)
 script = ExtResource("1_splat")

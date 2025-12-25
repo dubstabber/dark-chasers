@@ -169,7 +169,7 @@ func _update_bob(delta: float) -> void:
 		return
 	
 	# If shooting, immediately reset to initial position
-	if is_shooting:
+	if is_shooting or is_auto_hitting:
 		weapon_bob_amount = Vector3.ZERO
 		return
 

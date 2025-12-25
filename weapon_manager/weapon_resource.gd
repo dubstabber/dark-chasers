@@ -58,8 +58,8 @@ func hit() -> void:
 			if hit_decal and not collider.is_in_group("entity") and not collider.is_in_group("no_decals") and _is_wall_surface(hit_normal):
 				var hit_decal1 = hit_decal.instantiate()
 				collider.add_child(hit_decal1)
-				hit_decal1.global_transform.origin = hit_pos + hit_normal * 0.01
-				var rotation_basis = _calculate_sprite_rotation(hit_normal)
+				hit_decal1.global_transform.origin = hit_pos + hit_normal * (hit_decal1.size.y * 0.05)
+				var rotation_basis = _calculate_decal_rotation(hit_normal)
 				hit_decal1.global_transform.basis = rotation_basis
 
 			if collider.is_in_group("entity"):
@@ -87,23 +87,22 @@ func _is_wall_surface(normal: Vector3) -> bool:
 	return abs(normal.y) < 0.7
 
 
-func _calculate_sprite_rotation(normal: Vector3) -> Basis:
-	# Define a default "up" vector (Y-axis)
-	var up_vector = Vector3(0, 1, 0)
+func _calculate_decal_rotation(normal: Vector3) -> Basis:
+	# Decals project along their -Y axis, so we need to align -Y with the surface normal
+	# This means the Decal's +Y axis should point away from the surface (opposite of normal)
+	var forward = Vector3(0, 0, 1)
 
-	# Handle edge cases where the normal is parallel to the up vector
-	if abs(normal.dot(up_vector)) > 0.99: # If normal is nearly parallel to up vector
-		# Use a different "up" vector (e.g., Z-axis) to avoid singularity
-		up_vector = Vector3(0, 0, 1)
+	# Handle edge cases where the normal is parallel to forward vector
+	if abs(normal.dot(forward)) > 0.99:
+		forward = Vector3(1, 0, 0)
 
-	# Calculate the right and up vectors for the sprite
-	var right_vector = up_vector.cross(normal).normalized()
-	var sprite_up_vector = normal.cross(right_vector).normalized()
+	# Calculate tangent vectors on the surface plane
+	var right_vector = forward.cross(normal).normalized()
+	var forward_vector = normal.cross(right_vector).normalized()
 
-	# Construct the rotation basis
-	# The Z-axis of the sprite should align with the normal
-	# The X and Y axes should lie flat on the surface
-	return Basis(right_vector, sprite_up_vector, normal)
+	# Construct basis where -Y points along the normal (so Y points opposite to normal)
+	# Decal projects downward (-Y), so Y should equal -normal
+	return Basis(right_vector, -normal, forward_vector)
 
 
 ## Ammo Management Methods

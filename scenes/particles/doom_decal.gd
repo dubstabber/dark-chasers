@@ -1,5 +1,5 @@
-extends Sprite3D
+extends Decal
 
 
 func _ready() -> void:
-	texture = Preloads.DOOM_DECAL_IMAGES[randi() % Preloads.DOOM_DECAL_IMAGES.size()]
+	texture_albedo = Preloads.DOOM_DECAL_IMAGES[randi() % Preloads.DOOM_DECAL_IMAGES.size()]

@@ -97,6 +97,9 @@ var damage_blink_tween: Tween
 # Fall damage death tracking
 var _died_from_fall_damage := false
 
+# Custom death message for enemy kills
+var _death_message: String = ""
+
 var hud: CanvasLayer: set = set_hud
 
 var _initial_collision_mask: int
@@ -431,7 +434,7 @@ func _physics_process(delta):
 			death_throw -= 0.1
 
 
-func kill(pos = null):
+func kill(pos = null, death_message: String = ""):
 	"""Kill the player instantly
 
 	This method maintains backward compatibility while using the HealthComponent.
@@ -439,8 +442,10 @@ func kill(pos = null):
 
 	Args:
 		pos: Optional position of the damage source for death animation direction
+		death_message: Optional custom message to display in the HUD log
 	"""
 	if not is_dead():
+		_death_message = death_message
 		if pos:
 			direction = (pos - position).normalized()
 			direction.y = 0
@@ -486,10 +491,13 @@ func _on_health_component_died():
 	if not killed:
 		killed = true
 
-		# Show fall damage death message if applicable
+		# Show death message based on cause
 		if _died_from_fall_damage and hud:
 			hud.add_log("Player fell too far.")
 			_died_from_fall_damage = false
+		elif _death_message != "" and hud:
+			hud.add_log(_death_message)
+		_death_message = ""
 
 		# Handle weapon death animations immediately
 		_handle_weapon_death_animations()

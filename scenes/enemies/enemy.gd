@@ -8,6 +8,7 @@ class_name Enemy extends CharacterBody3D
 @export var speed: float = 7.0
 @export var accel: float = 10.0
 @export var debug_prints := false
+@export var death_message: String = ""
 
 @export_group("Blood Effects")
 @export var blood_enabled := true
@@ -180,7 +181,8 @@ func _on_find_path_timer_timeout():
 
 func _on_kill_zone_body_entered(body):
 	if body.is_in_group("player"):
-		body.kill(position)
+		var msg = body.name + " " + death_message if death_message != "" else ""
+		body.kill(position, msg)
 		current_target = null
 		velocity = Vector3.ZERO
 

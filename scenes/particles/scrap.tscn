@@ -14,6 +14,7 @@ script = ExtResource("1_cf3mc")
 [node name="Sprite3D" type="Sprite3D" parent="."]
 billboard = 2
 shaded = true
+texture_filter = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_gk3ro")

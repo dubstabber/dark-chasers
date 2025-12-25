@@ -38,6 +38,7 @@ height = 1.96106
 [node name="Ilopulu" instance=ExtResource("1_0h1jq")]
 script = ExtResource("2_ci2av")
 speed = 9.0
+death_message = "was given nightmares by Ilopulu."
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.261483, 0)
@@ -54,9 +55,6 @@ animation = &"run"
 [node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.891419, 0)
 shape = SubResource("CapsuleShape3D_6sv5x")
-
-[node name="NavigationAgent3D" parent="." index="3"]
-path_postprocessing = 1
 
 [node name="KillZone" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15778, 0)

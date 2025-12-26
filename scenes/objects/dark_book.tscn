@@ -16,9 +16,7 @@ script = ExtResource("1_pkehj")
 shape = SubResource("BoxShape3D_i1quk")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-sorting_offset = 5.0
 billboard = 2
 shaded = true
 texture_filter = 2
-render_priority = 1
 texture = ExtResource("1_7g4mc")

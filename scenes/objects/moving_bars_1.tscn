@@ -10,8 +10,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kbiir"]
 resource_name = "PillarSide"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_eab58")
 roughness = 0.9
 
@@ -22,8 +20,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_npnwq"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_oeqx6")
 roughness = 0.5
 uv1_offset = Vector3(0.45, 0.045, 0)
@@ -92,8 +88,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oeqx6"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_nhaao")
 roughness = 0.5
 uv1_offset = Vector3(0.645, 0.67, 0)
@@ -162,8 +156,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_33kgk"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_kpp4c")
 roughness = 0.5
 uv1_offset = Vector3(0.91, 0.14, 0)
@@ -232,8 +224,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fygvl"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_33kgk")
 roughness = 0.5
 uv1_offset = Vector3(0.875, -0.015, 0)
@@ -302,8 +292,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bee53"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_fygvl")
 roughness = 0.5
 uv1_offset = Vector3(-0.425, 0.045, 0)
@@ -372,8 +360,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kpp4c"]
 resource_name = "PillarFrame"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_npnwq")
 roughness = 0.5
 uv1_offset = Vector3(0.985, 0.315, 0)
@@ -486,7 +472,6 @@ collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_fygvl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
@@ -495,7 +480,6 @@ shape = SubResource("BoxShape3D_a4yma")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.799999, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_kpp4c")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="AnimatableBody3D"]
@@ -504,7 +488,6 @@ shape = SubResource("BoxShape3D_oeqx6")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.200001, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_4jeef")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="AnimatableBody3D"]
@@ -513,7 +496,6 @@ shape = SubResource("BoxShape3D_npnwq")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400002, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_3jg2o")
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="AnimatableBody3D"]
@@ -522,7 +504,6 @@ shape = SubResource("BoxShape3D_kpp4c")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_ud6bv")
 
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="AnimatableBody3D"]
@@ -531,7 +512,6 @@ shape = SubResource("BoxShape3D_33kgk")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="AnimatableBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, -0.00782776, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_oeqx6")
 
 [node name="CollisionShape3D6" type="CollisionShape3D" parent="AnimatableBody3D"]

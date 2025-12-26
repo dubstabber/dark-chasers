@@ -15,7 +15,6 @@ script = ExtResource("1_407mq")
 billboard = 2
 shaded = true
 texture_filter = 2
-render_priority = 1
 texture = ExtResource("1_u7ku3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

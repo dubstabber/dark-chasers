@@ -9,9 +9,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jb6mv"]
 resource_name = "FakeWall"
-render_priority = 1
-cull_mode = 2
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_w3cdm")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mu4bk"]
@@ -56,7 +53,6 @@ script = ExtResource("1_r8m1l")
 
 [node name="Plane" type="MeshInstance3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_m3hcj")
 skeleton = NodePath("")
 

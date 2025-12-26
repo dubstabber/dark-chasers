@@ -11,10 +11,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_55aia"]
 resource_name = "Front"
-render_priority = 1
-transparency = 1
-cull_mode = 2
-depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_d5cx8")
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_2tp02"]
@@ -24,10 +20,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ccpd7"]
 resource_name = "Bottom"
-render_priority = 1
-transparency = 1
-cull_mode = 2
-depth_draw_mode = 1
 albedo_texture = SubResource("PortableCompressedTexture2D_2tp02")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_q7buf"]
@@ -137,7 +129,6 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="MovingWall" type="MeshInstance3D" parent="AnimatableBody3D"]
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_cwiqe")
 skeleton = NodePath("")
 

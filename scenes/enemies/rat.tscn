@@ -48,7 +48,7 @@ data = {
 image = SubResource("Image_htnwb")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qyplo"]
-render_priority = 1
+render_priority = 0
 shader = ExtResource("34_q8b4v")
 shader_parameter/atlas_texture = SubResource("ImageTexture_q8b4v")
 shader_parameter/atlas_dimensions = Vector2(548, 160)
@@ -224,12 +224,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.130287, 0)
 
 [node name="DirectionalSprite3D" type="Sprite3D" parent="Graphics" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16718, 0)
-sorting_offset = 5.0
 material_override = SubResource("ShaderMaterial_qyplo")
 billboard = 2
 shaded = true
 texture_filter = 2
-render_priority = 1
 texture = SubResource("ImageTexture_cy5rw")
 script = ExtResource("35_qyplo")
 target_node_path = NodePath("../..")
@@ -249,10 +247,8 @@ metadata/_custom_type_script = "uid://ccvuru3xjtx3k"
 [node name="DeathSprite3D" type="Sprite3D" parent="Graphics" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.180978, 0)
 visible = false
-sorting_offset = 5.0
 billboard = 2
 shaded = true
-render_priority = 1
 texture = ExtResource("29_6swn3")
 
 [node name="CollisionShape3D" parent="." index="2"]

@@ -15,7 +15,6 @@ collision_mask = 7
 offset = Vector2(62, 0)
 billboard = 2
 shaded = true
-render_priority = 1
 texture = ExtResource("1_56xwc")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

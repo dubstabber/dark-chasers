@@ -10,8 +10,6 @@ keep_compressed_buffer = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyx4j"]
 resource_name = "Front"
-render_priority = 1
-depth_draw_mode = 2
 albedo_texture = SubResource("PortableCompressedTexture2D_5ihsf")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_nyctq"]
@@ -100,7 +98,6 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="MovingWall" type="MeshInstance3D" parent="AnimatableBody3D"]
-sorting_offset = 5.0
 mesh = SubResource("ArrayMesh_wev0n")
 skeleton = NodePath("")
 

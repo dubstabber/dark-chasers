@@ -47,10 +47,10 @@ func _process_node_materials(node: Node):
 
 func _update_material_settings(material: StandardMaterial3D):
 	# Set transparency to alpha
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.transparency = BaseMaterial3D.TRANSPARENCY_DISABLED
 	
 	# Set depth draw mode to always
-	material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_ALWAYS
+	material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY
 	
 	# Optionally set other common settings
 	# material.no_depth_test = false

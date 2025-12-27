@@ -13,6 +13,10 @@ var keys_collected: Array = []
 func _ready():
 	# Add this level to the "level" group so UI components can find it
 	add_to_group("level")
+	
+	# Add HUD to "hud" group for auto-discovery by player
+	if hud:
+		hud.add_to_group("hud")
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -69,14 +73,14 @@ func handle_transition(body, area3dname, marker):
 
 func _on_transition_entered(body, transitor):
 	if body.is_in_group("player") and transitor:
-		if "transit_pos" in body:
-			body.transit_pos = transitor
+		if body.has_node("InteractionComponent"):
+			body.interaction_component.set_transit_point(transitor)
 
 
 func _on_transition_exited(body):
 	if body.is_in_group("player"):
-		if "transit_pos" in body:
-			body.transit_pos = null
+		if body.has_node("InteractionComponent"):
+			body.interaction_component.clear_transit_point()
 
 
 func _key_body_entered(body, key_type, event, message_text):
@@ -99,6 +103,24 @@ func _key_body_entered(body, key_type, event, message_text):
 func _handle_key_event(_body, _key_type, _event, _message_text):
 	"""Override this method in specific maps to handle key-specific events"""
 	pass
+
+
+func setup_player(player: CharacterBody3D) -> void:
+	"""Centralized player setup - connects HUD and performs standard initialization
+	
+	Call this from spawn_player() in child level scripts instead of manually
+	setting player.hud = hud. This centralizes the player-HUD integration and
+	allows for future extensions without modifying every level script.
+	
+	Args:
+		player: The player instance to set up
+	"""
+	if hud:
+		player.hud = hud
+	
+	# Add player to "player" group if not already
+	if not player.is_in_group("player"):
+		player.add_to_group("player")
 
 
 func refresh_key_display():

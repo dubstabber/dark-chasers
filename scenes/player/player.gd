@@ -1,241 +1,80 @@
 class_name Player extends CharacterBody3D
 
-## Player controller with integrated health system
-##
-## This player controller includes movement, interaction, and health management
-## through a HealthComponent. The health system provides damage handling,
-## healing, death mechanics, and invulnerability frames.
-##
-## Health Integration:
-## - Uses HealthComponent for all health-related operations
-## - Delegates damage/healing to the health component
-## - Connects health component signals for death and damage events
-## - Maintains backward compatibility with existing kill() method
 
 @warning_ignore("UNUSED_SIGNAL")
 signal weapon_added(weapon: WeaponResource)
 
-const JUMP_VELOCITY := 6.0
-const WALKING_SPEED := 5.0
-const SPRINTING_SPEED := 8.0
-const CROUCHING_SPEED := 3.0
-
-const HEAD_BOBBING_SPRINTING_SPEED = 22.0
-const HEAD_BOBBING_WALKING_SPEED = 14.0
-const HEAD_BOBBING_CROUNCHING_SPEED = 10.0
-
-const HEAD_BOBBING_SPRINTING_INTENSITY = 0.2
-const HEAD_BOBBING_WALKING_INTENSITY = 0.1
-const HEAD_BOBBING_CROUNCHING_INTENSITY = 0.05
-
-# Fall damage configuration
-const FALL_DAMAGE_SAFE_SPEED = 8.0 # No damage below this fall speed
-const FALL_DAMAGE_MIN_SPEED = 12.0 # Minimum speed to start taking damage
-const FALL_DAMAGE_MULTIPLIER = 2.0 # Damage scaling factor
-const FALL_DAMAGE_MAX = 200 # Maximum fall damage per impact
-
-# Damage blink effect configuration
-const DAMAGE_BLINK_COLOR = Color(1.0, 0.0, 0.0, 0.3) # Red damage tint
-const DAMAGE_BLINK_FADE_IN_TIME = 0.1 # Quick fade to damage color
-const DAMAGE_BLINK_HOLD_TIME = 0.15 # Hold damage color briefly
-const DAMAGE_BLINK_FADE_OUT_TIME = 0.8 # Smooth fade back to transparent
-const DAMAGE_BLINK_ORIGINAL_MODULATE = Color(1.0, 1.0, 1.0, 0.0) # DeathRect default state
-
-# Death animation configuration
-const DEATH_THROW_SPEED = 7.0 # Speed for enemy-caused death throw animation
-
-var mouse_sens := 0.25
-var current_speed := 5.0
 var current_room: String
-var direction := Vector3.ZERO
-var fov := false
-var lerp_speed := 10.0
-var air_lerp_speed := 3.0
-var dead_lerp_speed := 3.0
 var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
-var killed := false # Legacy death state - kept for death animation compatibility
-var death_throw := DEATH_THROW_SPEED
-var clip_mode := false
-var transit_pos: Marker3D = null
-var is_climbing := false
-var killed_pos: Vector3 = Vector3.ZERO
-var is_crounching := false
-var crouching_depth := -0.5
 var last_velocity = Vector2.ZERO
-var current_weapon: int
-
-var walking := false
-var sprinting := false
-var crouching := false
-var sliding := false
-var can_step := true
-
-var slide_timer = 0.0
-var slide_timer_max = 1.0
-var slide_vector = Vector2.ZERO
-var slide_speed = 10.0
-
-var head_bobbing_vector = Vector2.ZERO
-var head_bobbing_index = 0.0
-var head_bobbing_current_intensity = 0.0
 
 var blocked_movement := false
 
-var moving_state := "idle"
-var shooting_state := "idle"
-var is_playing_shoot_animation := false
-var previous_shooting_state := "idle"
-var last_weapon_animation := ""
-
-# Fall damage tracking
-var was_airborne := false # Track if player was in the air last frame
-var fall_start_velocity := 0.0 # Track velocity when starting to fall
-
-# Damage blink effect
-var damage_blink_tween: Tween
-
-# Fall damage death tracking
+# Death message tracking (used by death component for HUD)
 var _died_from_fall_damage := false
-
-# Custom death message for enemy kills
 var _death_message: String = ""
 
 var hud: CanvasLayer: set = set_hud
 
-var _initial_collision_mask: int
-
 var debug_camera: Camera3D # temporary
 
-@onready var nek = $nek
-@onready var head = $nek/head
-@onready var eyes = $nek/head/eyes
-@onready var camera_3d = $nek/head/eyes/Camera3D
-@onready var color_rect = $nek/head/eyes/Camera3D/DeathRect
-@onready var stay_col = $StandingCollisionShape
-@onready var crounch_col = $CrouchingCollisionShape
-@onready var crounch_ray_cast_3d = $CrounchRayCast3D
+@onready var camera_3d = $nek/head/eyes/Camera3D # PlayerCamera extends Camera3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var sprite_animation_player = $SpriteAnimationPlayer
-@onready var directional_sprite: Sprite3D = $DirectionalSprite3D
-@onready var corpse_sprite: Sprite3D = $Corpse3D
-
-@onready var interaction = $nek/head/eyes/Camera3D/Interaction
-@onready var interact_sound = $InteractSound
 @onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var armor_component = $ArmorComponent
 @onready var ammo_component: PlayerAmmoComponent = $PlayerAmmoComponent
 @onready var weapon_manager: WeaponManager = $WeaponManager
+@onready var movement_component: PlayerMovementComponent = $PlayerMovementComponent
+@onready var head_bobbing_component: HeadBobbingComponent = $HeadBobbingComponent
+@onready var fall_damage_component: FallDamageComponent = $FallDamageComponent
+@onready var death_component: PlayerDeathComponent = $PlayerDeathComponent
+@onready var interaction_component: InteractionComponent = $InteractionComponent
+@onready var sprite_animation_component: SpriteAnimationComponent = $SpriteAnimationComponent
 
 
 func _ready():
-	# Store initial collision mask to restore when exiting clip mode
-	_initial_collision_mask = collision_mask
+	if not hud:
+		_auto_discover_hud()
 
-	# Configure and connect health component
-	# The HealthComponent handles all health logic, damage, healing, and death
 	if health_component:
-		# Configure audio
 		health_component.death_sound = Preloads.KILL_PLAYER_SOUND
-		# Note: damage_sound and heal_sound can be set later if needed
-
-		# Connect signals
-		health_component.died.connect(_on_health_component_died)
 		health_component.damage_taken.connect(_on_health_component_damage_taken)
-		health_component.health_changed.connect(_on_health_component_health_changed)
 
-		# Initialize health display (will be called again when HUD is connected)
-		_initialize_health_display()
-
-	# Configure and connect armor component
 	if armor_component:
-		# Configure armor settings
 		armor_component.max_armor = 100
 		armor_component.current_armor = 0
-		#armor_component.damage_reduction_type = 0 # DOOM_GREEN type
 
-		# Connect signals
-		armor_component.armor_changed.connect(_on_armor_component_armor_changed)
-		armor_component.armor_gained.connect(_on_armor_component_armor_gained)
-		armor_component.armor_lost.connect(_on_armor_component_armor_lost)
-		armor_component.armor_depleted.connect(_on_armor_component_armor_depleted)
-
-		# Initialize armor display (will be called again when HUD is connected)
-		_initialize_armor_display()
-
-	# Connect weapon manager signals for ammo display
 	if weapon_manager:
-		weapon_manager.weapon_ammo_changed.connect(_on_weapon_ammo_changed)
-		weapon_manager.weapon_switched.connect(_on_weapon_switched)
-
-		# Set up ammo component reference for all weapons
 		_setup_weapon_ammo_components()
-
-	# Connect ammo component signals to update HUD when ammo changes
-	if ammo_component:
-		ammo_component.ammo_changed.connect(_on_ammo_component_ammo_changed)
 	
-	# Connect sprite animation player signals
-	if sprite_animation_player:
-		sprite_animation_player.animation_finished.connect(_on_sprite_animation_finished)
+	_setup_modular_components()
 
 
-func _update_animation_state():
-	# Update movement state
-	if velocity.length() > 0.1:
-		moving_state = "run"
-	else:
-		moving_state = "idle"
+func _setup_modular_components() -> void:
+	if head_bobbing_component:
+		head_bobbing_component.footstep_triggered.connect(_on_footstep_triggered)
 	
-	# Update shooting state
-	_update_shooting_state()
-
-	# Detect shooting state transition or new shot
-	if shooting_state == "shoot" and previous_shooting_state == "idle":
-		# New shot started - play shoot animation
-		sprite_animation_player.play("shoot")
-		is_playing_shoot_animation = true
-	elif shooting_state == "shoot" and is_playing_shoot_animation:
-		# Still shooting and animation is playing - do nothing
-		pass
-	elif moving_state == "run":
-		# Not shooting, play movement animation
-		sprite_animation_player.play("move")
-		is_playing_shoot_animation = false
-	else:
-		# Not shooting, play idle animation
-		sprite_animation_player.play("RESET")
-		is_playing_shoot_animation = false
+	if fall_damage_component:
+		fall_damage_component.fatal_fall.connect(_on_fatal_fall)
 	
-	# Update previous state for next frame
-	previous_shooting_state = shooting_state
+	if death_component:
+		if health_component:
+			health_component.died.connect(death_component._on_health_died)
+		death_component.death_animation_started.connect(_on_death_component_died)
+	
+	if sprite_animation_component and sprite_animation_player:
+		sprite_animation_player.animation_finished.connect(sprite_animation_component.on_animation_finished)
 
 
-func _update_shooting_state():
-	"""Update the shooting state based on weapon manager animation"""
-	if weapon_manager and weapon_manager.animation_player and weapon_manager.current_weapon:
-		# Check if a shooting animation is currently playing
-		var is_shooting = weapon_manager.animation_player.is_playing() and (
-			weapon_manager.animation_player.current_animation == weapon_manager.current_weapon.shoot_anim_name or
-			weapon_manager.animation_player.current_animation == weapon_manager.current_weapon.repeat_shoot_anim_name
-		)
-		
-		# Track current weapon animation for detecting new shots
-		var current_weapon_animation = weapon_manager.animation_player.current_animation if weapon_manager.animation_player.is_playing() else ""
+func _on_footstep_triggered() -> void:
+	if footstep_surface_detector:
+		footstep_surface_detector.play_footstep()
 
-		if is_shooting:
-			shooting_state = "shoot"
-			# Check if this is a new weapon animation (new shot)
-			if current_weapon_animation != last_weapon_animation and current_weapon_animation != "":
-				# New shot detected - reset sprite animation flag to allow new animation
-				is_playing_shoot_animation = false
-		else:
-			shooting_state = "idle"
-		
-		last_weapon_animation = current_weapon_animation
-	else:
-		shooting_state = "idle"
-		last_weapon_animation = ""
+
+func _on_fatal_fall() -> void:
+	_died_from_fall_damage = true
 
 
 func _input(event):
@@ -246,9 +85,7 @@ func _input(event):
 		return
 	if not is_dead():
 		if event is InputEventMouseMotion:
-			rotate_y(deg_to_rad(-event.relative.x * mouse_sens))
-			head.rotate_x(deg_to_rad(-event.relative.y * mouse_sens))
-			head.rotation.x = clamp(head.rotation.x, deg_to_rad(-89), deg_to_rad(89))
+			camera_3d.handle_mouse_look(event.relative)
 	if event.is_action_pressed("switch-debug-camera"):
 		if camera_3d.current:
 			debug_camera.current = true
@@ -257,181 +94,48 @@ func _input(event):
 
 
 func _physics_process(delta):
-	if not is_on_floor() and not clip_mode:
+	if not is_on_floor() and not movement_component.clip_mode:
 		velocity.y -= gravity * delta
+	
 	if blocked_movement:
 		return
+	
 	if not is_dead():
 		var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
-		if (Input.is_action_pressed("crouch") or sliding) and not clip_mode:
-			current_speed = lerp(current_speed, CROUCHING_SPEED, delta * lerp_speed)
-			head.position.y = lerp(head.position.y, crouching_depth, delta * lerp_speed)
-			stay_col.disabled = true
-			crounch_col.disabled = false
-			
-			if sprinting and input_dir != Vector2.ZERO:
-				sliding = true
-				slide_timer = slide_timer_max
-				slide_vector = input_dir
-			
-			walking = false
-			sprinting = false
-			crouching = true
-		elif not crounch_ray_cast_3d.is_colliding():
-			stay_col.disabled = false
-			crounch_col.disabled = true
-			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
-			if Input.is_action_pressed("sprint") and velocity.length() > 0.1 and _can_sprint():
-				current_speed = lerp(current_speed, SPRINTING_SPEED, delta * lerp_speed)
-				camera_3d.fov += 2
-				camera_3d.fov = clamp(camera_3d.fov, 85, 110)
-				walking = false
-				sprinting = true
-				crouching = false
-			else:
-				current_speed = lerp(current_speed, WALKING_SPEED, delta * lerp_speed)
-				camera_3d.fov = 85
-				walking = true
-				sprinting = false
-				crouching = false
-				
-		if sliding:
-			slide_timer -= delta
-		if slide_timer <= 0:
-			sliding = false
+		movement_component.process_movement(delta, input_dir)
+		camera_3d.set_sprint_fov(movement_component.is_sprinting())
 		
-		if sprinting:
-			head_bobbing_current_intensity = HEAD_BOBBING_SPRINTING_INTENSITY
-			head_bobbing_index += HEAD_BOBBING_SPRINTING_SPEED * delta
-		elif walking:
-			head_bobbing_current_intensity = HEAD_BOBBING_WALKING_INTENSITY
-			head_bobbing_index += HEAD_BOBBING_WALKING_SPEED * delta
-		elif crouching:
-			head_bobbing_current_intensity = HEAD_BOBBING_CROUNCHING_INTENSITY
-			head_bobbing_index += HEAD_BOBBING_CROUNCHING_SPEED * delta
-		
-		if is_on_floor() and not sliding and input_dir != Vector2.ZERO:
-			head_bobbing_vector.y = sin(head_bobbing_index)
-			head_bobbing_vector.x = sin(head_bobbing_index / 2)
-			
-			if head_bobbing_vector.y > -head_bobbing_current_intensity:
-				can_step = true
-			if head_bobbing_vector.y < -head_bobbing_current_intensity and can_step:
-				can_step = false
-				footstep_surface_detector.play_footstep()
-			
-			eyes.position.y = lerp(eyes.position.y, head_bobbing_vector.y * (head_bobbing_current_intensity / 2.0), delta * lerp_speed)
-			eyes.position.x = lerp(eyes.position.x, head_bobbing_vector.x * (head_bobbing_current_intensity / 2.0), delta * lerp_speed)
-		else:
-			eyes.position.y = lerp(eyes.position.y, 0.0, delta * lerp_speed)
-			eyes.position.x = lerp(eyes.position.x, 0.0, delta * lerp_speed)
-			
-		if Input.is_action_just_pressed("jump") and clip_mode:
-			velocity.y = current_speed
-		elif Input.is_action_just_released("jump") and clip_mode:
-			velocity.y = move_toward(velocity.y, 0, current_speed)
+		if Input.is_action_just_pressed("jump"):
+			if movement_component.handle_jump():
+				if not movement_component.clip_mode:
+					animation_player.play("jump")
+		elif Input.is_action_just_released("jump"):
+			movement_component.handle_jump_release()
 		
 		if Input.is_action_just_pressed("crouch"):
-			if clip_mode:
-				velocity.y = - current_speed
+			movement_component.handle_crouch_press()
 		elif Input.is_action_just_released("crouch"):
-			if clip_mode:
-				velocity.y = 0
+			movement_component.handle_crouch_release()
 		
-		if Input.is_action_just_pressed("jump") and is_on_floor():
-			if not clip_mode:
-				velocity.y = JUMP_VELOCITY
-				sliding = false
-				animation_player.play("jump")
-		if is_on_floor():
-			if last_velocity.y < -4.0:
-				animation_player.play("landing")
-
-			# Fall damage detection - check if we just landed from a fall
-			if was_airborne and not clip_mode:
-				_check_fall_damage(last_velocity.y)
-			
-		if is_on_floor():
-			direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
-		else:
-			if input_dir != Vector2.ZERO:
-				direction = lerp(direction, (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * air_lerp_speed)
-			
-		if sliding:
-			direction = (transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
-			current_speed = (slide_timer + 0.1) * slide_speed
-
+		if is_on_floor() and last_velocity.y < -4.0:
+			animation_player.play("landing")
+		
 		if Input.is_action_just_pressed("toggle-clip-mode"):
-			clip_mode = not clip_mode
-			if hud: hud._on_player_mode_changed("clip_mode", clip_mode)
-			if clip_mode:
-				# Disable collision with Walls (layer 3) and Weapon Passthrough Walls (layer 5)
-				set_collision_mask_value(3, false)
-				set_collision_mask_value(5, false)
-				velocity = Vector3.ZERO
-			else:
-				collision_mask = _initial_collision_mask
-
-		if Input.is_action_just_pressed("use"):
-			var collider = interaction.get_collider()
-			if collider:
-				var root_node = collider.get_parent()
-				if root_node is Openable or root_node.is_in_group("door"):
-					if root_node.has_method("open_with_point"):
-						root_node.open_with_point(interaction.get_collision_point(), self)
-					
-				if collider.is_in_group("button"):
-					collider.press(self)
-			if transit_pos:
-				position = transit_pos.global_position
-				transit_pos = null
+			var new_clip_mode = movement_component.toggle_clip_mode()
+			if hud:
+				hud._on_player_mode_changed("clip_mode", new_clip_mode)
 		
-		if direction:
-			velocity.x = direction.x * current_speed
-			velocity.z = direction.z * current_speed
-		else:
-			velocity.x = move_toward(velocity.x, 0, current_speed)
-			velocity.z = move_toward(velocity.z, 0, current_speed)
-		if is_climbing and input_dir:
-			velocity.y = current_speed
-			
-		# Update animation state based on movement
-		_update_animation_state()
-
-		# Update fall tracking state
-		_update_fall_tracking()
-
+		if Input.is_action_just_pressed("use"):
+			_handle_use_input()
+		
 		last_velocity = velocity
 		move_and_slide()
-	else:
-		# Death animation: different behavior based on death cause
-		if death_throw > 0:
-			# Apply gradual camera lowering for all death types (simulate collapsing)
-			_apply_death_camera_lowering(delta)
+	
 
-			# Different movement behavior based on death cause
-			if killed_pos != Vector3.ZERO:
-				# Enemy-caused death: throw player backward away from enemy
-				velocity = - direction * death_throw
-
-				# Apply smooth camera rotation to face the enemy during death throw
-				var distance_to_enemy = (killed_pos - position).length()
-				if distance_to_enemy > 0.1:
-					# Create target transform that looks at the enemy
-					var look_direction = (killed_pos - position).normalized()
-					var target_transform = Transform3D()
-					target_transform.origin = position
-					target_transform = target_transform.looking_at(position + look_direction, Vector3.UP)
-
-					# Smoothly interpolate toward the target transform
-					transform = transform.interpolate_with(target_transform, dead_lerp_speed * delta)
-			else:
-				# Fall damage death: no movement, just collapse in place
-				# Stop all movement - player should stay where they died
-				velocity = Vector3.ZERO
-
-			move_and_slide()
-			death_throw -= 0.1
+func _handle_use_input() -> void:
+	"""Handle 'use' input - delegates to InteractionComponent"""
+	if interaction_component:
+		interaction_component.try_interact()
 
 
 func kill(pos = null, death_message: String = ""):
@@ -446,78 +150,23 @@ func kill(pos = null, death_message: String = ""):
 	"""
 	if not is_dead():
 		_death_message = death_message
-		if pos:
-			direction = (pos - position).normalized()
-			direction.y = 0
-			killed_pos = pos
-
-		# Use health component to handle death if available
-		if health_component:
+		if death_component:
+			if pos:
+				death_component.set_killed_position(pos)
+				death_component.set_death_direction((pos - position).normalized())
+			death_component.kill_with_direction(pos if pos else Vector3.ZERO, death_message)
+		elif health_component:
 			health_component.kill()
-		else:
-			# Fallback to old system
-			killed = true
-			color_rect.modulate.a = 0.7
-			Utils.play_sound(Preloads.KILL_PLAYER_SOUND, self)
 
 
-## Health System Integration
-##
-## The player uses a HealthComponent for all health-related functionality:
-## - Health management (current/max health, damage, healing)
-## - Death handling with proper signals and audio
-## - Invulnerability frames after taking damage
-## - Integration with existing game systems (enemies, health items)
-##
-## Key Integration Points:
-## - take_damage() method delegates to HealthComponent
-## - kill() method uses HealthComponent.kill() for instant death
-## - Health items automatically work with HealthComponent
-## - Enemy kill zones work through the kill() method
-## - Death animations and effects handled through signal connections
-## - Weapon death animations: stops bobbing and plays weapon lowering animation
-## - Fall damage system: monitors landing velocity and applies damage accordingly
-## - Damage blink effect: visual feedback through DeathRect color tinting
-
-## Health Component Signal Handlers
-## These methods are called by the HealthComponent when health events occur
-
-func _on_health_component_died():
-	"""Called when the health component signals death
-
-	Handles the visual death effects while the HealthComponent handles
-	the death logic, audio, and state management.
-	"""
-	if not killed:
-		killed = true
-
-		# Show death message based on cause
-		if _died_from_fall_damage and hud:
-			hud.add_log("Player fell too far.")
-			_died_from_fall_damage = false
-		elif _death_message != "" and hud:
-			hud.add_log(_death_message)
-		_death_message = ""
-
-		# Handle weapon death animations immediately
-		_handle_weapon_death_animations()
-
-		# Handle camera orientation for death animation
-		_setup_death_camera_orientation()
-
-		# Configure collision shapes for death state
-		_configure_death_collision()
-
-		# Apply persistent death screen overlay
-		_apply_death_overlay()
-		# Note: Death sound is handled by the health component
-
-		if sprite_animation_player and sprite_animation_player.has_animation("death"):
-			sprite_animation_player.play("death")
-		if directional_sprite:
-			directional_sprite.visible = false
-		if corpse_sprite:
-			corpse_sprite.visible = true
+func _on_death_component_died():
+	"""Called when death_component triggers death - handles HUD messages"""
+	if _died_from_fall_damage and hud:
+		hud.add_log("Player fell too far.")
+		_died_from_fall_damage = false
+	elif _death_message != "" and hud:
+		hud.add_log(_death_message)
+	_death_message = ""
 
 
 func _on_health_component_damage_taken(_amount: int, _current_health: int):
@@ -529,145 +178,31 @@ func _on_health_component_damage_taken(_amount: int, _current_health: int):
 	- Visual effects
 	- Camera effects
 	"""
-	# Play damage blink effect for visual feedback
-	_play_damage_blink_effect()
-
-
-func _on_health_component_health_changed(current_health: int, max_health: int):
-	"""Called when health changes (damage or healing)
-
-	This is where you can update UI elements like:
-	- Health bars
-	- Health indicators
-	- HUD elements
-	"""
-	# Update HUD health display
-	if hud and hud.has_method("update_health_display"):
-		hud.update_health_display(current_health, max_health)
-
-
-## Armor Component Signal Handlers
-## These methods are called by the ArmorComponent when armor events occur
-
-func _on_armor_component_armor_changed(current_armor: int, max_armor: int):
-	"""Called when armor changes (gained or lost)
-
-	This is where you can update UI elements like:
-	- Armor bars
-	- Armor indicators
-	- HUD elements
-	"""
-	# Update HUD armor display
-	if hud and hud.has_method("update_armor_display"):
-		hud.update_armor_display(current_armor, max_armor)
-
-
-func _on_armor_component_armor_gained(_amount: int, _current_armor: int):
-	"""Called when the player gains armor
-
-	This is where you can add player-specific armor gain effects like:
-	- Visual effects
-	- Sound effects (handled by ArmorComponent)
-	- UI notifications
-	"""
-	# Add any player-specific armor gain effects here
-	pass
-
-
-func _on_armor_component_armor_lost(_amount: int, _current_armor: int):
-	"""Called when the player loses armor
-
-	This is where you can add player-specific armor loss effects like:
-	- Visual effects
-	- Screen effects
-	- UI feedback
-	"""
-	# Add any player-specific armor loss effects here
-	pass
-
-
-func _on_armor_component_armor_depleted():
-	"""Called when armor is completely depleted
-
-	This is where you can add player-specific armor depletion effects like:
-	- Visual warnings
-	- Screen effects
-	- Audio cues (handled by ArmorComponent)
-	"""
-	# Add any player-specific armor depletion effects here
-	pass
-
-
-func _initialize_health_display():
-	"""Initialize the health display in the HUD
-
-	This method ensures the HUD shows the correct health value when the player
-	is first created or when the HUD connection is established.
-	"""
-	if hud and hud.has_method("update_health_display") and health_component:
-		hud.update_health_display(health_component.current_health, health_component.max_health)
-
-
-func _initialize_armor_display():
-	"""Initialize the armor display in the HUD
-
-	This method ensures the HUD shows the correct armor value when the player
-	is first created or when the HUD connection is established.
-	"""
-	if hud and hud.has_method("update_armor_display") and armor_component:
-		hud.update_armor_display(armor_component.current_armor, armor_component.max_armor)
 
 
 func set_hud(new_hud: CanvasLayer):
 	"""Setter for the HUD reference
 
-	Automatically initializes the health, armor, and ammo displays when the HUD is connected.
+	Connects HUD directly to player components for automatic updates.
 	"""
 	hud = new_hud
-	_initialize_health_display()
-	_initialize_armor_display()
-	# Defer ammo display initialization to ensure AmmoManager is ready
-	call_deferred("_initialize_ammo_display")
+	if hud and hud.has_method("connect_to_player"):
+		hud.connect_to_player(self)
 
 
-## Weapon System Signal Handlers
-## These methods are called by the WeaponManager when weapon/ammo events occur
-
-func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
-	"""Called when the current weapon's ammo changes
-
-	Updates the HUD ammo display with the new ammo values.
+func _auto_discover_hud() -> void:
+	"""Auto-discover HUD via group if not explicitly set
+	
+	This provides a fallback mechanism for flexible level design. If the level
+	doesn't explicitly set player.hud, the player can find the HUD by looking
+	for nodes in the "hud" group. This makes the player more self-contained
+	and reduces boilerplate in level scripts.
+	
+	Note: This is called in _ready() only if hud is not already set.
 	"""
-	if hud and hud.has_method("update_ammo_display"):
-		hud.update_ammo_display(current_ammo, max_ammo)
-
-
-func _on_weapon_switched(weapon: WeaponResource):
-	"""Called when the player switches weapons
-
-	Updates the HUD to show the new weapon's ammo count.
-	"""
-	if hud and hud.has_method("update_ammo_display"):
-		hud.update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
-
-
-func _on_ammo_component_ammo_changed(ammo_type: String, current_amount: int, max_amount: int):
-	"""Called when player's ammo component ammo changes
-
-	Updates the HUD if the changed ammo type matches the current weapon's ammo type.
-	"""
-	if weapon_manager and weapon_manager.current_weapon:
-		var weapon = weapon_manager.current_weapon
-		if not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
-			if hud and hud.has_method("update_ammo_display"):
-				hud.update_ammo_display(current_amount, max_amount)
-
-
-func _on_sprite_animation_finished(anim_name: String):
-	"""Called when sprite animation player finishes an animation"""
-	if anim_name == "shoot":
-		# Reset the shooting animation flag when shoot animation finishes
-		is_playing_shoot_animation = false
+	var hud_nodes = get_tree().get_nodes_in_group("hud")
+	if hud_nodes.size() > 0:
+		set_hud(hud_nodes[0])
 
 
 func _setup_weapon_ammo_components():
@@ -675,339 +210,18 @@ func _setup_weapon_ammo_components():
 	if not weapon_manager or not ammo_component:
 		return
 
-	# Set ammo component reference for all weapons in all slots
 	for slot_index in range(1, 10): # Slots 1-9
 		var slot_weapons = weapon_manager.get_slot_weapons(slot_index)
 		for weapon in slot_weapons:
 			weapon.ammo_component = ammo_component
 
 
-func _initialize_ammo_display():
-	"""Initialize the ammo display in the HUD
-
-	This method ensures the HUD shows the correct ammo value when the player
-	is first created or when the HUD connection is established.
-	"""
-	if hud and hud.has_method("update_ammo_display") and weapon_manager and weapon_manager.current_weapon:
-		var weapon = weapon_manager.current_weapon
-		hud.update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
-
-
-func _handle_weapon_death_animations():
-	"""Handle weapon-specific animations when the player dies
-
-	This method implements the following weapon death effects:
-	1. Stops weapon bobbing animations
-	2. Plays weapon pullout animation in reverse (weapon lowering effect)
-	3. Ensures immediate response to death for better visual feedback
-	"""
-	if not weapon_manager:
-		return
-
-	# 1. Stop weapon bobbing animations
-	weapon_manager.disable_weapon_bobbing()
-
-	# 2. Play weapon pullout animation in reverse if available
-	if weapon_manager.current_weapon and weapon_manager.current_weapon.pullout_anim_name:
-		var weapon_animation_player = weapon_manager.animation_player
-		if weapon_animation_player:
-			# Stop any current animation
-			weapon_animation_player.stop()
-
-			# Play the pullout animation backwards to create weapon lowering effect
-			weapon_animation_player.play_backwards(weapon_manager.current_weapon.pullout_anim_name)
-
-	# 3. Stop any auto-hitting behavior
-	weapon_manager.is_auto_hitting = false
-
-
-func _handle_weapon_revival():
-	"""Handle weapon-specific animations when the player is revived
-
-	This method restores normal weapon functionality:
-	1. Re-enables weapon bobbing animations
-	2. Resets weapon state
-	3. Plays weapon pullout animation to "re-equip" current weapon
-	4. Resets death animation state
-	5. Re-enables collision shapes
-	6. Resets camera position and death overlay
-	"""
-	if not weapon_manager:
-		return
-
-	weapon_manager.reset_weapon_on_revival()
-
-	# Reset death animation state
-	killed_pos = Vector3.ZERO
-	death_throw = DEATH_THROW_SPEED
-
-	# Re-enable collision shapes
-	_enable_revival_collision()
-
-	# Reset camera position and death overlay
-	_reset_death_effects()
-
-
-func _setup_death_camera_orientation():
-	"""Setup proper camera orientation for death animation
-
-	Handles two scenarios:
-	1. Enemy-caused death: Orient camera toward the enemy that killed the player
-	2. Fall damage death: Center head pitch only, no horizontal rotation
-	"""
-	# Check if we have a valid enemy position (killed_pos was set by kill() method)
-	if killed_pos != Vector3.ZERO:
-		# Enemy-caused death: Orient camera toward the enemy
-		_orient_camera_toward_enemy()
-	else:
-		# Fall damage or other non-enemy death: Only center the head pitch
-		# Keep killed_pos as Vector3.ZERO to prevent any camera rotation in death animation
-		_center_head_pitch_for_fall_death()
-
-
-func _center_head_pitch_for_fall_death():
-	"""Center the head pitch for fall damage deaths
-
-	For fall damage deaths, we only want to center the vertical look angle
-	to look straight ahead horizontally. We preserve the current horizontal
-	orientation (yaw) and don't rotate toward any target.
-	"""
-	if not head:
-		return
-
-	# Only center the head's X rotation (pitch) to look straight ahead
-	# Don't change the player's Y rotation (yaw) - preserve horizontal orientation
-	head.rotation.x = 0.0
-
-
-func _configure_death_collision():
-	"""Configure collision shapes for death state
-
-	Disables the standing collision shape but keeps the crouching collision shape
-	active to prevent the player from falling through the map or going outside
-	the playable area during death animations. The smaller crouching shape is
-	more appropriate for a collapsed/dead player state.
-	"""
-	if stay_col:
-		stay_col.disabled = true
-	if crounch_col:
-		crounch_col.disabled = false # Keep crouching collision active for death state
-
-
-func _apply_death_overlay():
-	"""Apply persistent death screen overlay
-
-	Sets the DeathRect to show the red death overlay and ensures it persists
-	throughout the entire death sequence. Stops any damage blink effects that
-	might interfere with the death overlay.
-	"""
-	if not color_rect:
-		return
-
-	# Stop any damage blink tween that might interfere with death overlay
-	if damage_blink_tween:
-		damage_blink_tween.kill()
-		damage_blink_tween = null
-
-	# Apply persistent death overlay (red tint with 0.7 alpha)
-	color_rect.modulate = Color(1.0, 0.0, 0.0, 0.7)
-
-
-func _apply_death_camera_lowering(delta: float):
-	"""Apply gradual camera lowering during death throw animation
-
-	Simulates the player collapsing/falling to the ground by gradually
-	lowering the camera position. Uses the same lerping system as crouching
-	but targets a lower position to simulate death collapse.
-
-	Args:
-		delta: Frame delta time for smooth interpolation
-	"""
-	if not head:
-		return
-
-	# Target position for death camera lowering (lower than crouching)
-	var death_camera_depth = crouching_depth * 1.7
-
-	# Gradually lower the camera using the same lerp system as crouching
-	head.position.y = lerp(head.position.y, death_camera_depth, delta * dead_lerp_speed)
-
-
-func _enable_revival_collision():
-	"""Restore normal collision shapes when player is revived
-
-	Restores normal collision detection for physics interactions.
-	Enables the standing collision shape and disables the crouching collision
-	shape to return to the normal alive state.
-	"""
-	if stay_col:
-		stay_col.disabled = false # Enable standing collision for normal gameplay
-	if crounch_col:
-		crounch_col.disabled = true # Disable crouching collision (normal state)
-
-
-func _reset_death_effects():
-	"""Reset camera position and death overlay when player is revived
-
-	Restores normal camera position and clears the death screen overlay.
-	This ensures the player returns to a normal state after revival.
-	"""
-	# Reset head position to normal (not lowered)
-	if head:
-		head.position.y = 0.0
-
-	# Clear death overlay and restore transparent state
-	if color_rect:
-		color_rect.modulate = DAMAGE_BLINK_ORIGINAL_MODULATE
-
-
 func respawn(health_amount: int = -1):
-	if not is_dead():
-		return
-	if death_throw > 0:
-		return
-
-	var corpses_parents = get_tree().get_nodes_in_group("corpse")
-	if corpse_sprite and corpses_parents.size() > 0:
-		var corpse_copy = corpse_sprite.duplicate()
-		if corpse_copy:
-			var corpses_parent = corpses_parents[0]
-			corpses_parent.add_child(corpse_copy)
-			corpse_copy.global_transform = corpse_sprite.global_transform
-			corpse_copy.visible = true
-			corpse_copy.layers = 1
-
-	if corpse_sprite:
-		corpse_sprite.visible = false
-	if directional_sprite:
-		directional_sprite.visible = true
-	if sprite_animation_player:
-		sprite_animation_player.play("RESET")
-
-	if health_component:
+	"""Respawn the player - delegates to death_component"""
+	if death_component:
+		death_component.respawn(health_amount)
+	elif is_dead() and health_component:
 		health_component.revive(health_amount)
-
-	killed = false
-	_handle_weapon_revival()
-
-
-func _orient_camera_toward_enemy():
-	"""Prepare camera orientation for enemy death animation
-
-	This method is called when an enemy kills the player to set up the death animation.
-	The actual camera rotation is handled gradually by the death animation loop using
-	transform.looking_at() interpolation for smooth movement.
-
-	Note: We don't apply immediate rotation here to avoid conflicts with the
-	death animation loop's transform interpolation.
-	"""
-	# The death animation loop will handle the actual camera rotation using:
-	# transform.looking_at(killed_pos) with interpolation
-	# This ensures smooth rotation toward the enemy during the death throw
-	pass
-
-
-## Fall Damage System
-## Monitors player landing velocity and applies damage through HealthComponent
-
-func _update_fall_tracking():
-	"""Update fall tracking state to detect when player transitions from air to ground"""
-	var currently_airborne = not is_on_floor()
-
-	# Track transition from airborne to grounded for fall damage detection
-	was_airborne = currently_airborne
-
-
-func _check_fall_damage(fall_velocity: float):
-	"""Check if fall damage should be applied based on landing velocity
-
-	Args:
-		fall_velocity: The vertical velocity when landing (negative value)
-	"""
-	if is_dead():
-		return
-
-	# Convert to positive fall speed for easier calculation
-	var fall_speed = abs(fall_velocity)
-
-	# Check if fall speed exceeds safe threshold
-	if fall_speed < FALL_DAMAGE_SAFE_SPEED:
-		return
-
-	# Calculate fall damage
-	var damage_amount = 0
-	if fall_speed >= FALL_DAMAGE_MIN_SPEED:
-		damage_amount = int((fall_speed - FALL_DAMAGE_SAFE_SPEED) * FALL_DAMAGE_MULTIPLIER)
-		damage_amount = min(damage_amount, FALL_DAMAGE_MAX)
-
-	if damage_amount > 0:
-		# Check if this damage will kill the player
-		if health_component and damage_amount >= health_component.current_health:
-			_died_from_fall_damage = true
-		take_damage(damage_amount)
-
-
-func _play_damage_blink_effect():
-	"""Play a red blink effect on the DeathRect when taking damage
-
-	Creates a smooth fade-in, hold, fade-out sequence using modulate property:
-	1. Quick fade to red damage color with visible alpha
-	2. Brief hold at damage color
-	3. Smooth fade back to transparent
-
-	Note: Uses modulate property since DeathRect has modulate.a = 0 by default,
-	making color changes invisible. Death overlay also uses modulate.a = 0.7.
-
-	Handles rapid damage events correctly by always restoring to the true
-	original transparent state, preventing residual red tinting.
-
-	Does not play if player is dead to avoid interfering with death overlay.
-	"""
-	if not color_rect or is_dead():
-		return
-
-	# Stop any existing blink tween
-	if damage_blink_tween:
-		damage_blink_tween.kill()
-
-	# Create new tween for the blink effect
-	damage_blink_tween = create_tween()
-
-	# Use the defined constant for the true original state (transparent)
-	# This ensures consistency with the scene configuration
-
-	# Chain the tween sequence properly
-	# 1. Fade in to damage color (red with visible alpha)
-	damage_blink_tween.tween_property(color_rect, "modulate", DAMAGE_BLINK_COLOR, DAMAGE_BLINK_FADE_IN_TIME)
-
-	# 2. Hold at damage color (using tween_interval instead of tween_delay)
-	damage_blink_tween.tween_interval(DAMAGE_BLINK_HOLD_TIME)
-
-	# 3. Fade out to transparent (always use the true original state)
-	damage_blink_tween.tween_property(color_rect, "modulate", DAMAGE_BLINK_ORIGINAL_MODULATE, DAMAGE_BLINK_FADE_OUT_TIME)
-
-	# 4. Ensure we end up in the correct state (redundant safety check)
-	damage_blink_tween.tween_callback(func():
-		if not is_dead():
-			color_rect.modulate = DAMAGE_BLINK_ORIGINAL_MODULATE
-	)
-
-
-func configure_fall_damage(safe_speed: float = FALL_DAMAGE_SAFE_SPEED,
-						   min_speed: float = FALL_DAMAGE_MIN_SPEED,
-						   multiplier: float = FALL_DAMAGE_MULTIPLIER,
-						   max_damage: int = FALL_DAMAGE_MAX):
-	"""Configure fall damage parameters at runtime
-
-	Args:
-		safe_speed: Maximum fall speed without damage
-		min_speed: Minimum speed to start taking damage
-		multiplier: Damage scaling factor
-		max_damage: Maximum damage per fall
-	"""
-	# Note: These would need to be instance variables to be configurable
-	# For now, this serves as documentation of the configurable parameters
-	print("Fall damage configured: safe=", safe_speed, " min=", min_speed, " mult=", multiplier, " max=", max_damage)
 
 
 ## Health Management Methods
@@ -1071,7 +285,7 @@ func is_alive() -> bool:
 	"""
 	if health_component:
 		return health_component.is_alive()
-	return not killed
+	return false
 
 
 func is_dead() -> bool:
@@ -1082,7 +296,7 @@ func is_dead() -> bool:
 	"""
 	if health_component:
 		return health_component.is_dead
-	return killed
+	return true
 
 
 const MIN_HEALTH_TO_SPRINT := 30
@@ -1162,13 +376,11 @@ func get_armor_percentage() -> float:
 ## Ammo Management Methods
 ## These methods provide a clean interface to the WeaponManager for ammo operations
 
-func add_ammo(amount: int, _weapon_name: String = "", _target_slot: int = 0, all_weapons: bool = false) -> bool:
+func add_ammo(amount: int, all_weapons: bool = false) -> bool:
 	"""Add ammo to weapons using the component-based ammo system
 
 	Args:
 		amount: Amount of ammo to add
-		weapon_name: Name of specific weapon to target (empty = current weapon) - DEPRECATED
-		target_slot: Slot number to target (0 = ignore slot filtering) - DEPRECATED
 		all_weapons: If true, add ammo to all non-infinite weapons
 
 	Returns:
@@ -1199,24 +411,3 @@ func add_ammo(amount: int, _weapon_name: String = "", _target_slot: int = 0, all
 				print("Current weapon '%s' has no ammo_type specified!" % weapon_manager.current_weapon.name)
 
 	return ammo_added
-
-
-func _find_weapon_by_name(weapon_name: String) -> WeaponResource:
-	"""Find a weapon by name across all slots
-
-	Args:
-		weapon_name: Name of the weapon to find
-
-	Returns:
-		WeaponResource: The weapon if found, null otherwise
-	"""
-	if not weapon_manager:
-		return null
-
-	for slot_index in range(1, 10): # Slots 1-9
-		var slot_array = weapon_manager.get_slot_weapons(slot_index)
-		for weapon in slot_array:
-			if weapon.name == weapon_name:
-				return weapon
-
-	return null

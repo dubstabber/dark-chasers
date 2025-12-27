@@ -6,11 +6,6 @@ extends Level
 
 func _ready():
 	super._ready()
-	#var destroyables = get_tree().get_nodes_in_group("destroyable")
-	#for destroyable in destroyables:
-		#if destroyable.name == 'BlinkWall':
-			#destroyable.connect("tree_exited", Utils.play_sound.bind(Preloads.WALLCUT_SOUND, self, destroyable.position, -15))
-			
 	spawn_player()
 	#open_all_doors()
 
@@ -19,7 +14,7 @@ func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
 	# player.blocked_movement = true
-	player.hud = hud
+	setup_player(player) # Centralized HUD connection via Level base class
 	#hud.show_black_screen()
 	
 	#respawn(player)

@@ -1,0 +1,126 @@
+class_name DamageEffectsComponent
+extends Node
+
+## Handles visual damage feedback effects (screen blink, overlays)
+
+@export_group("Blink Effect")
+@export var blink_color: Color = Color(1.0, 0.0, 0.0, 0.3)
+@export var fade_in_time: float = 0.1
+@export var hold_time: float = 0.15
+@export var fade_out_time: float = 0.8
+
+@export_group("Death Overlay")
+@export var death_overlay_color: Color = Color(1.0, 0.0, 0.0, 0.7)
+
+@export_group("Node References")
+@export var color_rect: ColorRect
+@export var health_component: HealthComponent:
+	set(value):
+		# Disconnect from old health component
+		if health_component and health_component.damage_taken.is_connected(_on_damage_taken):
+			health_component.damage_taken.disconnect(_on_damage_taken)
+			health_component.died.disconnect(_on_died)
+		
+		health_component = value
+		
+		# Connect to new health component
+		if health_component:
+			health_component.damage_taken.connect(_on_damage_taken)
+			health_component.died.connect(_on_died)
+@export var auto_discover: bool = true
+
+var original_modulate: Color = Color(1.0, 1.0, 1.0, 0.0)
+var damage_blink_tween: Tween
+
+
+func _ready():
+	if color_rect:
+		original_modulate = color_rect.modulate
+	
+	if auto_discover:
+		_auto_discover_dependencies()
+
+
+func _auto_discover_dependencies() -> void:
+	"""Auto-discover health_component from siblings if not set"""
+	if health_component:
+		return
+	
+	var parent = get_parent()
+	if not parent:
+		return
+	
+	# Auto-discover HealthComponent from siblings
+	for sibling in parent.get_children():
+		if sibling is HealthComponent:
+			health_component = sibling # Uses setter to auto-connect signals
+			break
+
+
+func _on_damage_taken(_amount: int, _current_health: int) -> void:
+	play_damage_blink()
+
+
+func _on_died() -> void:
+	apply_death_overlay()
+
+
+func play_damage_blink() -> void:
+	if not color_rect:
+		return
+	
+	# Don't play blink if dead (death overlay takes priority)
+	if health_component and health_component.is_dead:
+		return
+	
+	# Stop any existing blink tween
+	if damage_blink_tween:
+		damage_blink_tween.kill()
+	
+	# Create new tween for the blink effect
+	damage_blink_tween = create_tween()
+	
+	# 1. Fade in to damage color
+	damage_blink_tween.tween_property(color_rect, "modulate", blink_color, fade_in_time)
+	
+	# 2. Hold at damage color
+	damage_blink_tween.tween_interval(hold_time)
+	
+	# 3. Fade out to transparent
+	damage_blink_tween.tween_property(color_rect, "modulate", original_modulate, fade_out_time)
+	
+	# 4. Ensure we end up in the correct state
+	damage_blink_tween.tween_callback(func():
+		if health_component and not health_component.is_dead:
+			color_rect.modulate = original_modulate
+	)
+
+
+func apply_death_overlay() -> void:
+	if not color_rect:
+		return
+	
+	# Stop any damage blink tween
+	if damage_blink_tween:
+		damage_blink_tween.kill()
+		damage_blink_tween = null
+	
+	# Apply persistent death overlay
+	color_rect.modulate = death_overlay_color
+
+
+func clear_death_overlay() -> void:
+	if not color_rect:
+		return
+	
+	# Stop any tweens
+	if damage_blink_tween:
+		damage_blink_tween.kill()
+		damage_blink_tween = null
+	
+	# Reset to original state
+	color_rect.modulate = original_modulate
+
+
+func reset() -> void:
+	clear_death_overlay()

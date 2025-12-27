@@ -28,7 +28,7 @@ func _ready():
 func spawn_player():
 	var player = Preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
-	player.hud = hud
+	setup_player(player) # Centralized HUD connection via Level base class
 	respawn(player)
 
 
@@ -44,7 +44,7 @@ func spawn_enemy(index):
 	var spawner_timer = Timer.new()
 	enemy_spawners[index].add_child(spawner_timer)
 	spawner_timer.connect("timeout", respawn_enemy.bind(index, spawner_timer))
-	spawner_timer.wait_time = randf_range(min_respawn_time,max_respawn_time)
+	spawner_timer.wait_time = randf_range(min_respawn_time, max_respawn_time)
 	spawner_timer.one_shot = true
 	spawner_timer.start()
 	current_spawner += 1
@@ -54,7 +54,7 @@ func respawn_enemy(index, spawner_timer):
 	var enemy = Preloads.IMAGE_ENEMY_SCENE.instantiate()
 	enemies.add_child(enemy)
 	enemy.position = enemy_spawners[index].position
-	spawner_timer.wait_time = randf_range(min_respawn_time,max_respawn_time)
+	spawner_timer.wait_time = randf_range(min_respawn_time, max_respawn_time)
 	spawner_timer.start()
 
 
@@ -66,4 +66,3 @@ func _on_delay_between_spawners_timeout():
 func _on_disable_barriers_timeout() -> void:
 	spawn_barriers.hide()
 	spawn_barriers.get_child(0).collision_layer = 0
-	

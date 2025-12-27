@@ -31,7 +31,7 @@ func _on_body_entered(body: Node3D) -> void:
 		elif target_all_weapons:
 			# Special case: universal ammo that adds to all weapon types
 			if body.has_method("add_ammo"):
-				ammo_added = body.add_ammo(ammo_value, "", 0, true)
+				ammo_added = body.add_ammo(ammo_value, true)
 		else:
 			print("Ammo pickup has no ammo_type specified and is not universal ammo!")
 			return

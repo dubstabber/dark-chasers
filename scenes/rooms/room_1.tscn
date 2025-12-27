@@ -721,6 +721,7 @@ size = Vector2i(323, 323)
 
 [node name="Camera3D2" type="Camera3D" parent="ExternalCameras/Node3D/SubViewport2"]
 transform = Transform3D(0.675719, 0, -0.737159, 0, 1, 0, 0.737159, 0, 0.675719, 21.7638, 3.42994, 48.7303)
+cull_mask = 1048571
 
 [node name="Node3D2" type="Node3D" parent="ExternalCameras"]
 transform = Transform3D(0.380586, 0, -0.924745, 0, 1, 0, 0.924745, 0, 0.380586, 19.1893, 3.53843, 43.1672)
@@ -730,6 +731,7 @@ size = Vector2i(323, 323)
 
 [node name="Camera3D" type="Camera3D" parent="ExternalCameras/Node3D2/SubViewport"]
 transform = Transform3D(-0.999005, 0, 0.0445957, 0.0270158, 0.795622, 0.605191, -0.0354813, 0.605794, -0.79483, 27.464, 5.7748, 40.4373)
+cull_mask = 1048571
 
 [node name="Displays" type="Node3D" parent="."]
 

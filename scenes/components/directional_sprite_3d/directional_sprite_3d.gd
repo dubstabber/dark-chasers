@@ -33,6 +33,10 @@ var atlas_texture: Texture2D
 # Shader material for directional rendering
 var directional_material: ShaderMaterial
 
+# Cached references
+var _state_node: Node = null # Node providing moving_state/shooting_state
+var _position_node: Node3D = null # Node3D for global_position (shader target)
+
 #endregion
 
 
@@ -57,9 +61,10 @@ var directional_material: ShaderMaterial
 @export var target_node_path: NodePath = NodePath(""):
 	set(value):
 		target_node_path = value
-		_get_target_node()
-		generate_atlas()
-		notify_property_list_changed()
+		if is_inside_tree():
+			_update_node_references()
+			generate_atlas()
+			notify_property_list_changed()
 
 @export var direction_mode: DirectionMode = DirectionMode.THREE_DIRECTIONS:
 	set(value):
@@ -75,7 +80,7 @@ var directional_material: ShaderMaterial
 
 
 func _ready() -> void:
-	_get_target_node()
+	_update_node_references()
 	# Set up the shader material
 	if material_override is ShaderMaterial and material_override.shader is Shader:
 		directional_material = material_override
@@ -89,9 +94,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	# Update per-frame shader parameters
 	if directional_material and directional_material.shader:
-		var target_node = _get_target_node()
-		if target_node:
-			directional_material.set_shader_parameter("target_position", target_node.global_position)
+		# Use _position_node (Node3D) for global_position, not the state node
+		if _position_node:
+			directional_material.set_shader_parameter("target_position", _position_node.global_position)
 		
 		# Synchronise shader parameters each frame
 		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
@@ -195,21 +200,48 @@ func _add_sprite_group_properties(properties: Array[Dictionary], group_name: Str
 		})
 
 
-func _get_target_node() -> Node3D:
-	var target_node: Node = null
+func _update_node_references() -> void:
+	"""Update cached node references for state and position tracking.
+	
+	Separates concerns:
+	- _state_node: Node that provides moving_state/shooting_state (set via target_node_path)
+	- _position_node: Always uses scene owner (root node) - must be Node3D
+	
+	This means the sprite can be placed anywhere in the scene hierarchy,
+	and position tracking will always use the scene root (e.g., Player, Enemy).
+	"""
+	# Get state node from target_node_path or parent
 	if not target_node_path.is_empty() and has_node(target_node_path):
-		target_node = get_node(target_node_path)
+		_state_node = get_node(target_node_path)
 	else:
-		target_node = get_parent()
-
-	if target_node and target_node.get_script():
-		var script_properties = target_node.get_script().get_script_property_list()
+		_state_node = get_parent()
+	
+	# Check for state properties on state node
+	if _state_node and _state_node.get_script():
+		var script_properties = _state_node.get_script().get_script_property_list()
 		has_moving_state = script_properties.any(func(prop): return prop.name == "moving_state")
 		has_shooting_state = script_properties.any(func(prop): return prop.name == "shooting_state")
 	else:
 		has_moving_state = false
 		has_shooting_state = false
-	return target_node
+	
+	# Position node is the scene owner (root node) or parent as fallback
+	# This ensures consistent behavior regardless of where the sprite is placed
+	if not is_inside_tree():
+		_position_node = null
+		return
+	
+	var position_candidate = owner if owner else get_parent()
+	if position_candidate and position_candidate is Node3D:
+		_position_node = position_candidate
+	else:
+		push_warning("DirectionalSprite3D: Scene owner/parent is not a Node3D. Position tracking disabled.")
+		_position_node = null
+
+
+func _get_target_node() -> Node:
+	"""Get the state node (for backward compatibility with atlas generation)."""
+	return _state_node
 
 
 func _get_current_sprite_state(target_node: Node) -> int:

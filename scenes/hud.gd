@@ -15,11 +15,100 @@ var faded: bool
 @onready var key_ui_container: HBoxContainer = $TopRight/KeyUIContainer
 
 
+var _connected_player: CharacterBody3D = null
+
+
 func _ready():
 	timer.connect("timeout", hide_event_text)
 
 	# Initialize key display if keys are already collected
 	call_deferred("_initialize_key_display")
+
+
+func connect_to_player(player: CharacterBody3D) -> void:
+	"""Connect HUD directly to player components for automatic updates
+	
+	This eliminates the need for player.gd to forward signals to the HUD.
+	The HUD connects directly to HealthComponent, ArmorComponent, and WeaponManager.
+	"""
+	if _connected_player == player:
+		return
+	
+	# Disconnect from previous player if any
+	if _connected_player:
+		disconnect_from_player()
+	
+	_connected_player = player
+	
+	# Connect to HealthComponent
+	if player.health_component:
+		player.health_component.health_changed.connect(_on_player_health_changed)
+		update_health_display(player.health_component.current_health, player.health_component.max_health)
+	
+	# Connect to ArmorComponent
+	if player.armor_component:
+		player.armor_component.armor_changed.connect(_on_player_armor_changed)
+		update_armor_display(player.armor_component.current_armor, player.armor_component.max_armor)
+	
+	# Connect to WeaponManager
+	if player.weapon_manager:
+		player.weapon_manager.weapon_ammo_changed.connect(_on_player_ammo_changed)
+		player.weapon_manager.weapon_switched.connect(_on_player_weapon_switched)
+		# Initialize ammo display
+		call_deferred("_initialize_ammo_from_player", player)
+	
+	# Connect to AmmoComponent for reserve ammo updates
+	if player.ammo_component:
+		player.ammo_component.ammo_changed.connect(_on_player_reserve_ammo_changed.bind(player))
+
+
+func disconnect_from_player() -> void:
+	"""Disconnect HUD from the current player's components"""
+	if not _connected_player:
+		return
+	
+	if _connected_player.health_component and _connected_player.health_component.health_changed.is_connected(_on_player_health_changed):
+		_connected_player.health_component.health_changed.disconnect(_on_player_health_changed)
+	
+	if _connected_player.armor_component and _connected_player.armor_component.armor_changed.is_connected(_on_player_armor_changed):
+		_connected_player.armor_component.armor_changed.disconnect(_on_player_armor_changed)
+	
+	if _connected_player.weapon_manager:
+		if _connected_player.weapon_manager.weapon_ammo_changed.is_connected(_on_player_ammo_changed):
+			_connected_player.weapon_manager.weapon_ammo_changed.disconnect(_on_player_ammo_changed)
+		if _connected_player.weapon_manager.weapon_switched.is_connected(_on_player_weapon_switched):
+			_connected_player.weapon_manager.weapon_switched.disconnect(_on_player_weapon_switched)
+	
+	_connected_player = null
+
+
+func _on_player_health_changed(current_health: int, max_health: int) -> void:
+	update_health_display(current_health, max_health)
+
+
+func _on_player_armor_changed(current_armor: int, max_armor: int) -> void:
+	update_armor_display(current_armor, max_armor)
+
+
+func _on_player_ammo_changed(current_ammo: int, max_ammo: int) -> void:
+	update_ammo_display(current_ammo, max_ammo)
+
+
+func _on_player_weapon_switched(weapon: WeaponResource) -> void:
+	update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
+
+
+func _on_player_reserve_ammo_changed(ammo_type: String, current_amount: int, max_amount: int, player: CharacterBody3D) -> void:
+	if player.weapon_manager and player.weapon_manager.current_weapon:
+		var weapon = player.weapon_manager.current_weapon
+		if not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
+			update_ammo_display(current_amount, max_amount)
+
+
+func _initialize_ammo_from_player(player: CharacterBody3D) -> void:
+	if player.weapon_manager and player.weapon_manager.current_weapon:
+		var weapon = player.weapon_manager.current_weapon
+		update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
 
 
 func show_black_screen():

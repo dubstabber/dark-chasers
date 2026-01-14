@@ -12,33 +12,22 @@ signal transit_used(transit_pos: Marker3D)
 @export var interaction_raycast: RayCast3D
 @export var player: CharacterBody3D
 @export var interact_sound: AudioStreamPlayer3D
-@export var auto_discover: bool = true
 
 var pending_transit: Marker3D = null
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player from parent if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
-	# Auto-discover interaction raycast
-	if not interaction_raycast and player:
-		interaction_raycast = player.get_node_or_null("nek/head/eyes/Camera3D/Interaction")
-	
-	# Auto-discover interact sound
-	if not interact_sound and player:
-		interact_sound = player.get_node_or_null("InteractSound")
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
+	if not interaction_raycast:
+		push_warning("InteractionComponent: 'interaction_raycast' is not set. Interactions will be disabled.")
+	if not player:
+		push_warning("InteractionComponent: 'player' is not set. Transit teleportation will be disabled.")
+	if not interact_sound:
+		push_warning("InteractionComponent: 'interact_sound' is not set. Interaction sounds will be disabled.")
 
 
 func try_interact() -> bool:

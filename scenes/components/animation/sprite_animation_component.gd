@@ -8,7 +8,6 @@ extends Node
 @export var sprite_animation_player: AnimationPlayer
 @export var weapon_manager: WeaponManager
 @export var health_component: HealthComponent
-@export var auto_discover: bool = true
 
 var moving_state: String = "idle"
 var shooting_state: String = "idle"
@@ -18,33 +17,19 @@ var last_weapon_animation: String = ""
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player and related nodes from parent if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
 	if not player:
-		return
-	
-	# Auto-discover sprite animation player
+		push_warning("SpriteAnimationComponent: 'player' is not set. Animation updates will be disabled.")
 	if not sprite_animation_player:
-		sprite_animation_player = player.get_node_or_null("SpriteAnimationPlayer")
-	
-	# Auto-discover sibling components
-	for sibling in parent.get_children():
-		if not health_component and sibling is HealthComponent:
-			health_component = sibling
-		if not weapon_manager and sibling is WeaponManager:
-			weapon_manager = sibling
+		push_warning("SpriteAnimationComponent: 'sprite_animation_player' is not set. Animations will be disabled.")
+	if not weapon_manager:
+		push_warning("SpriteAnimationComponent: 'weapon_manager' is not set. Shooting animations will be disabled.")
+	if not health_component:
+		push_warning("SpriteAnimationComponent: 'health_component' is not set. Death state check will be disabled.")
 
 
 func _physics_process(_delta: float):

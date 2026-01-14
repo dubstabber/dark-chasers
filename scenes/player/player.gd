@@ -32,6 +32,7 @@ var debug_camera: Camera3D # temporary
 @onready var death_component: PlayerDeathComponent = $PlayerDeathComponent
 @onready var interaction_component: InteractionComponent = $InteractionComponent
 @onready var sprite_animation_component: SpriteAnimationComponent = $SpriteAnimationComponent
+@onready var input_component: PlayerInputComponent = $PlayerInputComponent
 
 
 func _ready():
@@ -66,6 +67,11 @@ func _setup_modular_components() -> void:
 	
 	if sprite_animation_component and sprite_animation_player:
 		sprite_animation_player.animation_finished.connect(sprite_animation_component.on_animation_finished)
+	
+	if input_component:
+		input_component.respawn_requested.connect(respawn)
+		if hud:
+			input_component.set_hud(hud)
 
 
 func _on_footstep_triggered() -> void:
@@ -75,67 +81,6 @@ func _on_footstep_triggered() -> void:
 
 func _on_fatal_fall() -> void:
 	_died_from_fall_damage = true
-
-
-func _input(event):
-	if event.is_action_pressed("respawn"):
-		respawn()
-		return
-	if blocked_movement:
-		return
-	if not is_dead():
-		if event is InputEventMouseMotion:
-			camera_3d.handle_mouse_look(event.relative)
-	if event.is_action_pressed("switch-debug-camera"):
-		if camera_3d.current:
-			debug_camera.current = true
-		else:
-			camera_3d.current = true
-
-
-func _physics_process(delta):
-	if not is_on_floor() and not movement_component.clip_mode:
-		velocity.y -= gravity * delta
-	
-	if blocked_movement:
-		return
-	
-	if not is_dead():
-		var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
-		movement_component.process_movement(delta, input_dir)
-		camera_3d.set_sprint_fov(movement_component.is_sprinting())
-		
-		if Input.is_action_just_pressed("jump"):
-			if movement_component.handle_jump():
-				if not movement_component.clip_mode:
-					animation_player.play("jump")
-		elif Input.is_action_just_released("jump"):
-			movement_component.handle_jump_release()
-		
-		if Input.is_action_just_pressed("crouch"):
-			movement_component.handle_crouch_press()
-		elif Input.is_action_just_released("crouch"):
-			movement_component.handle_crouch_release()
-		
-		if is_on_floor() and last_velocity.y < -4.0:
-			animation_player.play("landing")
-		
-		if Input.is_action_just_pressed("toggle-clip-mode"):
-			var new_clip_mode = movement_component.toggle_clip_mode()
-			if hud:
-				hud._on_player_mode_changed("clip_mode", new_clip_mode)
-		
-		if Input.is_action_just_pressed("use"):
-			_handle_use_input()
-		
-		last_velocity = velocity
-		move_and_slide()
-	
-
-func _handle_use_input() -> void:
-	"""Handle 'use' input - delegates to InteractionComponent"""
-	if interaction_component:
-		interaction_component.try_interact()
 
 
 func kill(pos = null, death_message: String = ""):
@@ -290,25 +235,12 @@ func is_alive() -> bool:
 
 func is_dead() -> bool:
 	"""Check if player is dead
-
+	
 	Returns:
 		bool: True if player is dead (health <= 0)
 	"""
 	if health_component:
 		return health_component.is_dead
-	return true
-
-
-const MIN_HEALTH_TO_SPRINT := 30
-
-func _can_sprint() -> bool:
-	"""Check if player has enough health to sprint
-
-	Returns:
-		bool: True if player can sprint (health >= MIN_HEALTH_TO_SPRINT)
-	"""
-	if health_component:
-		return health_component.current_health >= MIN_HEALTH_TO_SPRINT
 	return true
 
 
@@ -374,40 +306,10 @@ func get_armor_percentage() -> float:
 
 
 ## Ammo Management Methods
-## These methods provide a clean interface to the WeaponManager for ammo operations
+## These methods delegate to the WeaponManager for ammo operations
 
 func add_ammo(amount: int, all_weapons: bool = false) -> bool:
-	"""Add ammo to weapons using the component-based ammo system
-
-	Args:
-		amount: Amount of ammo to add
-		all_weapons: If true, add ammo to all non-infinite weapons
-
-	Returns:
-		bool: True if ammo was added to at least one weapon, False otherwise
-	"""
-	if not weapon_manager or not ammo_component:
-		return false
-
-	var ammo_added = false
-	var ammo_types_added = {} # Track which ammo types we've already added to
-
-	if all_weapons:
-		# Add ammo to all non-infinite weapons by ammo type
-		for slot_index in range(1, 10): # Slots 1-9
-			var slot_array = weapon_manager.get_slot_weapons(slot_index)
-			for weapon in slot_array:
-				if not weapon.infinite_ammo and weapon.ammo_type != "":
-					if not ammo_types_added.has(weapon.ammo_type):
-						if ammo_component.add_ammo(weapon.ammo_type, amount):
-							ammo_added = true
-							ammo_types_added[weapon.ammo_type] = true
-	else:
-		# Default: add ammo to current weapon's ammo type
-		if weapon_manager.current_weapon and not weapon_manager.current_weapon.infinite_ammo:
-			if weapon_manager.current_weapon.ammo_type != "":
-				ammo_added = ammo_component.add_ammo(weapon_manager.current_weapon.ammo_type, amount)
-			else:
-				print("Current weapon '%s' has no ammo_type specified!" % weapon_manager.current_weapon.name)
-
-	return ammo_added
+	"""Add ammo to weapons - delegates to WeaponManager"""
+	if weapon_manager:
+		return weapon_manager.add_ammo_to_weapons(amount, all_weapons)
+	return false

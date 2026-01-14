@@ -19,7 +19,6 @@ signal footstep_triggered()
 @export var eyes: Node3D
 @export var player: CharacterBody3D
 @export var movement_component: PlayerMovementComponent
-@export var auto_discover: bool = true
 
 @export_group("Settings")
 @export var lerp_speed: float = 10.0
@@ -32,30 +31,17 @@ var enabled: bool = true
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player from parent if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
-	# Auto-discover eyes node (look for common names)
-	if not eyes and player:
-		eyes = player.get_node_or_null("nek/head/eyes")
-	
-	# Auto-discover movement component from siblings
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
+	if not eyes:
+		push_warning("HeadBobbingComponent: 'eyes' is not set. Head bobbing will be disabled.")
+	if not player:
+		push_warning("HeadBobbingComponent: 'player' is not set. Head bobbing will be disabled.")
 	if not movement_component:
-		for sibling in parent.get_children():
-			if sibling is PlayerMovementComponent:
-				movement_component = sibling
-				break
+		push_warning("HeadBobbingComponent: 'movement_component' is not set. Sprint/crouch bobbing detection will be disabled.")
 
 
 func _physics_process(delta: float):

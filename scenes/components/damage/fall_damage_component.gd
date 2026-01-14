@@ -9,13 +9,12 @@ signal fatal_fall()
 @export_group("Damage Thresholds")
 @export var safe_speed: float = 8.0
 @export var min_damage_speed: float = 12.0
-@export var damage_multiplier: float = 2.0
-@export var max_damage: int = 200
+@export var damage_multiplier: float = 4.0
+@export var max_damage: int = 1000
 
 @export_group("Node References")
 @export var player: CharacterBody3D
 @export var health_component: HealthComponent
-@export var auto_discover: bool = true
 
 var was_airborne: bool = false
 var died_from_fall: bool = false
@@ -23,26 +22,15 @@ var _previous_velocity_y: float = 0.0
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player and health_component from parent/siblings if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
-	# Auto-discover HealthComponent from siblings
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
+	if not player:
+		push_warning("FallDamageComponent: 'player' is not set. Fall damage tracking will be disabled.")
 	if not health_component:
-		for sibling in parent.get_children():
-			if sibling is HealthComponent:
-				health_component = sibling
-				break
+		push_warning("FallDamageComponent: 'health_component' is not set. Fall damage application will be disabled.")
 
 
 func _physics_process(_delta: float):

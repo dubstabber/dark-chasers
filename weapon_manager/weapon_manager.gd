@@ -558,6 +558,42 @@ func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
 	weapon_ammo_changed.emit(current_ammo, max_ammo)
 
 
+func add_ammo_to_weapons(amount: int, all_weapons: bool = false) -> bool:
+	"""Add ammo to weapons using the component-based ammo system
+
+	Args:
+		amount: Amount of ammo to add
+		all_weapons: If true, add ammo to all non-infinite weapons
+
+	Returns:
+		bool: True if ammo was added to at least one weapon, False otherwise
+	"""
+	var player_ammo_component = _get_player_ammo_component()
+	if not player_ammo_component:
+		return false
+
+	var ammo_added = false
+	var ammo_types_added = {}
+
+	if all_weapons:
+		var all_slots = [slot_1, slot_2, slot_3, slot_4, slot_5, slot_6, slot_7, slot_8, slot_9]
+		for slot in all_slots:
+			for weapon in slot:
+				if weapon and not weapon.infinite_ammo and weapon.ammo_type != "":
+					if not ammo_types_added.has(weapon.ammo_type):
+						if player_ammo_component.add_ammo(weapon.ammo_type, amount):
+							ammo_added = true
+							ammo_types_added[weapon.ammo_type] = true
+	else:
+		if current_weapon and not current_weapon.infinite_ammo:
+			if current_weapon.ammo_type != "":
+				ammo_added = player_ammo_component.add_ammo(current_weapon.ammo_type, amount)
+			else:
+				push_warning("WeaponManager: Current weapon '%s' has no ammo_type specified!" % current_weapon.name)
+
+	return ammo_added
+
+
 func _on_weapon_ammo_depleted():
 	"""Called when the current weapon's ammo is completely depleted
 

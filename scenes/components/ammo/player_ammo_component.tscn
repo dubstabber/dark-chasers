@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bqm8xvyh2n8ys"]
 
-[ext_resource type="Script" path="res://components/player_ammo_component.gd" id="1_ammo_component"]
+[ext_resource type="Script" uid="uid://boh0lmgm2ofha" path="res://scenes/components/ammo/player_ammo_component.gd" id="1_ammo_component"]
 
 [node name="PlayerAmmoComponent" type="Node"]
 script = ExtResource("1_ammo_component")

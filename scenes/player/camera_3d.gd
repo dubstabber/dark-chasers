@@ -25,7 +25,6 @@ signal fov_changed(new_fov: float)
 @export_group("Node References")
 @export var head: Node3D
 @export var player: CharacterBody3D
-@export var auto_discover: bool = true
 
 @onready var crosshair_rect: TextureRect = $CrosshairRect
 
@@ -33,23 +32,15 @@ var _crouching_depth: float = -0.5
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player and head from parent hierarchy"""
-	# Camera is at: Player/nek/head/eyes/Camera3D
-	# So we traverse up to find head and player
-	var eyes = get_parent()
-	if eyes:
-		head = eyes.get_parent() # head node
-		if head:
-			var nek = head.get_parent()
-			if nek:
-				var potential_player = nek.get_parent()
-				if potential_player is CharacterBody3D:
-					player = potential_player
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
+	if not head:
+		push_warning("PlayerCamera: 'head' is not set. Mouse look and death camera effects will be disabled.")
+	if not player:
+		push_warning("PlayerCamera: 'player' is not set. Mouse look and death orientation will be disabled.")
 
 
 func _physics_process(_delta: float) -> void:

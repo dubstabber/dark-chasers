@@ -12,7 +12,7 @@ signal armor_broken()
 
 @export_group("Armor Settings")
 @export var max_armor: int = 100: set = set_max_armor
-@export var current_armor: int = 0: set = set_current_armor
+@export var current_armor: int = 50: set = set_current_armor
 @export var can_overshield: bool = false
 @export var overshield_limit: int = 150
 
@@ -24,6 +24,9 @@ signal armor_broken()
 @export var armor_gain_sound: AudioStream
 @export var armor_break_sound: AudioStream
 @export var armor_hit_sound: AudioStream
+
+@export_group("Node References")
+@export var owner_node: Node
 
 enum DamageReductionType {
 	DOOM_GREEN, # DOOM-style green armor: 1/3 damage reduction, 1:2 absorption ratio
@@ -39,8 +42,13 @@ func _ready():
 	if current_armor < 0:
 		current_armor = 0
 	
-	# Connect to parent if it has relevant methods
-	_connect_to_parent()
+	_validate_node_references()
+
+
+func _validate_node_references() -> void:
+	"""Validate that node references are set and log warnings for missing ones"""
+	if not owner_node:
+		push_warning("ArmorComponent: 'owner_node' is not set. Some features may be disabled.")
 
 
 func set_max_armor(value: int):
@@ -194,15 +202,6 @@ func _handle_armor_depletion():
 	# Emit depletion signals
 	armor_depleted.emit()
 	armor_broken.emit()
-
-func _connect_to_parent():
-	"""Connect to parent node if it has compatible methods"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# If parent has armor-related methods, we can integrate with them
-	# This allows for custom armor handling per entity type
 
 func _play_sound(sound: AudioStream):
 	"""Play an audio stream using the game's audio system"""

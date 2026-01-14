@@ -38,7 +38,6 @@ enum MovementState {IDLE, WALKING, SPRINTING, CROUCHING, SLIDING, CLIMBING, AIRB
 @export var crouching_collision: CollisionShape3D
 @export var crouch_raycast: RayCast3D
 @export var health_component: HealthComponent
-@export var auto_discover: bool = true
 
 var current_speed: float = 5.0
 var direction: Vector3 = Vector3.ZERO
@@ -64,43 +63,25 @@ var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 	if player:
 		_initial_collision_mask = player.collision_mask
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player and related nodes from parent if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
 	if not player:
-		return
-	
-	# Auto-discover head node
+		push_warning("PlayerMovementComponent: 'player' is not set. Movement will be disabled.")
 	if not head:
-		head = player.get_node_or_null("nek/head")
-	
-	# Auto-discover collision shapes
+		push_warning("PlayerMovementComponent: 'head' is not set. Head bobbing during crouch will be disabled.")
 	if not standing_collision:
-		standing_collision = player.get_node_or_null("StandingCollisionShape")
+		push_warning("PlayerMovementComponent: 'standing_collision' is not set. Collision switching will be disabled.")
 	if not crouching_collision:
-		crouching_collision = player.get_node_or_null("CrouchingCollisionShape")
+		push_warning("PlayerMovementComponent: 'crouching_collision' is not set. Collision switching will be disabled.")
 	if not crouch_raycast:
-		crouch_raycast = player.get_node_or_null("CrounchRayCast3D")
-	
-	# Auto-discover HealthComponent from siblings
+		push_warning("PlayerMovementComponent: 'crouch_raycast' is not set. Standing up detection will be disabled.")
 	if not health_component:
-		for sibling in parent.get_children():
-			if sibling is HealthComponent:
-				health_component = sibling
-				break
+		push_warning("PlayerMovementComponent: 'health_component' is not set. Sprint health check will be disabled.")
 
 
 func _physics_process(_delta: float):
@@ -138,8 +119,10 @@ func _update_crouch_state(delta: float, input_dir: Vector2) -> void:
 		if head:
 			head.position.y = lerp(head.position.y, crouching_depth, delta * lerp_speed)
 		
-		standing_collision.disabled = true
-		crouching_collision.disabled = false
+		if standing_collision:
+			standing_collision.disabled = true
+		if crouching_collision:
+			crouching_collision.disabled = false
 		
 		# Start sliding if was sprinting and pressing crouch with movement
 		# Check _is_sprinting BEFORE resetting it (matches old player.gd behavior)
@@ -154,9 +137,11 @@ func _update_crouch_state(delta: float, input_dir: Vector2) -> void:
 		if current_state != MovementState.SLIDING:
 			_set_state(MovementState.CROUCHING)
 	
-	elif crouch_raycast and not crouch_raycast.is_colliding():
-		standing_collision.disabled = false
-		crouching_collision.disabled = true
+	elif not crouch_raycast or not crouch_raycast.is_colliding():
+		if standing_collision:
+			standing_collision.disabled = false
+		if crouching_collision:
+			crouching_collision.disabled = true
 		
 		if head:
 			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
@@ -200,7 +185,14 @@ func _update_direction(delta: float, input_dir: Vector2) -> void:
 	if not player:
 		return
 	
-	if current_state == MovementState.SLIDING:
+	if clip_mode:
+		if input_dir != Vector2.ZERO:
+			direction = (player.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+		else:
+			direction = Vector3.ZERO
+			player.velocity.x = 0
+			player.velocity.z = 0
+	elif current_state == MovementState.SLIDING:
 		direction = (player.transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
 		current_speed = (slide_timer + 0.1) * slide_speed
 	elif player.is_on_floor():

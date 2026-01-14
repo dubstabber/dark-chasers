@@ -27,7 +27,6 @@ extends Node
 		if health_component:
 			health_component.damage_taken.connect(_on_damage_taken)
 			health_component.died.connect(_on_died)
-@export var auto_discover: bool = true
 
 var original_modulate: Color = Color(1.0, 1.0, 1.0, 0.0)
 var damage_blink_tween: Tween
@@ -37,24 +36,15 @@ func _ready():
 	if color_rect:
 		original_modulate = color_rect.modulate
 	
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover health_component from siblings if not set"""
-	if health_component:
-		return
-	
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover HealthComponent from siblings
-	for sibling in parent.get_children():
-		if sibling is HealthComponent:
-			health_component = sibling # Uses setter to auto-connect signals
-			break
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
+	if not color_rect:
+		push_warning("DamageEffectsComponent: 'color_rect' is not set. Damage visual effects will be disabled.")
+	if not health_component:
+		push_warning("DamageEffectsComponent: 'health_component' is not set. Auto damage blink will be disabled.")
 
 
 func _on_damage_taken(_amount: int, _current_health: int) -> void:

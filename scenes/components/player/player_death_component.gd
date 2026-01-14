@@ -28,10 +28,7 @@ signal respawn_completed()
 @export var corpse_sprite: Sprite3D
 @export var sprite_animation_player: AnimationPlayer
 @export var damage_effects: DamageEffectsComponent
-@export var auto_discover: bool = true
-
-@export_group("Crouch Settings")
-@export var crouching_depth: float = -0.5
+@export var movement_component: PlayerMovementComponent
 
 var death_throw: float = 0.0
 var killed_pos: Vector3 = Vector3.ZERO
@@ -40,48 +37,36 @@ var is_dead: bool = false
 
 
 func _ready():
-	if auto_discover:
-		_auto_discover_dependencies()
+	_validate_node_references()
 
 
-func _auto_discover_dependencies() -> void:
-	"""Auto-discover player and related nodes from parent if not set"""
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	# Auto-discover player (parent if it's a CharacterBody3D)
-	if not player and parent is CharacterBody3D:
-		player = parent
-	
+func _validate_node_references() -> void:
+	"""Validate that required node references are set and log warnings for missing ones"""
 	if not player:
-		return
-	
-	# Auto-discover nodes from player
+		push_warning("PlayerDeathComponent: 'player' is not set. Death handling will be disabled.")
 	if not head:
-		head = player.get_node_or_null("nek/head")
+		push_warning("PlayerDeathComponent: 'head' is not set. Camera lowering on death will be disabled.")
 	if not camera:
-		camera = player.get_node_or_null("nek/head/eyes/Camera3D")
+		push_warning("PlayerDeathComponent: 'camera' is not set. Death camera effects will be disabled.")
 	if not standing_collision:
-		standing_collision = player.get_node_or_null("StandingCollisionShape")
+		push_warning("PlayerDeathComponent: 'standing_collision' is not set. Collision switching on death will be disabled.")
 	if not crouching_collision:
-		crouching_collision = player.get_node_or_null("CrouchingCollisionShape")
+		push_warning("PlayerDeathComponent: 'crouching_collision' is not set. Collision switching on death will be disabled.")
+	if not health_component:
+		push_warning("PlayerDeathComponent: 'health_component' is not set. Death trigger will be disabled.")
+	if not weapon_manager:
+		push_warning("PlayerDeathComponent: 'weapon_manager' is not set. Weapon death handling will be disabled.")
 	if not directional_sprite:
-		directional_sprite = player.get_node_or_null("DirectionalSprite3D")
+		push_warning("PlayerDeathComponent: 'directional_sprite' is not set. Sprite visibility on death will be disabled.")
 	if not corpse_sprite:
-		corpse_sprite = player.get_node_or_null("Corpse3D")
+		push_warning("PlayerDeathComponent: 'corpse_sprite' is not set. Corpse spawning will be disabled.")
 	if not sprite_animation_player:
-		sprite_animation_player = player.get_node_or_null("SpriteAnimationPlayer")
-	
-	# Auto-discover sibling components
-	for sibling in parent.get_children():
-		if not health_component and sibling is HealthComponent:
-			health_component = sibling
-		if not weapon_manager and sibling is WeaponManager:
-			weapon_manager = sibling
-		if not damage_effects and sibling is DamageEffectsComponent:
-			damage_effects = sibling
-
+		push_warning("PlayerDeathComponent: 'sprite_animation_player' is not set. Death animation will be disabled.")
+	if not damage_effects:
+		push_warning("PlayerDeathComponent: 'damage_effects' is not set. Death overlay will be disabled.")
+	if not movement_component:
+		push_warning("PlayerDeathComponent: 'movement_component' is not set. Will use default crouching_depth.")
+ 
 
 func _physics_process(delta: float):
 	if not is_dead or not player:
@@ -116,7 +101,7 @@ func _on_health_died() -> void:
 
 
 func kill_with_direction(enemy_pos: Vector3, _death_message: String = "") -> void:
-	if is_dead:
+	if is_dead or not player:
 		return
 	
 	# Set direction for death throw
@@ -159,7 +144,8 @@ func _apply_death_camera_lowering(delta: float) -> void:
 	if camera and camera.has_method("apply_death_camera_lowering"):
 		camera.apply_death_camera_lowering(delta)
 	elif head:
-		var death_camera_depth = crouching_depth * camera_death_depth_multiplier
+		var crouch_depth = movement_component.crouching_depth if movement_component else -0.5
+		var death_camera_depth = crouch_depth * camera_death_depth_multiplier
 		head.position.y = lerp(head.position.y, death_camera_depth, delta * dead_lerp_speed)
 
 
@@ -236,8 +222,10 @@ func respawn(health_amount: int = -1) -> void:
 
 
 func _spawn_corpse() -> void:
+	if not player or not corpse_sprite:
+		return
 	var corpses_parents = player.get_tree().get_nodes_in_group("corpse")
-	if corpse_sprite and corpses_parents.size() > 0:
+	if corpses_parents.size() > 0:
 		var corpse_copy = corpse_sprite.duplicate()
 		if corpse_copy:
 			var corpses_parent = corpses_parents[0]

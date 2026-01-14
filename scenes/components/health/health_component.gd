@@ -29,6 +29,11 @@ signal health_depleted()
 @export var heal_sound: AudioStream
 @export var death_sound: AudioStream
 
+@export_group("Node References")
+@export var owner_node: Node
+@export var armor_component: Node
+@export var audio_player: Node
+
 var is_dead: bool = false
 var invulnerability_timer: float = 0.0
 
@@ -37,8 +42,17 @@ func _ready():
 	if current_health <= 0:
 		current_health = max_health
 	
-	# Connect to parent if it has relevant methods
-	_connect_to_parent()
+	_validate_node_references()
+
+
+func _validate_node_references() -> void:
+	"""Validate that node references are set and log warnings for missing ones"""
+	if not owner_node:
+		push_warning("HealthComponent: 'owner_node' is not set. destroy_on_death will be disabled.")
+	if not armor_component:
+		push_warning("HealthComponent: 'armor_component' is not set. Damage reduction will be disabled.")
+	if not audio_player:
+		push_warning("HealthComponent: 'audio_player' is not set. Sound effects will use fallback.")
 
 func _process(delta):
 	# Handle invulnerability timer
@@ -72,7 +86,6 @@ func take_damage(amount: int) -> bool:
 
 	# Check for ArmorComponent and process damage reduction
 	var final_damage = amount
-	var armor_component = _get_armor_component()
 	if armor_component and armor_component.has_method("process_damage"):
 		final_damage = armor_component.process_damage(amount)
 
@@ -173,60 +186,31 @@ func _handle_death():
 		if death_delay > 0.0:
 			await get_tree().create_timer(death_delay).timeout
 		
-		if is_instance_valid(get_parent()):
-			get_parent().queue_free()
+		if owner_node and is_instance_valid(owner_node):
+			owner_node.queue_free()
 
-func _get_armor_component():
-	"""Get the ArmorComponent from the same parent node"""
-	var parent = get_parent()
-	if not parent:
-		return null
-
-	# Look for ArmorComponent as a sibling node
-	for child in parent.get_children():
-		if child.get_script() and child.get_script().get_global_name() == "ArmorComponent":
-			return child
-
-	return null
-
-func _connect_to_parent():
-	"""Connect to parent node if it has compatible methods"""
-	var parent = get_parent()
-	if not parent:
-		return
-
-	# If parent has a take_damage method, we can override it
-	if parent.has_method("take_damage"):
-		# Note: This would require the parent to delegate to this component
-		pass
 
 func _play_sound(sound: AudioStream):
 	"""Play a sound effect"""
 	if not sound:
 		return
 	
-	# Try to find an AudioStreamPlayer in the parent
-	var parent = get_parent()
-	if not parent:
-		return
-	
-	var audio_player = parent.get_node_or_null("AudioStreamPlayer3D")
-	if not audio_player:
-		audio_player = parent.get_node_or_null("AudioStreamPlayer")
-	
-	if audio_player and audio_player is AudioStreamPlayer3D:
-		audio_player.stream = sound
-		audio_player.play()
-	elif audio_player and audio_player is AudioStreamPlayer:
-		audio_player.stream = sound
-		audio_player.play()
+	# Use configured audio player if available
+	if audio_player:
+		if audio_player is AudioStreamPlayer3D:
+			audio_player.stream = sound
+			audio_player.play()
+		elif audio_player is AudioStreamPlayer:
+			audio_player.stream = sound
+			audio_player.play()
 	else:
-		# Create a temporary audio player
+		# Fallback: create temporary audio player
 		var pos = Vector3.ZERO
-		if parent.has_method("get_global_position"):
-			pos = parent.get_global_position()
-		elif "global_position" in parent:
-			pos = parent.global_position
+		if owner_node:
+			if owner_node.has_method("get_global_position"):
+				pos = owner_node.get_global_position()
+			elif "global_position" in owner_node:
+				pos = owner_node.global_position
 		Utils.play_sound(sound, get_tree().root, pos)
 
 # Convenience methods for common use cases

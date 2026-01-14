@@ -62,6 +62,7 @@ func _physics_process(delta: float) -> void:
 		player.velocity.y -= _get_gravity() * delta
 	
 	if _is_movement_blocked():
+		_stop_all_movement()
 		return
 	
 	if not _is_player_dead():
@@ -156,3 +157,11 @@ func _get_last_velocity_y() -> float:
 func _update_last_velocity() -> void:
 	if player and "last_velocity" in player:
 		player.last_velocity = player.velocity
+
+
+func _stop_all_movement() -> void:
+	if player:
+		player.velocity.x = 0
+		player.velocity.z = 0
+	if movement_component:
+		movement_component.direction = Vector3.ZERO

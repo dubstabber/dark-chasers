@@ -29,6 +29,7 @@ signal respawn_completed()
 @export var sprite_animation_player: AnimationPlayer
 @export var damage_effects: DamageEffectsComponent
 @export var movement_component: PlayerMovementComponent
+@export var head_bobbing_component: HeadBobbingComponent
 
 var death_throw: float = 0.0
 var killed_pos: Vector3 = Vector3.ZERO
@@ -66,6 +67,8 @@ func _validate_node_references() -> void:
 		push_warning("PlayerDeathComponent: 'damage_effects' is not set. Death overlay will be disabled.")
 	if not movement_component:
 		push_warning("PlayerDeathComponent: 'movement_component' is not set. Will use default crouching_depth.")
+	if not head_bobbing_component:
+		push_warning("PlayerDeathComponent: 'head_bobbing_component' is not set. Head bobbing will continue during death.")
  
 
 func _physics_process(delta: float):
@@ -86,6 +89,7 @@ func _on_health_died() -> void:
 	_handle_weapon_death()
 	_setup_death_camera()
 	_configure_death_collision()
+	_disable_head_bobbing()
 	
 	if damage_effects:
 		damage_effects.apply_death_overlay()
@@ -180,6 +184,11 @@ func _configure_death_collision() -> void:
 		crouching_collision.disabled = false
 
 
+func _disable_head_bobbing() -> void:
+	if head_bobbing_component:
+		head_bobbing_component.set_enabled(false)
+
+
 func respawn(health_amount: int = -1) -> void:
 	if not is_dead:
 		return
@@ -255,6 +264,9 @@ func _reset_death_effects() -> void:
 	
 	if damage_effects:
 		damage_effects.clear_death_overlay()
+	
+	if head_bobbing_component:
+		head_bobbing_component.set_enabled(true)
 
 
 func can_respawn() -> bool:

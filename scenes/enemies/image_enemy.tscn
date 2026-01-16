@@ -1,6 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bb0ja5up2c6ny"]
 
-[ext_resource type="Script" uid="uid://crvqpgygs5h8g" path="res://scenes/enemies/image_enemy.gd" id="1_fvloq"]
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://crvqpgygs5h8g" path="res://scenes/enemies/image_enemy.gd" id="2_script"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nli0v"]
 radius = 0.360225
@@ -10,64 +11,39 @@ height = 1.195
 radius = 0.436058
 height = 1.495
 
-[node name="ImageEnemy" type="CharacterBody3D" groups=["enemy"]]
-collision_layer = 2
+[node name="ImageEnemy" instance=ExtResource("1_base")]
 collision_mask = 45
-slide_on_ceiling = false
-wall_min_slide_angle = 0.0
-floor_stop_on_slope = false
-floor_block_on_wall = false
-floor_snap_length = 0.31
-script = ExtResource("1_fvloq")
+script = ExtResource("2_script")
 
-[node name="Interaction" type="RayCast3D" parent="."]
+[node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277546, 0)
 target_position = Vector3(0, 0, -1)
-collision_mask = 12
 
-[node name="Graphics" type="Node3D" parent="."]
-
-[node name="Sprite3D" type="Sprite3D" parent="Graphics"]
+[node name="Sprite3D" type="Sprite3D" parent="Graphics" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.975002, 0)
 sorting_offset = 5.0
 billboard = 2
 render_priority = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.60043, 0)
 shape = SubResource("CapsuleShape3D_nli0v")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+[node name="NavigationAgent3D" parent="." index="3"]
 path_postprocessing = 1
 
-[node name="KillZone" type="Area3D" parent="."]
+[node name="KillZone" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.744169, 0)
-collision_layer = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
+[node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_yv763")
 
-[node name="Timers" type="Node" parent="."]
-
-[node name="InteractionTimer" type="Timer" parent="Timers"]
+[node name="InteractionTimer" parent="Timers" index="0"]
 wait_time = 0.25
-autostart = true
 
-[node name="WanderingTimer" type="Timer" parent="Timers"]
-one_shot = true
-
-[node name="FindPathTimer" type="Timer" parent="Timers"]
+[node name="FindPathTimer" parent="Timers" index="1"]
 wait_time = 0.3
-autostart = true
 
-[node name="SoundMusic" type="AudioStreamPlayer3D" parent="."]
+[node name="SoundMusic" type="AudioStreamPlayer3D" parent="." index="9"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 volume_db = -20.322
-
-[connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
-[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
-[connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
-[connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
-[connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
-[connection signal="timeout" from="Timers/WanderingTimer" to="." method="_on_wandering_timer_timeout"]
-[connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]

@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=6 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
+[ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
+[ext_resource type="Script" uid="uid://cf2x6d4kfgfje" path="res://scenes/components/enemy/godot_navigation_component.gd" id="3_nav"]
+[ext_resource type="Script" uid="uid://cbh1612uffdbk" path="res://scenes/components/enemy/enemy_ai_component.gd" id="4_ai"]
+[ext_resource type="Script" uid="uid://b7dpx1j72pp0d" path="res://scenes/components/enemy/enemy_wandering_component.gd" id="5_wander"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -39,6 +43,20 @@ autostart = true
 
 [node name="WanderingTimer" type="Timer" parent="Timers"]
 one_shot = true
+
+[node name="BloodEffectComponent" type="Node" parent="."]
+script = ExtResource("2_blood")
+
+[node name="GodotNavigationComponent" type="Node" parent="." node_paths=PackedStringArray("navigation_agent")]
+script = ExtResource("3_nav")
+navigation_agent = NodePath("../NavigationAgent3D")
+
+[node name="EnemyAIComponent" type="Node" parent="."]
+script = ExtResource("4_ai")
+
+[node name="EnemyWanderingComponent" type="Node" parent="."]
+script = ExtResource("5_wander")
+interaction_ray_path = NodePath("../Interaction")
 
 [connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
 [connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]

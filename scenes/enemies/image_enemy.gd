@@ -10,11 +10,6 @@ var enemy_data: Dictionary
 
 func _ready():
 	super._ready()
-	# Set red blood defaults if not configured in inspector
-	if not blood_particle_scene:
-		blood_color = Color(1.0, 0.0, 0.0, 1.0)
-		blood_particle_scene = Preloads.AO_RED_BLOOD_PARTICLE
-		blood_decal_scene = Preloads.BLOOD_SPLAT_DECAL
 	
 	if not speed: speed = 8.0
 	accel = 10

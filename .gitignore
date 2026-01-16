@@ -65,3 +65,5 @@ export_presets.cfg
 
 egb281/
 debug-output.txt
+docs/
+TASK.md

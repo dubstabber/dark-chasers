@@ -10,19 +10,11 @@ class_name Enemy extends CharacterBody3D
 @export var debug_prints := false
 @export var death_message: String = ""
 
-@export_group("Blood Effects")
-@export var blood_enabled := true
-@export var blood_color := Color(1.0, 0.0, 0.0, 1.0)
-@export var blood_particle_scene: PackedScene
-@export var blood_decal_scene: PackedScene
-
-const BLOOD_UPWARD_VELOCITY := 0.5
-const BLOOD_Z_OFFSET_RANGE := 0.1
-const BLOOD_SURFACE_OFFSET := 0.01
-const BLOOD_TRACE_DISTANCE := 5.4
-const BLOOD_TRACE_NOISE_LOW := 0.15
-const BLOOD_TRACE_NOISE_MED := 0.18
-const BLOOD_TRACE_NOISE_HIGH := 0.20
+var _blood_component: BloodEffectComponent
+var _nav_component: EnemyNavigationComponent
+var _ai_component: EnemyAIComponent
+var _health_component: HealthComponent
+var _wandering_component: EnemyWanderingComponent
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
@@ -44,10 +36,67 @@ var is_killed := false
 
 
 func _ready():
-	players = get_parent().get_node("%Players")
-	map_transitions = get_parent().get_node_or_null("%Transitions")
+	players = get_tree().get_first_node_in_group("players")
+	map_transitions = get_tree().get_first_node_in_group("transitions")
 	for disappear_zone in disappear_zones:
 		disappear_zone.connect("body_entered", _on_disappear_area)
+	_setup_components()
+
+
+func _setup_components() -> void:
+	_blood_component = get_node_or_null("BloodEffectComponent")
+	_setup_navigation_component()
+	_setup_ai_component()
+	_setup_health_component()
+	_setup_wandering_component()
+
+
+func _setup_navigation_component() -> void:
+	_nav_component = get_node_or_null("GodotNavigationComponent")
+	if _nav_component:
+		_nav_component.target_reached.connect(_on_navigation_agent_3d_target_reached)
+		_nav_component.link_reached.connect(_on_navigation_agent_3d_link_reached)
+		_nav_component.waypoint_reached.connect(_on_navigation_agent_3d_waypoint_reached)
+
+
+func _setup_ai_component() -> void:
+	_ai_component = get_node_or_null("EnemyAIComponent")
+	if _ai_component:
+		_ai_component.chase_player = chase_player
+		_ai_component.target_acquired.connect(_on_target_acquired)
+		_ai_component.target_died.connect(_on_target_died)
+
+
+func _setup_health_component() -> void:
+	_health_component = get_node_or_null("HealthComponent")
+	if _health_component:
+		_health_component.died.connect(_on_died)
+
+
+func _setup_wandering_component() -> void:
+	_wandering_component = get_node_or_null("EnemyWanderingComponent")
+	if _wandering_component:
+		_wandering_component.set_debug(debug_prints)
+		_wandering_component.direction_changed.connect(_on_wandering_direction_changed)
+		if is_wandering:
+			_wandering_component.start_wandering()
+
+
+func _on_wandering_direction_changed(new_dir: Vector3) -> void:
+	direction = new_dir
+
+
+func _on_died() -> void:
+	is_killed = true
+	velocity = Vector3.ZERO
+
+
+func has_health_component() -> bool:
+	return _health_component != null
+
+
+func get_health_component() -> HealthComponent:
+	return _health_component
 
 
 func _physics_process(delta):
@@ -55,34 +104,28 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 	if not is_killed:
 		if not current_target and chase_player:
-			check_targets()
+			_check_for_targets()
 		if current_target or not waypoints.is_empty():
-			var next_pos = nav.get_next_path_position()
-			# Only use horizontal movement for ground-based enemies to prevent Y drift
+			var next_pos = _get_next_path_position()
 			var horizontal_direction = Vector3(next_pos.x - global_position.x, 0, next_pos.z - global_position.z).normalized()
 			direction = horizontal_direction
-			# Preserve Y velocity for gravity/jumping, only lerp X and Z components
 			var target_velocity = horizontal_direction * (speed + jump_speed)
 			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
 			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
 			if current_target and current_target.has_method("is_dead") and current_target.is_dead():
 				current_target = null
+				if _ai_component:
+					_ai_component.clear_target()
 				velocity = Vector3.ZERO
-				# Reset timer to be more responsive when looking for new targets
 				find_path_timer.wait_time = 0.1
 			if is_on_floor() or is_flying:
 				look_forward()
 		elif is_wandering:
-			if wandering_timer.is_stopped():
-				wandering_timer.start()
-			# Check for wall collision during wandering
-			if debug_prints:
-				print("Checking wall collision during wandering...")
-			if _check_wall_collision():
-				if debug_prints:
-					print("Wall collision detected! Changing direction...")
-				_change_wandering_direction()
-			# Apply same horizontal-only movement for wandering
+			if _wandering_component:
+				_wandering_component.update(delta)
+				direction = _wandering_component.direction
+			else:
+				_legacy_wandering_update()
 			var target_velocity = direction * (speed + jump_speed)
 			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
 			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
@@ -99,39 +142,72 @@ func look_forward() -> void:
 		rotation.y = atan2(velocity.x, velocity.z) + PI
 
 
-func check_targets() -> void:
-	if players:
-		var space_state = get_world_3d().direct_space_state
-		for target in players.get_children():
-			var params = PhysicsRayQueryParameters3D.new()
-			params.from = global_position
-			params.to = target.camera_3d.global_position
-			params.exclude = [self]
-			params.collision_mask = collision_mask
-			var result = space_state.intersect_ray(params)
-			if (
-				result
-				and result.collider.is_in_group("player")
-				and not (target.has_method("is_dead") and target.is_dead())
-			):
-				var was_target_null = current_target == null
-				current_target = result.collider
-				# Immediately calculate path when target is first detected to eliminate delay
-				if was_target_null:
-					makepath()
-					if debug_prints:
-						print("Enemy detected new target, immediately calculating path")
+func _check_for_targets() -> void:
+	if _ai_component:
+		_ai_component.check_targets()
+	else:
+		_legacy_check_targets()
+
+
+func _on_target_acquired(target: Node3D) -> void:
+	current_target = target
+	makepath()
+	if debug_prints:
+		print("Enemy detected new target, immediately calculating path")
+
+
+func _on_target_died() -> void:
+	current_target = null
+	velocity = Vector3.ZERO
+	find_path_timer.wait_time = 0.1
+
+
+func _get_next_path_position() -> Vector3:
+	if _nav_component:
+		return _nav_component.get_next_path_position()
+	return nav.get_next_path_position()
+
+
+func _set_nav_target(pos: Vector3) -> void:
+	if _nav_component:
+		_nav_component.set_target(pos)
+	else:
+		nav.target_position = pos
+
+
+func _get_distance_to_target() -> float:
+	if _nav_component:
+		return _nav_component.distance_to_target()
+	return nav.distance_to_target()
+
+
+func _legacy_check_targets() -> void:
+	if not players:
+		return
+	var space_state = get_world_3d().direct_space_state
+	for target in players.get_children():
+		var params = PhysicsRayQueryParameters3D.new()
+		params.from = global_position
+		params.to = target.camera_3d.global_position
+		params.exclude = [self]
+		params.collision_mask = collision_mask
+		var result = space_state.intersect_ray(params)
+		if result and result.collider.is_in_group("player") and not (target.has_method("is_dead") and target.is_dead()):
+			var was_target_null = current_target == null
+			current_target = result.collider
+			if was_target_null:
+				makepath()
 
 
 func makepath() -> void:
 	if current_target:
 		if current_target.current_room == current_room or not current_room:
-			nav.target_position = current_target.global_position
+			_set_nav_target(current_target.global_position)
 		elif map_transitions:
 			var transition_point = find_path_to_player()[0]
-			nav.target_position = map_transitions.get_node(transition_point).global_position
+			_set_nav_target(map_transitions.get_node(transition_point).global_position)
 	elif not waypoints.is_empty():
-		nav.target_position = waypoints[0]
+		_set_nav_target(waypoints[0])
 
 
 func find_path_to_player():
@@ -166,8 +242,7 @@ func add_disappear_zone(area):
 
 
 func _on_find_path_timer_timeout():
-	var distance_to_target = nav.distance_to_target()
-	# More responsive timer intervals, especially for distant targets
+	var distance_to_target = _get_distance_to_target()
 	if distance_to_target < 20 or not waypoints.is_empty():
 		find_path_timer.wait_time = 0.1
 	elif distance_to_target < 35:
@@ -199,38 +274,13 @@ func _on_interaction_timer_timeout():
 				direction = Vector3(-direction.x, 0, -direction.z)
 
 
-func _check_wall_collision() -> bool:
-	"""Check if the enemy is about to collide with a wall during wandering using interaction_ray"""
-	if not interaction_ray:
-		if debug_prints:
-			print("No interaction_ray available")
-		return false
-	
-	# Check if ray is currently colliding with something
-	if interaction_ray.is_colliding():
+func _legacy_wandering_update() -> void:
+	if wandering_timer.is_stopped():
+		wandering_timer.start()
+	if interaction_ray and interaction_ray.is_colliding():
 		var collider = interaction_ray.get_collider()
-		if debug_prints:
-			print("Ray collision detected with: ", collider.name if collider else "null")
-			if collider:
-				print("Collider groups: ", collider.get_groups())
-		
-		# Return true if it's a wall (not a player)
 		if collider != null and not collider.is_in_group("player"):
-			return true
-	else:
-		if debug_prints:
-			print("No ray collision detected")
-	
-	return false
-
-
-func _change_wandering_direction() -> void:
-	"""Change wandering direction when hitting a wall - simple turn around approach"""
-	# Simple approach: turn around 180 degrees
-	direction = - direction.normalized()
-	
-	if debug_prints:
-		print("Enemy turned around to avoid wall, new direction: ", direction)
+			direction = - direction.normalized()
 
 
 func _on_wandering_timer_timeout():
@@ -266,108 +316,11 @@ func take_damage(_amount: int) -> void:
 
 
 func take_damage_at_position(_amount: int, hit_pos: Vector3) -> void:
-	_spawn_blood_splatter(hit_pos, Vector3.ZERO)
+	if _blood_component:
+		_blood_component.spawn_splatter(hit_pos, Vector3.ZERO)
 
 
 func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
-	_spawn_blood_splatter(hit_pos, shot_direction)
-	_trace_blood_to_walls(amount, hit_pos, shot_direction)
-
-
-func _spawn_blood_splatter(hit_pos: Vector3, shot_direction: Vector3) -> void:
-	if not blood_enabled or not blood_particle_scene:
-		return
-	
-	var particle := blood_particle_scene.instantiate()
-	get_tree().root.add_child(particle)
-	
-	# Offset blood spawn position toward the shooter (opposite of shot direction)
-	var surface_offset := Vector3.ZERO
-	if shot_direction.length_squared() > 0.01:
-		surface_offset = - shot_direction.normalized() * BLOOD_SURFACE_OFFSET
-	
-	# Spawn at hit position with surface offset and small random Y offset
-	var y_offset = randf_range(-BLOOD_Z_OFFSET_RANGE, BLOOD_Z_OFFSET_RANGE)
-	particle.global_position = hit_pos + surface_offset + Vector3(0, y_offset, 0)
-	
-	particle.linear_velocity = Vector3(0, BLOOD_UPWARD_VELOCITY, 0)
-
-
-func _trace_blood_to_walls(damage: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
-	if not blood_enabled or not blood_decal_scene:
-		return
-	
-	var decal_count: int
-	var noise: float
-	
-	if damage < 15:
-		if damage <= 10:
-			if randi() % 256 < 160:
-				return
-		decal_count = 1
-		noise = BLOOD_TRACE_NOISE_LOW
-	elif damage < 25:
-		decal_count = 2
-		noise = BLOOD_TRACE_NOISE_MED
-	else:
-		if randi() % 256 < 24:
-			decal_count = 1
-			noise = BLOOD_TRACE_NOISE_HIGH
-		else:
-			decal_count = 3
-			noise = BLOOD_TRACE_NOISE_HIGH
-	
-	for i in range(decal_count):
-		_trace_single_blood_ray(hit_pos, shot_direction, noise)
-
-
-func _trace_single_blood_ray(hit_pos: Vector3, shot_direction: Vector3, noise: float) -> void:
-	var noisy_direction = shot_direction
-	noisy_direction = noisy_direction.rotated(Vector3.UP, randf_range(-noise, noise))
-	noisy_direction = noisy_direction.rotated(Vector3.RIGHT, randf_range(-noise, noise))
-	noisy_direction = noisy_direction.normalized()
-	
-	var space_state = get_world_3d().direct_space_state
-	var ray_end = hit_pos + noisy_direction * BLOOD_TRACE_DISTANCE
-	
-	var query = PhysicsRayQueryParameters3D.create(hit_pos, ray_end)
-	query.exclude = [self]
-	query.collision_mask = 4 # Walls layer (layer 3)
-	
-	var result = space_state.intersect_ray(query)
-	
-	if result and not result.collider.is_in_group("entity") and not result.collider.is_in_group("no_decals"):
-		if _is_wall_surface(result.normal):
-			_spawn_blood_decal(result.position, result.normal, result.collider)
-
-
-func _is_wall_surface(normal: Vector3) -> bool:
-	"""Check if surface is a wall (not floor or ceiling)"""
-	return abs(normal.y) < 0.7
-
-
-func _spawn_blood_decal(hit_pos: Vector3, hit_normal: Vector3, collider: Node3D) -> void:
-	"""Spawn a blood splat decal on a wall surface"""
-	var decal := blood_decal_scene.instantiate()
-	collider.add_child(decal)
-	
-	decal.global_position = hit_pos + hit_normal * (decal.size.y * 0.05)
-	decal.global_transform.basis = _calculate_decal_rotation(hit_normal)
-	
-	if decal.has_method("set_blood_color"):
-		decal.set_blood_color(blood_color)
-	else:
-		decal.modulate = Color(blood_color.r * 0.5, blood_color.g * 0.5, blood_color.b * 0.5, 1.0)
-
-
-func _calculate_decal_rotation(normal: Vector3) -> Basis:
-	"""Calculate rotation basis for Decal node to project onto surface"""
-	var forward = Vector3.FORWARD
-	
-	if abs(normal.dot(forward)) > 0.99:
-		forward = Vector3.RIGHT
-	
-	var right_vector = forward.cross(normal).normalized()
-	var forward_vector = normal.cross(right_vector).normalized()
-	
-	return Basis(right_vector, -normal, forward_vector)
+	if _blood_component:
+		_blood_component.spawn_splatter(hit_pos, shot_direction)
+		_blood_component.trace_to_walls(amount, hit_pos, shot_direction)

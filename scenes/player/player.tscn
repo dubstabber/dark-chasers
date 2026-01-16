@@ -1222,7 +1222,7 @@ weapon_sound_player = NodePath("../InteractSound")
 bullet_raycast = NodePath("../nek/head/eyes/Camera3D/HitScanRayCast")
 
 [node name="DirectionalSprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0.604423, 0)
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 0, 0.605822, 0)
 layers = 2
 material_override = SubResource("ShaderMaterial_2wy34")
 cast_shadow = 0

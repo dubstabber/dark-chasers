@@ -244,6 +244,20 @@ func is_dead() -> bool:
 	return true
 
 
+func get_aim_point() -> Vector3:
+	"""Get the position enemies should aim at (camera position)
+	
+	This provides a standardized interface for enemy targeting,
+	decoupling enemies from knowing about the camera_3d property.
+	
+	Returns:
+		Vector3: Global position of the player's viewpoint
+	"""
+	if camera_3d:
+		return camera_3d.global_position
+	return global_position + Vector3(0, 1.6, 0)
+
+
 ## Armor Management Methods
 ## These methods provide a clean interface to the ArmorComponent
 

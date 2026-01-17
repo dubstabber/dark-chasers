@@ -9,12 +9,18 @@ class_name Enemy extends CharacterBody3D
 @export var accel: float = 10.0
 @export var debug_prints := false
 @export var death_message: String = ""
+@export var jump_velocity: float = 12.0
 
 var _blood_component: BloodEffectComponent
 var _nav_component: EnemyNavigationComponent
 var _ai_component: EnemyAIComponent
 var _health_component: HealthComponent
 var _wandering_component: EnemyWanderingComponent
+var _room_pathing_component: RoomPathingComponent
+var _door_opener_component: EnemyDoorOpenerComponent
+var _kill_zone_component: EnemyKillZoneComponent
+var _motor_component: EnemyMotorComponent
+var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var players: Node3D
@@ -36,19 +42,54 @@ var is_killed := false
 
 
 func _ready():
-	players = get_tree().get_first_node_in_group("players")
-	map_transitions = get_tree().get_first_node_in_group("transitions")
+	_setup_context()
 	for disappear_zone in disappear_zones:
 		disappear_zone.connect("body_entered", _on_disappear_area)
 	_setup_components()
 
 
+func _setup_context() -> void:
+	_enemy_context = get_node_or_null("/root/EnemyContext")
+	if _enemy_context:
+		players = _enemy_context.get_players_node()
+		map_transitions = _enemy_context.get_transitions_node()
+	else:
+		players = get_tree().get_first_node_in_group("players")
+		map_transitions = get_tree().get_first_node_in_group("transitions")
+
+
 func _setup_components() -> void:
 	_blood_component = get_node_or_null("BloodEffectComponent")
+	_room_pathing_component = get_node_or_null("RoomPathingComponent")
+	_door_opener_component = get_node_or_null("EnemyDoorOpenerComponent")
+	if _door_opener_component:
+		_door_opener_component.enabled = can_open_door
+	_setup_motor_component()
+	_setup_kill_zone_component()
 	_setup_navigation_component()
 	_setup_ai_component()
 	_setup_health_component()
 	_setup_wandering_component()
+
+
+func _setup_motor_component() -> void:
+	_motor_component = get_node_or_null("EnemyMotorComponent")
+	if _motor_component:
+		_motor_component.speed = speed
+		_motor_component.accel = accel
+		_motor_component.is_flying = is_flying
+
+
+func _setup_kill_zone_component() -> void:
+	_kill_zone_component = get_node_or_null("EnemyKillZoneComponent")
+	if _kill_zone_component:
+		_kill_zone_component.death_message = death_message
+		_kill_zone_component.player_killed.connect(_on_kill_zone_player_killed)
+
+
+func _on_kill_zone_player_killed(_player: Node3D) -> void:
+	current_target = null
+	velocity = Vector3.ZERO
 
 
 func _setup_navigation_component() -> void:
@@ -211,6 +252,16 @@ func makepath() -> void:
 
 
 func find_path_to_player():
+	if not current_target:
+		return null
+	
+	if _room_pathing_component:
+		return _room_pathing_component.find_path_to_room(current_room, current_target.current_room)
+	
+	return _legacy_find_path_to_player()
+
+
+func _legacy_find_path_to_player():
 	var visitedRooms = []
 	var queue = [[current_room]]
 
@@ -263,12 +314,21 @@ func _on_kill_zone_body_entered(body):
 
 
 func _on_interaction_timer_timeout():
+	if _door_opener_component:
+		if not _door_opener_component.check_and_open_door() and is_wandering:
+			if _door_opener_component.is_facing_door():
+				direction = Vector3(-direction.x, 0, -direction.z)
+		return
+	
+	_legacy_door_interaction()
+
+
+func _legacy_door_interaction() -> void:
 	var collider = interaction_ray.get_collider()
 	if collider:
 		var root_node = collider.get_parent()
 		if root_node is Openable:
 			if root_node.has_method("open_with_point") and can_open_door:
-				# Don't pass a triggering player - enemies shouldn't show door locked messages to players
 				root_node.open_with_point(interaction_ray.get_collision_point())
 			elif is_wandering:
 				direction = Vector3(-direction.x, 0, -direction.z)
@@ -296,7 +356,7 @@ func _on_navigation_agent_3d_target_reached():
 
 func _on_navigation_agent_3d_link_reached(details):
 	if details.owner.is_in_group("jump-up"):
-		velocity.y = 12
+		velocity.y = jump_velocity
 		jump_speed = gravity
 	if details.owner.is_in_group("jump-down"):
 		jump_speed = gravity

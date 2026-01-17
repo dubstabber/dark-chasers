@@ -13,6 +13,7 @@ var current_target: CharacterBody3D = null
 var players_node: Node3D = null
 
 var _owner_enemy: CharacterBody3D = null
+var _enemy_context: Node = null
 
 
 func _ready() -> void:
@@ -21,10 +22,13 @@ func _ready() -> void:
 
 
 func _find_players_node() -> void:
-	if _owner_enemy:
-		var parent = _owner_enemy.get_parent()
-		if parent:
-			players_node = get_tree().get_first_node_in_group("players")
+	if not _enemy_context:
+		_enemy_context = get_node_or_null("/root/EnemyContext")
+	
+	if _enemy_context and _enemy_context.has_method("get_players_node"):
+		players_node = _enemy_context.get_players_node()
+	else:
+		players_node = get_tree().get_first_node_in_group("players")
 
 
 func check_targets() -> void:
@@ -49,13 +53,13 @@ func check_targets() -> void:
 		if not target.has_method("is_dead") or target.is_dead():
 			continue
 		
-		if not _has_camera(target):
+		if not _has_aim_point(target):
 			continue
 		
 		if check_line_of_sight:
 			var params = PhysicsRayQueryParameters3D.new()
 			params.from = _owner_enemy.global_position
-			params.to = target.camera_3d.global_position
+			params.to = _get_aim_point(target)
 			params.exclude = [_owner_enemy]
 			params.collision_mask = _owner_enemy.collision_mask
 			
@@ -68,8 +72,16 @@ func check_targets() -> void:
 			return
 
 
-func _has_camera(target: Node3D) -> bool:
-	return "camera_3d" in target and target.camera_3d != null
+func _has_aim_point(target: Node3D) -> bool:
+	return target.has_method("get_aim_point") or ("camera_3d" in target and target.camera_3d != null)
+
+
+func _get_aim_point(target: Node3D) -> Vector3:
+	if target.has_method("get_aim_point"):
+		return target.get_aim_point()
+	elif "camera_3d" in target and target.camera_3d != null:
+		return target.camera_3d.global_position
+	return target.global_position + Vector3(0, 1.6, 0)
 
 
 func _set_target(new_target: CharacterBody3D) -> void:

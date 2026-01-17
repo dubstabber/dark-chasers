@@ -58,9 +58,6 @@ script = ExtResource("4_ai")
 script = ExtResource("5_wander")
 interaction_ray_path = NodePath("../Interaction")
 
-[connection signal="link_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_link_reached"]
-[connection signal="target_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_target_reached"]
-[connection signal="waypoint_reached" from="NavigationAgent3D" to="." method="_on_navigation_agent_3d_waypoint_reached"]
 [connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
 [connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
 [connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]

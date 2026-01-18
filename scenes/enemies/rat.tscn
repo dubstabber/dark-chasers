@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://jgmxt13pm14c"]
+[gd_scene load_steps=50 format=3 uid="uid://jgmxt13pm14c"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_7e6im"]
 [ext_resource type="Texture2D" uid="uid://1n6cqvqjy2y3" path="res://images/enemies/rat/1177A5.png" id="2_aas3s"]
@@ -79,6 +79,9 @@ image = SubResource("Image_tdive")
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rcw6u"]
 radius = 0.128666
 height = 0.300407
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mbbau"]
+radius = 0.01
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_osx53"]
 playback_mode = 1
@@ -256,6 +259,9 @@ texture = ExtResource("29_6swn3")
 [node name="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.135469, -0.152568)
 shape = SubResource("CapsuleShape3D_rcw6u")
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+shape = SubResource("SphereShape3D_mbbau")
 
 [node name="SoundInterval" type="Timer" parent="Timers" index="3"]
 wait_time = 4.0

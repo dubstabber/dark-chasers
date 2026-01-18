@@ -1,14 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=10 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
 [ext_resource type="Script" uid="uid://cf2x6d4kfgfje" path="res://scenes/components/enemy/godot_navigation_component.gd" id="3_nav"]
 [ext_resource type="Script" uid="uid://cbh1612uffdbk" path="res://scenes/components/enemy/enemy_ai_component.gd" id="4_ai"]
 [ext_resource type="Script" uid="uid://b7dpx1j72pp0d" path="res://scenes/components/enemy/enemy_wandering_component.gd" id="5_wander"]
+[ext_resource type="Script" uid="uid://2ouq0rt0pf37" path="res://scenes/components/enemy/room_pathing_component.gd" id="6_pathing"]
+[ext_resource type="Script" uid="uid://dxbhfwopw7h8v" path="res://scenes/components/enemy/enemy_door_opener_component.gd" id="7_door"]
+[ext_resource type="Script" uid="uid://diaw03b2phyih" path="res://scenes/components/enemy/enemy_kill_zone_component.gd" id="8_killzone"]
+[ext_resource type="Script" uid="uid://de28ybvafqnke" path="res://scenes/components/enemy/enemy_motor_component.gd" id="9_motor"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
-collision_mask = 63
+collision_mask = 55
 slide_on_ceiling = false
 wall_min_slide_angle = 0.0
 floor_stop_on_slope = false
@@ -28,6 +32,7 @@ collision_mask = 12
 
 [node name="KillZone" type="Area3D" parent="."]
 collision_layer = 0
+script = ExtResource("8_killzone")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
 
@@ -58,7 +63,15 @@ script = ExtResource("4_ai")
 script = ExtResource("5_wander")
 interaction_ray_path = NodePath("../Interaction")
 
-[connection signal="body_entered" from="KillZone" to="." method="_on_kill_zone_body_entered"]
+[node name="RoomPathingComponent" type="Node" parent="."]
+script = ExtResource("6_pathing")
+
+[node name="EnemyDoorOpenerComponent" type="Node" parent="."]
+script = ExtResource("7_door")
+
+[node name="EnemyMotorComponent" type="Node" parent="."]
+script = ExtResource("9_motor")
+
 [connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
 [connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]
 [connection signal="timeout" from="Timers/WanderingTimer" to="." method="_on_wandering_timer_timeout"]

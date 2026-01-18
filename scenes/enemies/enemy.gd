@@ -81,7 +81,7 @@ func _setup_motor_component() -> void:
 
 
 func _setup_kill_zone_component() -> void:
-	_kill_zone_component = get_node_or_null("EnemyKillZoneComponent")
+	_kill_zone_component = get_node_or_null("KillZone")
 	if _kill_zone_component:
 		_kill_zone_component.death_message = death_message
 		_kill_zone_component.player_killed.connect(_on_kill_zone_player_killed)
@@ -165,8 +165,6 @@ func _physics_process(delta):
 			if _wandering_component:
 				_wandering_component.update(delta)
 				direction = _wandering_component.direction
-			else:
-				_legacy_wandering_update()
 			var target_velocity = direction * (speed + jump_speed)
 			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
 			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
@@ -186,8 +184,6 @@ func look_forward() -> void:
 func _check_for_targets() -> void:
 	if _ai_component:
 		_ai_component.check_targets()
-	else:
-		_legacy_check_targets()
 
 
 func _on_target_acquired(target: Node3D) -> void:
@@ -206,38 +202,19 @@ func _on_target_died() -> void:
 func _get_next_path_position() -> Vector3:
 	if _nav_component:
 		return _nav_component.get_next_path_position()
-	return nav.get_next_path_position()
+	push_warning("Enemy: No navigation component found")
+	return global_position
 
 
 func _set_nav_target(pos: Vector3) -> void:
 	if _nav_component:
 		_nav_component.set_target(pos)
-	else:
-		nav.target_position = pos
 
 
 func _get_distance_to_target() -> float:
 	if _nav_component:
 		return _nav_component.distance_to_target()
-	return nav.distance_to_target()
-
-
-func _legacy_check_targets() -> void:
-	if not players:
-		return
-	var space_state = get_world_3d().direct_space_state
-	for target in players.get_children():
-		var params = PhysicsRayQueryParameters3D.new()
-		params.from = global_position
-		params.to = target.camera_3d.global_position
-		params.exclude = [self]
-		params.collision_mask = collision_mask
-		var result = space_state.intersect_ray(params)
-		if result and result.collider.is_in_group("player") and not (target.has_method("is_dead") and target.is_dead()):
-			var was_target_null = current_target == null
-			current_target = result.collider
-			if was_target_null:
-				makepath()
+	return 0.0
 
 
 func makepath() -> void:
@@ -258,34 +235,8 @@ func find_path_to_player():
 	if _room_pathing_component:
 		return _room_pathing_component.find_path_to_room(current_room, current_target.current_room)
 	
-	return _legacy_find_path_to_player()
-
-
-func _legacy_find_path_to_player():
-	var visitedRooms = []
-	var queue = [[current_room]]
-
-	while queue:
-		var path = queue.pop_front()
-		var c_room = path[-1]
-
-		if c_room == current_target.current_room:
-			var transitions = []
-			for i in range(1, path.size(), 2):
-				transitions.append(path[i])
-			return transitions
-		if c_room not in visitedRooms:
-			visitedRooms.append(c_room)
-			for transitionPoint in map_transitions.map_transitions[c_room].keys():
-				var nextRoom = map_transitions.map_transitions[c_room][transitionPoint]
-				if "enemy_exceptions" in map_transitions and transitionPoint in map_transitions.enemy_exceptions:
-					continue
-				if nextRoom not in visitedRooms:
-					var new_path = path.duplicate()
-					new_path.append(transitionPoint)
-					new_path.append(nextRoom)
-					queue.append(new_path)
-	return null
+	push_warning("Enemy: No room pathing component found")
+	return []
 
 
 func add_disappear_zone(area):
@@ -305,42 +256,11 @@ func _on_find_path_timer_timeout():
 	makepath()
 
 
-func _on_kill_zone_body_entered(body):
-	if body.is_in_group("player"):
-		var msg = body.name + " " + death_message if death_message != "" else ""
-		body.kill(position, msg)
-		current_target = null
-		velocity = Vector3.ZERO
-
-
 func _on_interaction_timer_timeout():
 	if _door_opener_component:
 		if not _door_opener_component.check_and_open_door() and is_wandering:
 			if _door_opener_component.is_facing_door():
 				direction = Vector3(-direction.x, 0, -direction.z)
-		return
-	
-	_legacy_door_interaction()
-
-
-func _legacy_door_interaction() -> void:
-	var collider = interaction_ray.get_collider()
-	if collider:
-		var root_node = collider.get_parent()
-		if root_node is Openable:
-			if root_node.has_method("open_with_point") and can_open_door:
-				root_node.open_with_point(interaction_ray.get_collision_point())
-			elif is_wandering:
-				direction = Vector3(-direction.x, 0, -direction.z)
-
-
-func _legacy_wandering_update() -> void:
-	if wandering_timer.is_stopped():
-		wandering_timer.start()
-	if interaction_ray and interaction_ray.is_colliding():
-		var collider = interaction_ray.get_collider()
-		if collider != null and not collider.is_in_group("player"):
-			direction = - direction.normalized()
 
 
 func _on_wandering_timer_timeout():

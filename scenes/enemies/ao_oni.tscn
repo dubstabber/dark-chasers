@@ -114,13 +114,12 @@ _data = {
 &"move": SubResource("Animation_move")
 }
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
-radius = 0.29
-height = 1.0716
-
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_killzone"]
-radius = 0.57991
-height = 2.05769
+radius = 0.429391
+height = 1.40779
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_c705j"]
+radius = 0.694512
 
 [node name="Ao oni" instance=ExtResource("1_base")]
 script = ExtResource("2_script")
@@ -153,18 +152,16 @@ libraries = {
 }
 
 [node name="CollisionShape3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
-shape = SubResource("CapsuleShape3D_body")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.691, 0)
+shape = SubResource("CapsuleShape3D_killzone")
 
 [node name="NavigationAgent3D" parent="." index="3"]
 avoidance_enabled = true
 radius = 1.0
 
-[node name="KillZone" parent="." index="4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05674, 0)
-
 [node name="CollisionShape3D" parent="KillZone" index="0"]
-shape = SubResource("CapsuleShape3D_killzone")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.984, 0)
+shape = SubResource("CapsuleShape3D_c705j")
 
 [node name="EnemyAnimationComponent" type="Node" parent="." index="6" node_paths=PackedStringArray("animation_player")]
 script = ExtResource("16_anim_comp")

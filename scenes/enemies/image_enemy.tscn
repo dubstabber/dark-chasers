@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bb0ja5up2c6ny"]
+[gd_scene load_steps=5 format=3 uid="uid://bb0ja5up2c6ny"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_base"]
 [ext_resource type="Script" uid="uid://crvqpgygs5h8g" path="res://scenes/enemies/image_enemy.gd" id="2_script"]
@@ -14,6 +14,7 @@ height = 1.495
 [node name="ImageEnemy" instance=ExtResource("1_base")]
 collision_mask = 45
 script = ExtResource("2_script")
+specific_enemy = ""
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277546, 0)

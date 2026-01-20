@@ -6,36 +6,38 @@ signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
 signal weapon_switched(weapon: WeaponResource)
 
 # --------------------------------------------------------------------------
+# Controllers
+# --------------------------------------------------------------------------
+var _bob_controller := WeaponBobController.new()
+var _switch_controller := WeaponSwitchController.new()
+
+# --------------------------------------------------------------------------
 # Runtime state
 # --------------------------------------------------------------------------
 var image_height: float
-var selected_slot_index := 2
-var selected_slot_position := 0
-
-var time := 0.0
-var bob_time := 0.0
-
-var smooth_movement_speed := 0.0
-var movement_speed_smoothing := 5.0
-
 var left_hand: Node
 var right_hand: Node
-
-var weapon_bob_amount: Vector3 = Vector3.ZERO
 var base_gun_position: Vector3 = Vector3.ZERO
 
-var current_weapon: WeaponResource
-
 var is_auto_hitting := false
-var bobbing_enabled := true # Controls whether weapon bobbing is active
 var is_shooting := false # Tracks if a shooting/hit animation is playing
 var _ammo_components_initialized := false # Track if ammo components have been set up
 
-# --------------------------------------------------------------------------
-# Weapon switching state management
-# --------------------------------------------------------------------------
-var is_switching_weapon := false
-var weapon_switch_queue: Array[int] = []
+# Controller property accessors
+var current_weapon: WeaponResource:
+	get: return _switch_controller.get_current_weapon()
+	set(value): _switch_controller.set_current_weapon(value)
+
+var is_switching_weapon: bool:
+	get: return _switch_controller.is_switching
+
+var selected_slot_index: int:
+	get: return _switch_controller.selected_slot_index
+	set(value): _switch_controller.selected_slot_index = value
+
+var selected_slot_position: int:
+	get: return _switch_controller.selected_slot_position
+	set(value): _switch_controller.selected_slot_position = value
 
 # --------------------------------------------------------------------------
 # Weapon slot resources (numbers correspond to keyboard shortcuts 1-9)
@@ -60,18 +62,6 @@ var weapon_switch_queue: Array[int] = []
 @export var weapon_sound_player: AudioStreamPlayer3D
 @export var bullet_raycast: RayCast3D
 
-# --------------------------------------------------------------------------
-# Bob tuning values (optimized for 3D weapons)
-# --------------------------------------------------------------------------
-const WEAPON_BOB_SMOOTHING: float = 8.0
-const WEAPON_BOB_MAX_OFFSET: float = 0.8
-const WEAPON_BOB_HORIZONTAL_RANGE: float = 0.31
-const WEAPON_BOB_VERTICAL_RANGE: float = 0.31
-const WEAPON_BOB_SPEED: float = 2.4
-const WEAPON_BOB_SPEED_REFERENCE: float = 5.0
-const WEAPON_BOB_MIN_SPEED_MULT: float = 0.5
-const WEAPON_BOB_MAX_SPEED_MULT: float = 2.5
-const WEAPON_BOB_IDLE_SPEED_MULT: float = 0.4
 
 # ========================================================================== #
 # Lifecycle
@@ -156,51 +146,19 @@ func _physics_process(_delta: float) -> void:
 
 
 # ========================================================================== #
-# Update helpers
+# Update helpers (delegated to bob controller)
 # ========================================================================== #
 func _update_speed(delta: float) -> void:
-	var speed: float = player.velocity.length()
-	smooth_movement_speed = lerp(smooth_movement_speed, speed, delta * movement_speed_smoothing)
+	_bob_controller.update_speed(player.velocity, delta)
+
 
 func _update_bob(delta: float) -> void:
-	# If bobbing is disabled, lerp weapon_bob_amount to zero
-	if not bobbing_enabled:
-		weapon_bob_amount = weapon_bob_amount.lerp(Vector3.ZERO, delta * WEAPON_BOB_SMOOTHING)
-		return
-	
-	# If shooting, immediately reset to initial position
-	if is_shooting or is_auto_hitting:
-		weapon_bob_amount = Vector3.ZERO
-		return
-
-	var intensity: float = clamp(smooth_movement_speed / WEAPON_BOB_SPEED_REFERENCE, 0.0, 1.0)
-
-	var time_scale: float = WEAPON_BOB_IDLE_SPEED_MULT
-	if smooth_movement_speed > 0.1:
-		time_scale = clamp(smooth_movement_speed / WEAPON_BOB_SPEED_REFERENCE,
-			WEAPON_BOB_MIN_SPEED_MULT,
-			WEAPON_BOB_MAX_SPEED_MULT)
-
-	bob_time += delta * time_scale
-
-	# Horizontal sway (X-axis for 3D weapons)
-	var h: float = sin(bob_time * WEAPON_BOB_SPEED) * WEAPON_BOB_HORIZONTAL_RANGE
-	var curve: float = pow(abs(h) / WEAPON_BOB_HORIZONTAL_RANGE, 4)
-	# Vertical bob (Y-axis for 3D weapons) 
-	var v: float = - (1.0 - curve) * WEAPON_BOB_VERTICAL_RANGE
-	# Forward/backward subtle movement (Z-axis for 3D weapons)
-	var z: float = sin(bob_time * WEAPON_BOB_SPEED * 0.5) * (WEAPON_BOB_HORIZONTAL_RANGE * 0.2)
-
-	var target: Vector3 = Vector3(h, v, z) * intensity
-	weapon_bob_amount = weapon_bob_amount.lerp(target, delta * WEAPON_BOB_SMOOTHING)
-	weapon_bob_amount.x = clamp(weapon_bob_amount.x, -WEAPON_BOB_MAX_OFFSET, WEAPON_BOB_MAX_OFFSET)
-	weapon_bob_amount.y = clamp(weapon_bob_amount.y, -WEAPON_BOB_MAX_OFFSET, WEAPON_BOB_MAX_OFFSET)
-	weapon_bob_amount.z = clamp(weapon_bob_amount.z, -WEAPON_BOB_MAX_OFFSET * 0.2, WEAPON_BOB_MAX_OFFSET * 0.2)
+	_bob_controller.update_bob(delta, is_shooting, is_auto_hitting)
 
 
 func _apply_offsets() -> void:
 	if gun_base:
-		gun_base.position = base_gun_position + weapon_bob_amount
+		gun_base.position = base_gun_position + _bob_controller.get_offset()
 
 
 # --------------------------------------------------------------------------
@@ -314,67 +272,38 @@ func hit() -> void:
 
 
 func switch_weapon(slot_index: int) -> void:
-	match slot_index:
-		1: if slot_1.is_empty(): return
-		2: if slot_2.is_empty(): return
-		3: if slot_3.is_empty(): return
-		4: if slot_4.is_empty(): return
-		5: if slot_5.is_empty(): return
-		6: if slot_6.is_empty(): return
-		7: if slot_7.is_empty(): return
-		8: if slot_8.is_empty(): return
-		9: if slot_9.is_empty(): return
+	var slot_array = _get_slot_array(slot_index)
+	if slot_array.is_empty():
+		return
 
-	if is_switching_weapon:
-		weapon_switch_queue.clear()
-		weapon_switch_queue.append(slot_index)
+	if _switch_controller.is_switching:
+		_switch_controller.queue_switch(slot_index)
 	else:
-		is_switching_weapon = true
+		_switch_controller.start_switching()
 		_start_weapon_switch_process(slot_index)
+
 
 func _start_weapon_switch_process(slot_index: int) -> void:
 	await _process_weapon_switch(slot_index)
 	await _process_weapon_switch_queue()
 
+
 func _process_weapon_switch_queue() -> void:
-	while not weapon_switch_queue.is_empty():
-		var next_slot = weapon_switch_queue.pop_front()
+	while _switch_controller.has_queued_switch():
+		var next_slot = _switch_controller.pop_queued_switch()
 		await _process_weapon_switch(next_slot)
-	is_switching_weapon = false
+	_switch_controller.finish_switching()
+
 
 func _process_weapon_switch(slot_index: int) -> void:
-	# Determine which weapon we're switching to
-	var target_slot_position = 0
-	if slot_index == selected_slot_index:
-		target_slot_position = selected_slot_position + 1
+	var slot_array = _get_slot_array(slot_index)
+	var target_weapon = _switch_controller.resolve_target_weapon(slot_index, slot_array)
 	
-	var target_slot: Array[WeaponResource]
-	match slot_index:
-		1: target_slot = slot_1
-		2: target_slot = slot_2
-		3: target_slot = slot_3
-		4: target_slot = slot_4
-		5: target_slot = slot_5
-		6: target_slot = slot_6
-		7: target_slot = slot_7
-		8: target_slot = slot_8
-		9: target_slot = slot_9
+	if target_weapon == null:
+		return # Already on target or slot empty
 	
-	# Handle slot position wrapping
-	if target_slot.size() <= target_slot_position:
-		target_slot_position = 0
-	
-	# Check if we're already on the target weapon
-	var target_weapon = target_slot[target_slot_position]
-	if current_weapon == target_weapon:
-		return # No need to switch to the same weapon
-	
-	# Update slot tracking
-	selected_slot_index = slot_index
-	selected_slot_position = target_slot_position
-
 	# Perform the actual weapon switch
-	await _equip_from_slot(target_slot)
+	await _equip_from_slot(slot_array)
 
 func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	if slot.size() <= selected_slot_position:
@@ -496,13 +425,12 @@ func extinguish_lighter() -> void:
 # ========================================================================== #
 func disable_weapon_bobbing() -> void:
 	"""Disable weapon bobbing animations (called when player dies)"""
-	bobbing_enabled = false
-	smooth_movement_speed = 0.0
+	_bob_controller.disable()
 
 
 func enable_weapon_bobbing() -> void:
 	"""Re-enable weapon bobbing animations (for revival or respawn)"""
-	bobbing_enabled = true
+	_bob_controller.enable()
 
 
 func reset_weapon_on_revival() -> void:

@@ -33,6 +33,7 @@ var debug_camera: Camera3D # temporary
 @onready var interaction_component: InteractionComponent = $InteractionComponent
 @onready var sprite_animation_component: SpriteAnimationComponent = $SpriteAnimationComponent
 @onready var input_component: PlayerInputComponent = $PlayerInputComponent
+@onready var damage_effects_component: DamageEffectsComponent = $DamageEffectsComponent
 
 
 func _ready():

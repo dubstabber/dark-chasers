@@ -29,14 +29,22 @@ func _ready():
 
 
 func _on_active_camera_changed(new_camera: Camera3D) -> void:
-	# Show crosshair only when player camera is active
+	# Show player UI only when player camera is active
 	if _connected_player and "camera_3d" in _connected_player:
-		if new_camera == _connected_player.camera_3d:
-			if crosshair and not crosshair.visible:
-				crosshair.show()
-		else:
-			if crosshair and crosshair.visible:
-				crosshair.hide()
+		var is_player_camera = new_camera == _connected_player.camera_3d
+		_set_player_ui_visible(is_player_camera)
+
+
+func _set_player_ui_visible(show_ui: bool) -> void:
+	"""Show or hide all player-specific UI elements (crosshair, health, armor, ammo, damage overlay)"""
+	if crosshair:
+		crosshair.visible = show_ui
+	if health_ui_value_container:
+		health_ui_value_container.get_parent().get_parent().visible = show_ui # BottomLeft container
+	if ammo_ui_value_container:
+		ammo_ui_value_container.get_parent().get_parent().get_parent().visible = show_ui # BottomRight container
+	if damage_overlay:
+		damage_overlay.visible = show_ui
 
 
 func connect_to_player(player: CharacterBody3D) -> void:

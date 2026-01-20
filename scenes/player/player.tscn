@@ -1,10 +1,9 @@
-[gd_scene load_steps=101 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=100 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
 [ext_resource type="Texture2D" uid="uid://dafc1hswoor1k" path="res://images/player_wieldables/HSPSB0.png" id="2_gu45f"]
 [ext_resource type="Texture2D" uid="uid://cajq72at54mod" path="res://images/player_wieldables/HSPSA0.png" id="2_rkwwq"]
-[ext_resource type="Texture2D" uid="uid://cn214ygtvkh5f" path="res://images/crosshairs/crosshair001.png" id="2_sryh2"]
 [ext_resource type="Shader" uid="uid://c50677wwcywbr" path="res://scenes/components/first_person_sprite_3d/weapon_clip_and_fov_shader.gdshader" id="3_upxxc"]
 [ext_resource type="Texture2D" uid="uid://cr2vq3lcp6hbd" path="res://images/player_wieldables/HFSTA0.png" id="4_p5d7t"]
 [ext_resource type="Texture2D" uid="uid://d27ty7pf8btbo" path="res://images/player_wieldables/HFSTE0.png" id="5_2e56o"]
@@ -1151,15 +1150,6 @@ texture_filter = 0
 render_priority = 4
 script = ExtResource("5_upxxc")
 
-[node name="DeathRect" type="ColorRect" parent="nek/head/eyes/Camera3D"]
-modulate = Color(1, 1, 1, 0)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0, 0, 1)
-
 [node name="Interaction" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
 target_position = Vector3(0, 0, -1)
 collision_mask = 15
@@ -1167,20 +1157,6 @@ collision_mask = 15
 [node name="HitScanRayCast" type="RayCast3D" parent="nek/head/eyes/Camera3D"]
 target_position = Vector3(0, 0, -1000)
 collision_mask = 14
-
-[node name="CrosshairRect" type="TextureRect" parent="nek/head/eyes/Camera3D"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_sryh2")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="nek/head/eyes"]
 libraries = {
@@ -1318,9 +1294,8 @@ movement_component = NodePath("../PlayerMovementComponent")
 head_bobbing_component = NodePath("../HeadBobbingComponent")
 metadata/_custom_type_script = "uid://dn2pu8ulxjgy0"
 
-[node name="DamageEffectsComponent" type="Node" parent="." node_paths=PackedStringArray("color_rect", "health_component")]
+[node name="DamageEffectsComponent" type="Node" parent="." node_paths=PackedStringArray("health_component")]
 script = ExtResource("70_ej2d6")
-color_rect = NodePath("../nek/head/eyes/Camera3D/DeathRect")
 health_component = NodePath("../HealthComponent")
 metadata/_custom_type_script = "uid://byh2r5bgsf30"
 

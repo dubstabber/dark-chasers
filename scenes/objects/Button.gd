@@ -17,7 +17,7 @@ var is_pressed := false
 func press(body):
 	if not is_pressed:
 		button_pressed.emit(body, event_name)
-		if temporary_camera: temporary_camera.set_current(true)
+		if temporary_camera: CameraManager.set_active_camera(temporary_camera)
 		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()

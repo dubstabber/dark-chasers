@@ -20,6 +20,7 @@ var _room_pathing_component: RoomPathingComponent
 var _door_opener_component: EnemyDoorOpenerComponent
 var _kill_zone_component: EnemyKillZoneComponent
 var _motor_component: EnemyMotorComponent
+var _brain_component: EnemyBrain
 var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -34,7 +35,6 @@ var moving_state := "idle"
 var is_flying := false
 var is_killed := false
 
-@onready var nav = $NavigationAgent3D
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var wandering_timer = $Timers/WanderingTimer
 @onready var graphics = $Graphics
@@ -62,6 +62,7 @@ func _setup_components() -> void:
 	_blood_component = get_node_or_null("BloodEffectComponent")
 	_room_pathing_component = get_node_or_null("RoomPathingComponent")
 	_door_opener_component = get_node_or_null("EnemyDoorOpenerComponent")
+	_brain_component = get_node_or_null("EnemyBrain")
 	if _door_opener_component:
 		_door_opener_component.enabled = can_open_door
 	_setup_motor_component()
@@ -141,39 +142,91 @@ func get_health_component() -> HealthComponent:
 
 
 func _physics_process(delta):
-	if not is_on_floor() and not is_flying:
-		velocity.y -= gravity * delta
+	if _brain_component and _brain_component.is_ability_active():
+		return
+	
+	_apply_gravity(delta)
+	
 	if not is_killed:
 		if not current_target and chase_player:
 			_check_for_targets()
 		if current_target or not waypoints.is_empty():
-			var next_pos = _get_next_path_position()
-			var horizontal_direction = Vector3(next_pos.x - global_position.x, 0, next_pos.z - global_position.z).normalized()
-			direction = horizontal_direction
-			var target_velocity = horizontal_direction * (speed + jump_speed)
-			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
-			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
-			if current_target and current_target.has_method("is_dead") and current_target.is_dead():
-				current_target = null
-				if _ai_component:
-					_ai_component.clear_target()
-				velocity = Vector3.ZERO
-				find_path_timer.wait_time = 0.1
-			if is_on_floor() or is_flying:
-				look_forward()
+			_process_chase_movement(delta)
 		elif is_wandering:
-			if _wandering_component:
-				_wandering_component.update(delta)
-				direction = _wandering_component.direction
-			var target_velocity = direction * (speed + jump_speed)
-			velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
-			velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
-			if is_on_floor() or is_flying:
-				look_forward()
+			_process_wandering_movement(delta)
 		else:
-			velocity = Vector3.ZERO
+			_stop_movement()
 	
-	move_and_slide()
+	_do_move_and_slide()
+
+
+func _apply_gravity(delta: float) -> void:
+	if _motor_component:
+		_motor_component.apply_gravity(delta)
+	elif not is_on_floor() and not is_flying:
+		velocity.y -= gravity * delta
+
+
+func _process_chase_movement(delta: float) -> void:
+	var next_pos = _get_next_path_position()
+	
+	if _motor_component:
+		_motor_component.move_toward_position(next_pos, delta)
+		direction = _motor_component.direction
+	else:
+		var horizontal_direction = Vector3(next_pos.x - global_position.x, 0, next_pos.z - global_position.z).normalized()
+		direction = horizontal_direction
+		var target_velocity = horizontal_direction * (speed + jump_speed)
+		velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
+		velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
+	
+	if current_target and current_target.has_method("is_dead") and current_target.is_dead():
+		current_target = null
+		if _ai_component:
+			_ai_component.clear_target()
+		_stop_movement()
+		find_path_timer.wait_time = 0.1
+		return
+	
+	if is_on_floor() or is_flying:
+		_do_look_forward()
+
+
+func _process_wandering_movement(delta: float) -> void:
+	if _wandering_component:
+		_wandering_component.update(delta)
+		direction = _wandering_component.direction
+	
+	if _motor_component:
+		_motor_component.move_in_direction(direction, delta)
+	else:
+		var target_velocity = direction * (speed + jump_speed)
+		velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
+		velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
+	
+	if is_on_floor() or is_flying:
+		_do_look_forward()
+
+
+func _stop_movement() -> void:
+	if _motor_component:
+		_motor_component.stop()
+	else:
+		velocity = Vector3.ZERO
+
+
+func _do_move_and_slide() -> void:
+	if _motor_component:
+		_motor_component.move_and_slide()
+	else:
+		move_and_slide()
+
+
+func _do_look_forward() -> void:
+	if _motor_component:
+		_motor_component.look_forward()
+	else:
+		look_forward()
 
 
 func look_forward() -> void:
@@ -271,19 +324,30 @@ func _on_wandering_timer_timeout():
 func _on_navigation_agent_3d_target_reached():
 	if not waypoints.is_empty():
 		waypoints.pop_front()
-		if waypoints.is_empty(): velocity = Vector3.ZERO
+		if waypoints.is_empty():
+			_stop_movement()
 
 
 func _on_navigation_agent_3d_link_reached(details):
 	if details.owner.is_in_group("jump-up"):
-		velocity.y = jump_velocity
-		jump_speed = gravity
+		if _motor_component:
+			_motor_component.apply_jump(jump_velocity)
+			_motor_component.jump_speed = gravity
+		else:
+			velocity.y = jump_velocity
+			jump_speed = gravity
 	if details.owner.is_in_group("jump-down"):
-		jump_speed = gravity
+		if _motor_component:
+			_motor_component.jump_speed = gravity
+		else:
+			jump_speed = gravity
 
 
 func _on_navigation_agent_3d_waypoint_reached(_details):
-	jump_speed = 0
+	if _motor_component:
+		_motor_component.jump_speed = 0
+	else:
+		jump_speed = 0
 
 
 func _on_disappear_area(body):
@@ -304,3 +368,20 @@ func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: V
 	if _blood_component:
 		_blood_component.spawn_splatter(hit_pos, shot_direction)
 		_blood_component.trace_to_walls(amount, hit_pos, shot_direction)
+
+
+func get_target_position() -> Vector3:
+	if current_target:
+		return current_target.global_position
+	return global_position
+
+
+func set_navigation_enabled(enabled: bool) -> void:
+	if _nav_component:
+		_nav_component.set_process(enabled)
+
+
+func get_navigation_enabled() -> bool:
+	if _nav_component:
+		return _nav_component.is_processing()
+	return false

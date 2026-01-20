@@ -79,7 +79,7 @@ func _handle_key_event(body, _key_type, event, _message_text):
 			for player in players.get_children():
 				player.blocked_movement = true
 			aooni.makepath()
-			$NavigationRegion3D/Cameras/BarsCamera2.set_current(true)
+			CameraManager.set_active_camera($NavigationRegion3D/Cameras/BarsCamera2)
 			await get_tree().create_timer(3.0).timeout
 			Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
 			await get_tree().create_timer(0.6).timeout
@@ -132,7 +132,7 @@ func _handle_button_event(body, event):
 			global_music.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
-				player.camera_3d.set_current(true)
+				CameraManager.set_active_camera(player.camera_3d)
 				player.blocked_movement = false
 			hud.show_event_text("[color=#6c6c6c]You:[/color] I should head to the 1st floor and check that out...", false, 3.0)
 		"show secret door":
@@ -140,7 +140,7 @@ func _handle_button_event(body, event):
 				player.blocked_movement = true
 			await get_tree().create_timer(1.0).timeout
 			for player in players.get_children():
-				player.camera_3d.set_current(true)
+				CameraManager.set_active_camera(player.camera_3d)
 				player.blocked_movement = false
 			hud.show_event_text("[color=#6c6c6c]You:[/color] Hmm... I wonder where that passage leads to?", false, 3.0)
 		"check map 2":
@@ -152,7 +152,7 @@ func _handle_button_event(body, event):
 			global_music.play()
 			await get_tree().create_timer(3.4).timeout
 			for player in players.get_children():
-				player.camera_3d.set_current(true)
+				CameraManager.set_active_camera(player.camera_3d)
 				player.blocked_movement = false
 			hud.show_event_text("[color=#6c6c6c]You:[/color] I activated the switch. I better get out of here quickly!", false, 3.0)
 		"": pass
@@ -176,7 +176,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawlerEnd.position)
 			await get_tree().create_timer(4.5).timeout
 			for player in players.get_children():
-				player.camera_3d.set_current(true)
+				CameraManager.set_active_camera(player.camera_3d)
 				player.blocked_movement = false
 			hud.show_event_text("[color=#6c6c6c]You:[/color] What the eff was that!?", false, 3.0)
 			global_music.stream = Preloads.CREEP_AMB_SOUND
@@ -256,7 +256,7 @@ func _on_custom_event(event):
 					hud.show_event_text("[color=#6c6c6c]You:[/color] I think that thing is gone...", false, 3.0)
 		"ao oni gave up":
 			for player in players.get_children():
-				player.camera_3d.set_current(true)
+				CameraManager.set_active_camera(player.camera_3d)
 				player.blocked_movement = false
 		"aomika disappeared":
 			hud.show_event_text("[color=#6c6c6c]You:[/color] Whatever that THING was... it's gone...", false, 3.0)

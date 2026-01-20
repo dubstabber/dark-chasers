@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=27 format=3]
+
+[ext_resource type="Script" path="res://scenes/resources/enemy_definition.gd" id="1"]
+[ext_resource type="Texture2D" path="res://images/enemies/static-images/angry-german-kid.png" id="2"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-01.ogg" id="3"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-02.ogg" id="4"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-03.ogg" id="5"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-04.ogg" id="6"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-05.ogg" id="7"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-06.ogg" id="8"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-07.ogg" id="9"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-08.ogg" id="10"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-09.ogg" id="11"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-10.ogg" id="12"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-11.ogg" id="13"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-12.ogg" id="14"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-13.ogg" id="15"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-14.ogg" id="16"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-15.ogg" id="17"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-16.ogg" id="18"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-17.ogg" id="19"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-18.ogg" id="20"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-19.ogg" id="21"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-20.ogg" id="22"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-21.ogg" id="23"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-22.ogg" id="24"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-23.ogg" id="25"]
+[ext_resource type="AudioStream" path="res://sounds/music/angrygermankid/angry-german-kid-24.ogg" id="26"]
+
+[resource]
+script = ExtResource("1")
+enemy_name = "angry german kid"
+image = ExtResource("2")
+music_playlist = Array[AudioStream]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15"), ExtResource("16"), ExtResource("17"), ExtResource("18"), ExtResource("19"), ExtResource("20"), ExtResource("21"), ExtResource("22"), ExtResource("23"), ExtResource("24"), ExtResource("25"), ExtResource("26")])

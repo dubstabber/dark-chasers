@@ -1,15 +1,5 @@
 extends HBoxContainer
 
-# Dictionary mapping key types to their textures
-var key_textures := {
-	"ruby": Preloads.RUBY_KEY_IMAGE,
-	"weird": Preloads.WEIRD_KEY_IMAGE,
-	"brown": Preloads.BROWN_KEY_IMAGE,
-	"gold": Preloads.GOLD_KEY_IMAGE,
-	"emerald": Preloads.EMERALD_KEY_IMAGE,
-	"silver": Preloads.SILVER_KEY_IMAGE
-}
-
 # Size for key icons in the UI
 const KEY_ICON_SIZE := Vector2(14, 14)
 const KEY_SPACING := 2
@@ -59,8 +49,8 @@ func _create_and_populate_column(keys: Array) -> void:
 	column_keys.reverse()
 
 	for key_type in column_keys:
-		if key_type in key_textures:
-			var key_texture_rect = _create_key_texture_rect(key_type)
+		var key_texture_rect = _create_key_texture_rect(key_type)
+		if key_texture_rect:
 			column.add_child(key_texture_rect)
 
 
@@ -92,8 +82,11 @@ func _create_key_column() -> MarginContainer:
 
 func _create_key_texture_rect(key_type: String) -> MarginContainer:
 	"""Create a TextureRect for a specific key type wrapped in a MarginContainer"""
+	var tex = Preloads.get_key_texture(key_type)
+	if not tex:
+		return null
 	var key_texture_rect = TextureRect.new()
-	key_texture_rect.texture = key_textures[key_type]
+	key_texture_rect.texture = tex
 	key_texture_rect.custom_minimum_size = KEY_ICON_SIZE
 	key_texture_rect.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	key_texture_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -111,10 +104,7 @@ func _create_key_texture_rect(key_type: String) -> MarginContainer:
 
 func get_collected_keys_from_level() -> Array:
 	"""Get collected keys from the current level/map"""
-	var level = get_tree().get_first_node_in_group("level")
-	if level and "keys_collected" in level:
-		return level.keys_collected
-	return []
+	return WorldContext.get_keys_collected()
 
 
 func refresh_display() -> void:

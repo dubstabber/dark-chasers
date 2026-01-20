@@ -13,6 +13,9 @@ const IDLE_SUFFIX = "_idle_sprite"
 const MOVEMENT_SUFFIX = "_movement_sprites"
 const SHOOTING_SUFFIX = "_shooting_sprites"
 
+# Static atlas cache: signature -> {texture: ImageTexture, max_sprite_size: Vector2i}
+static var _atlas_cache: Dictionary = {}
+
 # Direction definitions for each mode
 const DIRECTION_SETS = {
 	DirectionMode.THREE_DIRECTIONS: ["front", "side", "back"],
@@ -29,6 +32,7 @@ var idle_sprites := {}
 var movement_sprites := {}
 var shooting_sprites := {}
 var atlas_texture: Texture2D
+var _atlas_generation_pending := false
 
 # Shader material for directional rendering
 var directional_material: ShaderMaterial
@@ -63,13 +67,13 @@ var _position_node: Node3D = null # Node3D for global_position (shader target)
 		target_node_path = value
 		if is_inside_tree():
 			_update_node_references()
-			generate_atlas()
+			_request_atlas_generation()
 			notify_property_list_changed()
 
 @export var direction_mode: DirectionMode = DirectionMode.THREE_DIRECTIONS:
 	set(value):
 		direction_mode = value
-		generate_atlas()
+		_request_atlas_generation()
 		notify_property_list_changed()
 
 @export var debug_mode: bool = false:
@@ -81,14 +85,30 @@ var _position_node: Node3D = null # Node3D for global_position (shader target)
 
 func _ready() -> void:
 	_update_node_references()
-	# Set up the shader material
-	if material_override is ShaderMaterial and material_override.shader is Shader:
-		directional_material = material_override
-		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
-		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
-		directional_material.render_priority = self.render_priority
+	
+	# Validate that material_override has a shader attached
+	if not (material_override is ShaderMaterial and material_override.shader is Shader):
+		push_error("DirectionalSprite3D: material_override must be a ShaderMaterial with a valid shader attached.")
+		return
+	
+	# At runtime, create a fresh material to avoid stale SubResource issues
+	# The saved material in scene files may have outdated shader parameters
+	if not Engine.is_editor_hint():
+		var saved_shader = material_override.shader
+		directional_material = ShaderMaterial.new()
+		directional_material.shader = saved_shader
+		material_override = directional_material
 	else:
-		push_warning("DirectionalSprite3D: Invalid material override. Expected ShaderMaterial with Shader.")
+		directional_material = material_override
+	
+	directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
+	directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
+	directional_material.render_priority = self.render_priority
+	
+	# Generate atlas after material is set up - this ensures correct shader parameters
+	# even if scene was saved with stale values
+	_atlas_generation_pending = false # Cancel any pending deferred calls
+	generate_atlas()
 
 
 func _process(_delta: float) -> void:
@@ -142,24 +162,37 @@ func _set(property: StringName, value) -> bool:
 		var direction = prop_name.replace(IDLE_SUFFIX, "")
 		if direction in _get_current_directions():
 			idle_sprites[direction] = value
-			generate_atlas()
+			_request_atlas_generation()
 			return true
 	
 	if prop_name.ends_with(MOVEMENT_SUFFIX):
 		var direction = prop_name.replace(MOVEMENT_SUFFIX, "")
 		if direction in _get_current_directions():
 			movement_sprites[direction] = value
-			generate_atlas()
+			_request_atlas_generation()
 			return true
 	
 	if prop_name.ends_with(SHOOTING_SUFFIX):
 		var direction = prop_name.replace(SHOOTING_SUFFIX, "")
 		if direction in _get_current_directions():
 			shooting_sprites[direction] = value
-			generate_atlas()
+			_request_atlas_generation()
 			return true
 	
 	return false
+
+
+func _request_atlas_generation() -> void:
+	"""Defer atlas generation to batch multiple property changes."""
+	if _atlas_generation_pending:
+		return
+	_atlas_generation_pending = true
+	call_deferred("_do_deferred_atlas_generation")
+
+
+func _do_deferred_atlas_generation() -> void:
+	_atlas_generation_pending = false
+	generate_atlas()
 
 
 func _get_property_list():
@@ -235,8 +268,16 @@ func _update_node_references() -> void:
 	if position_candidate and position_candidate is Node3D:
 		_position_node = position_candidate
 	else:
-		push_warning("DirectionalSprite3D: Scene owner/parent is not a Node3D. Position tracking disabled.")
-		_position_node = null
+		# Fallback: walk up the tree to find a Node3D
+		var node = get_parent()
+		while node:
+			if node is Node3D:
+				_position_node = node
+				break
+			node = node.get_parent() if node.get_parent() else null
+	
+	if not _position_node:
+		push_warning("DirectionalSprite3D: No Node3D found for position tracking. owner=%s, parent=%s" % [owner, get_parent()])
 
 
 func _get_target_node() -> Node:
@@ -279,21 +320,34 @@ func generate_atlas():
 	# Validate sprite dimensions before proceeding
 	if not _validate_sprite_dimensions(directions):
 		return null
+	
+	# Check cache first
+	var signature = _compute_sprite_set_signature(directions)
+	var max_sprite_size: Vector2i
+	
+	if signature in _atlas_cache:
+		var cached = _atlas_cache[signature]
+		atlas_texture = cached.texture
+		max_sprite_size = cached.max_sprite_size
+	else:
+		# Collect sprites and determine dimensions
+		var all_sprites: Array[Array] = []
+		max_sprite_size = _get_sprite_max_dimensions(directions)
+		var max_frames = 1
 		
-	# Collect sprites and determine dimensions
-	var all_sprites: Array[Array] = []
-	var max_sprite_size = _get_sprite_max_dimensions(directions)
-	var max_frames = 1
-	
-	# Collect all sprites for each direction
-	for direction in directions:
-		var direction_sprites = _collect_direction_sprites(direction)
-		all_sprites.append([direction, direction_sprites])
-		max_frames = max(max_frames, direction_sprites.size())
-	
-	# Create and populate atlas
-	var atlas_dimensions = Vector2i(max_sprite_size.x * max_frames, max_sprite_size.y * directions.size())
-	atlas_texture = _create_atlas_texture(all_sprites, atlas_dimensions, max_sprite_size)
+		# Collect all sprites for each direction
+		for direction in directions:
+			var direction_sprites = _collect_direction_sprites(direction)
+			all_sprites.append([direction, direction_sprites])
+			max_frames = max(max_frames, direction_sprites.size())
+		
+		# Create and populate atlas
+		var atlas_dimensions = Vector2i(max_sprite_size.x * max_frames, max_sprite_size.y * directions.size())
+		atlas_texture = _create_atlas_texture(all_sprites, atlas_dimensions, max_sprite_size)
+		
+		# Store in cache
+		if atlas_texture:
+			_atlas_cache[signature] = {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
 	
 	if atlas_texture:
 		# Create properly sized current sprite texture
@@ -303,18 +357,16 @@ func generate_atlas():
 		var image = Image.create(max_sprite_size.x, max_sprite_size.y, false, Image.FORMAT_RGBA8)
 		image.fill(Color.TRANSPARENT)
 		texture = ImageTexture.create_from_image(image)
-
+		
 		# Ensure we have the shader material set up
 		if not directional_material:
-			var shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
-			directional_material = ShaderMaterial.new()
-			directional_material.shader = shader
-			material_override = directional_material
+			push_error("DirectionalSprite3D: directional_material not initialized. Ensure material_override has a valid shader.")
+			return
 		
 		if directional_material and directional_material.shader:
+			var atlas_size = Vector2(atlas_texture.get_width(), atlas_texture.get_height())
 			directional_material.set_shader_parameter("atlas_texture", atlas_texture)
 			directional_material.set_shader_parameter("billboard_mode", billboard)
-			var atlas_size = Vector2(atlas_texture.get_width(), atlas_texture.get_height())
 			directional_material.set_shader_parameter("atlas_dimensions", atlas_size)
 			directional_material.set_shader_parameter("max_sprite_size", Vector2(max_sprite_size))
 			directional_material.set_shader_parameter("direction_mode", direction_mode)
@@ -325,6 +377,40 @@ func generate_atlas():
 			# Target position will be updated in _process
 
 		notify_property_list_changed()
+
+
+func _compute_sprite_set_signature(directions: Array) -> String:
+	"""Generate a unique signature from the sprite set for cache keying."""
+	var parts: PackedStringArray = []
+	parts.append(str(direction_mode))
+	
+	for direction in directions:
+		# Idle sprite
+		var idle = idle_sprites.get(direction)
+		if idle is Texture2D:
+			parts.append(idle.resource_path if idle.resource_path else str(idle.get_rid().get_id()))
+		else:
+			parts.append("null")
+		
+		# Movement sprites
+		var movement = movement_sprites.get(direction, [])
+		if movement is Array:
+			for sprite in movement:
+				if sprite is Texture2D:
+					parts.append(sprite.resource_path if sprite.resource_path else str(sprite.get_rid().get_id()))
+				else:
+					parts.append("null")
+		
+		# Shooting sprites
+		var shooting = shooting_sprites.get(direction, [])
+		if shooting is Array:
+			for sprite in shooting:
+				if sprite is Texture2D:
+					parts.append(sprite.resource_path if sprite.resource_path else str(sprite.get_rid().get_id()))
+				else:
+					parts.append("null")
+	
+	return "|".join(parts)
 
 
 func _has_any_sprites() -> bool:

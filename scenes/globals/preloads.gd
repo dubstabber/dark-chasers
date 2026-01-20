@@ -1,5 +1,12 @@
 extends Node
 
+## Preloads autoload - compatibility adapter over Resource-based catalogs.
+## New code should use KeyIconLibrary and VfxCatalog directly when possible.
+
+# Catalogs (lazy-loaded)
+var _key_icons: KeyIconLibrary
+var _vfx_catalog: VfxCatalog
+
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
 
@@ -8,12 +15,29 @@ const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
 const ILOPULU_SCENE := preload("res://scenes/enemies/ilopulu.tscn")
 const WHITEFACE_SCENE := preload("res://scenes/enemies/white_face.tscn")
 
+# Key images - kept as const for backward compatibility
 const RUBY_KEY_IMAGE := preload("res://images/items/REDKA0.png")
 const WEIRD_KEY_IMAGE := preload("res://images/items/WEIRA0.png")
 const BROWN_KEY_IMAGE := preload("res://images/items/BROWA0.png")
 const GOLD_KEY_IMAGE := preload("res://images/items/YKGOA0.png")
 const EMERALD_KEY_IMAGE := preload("res://images/items/EMERA0.png")
 const SILVER_KEY_IMAGE := preload("res://images/items/SILVA0.png")
+
+
+func get_key_icons() -> KeyIconLibrary:
+	if not _key_icons:
+		_key_icons = load("res://scenes/resources/key_icon_library.tres")
+	return _key_icons
+
+
+func get_vfx_catalog() -> VfxCatalog:
+	if not _vfx_catalog:
+		_vfx_catalog = load("res://scenes/resources/vfx_catalog.tres")
+	return _vfx_catalog
+
+
+func get_key_texture(key_type: String) -> Texture2D:
+	return get_key_icons().get_texture(key_type)
 
 const DOOR_LOCKED_SOUND := preload("res://sounds/sfx/DOORLOCK.ogg") # TODO: remove
 const KEY_COLLECTED_SOUND := preload("res://sounds/sfx/DSKEYPIC.wav")

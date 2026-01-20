@@ -54,7 +54,6 @@ func spawn_splatter(hit_pos: Vector3, shot_direction: Vector3 = Vector3.ZERO) ->
 			sprite.material_override.set_shader_parameter("blood_color", blood_color)
 	
 	blood_splattered.emit(hit_pos)
-	print("Blood color: ", blood_color)
 
 
 func trace_to_walls(damage: int, hit_pos: Vector3, shot_direction: Vector3) -> void:

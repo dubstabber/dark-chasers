@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="KeyIconLibrary" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/resources/key_icon_library.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://images/items/REDKA0.png" id="2_ruby"]
+[ext_resource type="Texture2D" path="res://images/items/WEIRA0.png" id="3_weird"]
+[ext_resource type="Texture2D" path="res://images/items/BROWA0.png" id="4_brown"]
+[ext_resource type="Texture2D" path="res://images/items/YKGOA0.png" id="5_gold"]
+[ext_resource type="Texture2D" path="res://images/items/EMERA0.png" id="6_emerald"]
+[ext_resource type="Texture2D" path="res://images/items/SILVA0.png" id="7_silver"]
+
+[resource]
+script = ExtResource("1_script")
+ruby = ExtResource("2_ruby")
+weird = ExtResource("3_weird")
+brown = ExtResource("4_brown")
+gold = ExtResource("5_gold")
+emerald = ExtResource("6_emerald")
+silver = ExtResource("7_silver")

@@ -119,10 +119,11 @@ func _toggle_debug_camera() -> void:
 	if not debug_cam:
 		return
 	
-	if camera.current:
-		debug_cam.current = true
+	# Use CameraManager for centralized camera switching
+	if CameraManager.is_camera_active(camera):
+		CameraManager.set_active_camera(debug_cam)
 	else:
-		camera.current = true
+		CameraManager.set_active_camera(camera)
 	debug_camera_toggled.emit()
 
 

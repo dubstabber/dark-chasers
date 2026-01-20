@@ -7,19 +7,7 @@ signal key_collected(body, type, event_name, message_text)
 @export var event_name: String
 
 func _ready():
-	match key_type:
-		"ruby":
-			$Sprite3D.texture = Preloads.RUBY_KEY_IMAGE
-		"weird":
-			$Sprite3D.texture = Preloads.WEIRD_KEY_IMAGE
-		"brown":
-			$Sprite3D.texture = Preloads.BROWN_KEY_IMAGE
-		"gold":
-			$Sprite3D.texture = Preloads.GOLD_KEY_IMAGE
-		"emerald":
-			$Sprite3D.texture = Preloads.EMERALD_KEY_IMAGE
-		"silver", _:
-			$Sprite3D.texture = Preloads.SILVER_KEY_IMAGE
+	$Sprite3D.texture = Preloads.get_key_texture(key_type)
 
 
 func _on_body_entered(body):

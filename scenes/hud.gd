@@ -13,6 +13,8 @@ var faded: bool
 @onready var ammo_ui_value_container: HBoxContainer = %AmmoUIValueContainer
 @onready var shield_ui_value_container: HBoxContainer = %ShieldUIValueContainer
 @onready var key_ui_container: HBoxContainer = $TopRight/KeyUIContainer
+@onready var damage_overlay: ColorRect = $DamageOverlay
+@onready var crosshair: TextureRect = $Crosshair
 
 
 var _connected_player: CharacterBody3D = null
@@ -20,9 +22,21 @@ var _connected_player: CharacterBody3D = null
 
 func _ready():
 	timer.connect("timeout", hide_event_text)
+	CameraManager.active_camera_changed.connect(_on_active_camera_changed)
 
 	# Initialize key display if keys are already collected
 	call_deferred("_initialize_key_display")
+
+
+func _on_active_camera_changed(new_camera: Camera3D) -> void:
+	# Show crosshair only when player camera is active
+	if _connected_player and "camera_3d" in _connected_player:
+		if new_camera == _connected_player.camera_3d:
+			if crosshair and not crosshair.visible:
+				crosshair.show()
+		else:
+			if crosshair and crosshair.visible:
+				crosshair.hide()
 
 
 func connect_to_player(player: CharacterBody3D) -> void:
@@ -60,6 +74,10 @@ func connect_to_player(player: CharacterBody3D) -> void:
 	# Connect to AmmoComponent for reserve ammo updates
 	if player.ammo_component:
 		player.ammo_component.ammo_changed.connect(_on_player_reserve_ammo_changed.bind(player))
+	
+	# Wire up DamageEffectsComponent to use HUD's damage overlay
+	if "damage_effects_component" in player and player.damage_effects_component:
+		player.damage_effects_component.color_rect = damage_overlay
 
 
 func disconnect_from_player() -> void:

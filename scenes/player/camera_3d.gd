@@ -33,6 +33,8 @@ var _crouching_depth: float = -0.5
 
 func _ready():
 	_validate_node_references()
+	CameraManager.active_camera_changed.connect(_on_active_camera_changed)
+	CameraManager.register_camera(self)
 
 
 func _validate_node_references() -> void:
@@ -43,13 +45,14 @@ func _validate_node_references() -> void:
 		push_warning("PlayerCamera: 'player' is not set. Mouse look and death orientation will be disabled.")
 
 
-func _physics_process(_delta: float) -> void:
+func _on_active_camera_changed(new_camera: Camera3D) -> void:
 	# Handle crosshair visibility when switching cameras
-	var current_camera = get_viewport().get_camera_3d()
-	if self != current_camera:
-		if crosshair_rect.visible: crosshair_rect.hide()
+	if self != new_camera:
+		if crosshair_rect and crosshair_rect.visible:
+			crosshair_rect.hide()
 	else:
-		if not crosshair_rect.visible: crosshair_rect.show()
+		if crosshair_rect and not crosshair_rect.visible:
+			crosshair_rect.show()
 
 
 func handle_mouse_look(relative: Vector2) -> void:

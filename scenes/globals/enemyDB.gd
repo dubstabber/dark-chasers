@@ -1,38 +1,34 @@
 extends Node
 
-var ENEMIES = [
-	{
-		"name": "swag hacker",
-		"image": load("res://images/enemies/static-images/swag_hacker.jpg"),
-	},
-	{
-		"name": "botanicula onion",
-		"image": load("res://images/enemies/static-images/botanicula_onion.png"),
-	},
-	{
-		"name": "giga chad",
-		"image": load("res://images/enemies/static-images/gigachad.webp"),
-		"music": load("res://sounds/music/gigachad.mp3"),
-	},
-	{
-		"name": "obunga",
-		"image": load("res://images/enemies/static-images/obunga.webp"),
-	},
-	{
-		"name": "angry german kid",
-		"image": load("res://images/enemies/static-images/angry-german-kid.png"),
-		"musics": load_musics("res://sounds/music/angrygermankid/angry-german-kid-", 25, ".ogg")
-	},
-]
+## Database of static-image enemy definitions.
+## Uses typed EnemyDefinition resources for editor tooling and validation.
+
+var ENEMIES: Array[EnemyDefinition] = []
+
+var _definitions_by_name: Dictionary = {}
 
 
-func load_musics(prefix, numberOfFiles, type):
-	var musics := []
-	for i in range(1, numberOfFiles):
-		var music: Resource
-		if i < 10:
-			music = load(prefix + "0" + str(i) + type)
-		else:
-			music = load(prefix + str(i) + type)
-		musics.push_front(music)
-	return musics
+func _ready() -> void:
+	_load_definitions()
+
+
+func _load_definitions() -> void:
+	ENEMIES = [
+		preload("res://scenes/resources/enemies/swag_hacker.tres"),
+		preload("res://scenes/resources/enemies/botanicula_onion.tres"),
+		preload("res://scenes/resources/enemies/giga_chad.tres"),
+		preload("res://scenes/resources/enemies/obunga.tres"),
+		preload("res://scenes/resources/enemies/angry_german_kid.tres"),
+	]
+	
+	# Build lookup table
+	for def in ENEMIES:
+		_definitions_by_name[def.enemy_name] = def
+
+
+func get_by_name(enemy_name: String) -> EnemyDefinition:
+	return _definitions_by_name.get(enemy_name)
+
+
+func get_random() -> EnemyDefinition:
+	return ENEMIES.pick_random()

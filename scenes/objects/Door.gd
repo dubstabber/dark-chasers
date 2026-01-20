@@ -36,7 +36,6 @@ const _SIDE_NAMES := {
 }
 
 var _is_open := false
-var _map: Node3D
 var _playing_forward := true
 var _has_reversed_due_block := false
 var _current_open_sound: AudioStreamPlayer3D
@@ -55,7 +54,6 @@ func _ready() -> void:
 	if not is_in_group("door"):
 		add_to_group("door")
 
-	_map = get_tree().get_first_node_in_group("map")
 	if _anim:
 		_anim.connect("animation_finished", _on_animation_finished)
 
@@ -103,7 +101,7 @@ func _update_current_sound_reference(new_sound: AudioStreamPlayer3D, is_open_sou
 
 func _toggle_door(force := false) -> void:
 	var is_unlocked := true
-	if not force and _map and key_needed and key_needed not in _map.keys_collected:
+	if not force and key_needed and not WorldContext.has_key(key_needed):
 		is_unlocked = false
 
 	if not is_unlocked:

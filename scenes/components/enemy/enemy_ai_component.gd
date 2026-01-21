@@ -8,6 +8,7 @@ signal target_died()
 @export var detection_enabled: bool = true
 @export var chase_player: bool = true
 @export var check_line_of_sight: bool = true
+@export var line_of_sight_origin: Node3D
 
 var current_target: CharacterBody3D = null
 var players_node: Node3D = null
@@ -58,7 +59,7 @@ func check_targets() -> void:
 		
 		if check_line_of_sight:
 			var params = PhysicsRayQueryParameters3D.new()
-			params.from = _owner_enemy.global_position
+			params.from = _get_line_of_sight_origin()
 			params.to = _get_aim_point(target)
 			params.exclude = [_owner_enemy]
 			params.collision_mask = _owner_enemy.collision_mask
@@ -74,6 +75,12 @@ func check_targets() -> void:
 
 func _has_aim_point(target: Node3D) -> bool:
 	return target.has_method("get_aim_point") or ("camera_3d" in target and target.camera_3d != null)
+
+
+func _get_line_of_sight_origin() -> Vector3:
+	if line_of_sight_origin:
+		return line_of_sight_origin.global_position
+	return _owner_enemy.global_position
 
 
 func _get_aim_point(target: Node3D) -> Vector3:

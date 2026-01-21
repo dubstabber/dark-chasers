@@ -49,8 +49,6 @@ func _validate_node_references() -> void:
 	"""Validate that node references are set and log warnings for missing ones"""
 	if not owner_node:
 		push_warning("HealthComponent: 'owner_node' is not set. destroy_on_death will be disabled.")
-	if not armor_component:
-		push_warning("HealthComponent: 'armor_component' is not set. Damage reduction will be disabled.")
 	if not audio_player:
 		push_warning("HealthComponent: 'audio_player' is not set. Sound effects will use fallback.")
 

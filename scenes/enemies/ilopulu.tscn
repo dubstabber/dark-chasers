@@ -68,7 +68,10 @@ animated_sprite = NodePath("../Graphics/AnimatedSprite3D")
 idle_animation = "stay"
 move_animation = "run"
 
-[node name="BloodEffectComponent" parent="." index="7"]
+[node name="EyesDetection3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75497, 0)
+
+[node name="BloodEffectComponent" parent="." index="8"]
 blood_color = Color(0, 0, 0, 1)
 particle_scene = ExtResource("6_0ua07")
 decal_scene = ExtResource("7_xf0aw")

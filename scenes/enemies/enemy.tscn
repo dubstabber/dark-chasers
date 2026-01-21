@@ -37,6 +37,9 @@ script = ExtResource("8_killzone")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="KillZone"]
 
+[node name="EyesDetection3D" type="Marker3D" parent="."]
+visible = false
+
 [node name="Timers" type="Node" parent="."]
 
 [node name="InteractionTimer" type="Timer" parent="Timers"]
@@ -57,8 +60,9 @@ script = ExtResource("2_blood")
 script = ExtResource("3_nav")
 navigation_agent = NodePath("../NavigationAgent3D")
 
-[node name="EnemyAIComponent" type="Node" parent="."]
+[node name="EnemyAIComponent" type="Node" parent="." node_paths=PackedStringArray("line_of_sight_origin")]
 script = ExtResource("4_ai")
+line_of_sight_origin = NodePath("../EyesDetection3D")
 
 [node name="EnemyWanderingComponent" type="Node" parent="."]
 script = ExtResource("5_wander")

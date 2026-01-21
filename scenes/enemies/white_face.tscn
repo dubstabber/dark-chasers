@@ -42,7 +42,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.855693, 0)
 [node name="CollisionShape3D" parent="KillZone" index="0"]
 shape = SubResource("CapsuleShape3D_1vtrc")
 
-[node name="BloodEffectComponent" parent="." index="7"]
+[node name="EyesDetection3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11734, 0)
+
+[node name="BloodEffectComponent" parent="." index="8"]
 blood_color = Color(1, 1, 1, 1)
 particle_scene = ExtResource("4_nlm13")
 decal_scene = ExtResource("5_52815")

@@ -1232,6 +1232,7 @@ libraries = {
 autoplay = "RESET"
 
 [node name="HealthSoundPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -10.0
 
 [node name="HealthSoundPlayer" type="AudioStreamPlayer" parent="."]
 volume_db = -10.0

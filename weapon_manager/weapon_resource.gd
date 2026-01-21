@@ -44,65 +44,8 @@ var ammo_component: PlayerAmmoComponent # Reference to the player's ammo compone
 @export var infinite_ammo: bool = false
 
 
-func hit() -> void:
-	if shoot_type == ShootTypes.HitScan:
-		var collider = weapon_manager.bullet_raycast.get_collider()
-		if collider:
-			var hit_pos = weapon_manager.bullet_raycast.get_collision_point()
-			var hit_normal = weapon_manager.bullet_raycast.get_collision_normal()
-			if hit_particle:
-				var hit_particle1 = hit_particle.instantiate()
-				weapon_manager.get_tree().root.add_child(hit_particle1)
-				hit_particle1.global_transform.origin = hit_pos + hit_normal * 0.01
-				hit_particle1.connect("animation_finished", hit_particle1.queue_free)
-			if hit_decal and not collider.is_in_group("entity") and not collider.is_in_group("no_decals") and _is_wall_surface(hit_normal):
-				var hit_decal1 = hit_decal.instantiate()
-				collider.add_child(hit_decal1)
-				hit_decal1.global_transform.origin = hit_pos + hit_normal * (hit_decal1.size.y * 0.05)
-				var rotation_basis = _calculate_decal_rotation(hit_normal)
-				hit_decal1.global_transform.basis = rotation_basis
-
-			if collider.is_in_group("entity"):
-				if damage_entity_sound:
-					Utils.play_sound(damage_entity_sound, weapon_manager.get_tree().root, hit_pos)
-			elif damage_wall_sound:
-				Utils.play_sound(damage_wall_sound, weapon_manager.get_tree().root, hit_pos)
-		
-			var shot_direction := -weapon_manager.bullet_raycast.global_transform.basis.z.normalized()
-		
-			if collider.has_method("take_damage_with_direction"):
-				# Pass damage, hit position, and shot direction for wall blood tracing
-				collider.take_damage_with_direction(damage, hit_pos, shot_direction)
-			elif collider.has_method("take_damage_at_position"):
-				collider.take_damage_at_position(damage, hit_pos)
-			elif collider.has_method("take_damage"):
-				collider.take_damage(damage)
-			if collider.is_in_group("destroyable"):
-				collider.queue_free()
-
-
-func _is_wall_surface(normal: Vector3) -> bool:
-	# Returns true if the surface is a wall (not floor or ceiling)
-	# Check if the normal is mostly horizontal (wall) vs vertical (floor/ceiling)
-	return abs(normal.y) < 0.7
-
-
-func _calculate_decal_rotation(normal: Vector3) -> Basis:
-	# Decals project along their -Y axis, so we need to align -Y with the surface normal
-	# This means the Decal's +Y axis should point away from the surface (opposite of normal)
-	var forward = Vector3(0, 0, 1)
-
-	# Handle edge cases where the normal is parallel to forward vector
-	if abs(normal.dot(forward)) > 0.99:
-		forward = Vector3(1, 0, 0)
-
-	# Calculate tangent vectors on the surface plane
-	var right_vector = forward.cross(normal).normalized()
-	var forward_vector = normal.cross(right_vector).normalized()
-
-	# Construct basis where -Y points along the normal (so Y points opposite to normal)
-	# Decal projects downward (-Y), so Y should equal -normal
-	return Basis(right_vector, -normal, forward_vector)
+# Note: hit() execution logic has been moved to WeaponHitExecutor
+# WeaponResource is now pure config/state - no scene-tree mutations
 
 
 ## Ammo Management Methods

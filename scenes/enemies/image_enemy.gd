@@ -1,5 +1,8 @@
 extends Enemy
 
+## Target size for enemy sprite scaling (in pixels)
+const TARGET_SPRITE_SIZE := 300
+
 @export var specific_enemy: String
 
 var enemy_data: EnemyDefinition
@@ -22,13 +25,12 @@ func _ready():
 	
 	image.texture = enemy_data.image
 	
-	# Scale image to target size
-	var sizeto = 300
+	# Scale image to target size (always scale to normalize enemy sizes)
 	var size = image.texture.get_size()
-	if size.x > sizeto or size.y > sizeto or size.x <= sizeto or size.y <= sizeto:
-		var sizeIt = size.x if size.x > size.y else size.y
-		var scalefactor = sizeto / sizeIt
-		image.scale = Vector3(scalefactor, scalefactor, 1)
+	var largest_dimension = maxf(size.x, size.y)
+	if largest_dimension > 0:
+		var scale_factor = TARGET_SPRITE_SIZE / largest_dimension
+		image.scale = Vector3(scale_factor, scale_factor, 1)
 	
 	# Set up music
 	if enemy_data.has_music():

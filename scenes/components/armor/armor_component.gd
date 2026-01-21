@@ -205,15 +205,9 @@ func _handle_armor_depletion():
 
 func _play_sound(sound: AudioStream):
 	"""Play an audio stream using the game's audio system"""
-	if sound:
-		# Use the same audio system as HealthComponent
-		var audio_player = AudioStreamPlayer.new()
-		get_tree().current_scene.add_child(audio_player)
-		audio_player.stream = sound
-		audio_player.play()
-		
-		# Clean up after playing
-		audio_player.finished.connect(func(): audio_player.queue_free())
+	if sound and owner_node:
+		# Use Utils.play_sound for consistent audio routing and pooling
+		Utils.play_sound(sound, get_tree().root, owner_node.global_position if owner_node is Node3D else Vector3.ZERO)
 
 # Convenience methods for common use cases
 func gain_armor(amount: int) -> bool:

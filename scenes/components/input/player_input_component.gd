@@ -9,7 +9,7 @@ signal clip_mode_toggled(enabled: bool)
 signal debug_camera_toggled()
 
 @export_group("Node References")
-@export var player: CharacterBody3D
+@export var player: Player
 @export var camera: Node3D # PlayerCamera
 @export var movement_component: PlayerMovementComponent
 @export var interaction_component: InteractionComponent
@@ -75,7 +75,9 @@ func _physics_process(delta: float) -> void:
 
 func _process_movement_input(delta: float) -> void:
 	var input_dir = Input.get_vector("move-left", "move-right", "move-up", "move-down")
-	movement_component.process_movement(delta, input_dir)
+	var is_crouching = Input.is_action_pressed("crouch")
+	var is_sprinting = Input.is_action_pressed("sprint")
+	movement_component.process_movement(delta, input_dir, is_crouching, is_sprinting)
 	
 	if camera and camera.has_method("set_sprint_fov"):
 		camera.set_sprint_fov(movement_component.is_sprinting())
@@ -132,31 +134,31 @@ func set_hud(new_hud: CanvasLayer) -> void:
 
 
 func _is_movement_blocked() -> bool:
-	if player and "blocked_movement" in player:
+	if player:
 		return player.blocked_movement
 	return false
 
 
 func _is_player_dead() -> bool:
-	if player and player.has_method("is_dead"):
+	if player:
 		return player.is_dead()
 	return false
 
 
 func _get_gravity() -> float:
-	if player and "gravity" in player:
+	if player:
 		return player.gravity
 	return ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _get_last_velocity_y() -> float:
-	if player and "last_velocity" in player:
+	if player:
 		return player.last_velocity.y
 	return 0.0
 
 
 func _update_last_velocity() -> void:
-	if player and "last_velocity" in player:
+	if player:
 		player.last_velocity = player.velocity
 
 

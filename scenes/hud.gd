@@ -15,6 +15,8 @@ var faded: bool
 @onready var key_ui_container: HBoxContainer = $TopRight/KeyUIContainer
 @onready var damage_overlay: ColorRect = $DamageOverlay
 @onready var crosshair: TextureRect = $Crosshair
+@onready var bottom_left_container: Control = $BottomLeft
+@onready var bottom_right_container: Control = $BottomRight
 
 
 var _connected_player: CharacterBody3D = null
@@ -39,10 +41,10 @@ func _set_player_ui_visible(show_ui: bool) -> void:
 	"""Show or hide all player-specific UI elements (crosshair, health, armor, ammo, damage overlay)"""
 	if crosshair:
 		crosshair.visible = show_ui
-	if health_ui_value_container:
-		health_ui_value_container.get_parent().get_parent().visible = show_ui # BottomLeft container
-	if ammo_ui_value_container:
-		ammo_ui_value_container.get_parent().get_parent().get_parent().visible = show_ui # BottomRight container
+	if bottom_left_container:
+		bottom_left_container.visible = show_ui
+	if bottom_right_container:
+		bottom_right_container.visible = show_ui
 	if damage_overlay:
 		damage_overlay.visible = show_ui
 
@@ -197,16 +199,8 @@ func _get_hud_owner() -> CharacterBody3D:
 	Returns:
 		The player CharacterBody3D that this HUD belongs to, or null if not found
 	"""
-	# The HUD is typically a child of the level, and players have a reference to it
-	# We need to find which player has this HUD as their hud property
-	var level = get_parent()
-	if level and "players" in level:
-		var players_node = level.players
-		if players_node:
-			for player in players_node.get_children():
-				if player.has_method("get") and player.get("hud") == self:
-					return player
-	return null
+	# Use explicit connected player reference instead of scene-tree discovery
+	return _connected_player
 
 
 func hide_event_text():

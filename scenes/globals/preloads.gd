@@ -6,6 +6,7 @@ extends Node
 # Catalogs (lazy-loaded)
 var _key_icons: KeyIconLibrary
 var _vfx_catalog: VfxCatalog
+var _particle_catalog: ParticleCatalog
 
 const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
 const HUD_SCENE := preload("res://scenes/hud.tscn")
@@ -36,6 +37,12 @@ func get_vfx_catalog() -> VfxCatalog:
 	return _vfx_catalog
 
 
+func get_particle_catalog() -> ParticleCatalog:
+	if not _particle_catalog:
+		_particle_catalog = load("res://scenes/resources/particle_catalog.tres")
+	return _particle_catalog
+
+
 func get_key_texture(key_type: String) -> Texture2D:
 	return get_key_icons().get_texture(key_type)
 
@@ -63,6 +70,7 @@ const BUTTON_DOWN_5_IMAGE := preload("res://images/textures/BSW05B.png")
 
 const WATER_SPLASH_SOUND := preload("res://sounds/sfx/footsteps/water/DSSPLSML.wav")
 
+# DEPRECATED: Use get_particle_catalog().small_wood_images instead
 const SMALL_WOOD_IMAGES := [
 	preload("res://images/particles/1045A0.png"),
 	preload("res://images/particles/1045B0.png"),
@@ -71,6 +79,7 @@ const SMALL_WOOD_IMAGES := [
 	preload("res://images/particles/1045E0.png"),
 	preload("res://images/particles/1045F0.png")
 ]
+# DEPRECATED: Use get_particle_catalog().big_wood_images instead
 const BIG_WOOD_IMAGES := [
 	preload("res://images/particles/1046A0.png"),
 	preload("res://images/particles/1046B0.png"),
@@ -81,12 +90,14 @@ const BIG_WOOD_IMAGES := [
 	preload("res://images/particles/1046G0.png"),
 	preload("res://images/particles/1046H0.png")
 ]
+# DEPRECATED: Use get_particle_catalog().white_scrap_images instead
 const WHITE_SCRAP_IMAGES := [
 	preload("res://images/particles/1047A0.png"),
 	preload("res://images/particles/1047B0.png"),
 	preload("res://images/particles/1047C0.png"),
 	preload("res://images/particles/1047D0.png")
 ]
+# DEPRECATED: Use get_particle_catalog().pot_scrap_images instead
 const POT_SCRAP_IMAGES := [
 	preload("res://images/particles/1075C0.png"),
 	preload("res://images/particles/1075D0.png"),
@@ -97,6 +108,7 @@ const POT_SCRAP_IMAGES := [
 	preload("res://images/particles/1075I0.png"),
 	preload("res://images/particles/1075J0.png")
 ]
+# DEPRECATED: Use get_particle_catalog() instead
 const CIRCLE_GROUND_SCRAP_IMAGE := preload("res://images/particles/1075K0.png")
 const SMALL_GROUND_SCRAP_IMAGE := preload("res://images/particles/1075L0.png")
 const GRASS_SCRAP_IMAGES := [
@@ -106,6 +118,7 @@ const GRASS_SCRAP_IMAGES := [
 	preload("res://images/particles/1075P0.png")
 ]
 
+# DEPRECATED: Use get_particle_catalog().paper_scrap_images instead
 const PAPER_SCRAP_IMAGES := [
 	preload("res://images/particles/1035A0.png"),
 	preload("res://images/particles/1035B0.png"),
@@ -114,6 +127,7 @@ const PAPER_SCRAP_IMAGES := [
 	preload("res://images/particles/1035E0.png")
 ]
 
+# DEPRECATED: Use get_particle_catalog().glass_scrap_images instead
 const GLASS_SCRAP_IMAGES := [
 	preload("res://images/particles/GLACA0.png"),
 	preload("res://images/particles/GLACB0.png"),
@@ -126,6 +140,7 @@ const GLASS_SCRAP_IMAGES := [
 	preload("res://images/particles/GLACI0.png")
 ]
 
+# DEPRECATED: Use get_particle_catalog().doom_decal_images instead
 const DOOM_DECAL_IMAGES := [
 	preload("res://images/particles/chip1.png"),
 	preload("res://images/particles/chip2.png"),

@@ -15,19 +15,22 @@ extends Node
 @export_group("Node References")
 @export var color_rect: ColorRect
 @export var health_component: HealthComponent:
+	get:
+		return _health_component
 	set(value):
 		# Disconnect from old health component
-		if health_component and health_component.damage_taken.is_connected(_on_damage_taken):
-			health_component.damage_taken.disconnect(_on_damage_taken)
-			health_component.died.disconnect(_on_died)
+		if _health_component and _health_component.damage_taken.is_connected(_on_damage_taken):
+			_health_component.damage_taken.disconnect(_on_damage_taken)
+			_health_component.died.disconnect(_on_died)
 		
-		health_component = value
-		
-		# Connect to new health component
-		if health_component:
-			health_component.damage_taken.connect(_on_damage_taken)
-			health_component.died.connect(_on_died)
+		_health_component = value
 
+		# Connect to new health component
+		if _health_component:
+			_health_component.damage_taken.connect(_on_damage_taken)
+			_health_component.died.connect(_on_died)
+
+var _health_component: HealthComponent
 var original_modulate: Color = Color(1.0, 1.0, 1.0, 0.0)
 var damage_blink_tween: Tween
 

@@ -10,6 +10,7 @@ signal weapon_switched(weapon: WeaponResource)
 # --------------------------------------------------------------------------
 var _bob_controller := WeaponBobController.new()
 var _switch_controller := WeaponSwitchController.new()
+var _hit_executor := WeaponHitExecutor.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -55,7 +56,7 @@ var selected_slot_position: int:
 # --------------------------------------------------------------------------
 # Scene references
 # --------------------------------------------------------------------------
-@export var player: CharacterBody3D
+@export var player: Player
 @export var gun_base: Node
 @export var animation_player: AnimationPlayer
 @export var hit_sound_player: AudioStreamPlayer3D
@@ -70,6 +71,9 @@ func _ready() -> void:
 	left_hand = gun_base.get_node_or_null("LeftHandSlot")
 	right_hand = gun_base.get_node_or_null("RightHandSlot")
 	base_gun_position = gun_base.position
+	
+	# Initialize hit executor with scene references
+	_hit_executor.setup(get_tree(), bullet_raycast)
 	
 	# Initialize ammo component references for all weapons
 	_setup_weapon_ammo_components()
@@ -114,11 +118,11 @@ func _get_player_ammo_component() -> PlayerAmmoComponent:
 	if not player:
 		return null
 	
-	# Check if player has ammo_component property and it's not null
-	if player.has_method("get") and "ammo_component" in player and player.ammo_component:
+	# Player class has typed ammo_component property
+	if player.ammo_component:
 		return player.ammo_component
 	
-	# Try to find ammo component as a child node
+	# Fallback: try to find ammo component as a child node
 	return player.get_node_or_null("PlayerAmmoComponent")
 
 
@@ -128,21 +132,8 @@ func _process(delta: float) -> void:
 	_apply_offsets()
 
 
-func _physics_process(_delta: float) -> void:
-	if player.blocked_movement:
-		return
-	if player and player.has_method("is_dead") and player.is_dead():
-		return
-
-	if Input.is_action_just_pressed("hit") and current_weapon.shoot_anim_name:
-		if not animation_player.is_playing() and current_weapon.can_fire():
-			animation_player.play(current_weapon.shoot_anim_name)
-
-	if is_auto_hitting and current_weapon.can_fire():
-		if current_weapon.repeat_shoot_anim_name and not animation_player.is_playing():
-			animation_player.play(current_weapon.repeat_shoot_anim_name)
-		elif current_weapon.shoot_anim_name and not animation_player.is_playing():
-			animation_player.play(current_weapon.shoot_anim_name)
+# Note: Input polling moved to WeaponInputComponent
+# WeaponManager is now a pure orchestrator - call try_fire(), start_auto_hitting(), etc.
 
 
 # ========================================================================== #
@@ -226,49 +217,74 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	await _equip_from_slot(slot_array)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if player.blocked_movement:
+# ========================================================================== #
+# Public fire control methods (called by WeaponInputComponent)
+# ========================================================================== #
+func try_fire() -> void:
+	"""Attempt to fire the current weapon (single shot)"""
+	if not current_weapon or not current_weapon.shoot_anim_name:
 		return
-
-	if player and player.has_method("is_dead") and player.is_dead():
+	if animation_player.is_playing() or is_switching_weapon:
 		return
+	if not current_weapon.can_fire():
+		return
+	animation_player.play(current_weapon.shoot_anim_name)
 
-	if event.is_action_pressed("hit") and current_weapon and current_weapon.auto_hit:
-		is_auto_hitting = true
-	elif event.is_action_released("hit") and is_auto_hitting:
-		is_auto_hitting = false
 
-		if animation_player.is_playing():
-			await animation_player.animation_finished
+func try_auto_fire() -> void:
+	"""Attempt to continue auto-fire for automatic weapons"""
+	if not current_weapon or not is_auto_hitting:
+		return
+	if not current_weapon.can_fire():
+		return
+	if animation_player.is_playing():
+		return
+	
+	if current_weapon.repeat_shoot_anim_name:
+		animation_player.play(current_weapon.repeat_shoot_anim_name)
+	elif current_weapon.shoot_anim_name:
+		animation_player.play(current_weapon.shoot_anim_name)
 
-		if is_auto_hitting:
-			return
 
-		if current_weapon and current_weapon.pullout_anim_name and not animation_player.is_playing():
-			animation_player.stop()
+func start_auto_hitting() -> void:
+	"""Start auto-fire mode for automatic weapons"""
+	is_auto_hitting = true
 
-			animation_player.current_animation = current_weapon.pullout_anim_name
-			var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
-			if pullout_anim:
-				animation_player.seek(pullout_anim.length, true, true)
-				lighter_off.emit()
 
-	if event.is_action_pressed("hit") and current_weapon and not current_weapon.auto_hit:
-		if current_weapon.shoot_anim_name and not animation_player.is_playing() and not is_switching_weapon and current_weapon.can_fire():
-			animation_player.play(current_weapon.shoot_anim_name)
+func stop_auto_hitting() -> void:
+	"""Stop auto-fire mode and reset to idle"""
+	is_auto_hitting = false
+	_reset_to_idle_after_auto_fire()
 
-	if event is InputEventKey and event.pressed:
-		var num: int = event.unicode - KEY_0
-		if num > 0 and num < 10:
-			switch_weapon(num)
+
+func _reset_to_idle_after_auto_fire() -> void:
+	"""Reset weapon to idle state after auto-fire ends"""
+	if animation_player.is_playing():
+		await animation_player.animation_finished
+	
+	if is_auto_hitting:
+		return # User started firing again
+	
+	if current_weapon and current_weapon.pullout_anim_name and not animation_player.is_playing():
+		animation_player.stop()
+		animation_player.current_animation = current_weapon.pullout_anim_name
+		var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
+		if pullout_anim:
+			animation_player.seek(pullout_anim.length, true, true)
+			lighter_off.emit()
+
 
 func hit() -> void:
-	if current_weapon and current_weapon.has_method("hit"):
-		# Consume ammo before hitting (for non-melee weapons)
-		if not current_weapon.melee_attack:
-			if not current_weapon.consume_ammo():
-				return # Don't hit if insufficient ammo
-		current_weapon.hit()
+	if not current_weapon:
+		return
+	
+	# Consume ammo before hitting (for non-melee weapons)
+	if not current_weapon.melee_attack:
+		if not current_weapon.consume_ammo():
+			return # Don't hit if insufficient ammo
+	
+	# Execute hit via the hit executor (handles particles, decals, damage)
+	_hit_executor.execute_hit(current_weapon)
 
 
 func switch_weapon(slot_index: int) -> void:

@@ -26,14 +26,13 @@ func _find_players_node() -> void:
 	if not _enemy_context:
 		_enemy_context = get_node_or_null("/root/EnemyContext")
 	
-	if _enemy_context and _enemy_context.has_method("get_players_node"):
+	if _enemy_context:
 		players_node = _enemy_context.get_players_node()
-	else:
-		players_node = get_tree().get_first_node_in_group("players")
+	# Note: EnemyContext handles group fallback internally; no need to duplicate here
 
 
 func check_targets() -> void:
-	if current_target and current_target.has_method("is_dead") and current_target.is_dead():
+	if current_target and Mortal.is_dead(current_target):
 		current_target = null
 		target_died.emit()
 	
@@ -51,10 +50,10 @@ func check_targets() -> void:
 	var space_state = _owner_enemy.get_world_3d().direct_space_state
 	
 	for target in players_node.get_children():
-		if not target.has_method("is_dead") or target.is_dead():
+		if not Mortal.is_alive(target):
 			continue
 		
-		if not _has_aim_point(target):
+		if not Aimable.check(target):
 			continue
 		
 		if check_line_of_sight:
@@ -74,7 +73,8 @@ func check_targets() -> void:
 
 
 func _has_aim_point(target: Node3D) -> bool:
-	return target.has_method("get_aim_point") or ("camera_3d" in target and target.camera_3d != null)
+	# Legacy method - use Aimable.check() instead
+	return Aimable.check(target) or ("camera_3d" in target and target.camera_3d != null)
 
 
 func _get_line_of_sight_origin() -> Vector3:
@@ -84,11 +84,7 @@ func _get_line_of_sight_origin() -> Vector3:
 
 
 func _get_aim_point(target: Node3D) -> Vector3:
-	if target.has_method("get_aim_point"):
-		return target.get_aim_point()
-	elif "camera_3d" in target and target.camera_3d != null:
-		return target.camera_3d.global_position
-	return target.global_position + Vector3(0, 1.6, 0)
+	return Aimable.get_aim_point(target)
 
 
 func _set_target(new_target: CharacterBody3D) -> void:
@@ -105,7 +101,7 @@ func clear_target() -> void:
 
 
 func check_target_alive() -> bool:
-	if current_target and current_target.has_method("is_dead") and current_target.is_dead():
+	if current_target and Mortal.is_dead(current_target):
 		current_target = null
 		target_died.emit()
 		return false

@@ -53,9 +53,7 @@ func _setup_context() -> void:
 	if _enemy_context:
 		players = _enemy_context.get_players_node()
 		map_transitions = _enemy_context.get_transitions_node()
-	else:
-		players = get_tree().get_first_node_in_group("players")
-		map_transitions = get_tree().get_first_node_in_group("transitions")
+	# Note: EnemyContext handles group fallback internally; no need to duplicate here
 
 
 func _setup_components() -> void:
@@ -275,8 +273,13 @@ func makepath() -> void:
 		if current_target.current_room == current_room or not current_room:
 			_set_nav_target(current_target.global_position)
 		elif map_transitions:
-			var transition_point = find_path_to_player()[0]
-			_set_nav_target(map_transitions.get_node(transition_point).global_position)
+			var path_to_player = find_path_to_player()
+			if path_to_player and not path_to_player.is_empty():
+				var transition_point = path_to_player[0]
+				_set_nav_target(map_transitions.get_node(transition_point).global_position)
+			else:
+				# No valid path found; fall back to direct navigation
+				_set_nav_target(current_target.global_position)
 	elif not waypoints.is_empty():
 		_set_nav_target(waypoints[0])
 

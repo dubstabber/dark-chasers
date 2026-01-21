@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://by6immycqwkt5"]
+[gd_scene load_steps=101 format=3 uid="uid://by6immycqwkt5"]
 
 [ext_resource type="Script" uid="uid://f0613ebbcpqb" path="res://scenes/player/player.gd" id="1_bqxx6"]
 [ext_resource type="Script" uid="uid://k11m4xhs6555" path="res://scenes/player/camera_3d.gd" id="2_3kmde"]
@@ -69,6 +69,7 @@
 [ext_resource type="Script" uid="uid://dn2pu8ulxjgy0" path="res://scenes/components/player/player_death_component.gd" id="69_lclul"]
 [ext_resource type="Script" uid="uid://byh2r5bgsf30" path="res://scenes/components/effects/damage_effects_component.gd" id="70_ej2d6"]
 [ext_resource type="Script" uid="uid://devo0dnknywil" path="res://scenes/components/interaction/interaction_component.gd" id="71_ej2d6"]
+[ext_resource type="Script" uid="uid://bxfrow3qa0tcq" path="res://scenes/components/input/weapon_input_component.gd" id="72_bysbl"]
 [ext_resource type="Script" uid="uid://bk6uhvda2xkgb" path="res://scenes/components/animation/sprite_animation_component.gd" id="72_fvjb1"]
 [ext_resource type="Script" uid="uid://bnqh2f2sjiajy" path="res://scenes/components/input/player_input_component.gd" id="73_input"]
 
@@ -1322,3 +1323,8 @@ camera = NodePath("../nek/head/eyes/Camera3D")
 movement_component = NodePath("../PlayerMovementComponent")
 interaction_component = NodePath("../InteractionComponent")
 animation_player = NodePath("../nek/head/eyes/AnimationPlayer")
+
+[node name="WeaponInputComponent" type="Node" parent="." node_paths=PackedStringArray("weapon_manager", "player")]
+script = ExtResource("72_bysbl")
+weapon_manager = NodePath("../WeaponManager")
+player = NodePath("..")

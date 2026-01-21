@@ -97,11 +97,19 @@ func _physics_process(_delta: float):
 		_was_grounded = currently_grounded
 
 
-func process_movement(delta: float, input_dir: Vector2) -> void:
+func process_movement(delta: float, input_dir: Vector2, is_crouching_input: bool = false, is_sprinting_input: bool = false) -> void:
+	"""Process movement with input state passed from PlayerInputComponent
+	
+	Args:
+		delta: Frame delta time
+		input_dir: Movement direction from input
+		is_crouching_input: Whether crouch is being held
+		is_sprinting_input: Whether sprint is being held
+	"""
 	if not player:
 		return
 	
-	_update_crouch_state(delta, input_dir)
+	_update_crouch_state(delta, input_dir, is_crouching_input, is_sprinting_input)
 	_update_slide(delta)
 	_update_direction(delta, input_dir)
 	_apply_movement()
@@ -109,8 +117,7 @@ func process_movement(delta: float, input_dir: Vector2) -> void:
 	_update_movement_state()
 
 
-func _update_crouch_state(delta: float, input_dir: Vector2) -> void:
-	var is_crouching_input = Input.is_action_pressed("crouch")
+func _update_crouch_state(delta: float, input_dir: Vector2, is_crouching_input: bool, is_sprinting_input: bool) -> void:
 	var currently_sliding = current_state == MovementState.SLIDING
 	
 	if (is_crouching_input or currently_sliding) and not clip_mode:
@@ -146,7 +153,7 @@ func _update_crouch_state(delta: float, input_dir: Vector2) -> void:
 		if head:
 			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
 		
-		if Input.is_action_pressed("sprint") and player.velocity.length() > 0.1 and _can_sprint():
+		if is_sprinting_input and player.velocity.length() > 0.1 and _can_sprint():
 			current_speed = lerp(current_speed, sprinting_speed, delta * lerp_speed)
 			_set_state(MovementState.SPRINTING)
 			_is_sprinting = true

@@ -26,14 +26,12 @@ signal fov_changed(new_fov: float)
 @export var head: Node3D
 @export var player: CharacterBody3D
 
-@onready var crosshair_rect: TextureRect = $CrosshairRect
 
 var _crouching_depth: float = -0.5
 
 
 func _ready():
 	_validate_node_references()
-	CameraManager.active_camera_changed.connect(_on_active_camera_changed)
 	CameraManager.register_camera(self)
 
 
@@ -43,16 +41,6 @@ func _validate_node_references() -> void:
 		push_warning("PlayerCamera: 'head' is not set. Mouse look and death camera effects will be disabled.")
 	if not player:
 		push_warning("PlayerCamera: 'player' is not set. Mouse look and death orientation will be disabled.")
-
-
-func _on_active_camera_changed(new_camera: Camera3D) -> void:
-	# Handle crosshair visibility when switching cameras
-	if self != new_camera:
-		if crosshair_rect and crosshair_rect.visible:
-			crosshair_rect.hide()
-	else:
-		if crosshair_rect and not crosshair_rect.visible:
-			crosshair_rect.show()
 
 
 func handle_mouse_look(relative: Vector2) -> void:

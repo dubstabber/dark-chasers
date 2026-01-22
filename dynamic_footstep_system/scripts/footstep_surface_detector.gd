@@ -2,9 +2,15 @@ extends AudioStreamPlayer3D
 
 class_name FootstepSurfaceDetector
 
-@export var generic_fallback_footstep_profile : AudioStreamRandomizer
-@export var footstep_material_library : FootstepMaterialLibrary
+@export var generic_fallback_footstep_profile: AudioStreamRandomizer
+@export var footstep_material_library: FootstepMaterialLibrary
+@export var cache_grid_size: float = 0.5 # Size of grid cells for position snapping in cache
+
 var last_result
+
+# Cache: maps "collider_id:snapped_x:snapped_y:snapped_z" -> Material (or null for no material)
+var _material_cache: Dictionary = {}
+const MAX_CACHE_SIZE: int = 128
 
 
 func play_footstep():
@@ -20,9 +26,9 @@ func play_footstep():
 		else:
 			_play_footstep(generic_fallback_footstep_profile)
 
-func _play_by_footstep_surface(collider : Node3D) -> bool:
+func _play_by_footstep_surface(collider: Node3D) -> bool:
 	#check for footstep surface as a child of the collider
-	var footstep_surface_child : AudioStreamRandomizer = _get_footstep_surface_child(collider)
+	var footstep_surface_child: AudioStreamRandomizer = _get_footstep_surface_child(collider)
 	#if a child footstep surface was found, then play the sound defined by it
 	if footstep_surface_child:
 		_play_footstep(footstep_surface_child)
@@ -33,11 +39,11 @@ func _play_by_footstep_surface(collider : Node3D) -> bool:
 		return true
 	return false
 
-func _play_by_material(collider : Node3D) -> bool:
+func _play_by_material(collider: Node3D) -> bool:
 	# if no footstep surface, see if we can get a material
 	if footstep_material_library:
 		#find surface material
-		var material : Material = _get_surface_material(collider)
+		var material: Material = _get_surface_material(collider)
 		#if a material was found
 		if material:
 			#get a profile from our library
@@ -49,7 +55,7 @@ func _play_by_material(collider : Node3D) -> bool:
 				return true
 	return false
 
-func _get_footstep_surface_child(collider : Node3D) -> AudioStreamRandomizer:
+func _get_footstep_surface_child(collider: Node3D) -> AudioStreamRandomizer:
 	#find all children of the collider static body that are of type "FootstepSurface"
 	var footstep_surfaces = collider.find_children("", "FootstepSurface")
 	if footstep_surfaces:
@@ -57,7 +63,35 @@ func _get_footstep_surface_child(collider : Node3D) -> AudioStreamRandomizer:
 		return footstep_surfaces[0].footstep_profile
 	return null
 
-func _get_surface_material(collider : Node3D) -> Material:
+func _get_cache_key(collider: Node3D, hit_position: Vector3) -> String:
+	# Snap position to grid for cache key
+	var snapped_x = floori(hit_position.x / cache_grid_size)
+	var snapped_y = floori(hit_position.y / cache_grid_size)
+	var snapped_z = floori(hit_position.z / cache_grid_size)
+	return "%d:%d:%d:%d" % [collider.get_instance_id(), snapped_x, snapped_y, snapped_z]
+
+
+func _get_surface_material(collider: Node3D) -> Material:
+	# Check cache first for expensive multi-surface mesh lookups
+	var hit_position: Vector3 = last_result.get('position', global_position)
+	var cache_key := _get_cache_key(collider, hit_position)
+	if _material_cache.has(cache_key):
+		return _material_cache[cache_key]
+	
+	var material := _get_surface_material_uncached(collider)
+	
+	# Store in cache (with size limit)
+	if _material_cache.size() >= MAX_CACHE_SIZE:
+		# Simple eviction: clear half the cache
+		var keys = _material_cache.keys()
+		for i in range(MAX_CACHE_SIZE >> 1): # Evict half
+			_material_cache.erase(keys[i])
+	_material_cache[cache_key] = material
+	
+	return material
+
+
+func _get_surface_material_uncached(collider: Node3D) -> Material:
 	var mesh_instance = null
 	var meshes = []
 	if collider is CSGShape3D:
@@ -98,8 +132,8 @@ func _get_surface_material(collider : Node3D) -> Material:
 			var faces = mesh.get_faces()
 			
 			var aabb = mesh.get_aabb() as AABB
-			var accuracy = round(4*aabb.size.length_squared()) # dynamically calculate a reasonable grid size
-			var snap = aabb.size/accuracy # this will be the size of our units to snap to
+			var accuracy = round(4 * aabb.size.length_squared()) # dynamically calculate a reasonable grid size
+			var snap = aabb.size / accuracy # this will be the size of our units to snap to
 			
 			var coord = null
 			
@@ -107,13 +141,13 @@ func _get_surface_material(collider : Node3D) -> Material:
 				# first, figure out what face we're standing on
 				var face_idx = i * 3
 				var a = mesh_instance.to_global(faces[face_idx])
-				var b = mesh_instance.to_global(faces[face_idx+1])
-				var c = mesh_instance.to_global(faces[face_idx+2])
-				var ray_t = Geometry3D.ray_intersects_triangle(global_position,ray,a,b,c)
+				var b = mesh_instance.to_global(faces[face_idx + 1])
+				var c = mesh_instance.to_global(faces[face_idx + 2])
+				var ray_t = Geometry3D.ray_intersects_triangle(global_position, ray, a, b, c)
 				if ray_t:
-					face = faces.slice(face_idx,face_idx+3)
+					face = faces.slice(face_idx, face_idx + 3)
 					# round out vert coordinates to avoid floating point errors
-					coord = [round(faces[face_idx]/snap),round(faces[face_idx+1]/snap),round(faces[face_idx+2]/snap)]
+					coord = [round(faces[face_idx] / snap), round(faces[face_idx + 1] / snap), round(faces[face_idx + 2] / snap)]
 					break
 			var mat = null
 			if face:
@@ -123,7 +157,7 @@ func _get_surface_material(collider : Node3D) -> Material:
 					var has_vert_b = false
 					var has_vert_c = false
 					for vert in surf:
-						var vert_coord = round(vert/snap)
+						var vert_coord = round(vert / snap)
 						has_vert_a = has_vert_a or vert_coord == coord[0]
 						has_vert_b = has_vert_b or vert_coord == coord[1]
 						has_vert_c = has_vert_c or vert_coord == coord[2]
@@ -136,6 +170,6 @@ func _get_surface_material(collider : Node3D) -> Material:
 			return mat
 	return null
 
-func _play_footstep(footstep_profile : AudioStreamRandomizer):
+func _play_footstep(footstep_profile: AudioStreamRandomizer):
 	stream = footstep_profile
 	play()

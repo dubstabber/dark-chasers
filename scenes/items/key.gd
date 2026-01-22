@@ -1,6 +1,8 @@
 @tool
 extends Area3D
 
+const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
+
 signal key_collected(body, type, event_name, message_text)
 
 @export var key_type: String
@@ -30,6 +32,14 @@ func _on_body_entered(body):
 				message_text = 'Congratulations! You just picked up the useless key!'
 			_:
 				message_text = "Picked up a key."
+		# Emit typed event to GameEventBus
+		GameEventBus.emit(GameEventTypesScript.KEY_COLLECTED, {
+			"body": body,
+			"key_type": key_type,
+			"event_name": event_name,
+			"message": message_text
+		}, self)
+		# Keep legacy signal for backward compatibility
 		key_collected.emit(body, key_type, event_name, message_text)
 		Utils.play_sound(Preloads.KEY_COLLECTED_SOUND, body)
 		queue_free()

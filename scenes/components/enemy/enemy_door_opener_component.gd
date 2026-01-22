@@ -32,7 +32,7 @@ func check_and_open_door() -> bool:
 		return false
 	
 	var root_node = collider.get_parent()
-	if root_node and root_node.has_method("open_with_point"):
+	if root_node is Openable:
 		root_node.open_with_point(_interaction_ray.get_collision_point())
 		door_opened.emit(root_node)
 		return true
@@ -50,4 +50,4 @@ func is_facing_door() -> bool:
 		return false
 	
 	var root_node = collider.get_parent()
-	return root_node and root_node.has_method("open_with_point")
+	return root_node is Openable

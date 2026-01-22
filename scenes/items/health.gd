@@ -1,5 +1,7 @@
 extends Area3D
 
+const HealableInterface = preload("res://scenes/interfaces/healable.gd")
+
 signal item_pickedup(event_string)
 
 @export var event_string: String
@@ -8,17 +10,10 @@ signal item_pickedup(event_string)
 
 func _on_body_entered(body):
 	if body.is_in_group('player'):
-		# Try to heal using HealthComponent first
-		var health_component = body.get_node_or_null("HealthComponent")
-		var healed = false
-
-		if health_component and health_component.has_method("heal"):
-			healed = health_component.heal(heal_value)
-		elif body.has_method("heal"):
-			# Fallback to direct heal method on the body
-			healed = body.heal(heal_value)
-
-		# Only consume the item if healing was successful
+		if not HealableInterface.check(body):
+			return
+		
+		var healed = HealableInterface.heal(body, heal_value)
 		if healed:
 			if pickup_sound:
 				Utils.play_sound(pickup_sound, get_parent(), position)

@@ -18,9 +18,25 @@ func _on_target_set(pos: Vector3) -> void:
 
 
 func get_next_path_position() -> Vector3:
+	if not _owner_enemy:
+		return Vector3.ZERO
+	
 	if navigation_agent:
-		return navigation_agent.get_next_path_position()
-	return Vector3.ZERO
+		# Check if navigation map is valid and navigation is ready
+		var nav_map = navigation_agent.get_navigation_map()
+		if not nav_map.is_valid():
+			return _owner_enemy.global_position
+		
+		# If navigation is finished (no path or reached target), stay in place
+		if navigation_agent.is_navigation_finished():
+			return _owner_enemy.global_position
+		
+		var next_pos = navigation_agent.get_next_path_position()
+		# Sanity check: if returned position is very far, something is wrong
+		if next_pos.distance_to(_owner_enemy.global_position) > 1000.0:
+			return _owner_enemy.global_position
+		return next_pos
+	return _owner_enemy.global_position
 
 
 func is_target_reached() -> bool:

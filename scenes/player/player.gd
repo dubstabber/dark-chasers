@@ -141,13 +141,18 @@ func _auto_discover_hud() -> void:
 	
 	This provides a fallback mechanism for flexible level design. If the level
 	doesn't explicitly set player.hud, the player can find the HUD by looking
-	for nodes in the "hud" group. This makes the player more self-contained
-	and reduces boilerplate in level scripts.
+	for nodes in the "hud" group.
 	
 	Note: This is called in _ready() only if hud is not already set.
+	Prefer explicit wiring via Level.setup_player() instead.
 	"""
+	if not OS.is_debug_build():
+		push_warning("Player: HUD not set explicitly. Use Level.setup_player() for explicit wiring.")
+		return
+	
 	var hud_nodes = get_tree().get_nodes_in_group("hud")
 	if hud_nodes.size() > 0:
+		push_warning("Player: Auto-discovered HUD via group fallback. Prefer explicit wiring.")
 		set_hud(hud_nodes[0])
 
 

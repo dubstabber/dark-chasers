@@ -1,6 +1,5 @@
 extends Level
 
-
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 
 
@@ -58,9 +57,10 @@ func _handle_key_event(body, _key_type, event, _message_text):
 		"spawn ao oni in library":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
+			aooni.global_position = $NavigationRegion3D/EventSpawners/FirstAoOniChase.global_position
 			aooni.current_room = "FirstFloor"
-			aooni.position = $NavigationRegion3D/EventSpawners/FirstAoOniChase.position
 			aooni.current_target = body
+			aooni.makepath()
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/LibraryExitArea)
 			global_music.stream = Preloads.AOSEE_SOUND
 			global_music.volume_db = -5
@@ -71,7 +71,8 @@ func _handle_key_event(body, _key_type, event, _message_text):
 		"ao oni tries to break bars":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
-			aooni.position = $NavigationRegion3D/EventSpawners/AoOniBars.position
+			aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniBars.global_position
+			aooni.current_room = "SecondFloor"
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/BarsAoOniRunAway)
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak.position)
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak2.position)
@@ -97,10 +98,11 @@ func _handle_key_event(body, _key_type, event, _message_text):
 		"spawn white face":
 			var whiteface = Preloads.WHITEFACE_SCENE.instantiate()
 			enemies.add_child(whiteface)
+			whiteface.global_position = $NavigationRegion3D/EventSpawners/WhiteFaceSpawn.global_position
 			whiteface.current_room = "BigHall"
-			whiteface.position = $NavigationRegion3D/EventSpawners/WhiteFaceSpawn.position
 			# $NavigationRegion3D/WorldEnvironment.queue_free()
 			whiteface.current_target = body
+			whiteface.makepath()
 		"": pass
 		_:
 			prints("unknown event: '", event, "'")
@@ -115,9 +117,10 @@ func _handle_button_event(body, event):
 		"play piano":
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
-			aooni.position = $NavigationRegion3D/EventSpawners/AoOniPiano.position
+			aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniPiano.global_position
 			aooni.current_room = "PianoRoom"
 			aooni.current_target = body
+			aooni.makepath()
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/PianoExitArea)
 			hud.show_event_text("[color=#6c6c6c]You:[/color] It's that monster! RUN!!!", false, 3.0)
 			global_music.stream = Preloads.AOSEE_SOUND
@@ -170,10 +173,12 @@ func _handle_area_event(body: CharacterBody3D, event):
 				player.blocked_movement = true
 			var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 			enemies.add_child(aooni)
+			aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniCrawler.global_position
+			aooni.current_room = "FirstFloor"
 			aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/CrawlingAoOniArea)
-			aooni.position = $NavigationRegion3D/EventSpawners/AoOniCrawler.position
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawler2.position)
 			aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawlerEnd.position)
+			aooni.makepath()
 			await get_tree().create_timer(4.5).timeout
 			for player in players.get_children():
 				CameraManager.set_active_camera(player.camera_3d)
@@ -186,7 +191,7 @@ func _handle_area_event(body: CharacterBody3D, event):
 			if not $NavigationRegion3D/Buttons/PianoButton.is_pressed:
 				var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 				enemies.add_child(aooni)
-				aooni.position = $NavigationRegion3D/EventSpawners/AoOniPiano.position
+				aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniPiano.global_position
 				aooni.current_room = "PianoRoom"
 				aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/PianoExitArea)
 				$NavigationRegion3D/Buttons/PianoButton.is_pressed = true
@@ -213,9 +218,10 @@ func _handle_area_event(body: CharacterBody3D, event):
 			await get_tree().create_timer(1.0).timeout
 			var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
 			enemies.add_child(ilopulu)
-			ilopulu.position = $NavigationRegion3D/EventSpawners/IlopuluSpawn.position
+			ilopulu.global_position = $NavigationRegion3D/EventSpawners/IlopuluSpawn.global_position
 			ilopulu.current_room = "BigHall"
 			ilopulu.current_target = body
+			ilopulu.makepath()
 			ilopulu.add_disappear_zone($NavigationRegion3D/DisappearZones/ExitBigHallway)
 		"open ao mika wardrobe":
 			var wardrobe_door = $Doors/AoWardrobeDoor4
@@ -270,6 +276,30 @@ func _door_locked(text, triggering_player):
 		# Show event text only to the specific player who triggered the interaction
 		hud.show_event_text_for_player(triggering_player, text, false, 3.0)
 	# If no triggering player is specified (e.g., enemy interaction), don't show any message
+
+
+# === TYPED EVENT HANDLERS (GameEventBus) ===
+# These receive typed events and dispatch to legacy handlers for backward compatibility.
+# Future refactoring will move logic directly here and use SequenceDirector for timed sequences.
+
+func _on_button_event(event: RefCounted) -> void:
+	var body = event.get_body()
+	var event_name: String = event.get_string("event_name", "")
+	# Dispatch to legacy handler
+	_handle_button_event(body, event_name)
+
+
+func _on_area_event(event: RefCounted) -> void:
+	var body = event.get_body()
+	var event_name: String = event.get_string("event_name", "")
+	# Dispatch to legacy handler
+	_handle_area_event(body, event_name)
+
+
+func _on_key_event(event: RefCounted) -> void:
+	# Call parent to handle key collection (adds to keys_collected array and updates HUD)
+	# Parent's _key_body_entered will then call _handle_key_event for mansion-specific logic
+	super._on_key_event(event)
 
 
 # For testing purposes

@@ -1,5 +1,7 @@
 extends StaticBody3D
 
+const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
+
 signal button_pressed(body, event_name)
 
 @export var button_type: String
@@ -16,7 +18,18 @@ var is_pressed := false
 
 func press(body):
 	if not is_pressed:
+		# Emit typed event via GameEventBus
+		GameEventBus.emit(GameEventTypesScript.BUTTON_PRESSED, {
+			"body": body,
+			"event_name": event_name,
+			"button": self,
+			"door": door_to_open,
+			"camera": temporary_camera
+		}, self)
+		
+		# Keep legacy signal for backward compatibility
 		button_pressed.emit(body, event_name)
+		
 		if temporary_camera: CameraManager.set_active_camera(temporary_camera)
 		if door_to_open: door_to_open.open()
 		is_pressed = true

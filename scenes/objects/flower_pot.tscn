@@ -25,8 +25,8 @@ animations = [{
 }]
 
 [node name="FlowerPot" type="StaticBody3D" groups=["entity"]]
-collision_layer = 4
-collision_mask = 7
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("1_2hyoh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

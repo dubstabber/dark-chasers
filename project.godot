@@ -25,6 +25,9 @@ WorldContext="*res://scenes/services/world_context.gd"
 CameraManager="*res://scenes/services/camera_manager.gd"
 AudioPoolService="*res://scenes/services/audio_pool_service.gd"
 VfxPoolService="*res://scenes/services/vfx_pool_service.gd"
+GameEventBus="*res://scenes/services/game_event_bus.gd"
+SequenceDirector="*res://scenes/services/sequence_director.gd"
+InputRouter="*res://scenes/services/input_router.gd"
 
 [display]
 

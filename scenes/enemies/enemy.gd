@@ -34,6 +34,7 @@ var ground_type: String
 var moving_state := "idle"
 var is_flying := false
 var is_killed := false
+var _pending_transition_name: String = ""
 
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var wandering_timer = $Timers/WanderingTimer
@@ -156,6 +157,9 @@ func _physics_process(delta):
 			_stop_movement()
 	
 	_do_move_and_slide()
+	
+	# Manual overlap check for disappear zones (fallback if signal doesn't fire)
+	_check_disappear_zone_overlap()
 
 
 func _apply_gravity(delta: float) -> void:
@@ -271,16 +275,25 @@ func _get_distance_to_target() -> float:
 func makepath() -> void:
 	if current_target:
 		if current_target.current_room == current_room or not current_room:
+			_pending_transition_name = ""
 			_set_nav_target(current_target.global_position)
 		elif map_transitions:
 			var path_to_player = find_path_to_player()
 			if path_to_player and not path_to_player.is_empty():
 				var transition_point = path_to_player[0]
-				_set_nav_target(map_transitions.get_node(transition_point).global_position)
+				_pending_transition_name = transition_point
+				var trans_node = map_transitions.get_node(transition_point)
+				var _dist = global_position.distance_to(trans_node.global_position)
+
+				_set_nav_target(trans_node.global_position)
 			else:
 				# No valid path found; fall back to direct navigation
+				_pending_transition_name = ""
 				_set_nav_target(current_target.global_position)
+		else:
+			_pending_transition_name = ""
 	elif not waypoints.is_empty():
+		_pending_transition_name = ""
 		_set_nav_target(waypoints[0])
 
 
@@ -296,6 +309,7 @@ func find_path_to_player():
 
 
 func add_disappear_zone(area):
+	disappear_zones.append(area)
 	area.connect("body_entered", _on_disappear_area)
 
 
@@ -325,6 +339,16 @@ func _on_wandering_timer_timeout():
 
 
 func _on_navigation_agent_3d_target_reached():
+	# Handle room transition when reaching a transition point
+	if _pending_transition_name != "" and map_transitions:
+		var transition_node = map_transitions.get_node_or_null(_pending_transition_name)
+		if transition_node:
+			_execute_transition(transition_node)
+		else:
+			print("_on_navigation_agent_3d_target_reached: transition_node not found: %s" % _pending_transition_name)
+		_pending_transition_name = ""
+		return
+	
 	if not waypoints.is_empty():
 		waypoints.pop_front()
 		if waypoints.is_empty():
@@ -358,6 +382,14 @@ func _on_disappear_area(body):
 		queue_free()
 
 
+func _check_disappear_zone_overlap() -> void:
+	for zone in disappear_zones:
+		if is_instance_valid(zone) and zone.overlaps_body(self):
+			print("_check_disappear_zone_overlap: detected overlap with %s, calling queue_free" % zone.name)
+			queue_free()
+			return
+
+
 func take_damage(_amount: int) -> void:
 	take_damage_at_position(_amount, global_position + Vector3(0, 1.0, 0))
 
@@ -377,6 +409,50 @@ func get_target_position() -> Vector3:
 	if current_target:
 		return current_target.global_position
 	return global_position
+
+
+func _execute_transition(transition_node: Node3D) -> void:
+	# Check for disappear zones before transitioning - enemy should disappear, not teleport
+	for zone in disappear_zones:
+		if is_instance_valid(zone) and zone.overlaps_body(self):
+			queue_free()
+			return
+	
+	# Get the transition graph from EnemyContext
+	if not _enemy_context:
+		return
+	
+	var transition_graph = _enemy_context.get_transition_graph()
+	if transition_graph.is_empty():
+		return
+	
+	var transition_name = transition_node.name
+	
+	if current_room not in transition_graph:
+		return
+	
+	if transition_name not in transition_graph[current_room]:
+		return
+	
+	# Find the marker (spawn point) within the transition
+	var marker: Marker3D = null
+	for child in transition_node.get_children():
+		if child.is_in_group("spawn_point"):
+			marker = child
+			break
+	
+	if not marker:
+		push_warning("Enemy._execute_transition: No spawn_point marker found in %s" % transition_name)
+		return
+	
+	# Execute the transition
+	var to_room = transition_graph[current_room][transition_name]
+	current_room = to_room
+	global_position = marker.global_position
+	
+	# Restart pathfinding with short delay
+	find_path_timer.wait_time = 0.1
+	find_path_timer.start()
 
 
 func set_navigation_enabled(enabled: bool) -> void:

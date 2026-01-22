@@ -1,5 +1,7 @@
 extends Area3D
 
+const AmmoConsumerInterface = preload("res://scenes/interfaces/ammo_consumer.gd")
+
 signal item_pickedup(event_string)
 
 @export var ammo_value := 20
@@ -17,21 +19,15 @@ signal item_pickedup(event_string)
 
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group('player'):
+		if not AmmoConsumerInterface.check(body):
+			print("Player cannot receive ammo!")
+			return
+		
 		var ammo_added = false
-
-		# Use component-based ammo system if ammo_type is specified
 		if ammo_type != "":
-			# Get the player's ammo component
-			var player_ammo_component = body.get("ammo_component")
-			if player_ammo_component and player_ammo_component.has_method("add_ammo"):
-				ammo_added = player_ammo_component.add_ammo(ammo_type, ammo_value)
-			else:
-				print("Player has no ammo_component!")
-				return
+			ammo_added = AmmoConsumerInterface.add_ammo(body, ammo_type, ammo_value)
 		elif target_all_weapons:
-			# Special case: universal ammo that adds to all weapon types
-			if body.has_method("add_ammo"):
-				ammo_added = body.add_ammo(ammo_value, true)
+			ammo_added = AmmoConsumerInterface.add_universal_ammo(body, ammo_value)
 		else:
 			print("Ammo pickup has no ammo_type specified and is not universal ammo!")
 			return

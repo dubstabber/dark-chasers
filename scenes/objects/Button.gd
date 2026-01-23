@@ -18,7 +18,10 @@ var is_pressed := false
 
 func press(body):
 	if not is_pressed:
-		# Emit typed event via GameEventBus
+		# Emit typed event via GameEventBus (pure emitter - no direct effects)
+		# Effects (door opening, camera switching) are handled by:
+		# - Effect components attached as children (DoorOpenerEffect, CameraSwitchEffect)
+		# - Event subscribers (level scripts, SequenceDirector)
 		GameEventBus.emit(GameEventTypesScript.BUTTON_PRESSED, {
 			"body": body,
 			"event_name": event_name,
@@ -27,11 +30,9 @@ func press(body):
 			"camera": temporary_camera
 		}, self)
 		
-		# Keep legacy signal for backward compatibility
+		# Keep legacy signal for effect components to connect to
 		button_pressed.emit(body, event_name)
 		
-		if temporary_camera: CameraManager.set_active_camera(temporary_camera)
-		if door_to_open: door_to_open.open()
 		is_pressed = true
 		change_sprite()
 		if press_sound: Utils.play_sound(press_sound, self)

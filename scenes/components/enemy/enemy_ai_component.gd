@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func _find_players_node() -> void:
 	if not _enemy_context:
-		_enemy_context = get_node_or_null("/root/EnemyContext")
+		_enemy_context = EnemyContext
 	
 	if _enemy_context:
 		players_node = _enemy_context.get_players_node()

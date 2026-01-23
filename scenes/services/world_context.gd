@@ -50,3 +50,27 @@ func set_level_node(node: Node3D) -> void:
 
 func set_use_group_fallback(enabled: bool) -> void:
 	_use_group_fallback = enabled
+
+
+func get_hud() -> CanvasLayer:
+	"""Get the HUD from the current level.
+	
+	Returns:
+		CanvasLayer: The HUD node, or null if not available.
+	"""
+	var level = get_level_node()
+	if level and level is Level:
+		return level.hud
+	return null
+
+
+func get_enemies_node() -> Node3D:
+	"""Get the enemies container from the current level.
+	
+	Returns:
+		Node3D: The enemies container node, or null if not available.
+	"""
+	var level = get_level_node()
+	if level and level is Level:
+		return level.enemies
+	return null

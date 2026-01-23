@@ -11,7 +11,7 @@ var _enemy_context: Node = null
 
 
 func _ready() -> void:
-	_enemy_context = get_node_or_null("/root/EnemyContext")
+	_enemy_context = EnemyContext
 
 
 func find_path_to_room(from_room: String, to_room: String) -> Array:

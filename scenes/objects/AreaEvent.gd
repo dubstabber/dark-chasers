@@ -20,7 +20,10 @@ func _body_entered(body):
 	if body.is_in_group('player') and not triggered:
 		if one_trigger_only: triggered = true
 		
-		# Emit typed event via GameEventBus
+		# Emit typed event via GameEventBus (pure emitter - no direct effects)
+		# Effects (door opening, camera switching) are handled by:
+		# - Effect components attached as children (DoorOpenerEffect, CameraSwitchEffect)
+		# - Event subscribers (level scripts, SequenceDirector)
 		GameEventBus.emit(GameEventTypesScript.AREA_ENTERED, {
 			"body": body,
 			"event_name": event_name,
@@ -29,8 +32,5 @@ func _body_entered(body):
 			"camera": temporary_camera
 		}, self)
 		
-		if temporary_camera: CameraManager.set_active_camera(temporary_camera)
-		if door_to_open and door_to_open.has_method("open"): door_to_open.open()
-		
-		# Keep legacy signal for backward compatibility
+		# Keep legacy signal for effect components to connect to
 		event_triggered.emit(body, event_name)

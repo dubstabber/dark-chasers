@@ -1,6 +1,7 @@
 extends Area3D
 
 const HealableInterface = preload("res://scenes/interfaces/healable.gd")
+const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
 
 signal item_pickedup(event_string)
 
@@ -18,6 +19,11 @@ func _on_body_entered(body):
 			if pickup_sound:
 				Utils.play_sound(pickup_sound, get_parent(), position)
 			item_pickedup.emit(event_string)
+			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+				"message": event_string,
+				"item": self,
+				"body": body
+			}, self)
 			queue_free()
 		else:
 			# Optional: Show message that health is full

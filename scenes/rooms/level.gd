@@ -32,17 +32,8 @@ func _ready():
 	GameEventBus.subscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
 	GameEventBus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
 	GameEventBus.subscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
-	
-	# Door locked signals - Openable class has door_locked signal
-	var doors = get_tree().get_nodes_in_group("door")
-	for door in doors:
-		if door is Openable:
-			door.door_locked.connect(_door_locked)
-	
-	# Item pickup signals still use group discovery (items don't emit to event bus yet)
-	var items = get_tree().get_nodes_in_group("item")
-	for item in items:
-		item.connect("item_pickedup", hud.add_log)
+	GameEventBus.subscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
+	GameEventBus.subscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
 	
 	if transitions:
 		for t in transitions.get_children():
@@ -59,6 +50,8 @@ func _exit_tree():
 	GameEventBus.unsubscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
 	GameEventBus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
 	GameEventBus.unsubscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
+	GameEventBus.unsubscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
+	GameEventBus.unsubscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
 
 
 # Typed event handlers - extract data from GameEvent and delegate to legacy handlers
@@ -73,13 +66,47 @@ func _on_key_event(event: RefCounted) -> void:
 func _on_button_event(event: RefCounted) -> void:
 	var body = event.get_body()
 	var event_name = event.get_string("event_name")
+	
+	# Handle camera switching if button has a temporary_camera configured
+	var camera = event.get_node("camera")
+	if camera:
+		CameraManager.set_active_camera(camera)
+	
+	# Handle door opening if button has a door_to_open configured
+	var door = event.get_node("door")
+	if door and door is Openable:
+		door.open()
+	
 	_handle_button_event(body, event_name)
 
 
 func _on_area_event(event: RefCounted) -> void:
 	var body = event.get_body()
 	var event_name = event.get_string("event_name")
+	
+	# Handle camera switching if area has a temporary_camera configured
+	var camera = event.get_node("camera")
+	if camera:
+		CameraManager.set_active_camera(camera)
+	
+	# Handle door opening if area has a door_to_open configured
+	var door = event.get_node("door")
+	if door and door is Openable:
+		door.open()
+	
 	_handle_area_event(body, event_name)
+
+
+func _on_door_locked_event(event: RefCounted) -> void:
+	var text = event.get_string("text")
+	var triggering_player = event.payload.get("triggering_player")
+	_door_locked(text, triggering_player)
+
+
+func _on_item_pickedup_event(event: RefCounted) -> void:
+	var message = event.get_string("message")
+	if hud and message:
+		hud.add_log(message)
 
 
 # App-level input (quit/fullscreen) is now handled by InputRouter autoload
@@ -126,7 +153,7 @@ func _on_transition_exited(body):
 
 func _key_body_entered(body, key_type, event, message_text):
 	# Add log message to HUD
-	if hud and hud.has_method("add_log"):
+	if hud:
 		hud.add_log(message_text)
 
 	# Add key to collection if not already collected
@@ -134,7 +161,7 @@ func _key_body_entered(body, key_type, event, message_text):
 		keys_collected.push_back(key_type)
 
 		# Update the key display in the HUD
-		if hud and hud.has_method("update_keys_display"):
+		if hud:
 			hud.update_keys_display(keys_collected)
 
 	# Handle any specific events (can be overridden by child classes)
@@ -166,7 +193,7 @@ func setup_player(player: CharacterBody3D) -> void:
 
 func refresh_key_display():
 	"""Manually refresh the key display - useful for testing or when keys are added programmatically"""
-	if hud and hud.has_method("update_keys_display"):
+	if hud:
 		hud.update_keys_display(keys_collected)
 func _handle_button_event(_body, _event): pass
 func _handle_area_event(_body: CharacterBody3D, _event): pass

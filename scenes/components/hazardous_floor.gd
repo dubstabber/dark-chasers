@@ -3,6 +3,9 @@ extends Node3D
 
 ## Attach this script to any floor node (MeshInstance3D, StaticBody3D, etc.)
 ## to make it deal damage to entities standing on it.
+##
+## Uses Area3D-based detection instead of group scans for better performance.
+## Entities entering the detection area are tracked and damaged on interval.
 
 @export_group("Damage Settings")
 @export var damage_per_tick: int = 10
@@ -14,29 +17,24 @@ var _damage_on_contact: bool = true
 @export var damage_players: bool = true
 @export var damage_enemies: bool = false
 
-@export_group("Collision Settings")
-@export var collision_root: NodePath ## Optional: set to the StaticBody3D/Collision root if different from this node
+@export_group("Detection Area")
+@export var detection_height_offset: float = 0.1 ## How far above the floor to place detection area
+@export var detection_height: float = 1.0 ## Height of the detection area above the floor
 
 var _timer: Timer
-var _floor_node: Node3D
-var _entities_on_floor: Array[Node] = []
-var _hazard_id: int
+var _detection_area: Area3D
+var _entities_on_floor: Dictionary = {} # entity -> first_contact_handled
 
 
 func _ready():
-	if collision_root != NodePath(""):
-		var n = get_node_or_null(collision_root)
-		if n and n is Node3D:
-			_floor_node = n
-		else:
-			push_warning("HazardousFloor: collision_root is invalid; falling back to self")
-			_floor_node = self
+	_detection_area = _create_detection_area()
+	
+	if _detection_area:
+		_detection_area.body_entered.connect(_on_body_entered)
+		_detection_area.body_exited.connect(_on_body_exited)
 	else:
-		_floor_node = self
-
-	_hazard_id = get_instance_id()
-	_mark_hazard_subtree(_floor_node)
-	set_physics_process(_damage_on_contact)
+		push_warning("HazardousFloor: Could not create detection area - no CollisionShape3D found in parent hierarchy")
+	
 	_timer = Timer.new()
 	_timer.wait_time = damage_interval
 	_timer.one_shot = false
@@ -45,107 +43,116 @@ func _ready():
 	_timer.start()
 
 
-func _on_timer_timeout():
-	_check_entities_on_floor(false)
+func _create_detection_area() -> Area3D:
+	var source_shape := _find_collision_shape()
+	if not source_shape or not source_shape.shape:
+		return null
+	
+	var area := Area3D.new()
+	area.name = "HazardDetectionArea"
+	area.collision_layer = 0
+	area.collision_mask = 1 | 2 # Detect players (layer 1) and entities (layer 2)
+	
+	var shape_copy := CollisionShape3D.new()
+	shape_copy.shape = source_shape.shape.duplicate()
+	
+	# Offset upward to detect entities standing on the floor
+	shape_copy.position = Vector3(0, detection_height_offset + detection_height * 0.5, 0)
+	
+	# If the shape is a box, extend its height to cover the detection range
+	if shape_copy.shape is BoxShape3D:
+		var box: BoxShape3D = shape_copy.shape
+		box.size.y = detection_height
+	
+	area.add_child(shape_copy)
+	add_child(area)
+	
+	return area
 
 
-func _physics_process(_delta: float) -> void:
-	if _damage_on_contact:
-		_check_entities_on_floor(true)
+func _find_collision_shape() -> CollisionShape3D:
+	# First check siblings (common case: HazardousFloor is child of StaticBody3D)
+	var parent := get_parent()
+	if parent:
+		for sibling in parent.get_children():
+			if sibling is CollisionShape3D:
+				return sibling
+	
+	# Check children
+	for child in get_children():
+		if child is CollisionShape3D:
+			return child
+	
+	# Check parent if it's the collision shape holder
+	if parent is CollisionShape3D:
+		return parent
+	
+	return null
 
 
-func _mark_hazard_subtree(root: Node) -> void:
-	if not root:
+func _on_body_entered(body: Node3D) -> void:
+	if not _should_damage_entity(body):
 		return
-	root.set_meta("hazard_floor_id", _hazard_id)
-	for child in root.get_children():
-		if child is Node:
-			_mark_hazard_subtree(child)
+	
+	if body not in _entities_on_floor:
+		_entities_on_floor[body] = false
+		if _damage_on_contact:
+			_deal_damage(body)
+			_entities_on_floor[body] = true
+
+
+func _on_body_exited(body: Node3D) -> void:
+	_entities_on_floor.erase(body)
+
+
+func _on_timer_timeout():
+	_damage_tracked_entities()
 
 
 func set_damage_on_contact(value: bool) -> void:
 	_damage_on_contact = value
-	set_physics_process(value)
 
 
-func _check_entities_on_floor(immediate_only: bool):
-	var world = _floor_node.get_world_3d()
-	if not world:
-		return
-	
-	var space_state = world.direct_space_state
-	var entities_to_check: Array[Node] = []
-	
-	if damage_players:
-		var players = get_tree().get_nodes_in_group("player")
-		entities_to_check.append_array(players)
-	
-	if damage_enemies:
-		var enemies = get_tree().get_nodes_in_group("entity")
-		entities_to_check.append_array(enemies)
-	
-	var entities_currently_on: Array[Node] = []
-	
-	for entity in entities_to_check:
-		if not is_instance_valid(entity):
-			continue
-		if not entity is Node3D:
-			continue
-		
-		if entity is CharacterBody3D and (not immediate_only) and not entity.is_on_floor():
-			continue
-		
-		var ray_origin = entity.global_position + Vector3(0, 0.2, 0)
-		var ray_end = entity.global_position + Vector3(0, -1.0, 0)
-		
-		var query = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-		if entity is CollisionObject3D:
-			query.exclude = [entity.get_rid()]
-		
-		var result = space_state.intersect_ray(query)
-		if result and result.collider:
-			if _is_this_floor(result.collider):
-				entities_currently_on.append(entity)
-				
-				var is_new_contact = entity not in _entities_on_floor
-				
-				if is_new_contact:
-					if _damage_on_contact and immediate_only:
-						_deal_damage(entity)
-				else:
-					if not immediate_only:
-						_deal_damage(entity)
-	
-	_entities_on_floor = entities_currently_on
-
-
-func _is_this_floor(collider: Node) -> bool:
-	var node: Node = collider
-	while node:
-		if node.has_meta("hazard_floor_id") and int(node.get_meta("hazard_floor_id")) == _hazard_id:
-			return true
-		node = node.get_parent()
+func _should_damage_entity(entity: Node) -> bool:
+	if not is_instance_valid(entity):
+		return false
+	if damage_players and entity is Player:
+		return true
+	if damage_enemies and entity is Enemy:
+		return true
+	if damage_players and entity.is_in_group("player"):
+		return true
+	if damage_enemies and entity.is_in_group("entity"):
+		return true
 	return false
 
 
-func _deal_damage(entity: Node):
-	var health_component = entity.get_node_or_null("HealthComponent")
-	var was_dead := false
-	if health_component:
-		was_dead = bool(health_component.is_dead)
-	if health_component and health_component.has_method("take_damage"):
-		health_component.take_damage(damage_per_tick)
-		if entity.is_in_group("player") and not was_dead and health_component.is_dead:
+func _damage_tracked_entities() -> void:
+	var entities_to_remove: Array[Node] = []
+	
+	for entity in _entities_on_floor.keys():
+		if not is_instance_valid(entity):
+			entities_to_remove.append(entity)
+			continue
+		
+		if entity is CharacterBody3D and not entity.is_on_floor():
+			continue
+		
+		_deal_damage(entity)
+	
+	for entity in entities_to_remove:
+		_entities_on_floor.erase(entity)
+
+
+func _deal_damage(entity: Node) -> void:
+	var was_dead := Damageable.is_dead(entity)
+	
+	if Damageable.deal_damage(entity, damage_per_tick):
+		if entity is Player and not was_dead and Damageable.is_dead(entity):
 			_log_player_mutated(entity)
-		return
-	if entity.has_method("take_damage"):
-		entity.take_damage(damage_per_tick)
 
 
 func _log_player_mutated(_player: Node) -> void:
-	var levels = get_tree().get_nodes_in_group("level")
-	if levels.size() == 0:
-		return
-	var level = levels[0]
-	if level and "hud" in level and level.hud and level.hud.has_method("add_log"):
-		level.hud.add_log("Player mutated.")
+	var hud := WorldContext.get_hud()
+	if hud and hud.has_method("add_log"):
+		hud.add_log("Player mutated.")

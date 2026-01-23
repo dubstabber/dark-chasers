@@ -163,7 +163,7 @@ func _execute_action(action: RefCounted) -> void:
 func _block_players(targets: Array[Node]) -> void:
 	var players := _get_players(targets)
 	for player in players:
-		if "blocked_movement" in player:
+		if player is Player:
 			player.blocked_movement = true
 	GameEventBus.emit(GameEventTypesScript.PLAYER_BLOCKED, {"players": players})
 
@@ -171,7 +171,7 @@ func _block_players(targets: Array[Node]) -> void:
 func _unblock_players(targets: Array[Node]) -> void:
 	var players := _get_players(targets)
 	for player in players:
-		if "blocked_movement" in player:
+		if player is Player:
 			player.blocked_movement = false
 	GameEventBus.emit(GameEventTypesScript.PLAYER_UNBLOCKED, {"players": players})
 
@@ -185,33 +185,33 @@ func _get_players(targets: Array[Node]) -> Array[Node]:
 func _restore_player_cameras() -> void:
 	var players := EnemyContext.get_players()
 	for player in players:
-		if "camera_3d" in player and player.camera_3d:
+		if player is Player and player.camera_3d:
 			CameraManager.set_active_camera(player.camera_3d)
 			break
 
 
 func _show_event_text(text: String, duration: float) -> void:
-	var level := WorldContext.get_level_node()
-	if level and "hud" in level and level.hud:
-		level.hud.show_event_text(text, false, duration)
+	var hud := WorldContext.get_hud()
+	if hud:
+		hud.show_event_text(text, false, duration)
 
 
 func _hide_event_text() -> void:
-	var level := WorldContext.get_level_node()
-	if level and "hud" in level and level.hud:
-		level.hud.hide_event_text()
+	var hud := WorldContext.get_hud()
+	if hud:
+		hud.hide_event_text()
 
 
 func _spawn_enemy(action: RefCounted) -> void:
 	if not action.enemy_scene:
 		return
 	
-	var level := WorldContext.get_level_node()
-	if not level or not "enemies" in level:
+	var enemies_node := WorldContext.get_enemies_node()
+	if not enemies_node:
 		return
 	
 	var enemy = action.enemy_scene.instantiate()
-	level.enemies.add_child(enemy)
+	enemies_node.add_child(enemy)
 	
 	if action.spawn_position != Vector3.ZERO:
 		enemy.position = action.spawn_position

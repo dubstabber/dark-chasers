@@ -35,6 +35,7 @@ func _on_player_finished(player: AudioStreamPlayer3D) -> void:
 	# Reset and return to pool
 	player.stream = null
 	player.global_position = Vector3.ZERO
+	player.pitch_scale = 1.0
 
 
 func _get_available_player() -> AudioStreamPlayer3D:

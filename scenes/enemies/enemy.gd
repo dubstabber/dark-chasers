@@ -50,7 +50,7 @@ func _ready():
 
 
 func _setup_context() -> void:
-	_enemy_context = get_node_or_null("/root/EnemyContext")
+	_enemy_context = EnemyContext
 	if _enemy_context:
 		players = _enemy_context.get_players_node()
 		map_transitions = _enemy_context.get_transitions_node()

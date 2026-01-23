@@ -1,5 +1,7 @@
 extends Area3D
 
+const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
+
 signal item_pickedup(event_string)
 
 @export var wieldable_item: WeaponResource
@@ -16,4 +18,9 @@ func _on_body_entered(body: Node3D) -> void:
 		# Emit the pickup message for HUD display
 		if event_string:
 			item_pickedup.emit(event_string)
+			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+				"message": event_string,
+				"item": self,
+				"body": body
+			}, self)
 		queue_free()

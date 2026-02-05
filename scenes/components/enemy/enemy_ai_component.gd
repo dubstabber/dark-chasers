@@ -73,8 +73,8 @@ func check_targets() -> void:
 
 
 func _has_aim_point(target: Node3D) -> bool:
-	# Legacy method - use Aimable.check() instead
-	return Aimable.check(target) or ("camera_3d" in target and target.camera_3d != null)
+	# Use typed interfaces: Aimable for get_aim_point(), CameraOwner for camera_3d
+	return Aimable.check(target) or CameraOwner.check(target)
 
 
 func _get_line_of_sight_origin() -> Vector3:

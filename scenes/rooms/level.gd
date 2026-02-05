@@ -54,47 +54,40 @@ func _exit_tree():
 	GameEventBus.unsubscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
 
 
-# Typed event handlers - extract data from GameEvent and delegate to legacy handlers
+# === GENERIC EVENT HANDLERS ===
+# These handle common patterns from generic events (KEY_COLLECTED, BUTTON_PRESSED, AREA_ENTERED).
+# Child classes should subscribe to domain-specific events (e.g., BUTTON_CHECK_TV) directly
+# instead of overriding _handle_*_event methods.
+
 func _on_key_event(event: RefCounted) -> void:
 	var body = event.get_body()
 	var key_type = event.get_string("key_type")
-	var event_name = event.get_string("event_name")
 	var message = event.get_string("message")
-	_key_body_entered(body, key_type, event_name, message)
+	_key_body_entered(body, key_type, message)
 
 
 func _on_button_event(event: RefCounted) -> void:
-	var body = event.get_body()
-	var event_name = event.get_string("event_name")
-	
 	# Handle camera switching if button has a temporary_camera configured
 	var camera = event.get_node("camera")
 	if camera:
 		CameraManager.set_active_camera(camera)
-	
+
 	# Handle door opening if button has a door_to_open configured
 	var door = event.get_node("door")
 	if door and door is Openable:
 		door.open()
-	
-	_handle_button_event(body, event_name)
 
 
 func _on_area_event(event: RefCounted) -> void:
-	var body = event.get_body()
-	var event_name = event.get_string("event_name")
-	
 	# Handle camera switching if area has a temporary_camera configured
 	var camera = event.get_node("camera")
 	if camera:
 		CameraManager.set_active_camera(camera)
-	
+
 	# Handle door opening if area has a door_to_open configured
 	var door = event.get_node("door")
 	if door and door is Openable:
 		door.open()
-	
-	_handle_area_event(body, event_name)
 
 
 func _on_door_locked_event(event: RefCounted) -> void:
@@ -113,30 +106,30 @@ func _on_item_pickedup_event(event: RefCounted) -> void:
 
 
 func handle_transition(body, area3dname, marker):
-	if not "current_room" in body:
-		push_warning("handle_transition: body has no current_room property: %s" % body.name)
+	# Use RoomAware interface for room-based transitions
+	if not RoomAware.check(body):
+		push_warning("handle_transition: body is not RoomAware: %s" % body.name)
 		return
-	
-	var from_room = body.current_room
+
+	var from_room = RoomAware.get_current_room(body)
 	if from_room == "" or from_room == null:
 		push_warning("handle_transition: body.current_room is empty for %s" % body.name)
 		return
-	
+
 	if from_room not in transitions.map_transitions:
 		push_warning("handle_transition: from_room '%s' not in map_transitions for %s" % [from_room, body.name])
 		return
-	
+
 	if area3dname not in transitions.map_transitions[from_room]:
 		push_warning("handle_transition: transition '%s' not found from room '%s' for %s" % [area3dname, from_room, body.name])
 		return
-	
+
 	var to_room = transitions.map_transitions[from_room][area3dname]
-	body.current_room = to_room
+	RoomAware.set_current_room(body, to_room)
 	body.global_position = marker.global_position
-	
-	if "find_path_timer" in body:
-		body.find_path_timer.wait_time = 0.1
-		body.find_path_timer.start()
+
+	# Use PathfindingEntity interface to make pathfinding responsive after transition
+	PathfindingEntity.make_responsive(body)
 
 
 func _on_transition_entered(body, transitor):
@@ -151,7 +144,7 @@ func _on_transition_exited(body):
 			body.interaction_component.clear_transit_point()
 
 
-func _key_body_entered(body, key_type, event, message_text):
+func _key_body_entered(body, key_type, message_text):
 	# Add log message to HUD
 	if hud:
 		hud.add_log(message_text)
@@ -164,28 +157,20 @@ func _key_body_entered(body, key_type, event, message_text):
 		if hud:
 			hud.update_keys_display(keys_collected)
 
-	# Handle any specific events (can be overridden by child classes)
-	_handle_key_event(body, key_type, event, message_text)
-
-
-func _handle_key_event(_body, _key_type, _event, _message_text):
-	"""Override this method in specific maps to handle key-specific events"""
-	pass
-
 
 func setup_player(player: CharacterBody3D) -> void:
 	"""Centralized player setup - connects HUD and performs standard initialization
-	
+
 	Call this from spawn_player() in child level scripts instead of manually
 	setting player.hud = hud. This centralizes the player-HUD integration and
 	allows for future extensions without modifying every level script.
-	
+
 	Args:
 		player: The player instance to set up
 	"""
 	if hud:
 		player.hud = hud
-	
+
 	# Add player to "player" group if not already
 	if not player.is_in_group("player"):
 		player.add_to_group("player")
@@ -195,6 +180,6 @@ func refresh_key_display():
 	"""Manually refresh the key display - useful for testing or when keys are added programmatically"""
 	if hud:
 		hud.update_keys_display(keys_collected)
-func _handle_button_event(_body, _event): pass
-func _handle_area_event(_body: CharacterBody3D, _event): pass
+
+
 func _door_locked(_text, _triggering_player): pass

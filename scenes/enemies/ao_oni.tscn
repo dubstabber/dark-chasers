@@ -39,7 +39,6 @@ shader_parameter/atlas_dimensions = Vector2(600, 1200)
 shader_parameter/max_sprite_size = Vector2(200, 400)
 shader_parameter/current_frame = 0
 shader_parameter/direction_mode = 0
-shader_parameter/target_position = Vector3(-47.6345, 202.197, -26.7313)
 shader_parameter/billboard_mode = 2
 shader_parameter/alpha_cut_mode = 0
 shader_parameter/alpha_cut_threshold = 0.5

@@ -8,5 +8,5 @@ func _ready():
 
 
 func _on_body_entered(body):
-	if "ground_type" in body:
-		body.ground_type = type
+	# Use GroundTypeReceiver interface for typed ground type assignment
+	GroundTypeReceiver.set_ground_type(body, type)

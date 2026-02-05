@@ -182,7 +182,8 @@ func _process_chase_movement(delta: float) -> void:
 		velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
 		velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
 	
-	if current_target and current_target.has_method("is_dead") and current_target.is_dead():
+	# Use Mortal interface to check if target is dead
+	if current_target and Mortal.is_dead(current_target):
 		current_target = null
 		if _ai_component:
 			_ai_component.clear_target()

@@ -78,9 +78,9 @@ func _process_movement_input(delta: float) -> void:
 	var is_crouching = Input.is_action_pressed("crouch")
 	var is_sprinting = Input.is_action_pressed("sprint")
 	movement_component.process_movement(delta, input_dir, is_crouching, is_sprinting)
-	
-	if camera and camera.has_method("set_sprint_fov"):
-		camera.set_sprint_fov(movement_component.is_sprinting())
+
+	# Use PlayerCameraInterface for sprint FOV
+	PlayerCameraInterface.set_sprint_fov(camera, movement_component.is_sprinting())
 	
 	if Input.is_action_just_pressed("jump"):
 		if movement_component.handle_jump():
@@ -103,7 +103,8 @@ func _process_action_input() -> void:
 	if Input.is_action_just_pressed("toggle-clip-mode"):
 		var new_clip_mode = movement_component.toggle_clip_mode()
 		clip_mode_toggled.emit(new_clip_mode)
-		if hud and hud.has_method("_on_player_mode_changed"):
+		# HUD is a known scene with _on_player_mode_changed method
+		if hud:
 			hud._on_player_mode_changed("clip_mode", new_clip_mode)
 	
 	if Input.is_action_just_pressed("use"):
@@ -115,9 +116,10 @@ func _process_action_input() -> void:
 func _toggle_debug_camera() -> void:
 	if not camera or not player:
 		return
-	
+
 	# Get debug_camera from player (set by level script after _ready)
-	var debug_cam = player.debug_camera if "debug_camera" in player else null
+	# Player is a known class with debug_camera property
+	var debug_cam = player.debug_camera
 	if not debug_cam:
 		return
 	

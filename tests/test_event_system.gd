@@ -12,14 +12,16 @@ var received_events: Array = []
 
 func _ready():
 	print("=== EVENT SYSTEM TESTS ===")
-	
+
 	test_game_event_creation()
 	test_event_bus_subscribe_emit()
 	test_event_bus_unsubscribe()
 	test_event_bus_history()
 	test_sequence_action_creation()
 	test_sequence_data_builder()
-	
+	test_domain_specific_event_routing()
+	test_generic_and_domain_events_both_fire()
+
 	print("=== ALL EVENT SYSTEM TESTS COMPLETED ===")
 
 
@@ -137,3 +139,74 @@ func test_sequence_data_builder():
 
 func _on_test_event(event: RefCounted) -> void:
 	received_events.append(event)
+
+
+# === Phase E: Domain-Specific Event Routing Tests ===
+
+var domain_events_received: Array = []
+var generic_events_received: Array = []
+
+
+func test_domain_specific_event_routing():
+	print("\n--- Testing Domain-Specific Event Routing (Phase E) ---")
+
+	domain_events_received.clear()
+
+	# Subscribe to a domain-specific event type (e.g., BUTTON_CHECK_TV)
+	GameEventBus.subscribe(GameEventTypesScript.BUTTON_CHECK_TV, _on_domain_event)
+
+	# Emit the domain-specific event
+	GameEventBus.emit(GameEventTypesScript.BUTTON_CHECK_TV, {
+		"body": null,
+		"button": null
+	})
+
+	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
+	assert(domain_events_received[0].event_type == GameEventTypesScript.BUTTON_CHECK_TV, "Event type should be BUTTON_CHECK_TV")
+
+	# Cleanup
+	GameEventBus.unsubscribe(GameEventTypesScript.BUTTON_CHECK_TV, _on_domain_event)
+
+	print("✓ Domain-specific event routing works correctly")
+
+
+func test_generic_and_domain_events_both_fire():
+	print("\n--- Testing Generic + Domain Events Both Fire ---")
+
+	domain_events_received.clear()
+	generic_events_received.clear()
+
+	# Subscribe to both generic and domain-specific events
+	GameEventBus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_generic_event)
+	GameEventBus.subscribe(GameEventTypesScript.BUTTON_CHECK_MAP, _on_domain_event)
+
+	# Simulate what Button.gd does: emit both domain-specific and generic events
+	# First, domain-specific
+	GameEventBus.emit(GameEventTypesScript.BUTTON_CHECK_MAP, {
+		"body": null,
+		"button": null
+	})
+	# Then, generic
+	GameEventBus.emit(GameEventTypesScript.BUTTON_PRESSED, {
+		"body": null,
+		"button": null
+	})
+
+	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
+	assert(generic_events_received.size() == 1, "Should receive 1 generic event")
+	assert(domain_events_received[0].event_type == GameEventTypesScript.BUTTON_CHECK_MAP, "Domain event type should match")
+	assert(generic_events_received[0].event_type == GameEventTypesScript.BUTTON_PRESSED, "Generic event type should match")
+
+	# Cleanup
+	GameEventBus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_generic_event)
+	GameEventBus.unsubscribe(GameEventTypesScript.BUTTON_CHECK_MAP, _on_domain_event)
+
+	print("✓ Generic + domain events both fire correctly")
+
+
+func _on_domain_event(event: RefCounted) -> void:
+	domain_events_received.append(event)
+
+
+func _on_generic_event(event: RefCounted) -> void:
+	generic_events_received.append(event)

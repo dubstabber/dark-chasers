@@ -62,9 +62,11 @@ func find_path_to_room(from_room: String, to_room: String) -> Array:
 
 
 func _get_transition_graph() -> Dictionary:
-	if _enemy_context and _enemy_context.has_method("get_transition_graph"):
+	# EnemyContext is a known autoload with get_transition_graph() method
+	if _enemy_context:
 		return _enemy_context.get_transition_graph()
-	
+
+	# Fallback: direct group lookup (legacy, should be removed in Phase F)
 	var transitions_node = get_tree().get_first_node_in_group("transitions")
 	if transitions_node and "map_transitions" in transitions_node:
 		return transitions_node.map_transitions
@@ -72,9 +74,11 @@ func _get_transition_graph() -> Dictionary:
 
 
 func _get_enemy_exceptions() -> Array:
-	if _enemy_context and _enemy_context.has_method("get_enemy_exceptions"):
+	# EnemyContext is a known autoload with get_enemy_exceptions() method
+	if _enemy_context:
 		return _enemy_context.get_enemy_exceptions()
-	
+
+	# Fallback: direct group lookup (legacy, should be removed in Phase F)
 	var transitions_node = get_tree().get_first_node_in_group("transitions")
 	if transitions_node and "enemy_exceptions" in transitions_node:
 		return transitions_node.enemy_exceptions

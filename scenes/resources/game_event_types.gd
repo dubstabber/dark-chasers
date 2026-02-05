@@ -3,8 +3,21 @@ extends RefCounted
 
 ## Centralized event type constants.
 ## Use these instead of raw strings for type safety and discoverability.
+##
+## ARCHITECTURE NOTE (Phase E - Event-ID-only):
+## The event_type: StringName is the SOLE stable identity for events.
+## Do NOT use payload.event_name or other string fields for routing/dispatch.
+## Emitters should emit domain-specific event types (e.g., BUTTON_CHECK_TV)
+## rather than generic types (e.g., BUTTON_PRESSED) with string payloads.
+##
+## For backward compatibility during migration, generic types like BUTTON_PRESSED
+## and AREA_ENTERED are kept but should be phased out in favor of specific types.
 
-# Key pickup events
+# === GENERIC EVENT TYPES (for base Level class and non-specific handlers) ===
+# These are used by the base Level class for common handling patterns.
+# Specific maps should subscribe to domain-specific events instead.
+
+# Key pickup events (generic - used by base Level for key collection tracking)
 const KEY_COLLECTED := &"key_collected"
 
 # Monster events

@@ -8,7 +8,8 @@ uniform vec2 max_sprite_size = vec2(1.0, 1.0);
 uniform int current_frame = 0;
 
 uniform int direction_mode : hint_range(0, 3) = 0; // 0=THREE, 1=FOUR, 2=FIVE, 3=EIGHT
-uniform vec3 target_position = vec3(0.0, 0.0, 0.0);
+// target_position is now calculated from MODEL_MATRIX[3].xyz per-instance
+// to avoid shared uniform issues with cached atlases
 
 uniform int billboard_mode = 0; // 0 = none, 1 = full, 2 = y
 
@@ -56,7 +57,10 @@ void vertex() {
 	}
 
 	vec3 camera_pos = INV_VIEW_MATRIX[3].xyz;
-		vec3 to_camera = normalize(camera_pos - target_position);
+		// Use sprite's world position from MODEL_MATRIX instead of uniform
+		// This ensures each instance calculates its own direction
+		vec3 sprite_world_pos = MODEL_MATRIX[3].xyz;
+		vec3 to_camera = normalize(camera_pos - sprite_world_pos);
 
 		// Get target's local axes (Godot uses -Z as forward, X as right)
 		vec3 target_forward = -normalize(MODEL_MATRIX[2].xyz); // Negate because Godot's Z is backwards

@@ -14,7 +14,7 @@ func _ready() -> void:
 		get_parent().connect(auto_connect_parent_signal, _on_triggered)
 
 
-func _on_triggered(_body = null, _event_name = null) -> void:
+func _on_triggered(_body = null) -> void:
 	trigger()
 
 

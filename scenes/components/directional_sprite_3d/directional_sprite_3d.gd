@@ -39,7 +39,6 @@ var directional_material: ShaderMaterial
 
 # Cached references
 var _state_node: Node = null # Node providing moving_state/shooting_state
-var _position_node: Node3D = null # Node3D for global_position (shader target)
 
 #endregion
 
@@ -114,10 +113,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	# Update per-frame shader parameters
 	if directional_material and directional_material.shader:
-		# Use _position_node (Node3D) for global_position, not the state node
-		if _position_node:
-			directional_material.set_shader_parameter("target_position", _position_node.global_position)
-		
+		# target_position is now calculated from MODEL_MATRIX in shader (per-instance)
 		# Synchronise shader parameters each frame
 		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
 		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
@@ -234,14 +230,12 @@ func _add_sprite_group_properties(properties: Array[Dictionary], group_name: Str
 
 
 func _update_node_references() -> void:
-	"""Update cached node references for state and position tracking.
+	"""Update cached node references for state tracking.
 	
-	Separates concerns:
-	- _state_node: Node that provides moving_state/shooting_state (set via target_node_path)
-	- _position_node: Always uses scene owner (root node) - must be Node3D
+	_state_node: Node that provides moving_state/shooting_state (set via target_node_path)
 	
-	This means the sprite can be placed anywhere in the scene hierarchy,
-	and position tracking will always use the scene root (e.g., Player, Enemy).
+	Note: Position for direction calculation is now handled per-instance in the shader
+	using MODEL_MATRIX, so no position node tracking is needed.
 	"""
 	# Get state node from target_node_path or parent
 	if not target_node_path.is_empty() and has_node(target_node_path):
@@ -257,27 +251,6 @@ func _update_node_references() -> void:
 	else:
 		has_moving_state = false
 		has_shooting_state = false
-	
-	# Position node is the scene owner (root node) or parent as fallback
-	# This ensures consistent behavior regardless of where the sprite is placed
-	if not is_inside_tree():
-		_position_node = null
-		return
-	
-	var position_candidate = owner if owner else get_parent()
-	if position_candidate and position_candidate is Node3D:
-		_position_node = position_candidate
-	else:
-		# Fallback: walk up the tree to find a Node3D
-		var node = get_parent()
-		while node:
-			if node is Node3D:
-				_position_node = node
-				break
-			node = node.get_parent() if node.get_parent() else null
-	
-	if not _position_node:
-		push_warning("DirectionalSprite3D: No Node3D found for position tracking. owner=%s, parent=%s" % [owner, get_parent()])
 
 
 func _get_target_node() -> Node:
@@ -292,19 +265,8 @@ func _get_current_sprite_state(target_node: Node) -> int:
 	if not target_node:
 		return 0
 
-	# Check for shooting state first (highest priority)
-	if "shooting_state" in target_node and target_node.shooting_state != "":
-		return 2
-
-	# Check for movement state
-	if "moving_state" in target_node:
-		var state = target_node.moving_state
-		# Movement states that should return 1
-		if state in ["run", "moving", "move", "walk", "sprint"]:
-			return 1
-
-	# Default to idle state
-	return 0
+	# Use AnimationStateProvider interface for typed state access
+	return AnimationStateProvider.get_state_priority(target_node)
 
 
 func generate_atlas():

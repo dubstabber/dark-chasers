@@ -43,20 +43,21 @@ func try_interact() -> bool:
 		return false
 	
 	interacted.emit(collider)
-	
-	# Handle door interaction
+
+	# Handle door interaction using Openable interface
 	var root_node = collider.get_parent()
-	if root_node.has_method("open_with_point") and (root_node is Openable or root_node.is_in_group("door")):
+	if root_node is Openable:
 		root_node.open_with_point(interaction_raycast.get_collision_point(), player)
 		door_opened.emit(root_node)
 		return true
-	
-	# Handle button interaction
-	if collider.is_in_group("button") and collider.has_method("press"):
+
+	# Handle button interaction - buttons are in "button" group and have press() method
+	# Note: Button is a known scene type, so we can call press() directly
+	if collider.is_in_group("button"):
 		collider.press(player)
 		button_pressed.emit(collider)
 		return true
-	
+
 	return false
 
 

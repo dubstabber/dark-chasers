@@ -23,8 +23,8 @@ func _on_body_entered(body: Node3D) -> void:
 		if death_message != "":
 			msg = body.name + " " + death_message
 		
-		if body.has_method("kill"):
-			body.kill(global_position, msg)
+		# Use Mortal interface to kill the player
+		Mortal.kill(body, global_position, msg)
 		
 		player_killed.emit(body)
 		

@@ -17,8 +17,9 @@ static func get_aim_point(node: Node) -> Vector3:
 		return Vector3.ZERO
 	if check(node):
 		return node.get_aim_point()
-	# Fallback: check for camera_3d property (legacy support)
-	if "camera_3d" in node and node.camera_3d != null:
-		return node.camera_3d.global_position
+	# Fallback: use CameraOwner interface for camera position
+	var camera_pos = CameraOwner.get_camera_position(node)
+	if camera_pos != Vector3.ZERO:
+		return camera_pos
 	# Default fallback: head height offset
 	return node.global_position + Vector3(0, 1.6, 0)

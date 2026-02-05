@@ -52,6 +52,8 @@ func get_transitions_node() -> Node3D:
 
 func get_transition_graph() -> Dictionary:
 	var transitions = get_transitions_node()
+	# LEGACY: Duck-typing for transitions node properties
+	# TODO (Phase F): Create Transitions class_name and use typed access
 	if transitions and "map_transitions" in transitions:
 		return transitions.map_transitions
 	return {}
@@ -59,6 +61,8 @@ func get_transition_graph() -> Dictionary:
 
 func get_enemy_exceptions() -> Array:
 	var transitions = get_transitions_node()
+	# LEGACY: Duck-typing for transitions node properties
+	# TODO (Phase F): Create Transitions class_name and use typed access
 	if transitions and "enemy_exceptions" in transitions:
 		return transitions.enemy_exceptions
 	return []

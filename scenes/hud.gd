@@ -32,8 +32,10 @@ func _ready():
 
 func _on_active_camera_changed(new_camera: Camera3D) -> void:
 	# Show player UI only when player camera is active
-	if _connected_player and "camera_3d" in _connected_player:
-		var is_player_camera = new_camera == _connected_player.camera_3d
+	# Use CameraOwner interface for typed camera access
+	var player_camera = CameraOwner.get_camera(_connected_player)
+	if player_camera:
+		var is_player_camera = new_camera == player_camera
 		_set_player_ui_visible(is_player_camera)
 
 
@@ -86,7 +88,8 @@ func connect_to_player(player: CharacterBody3D) -> void:
 		player.ammo_component.ammo_changed.connect(_on_player_reserve_ammo_changed.bind(player))
 	
 	# Wire up DamageEffectsComponent to use HUD's damage overlay
-	if "damage_effects_component" in player and player.damage_effects_component:
+	# Player is a typed class, so we can access damage_effects_component directly
+	if player.damage_effects_component:
 		player.damage_effects_component.color_rect = damage_overlay
 
 
@@ -228,7 +231,8 @@ func update_health_display(current_health: int, _max_health: int):
 		current_health: Current health value to display
 		_max_health: Maximum health value (for future use with health bars)
 	"""
-	if health_ui_value_container and health_ui_value_container.has_method("set_value_with_aooni_font"):
+	# UI containers are @onready scene references with known scripts
+	if health_ui_value_container:
 		health_ui_value_container.set_value_with_aooni_font(current_health)
 
 
@@ -239,7 +243,7 @@ func update_ammo_display(current_ammo: int, _max_ammo: int):
 		current_ammo: Current ammo value to display
 		_max_ammo: Maximum ammo value (for future use with ammo bars)
 	"""
-	if ammo_ui_value_container and ammo_ui_value_container.has_method("set_value_with_aooni_font"):
+	if ammo_ui_value_container:
 		ammo_ui_value_container.set_value_with_aooni_font(current_ammo)
 
 
@@ -250,7 +254,7 @@ func update_armor_display(current_armor: int, _max_armor: int):
 		current_armor: Current armor value to display
 		_max_armor: Maximum armor value (for future use with armor bars)
 	"""
-	if shield_ui_value_container and shield_ui_value_container.has_method("set_value_with_aooni_font"):
+	if shield_ui_value_container:
 		# When armor is 0, we don't want to show any digits in the HUD. The
 		# ui_bitmap_text script treats negative values (e.g. -1) as a sentinel
 		# to hide the value completely. Re-use that convention here.
@@ -264,11 +268,11 @@ func update_keys_display(collected_keys: Array):
 	Args:
 		collected_keys: Array of key types that have been collected
 	"""
-	if key_ui_container and key_ui_container.has_method("update_keys_ui"):
+	if key_ui_container:
 		key_ui_container.update_keys_ui(collected_keys)
 
 
 func _initialize_key_display():
 	"""Initialize the key display by getting keys from the current level"""
-	if key_ui_container and key_ui_container.has_method("refresh_display"):
+	if key_ui_container:
 		key_ui_container.refresh_display()

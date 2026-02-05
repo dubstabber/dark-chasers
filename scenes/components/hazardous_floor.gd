@@ -153,6 +153,7 @@ func _deal_damage(entity: Node) -> void:
 
 
 func _log_player_mutated(_player: Node) -> void:
+	# HUD is a known scene with add_log method
 	var hud := WorldContext.get_hud()
-	if hud and hud.has_method("add_log"):
+	if hud:
 		hud.add_log("Player mutated.")

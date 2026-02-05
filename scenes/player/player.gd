@@ -132,7 +132,8 @@ func set_hud(new_hud: CanvasLayer):
 	Connects HUD directly to player components for automatic updates.
 	"""
 	hud = new_hud
-	if hud and hud.has_method("connect_to_player"):
+	# HUD is a known scene with connect_to_player method
+	if hud:
 		hud.connect_to_player(self)
 
 

@@ -23,3 +23,19 @@ static func is_alive(node: Node) -> bool:
 	if not check(node):
 		return false
 	return node.is_alive()
+
+
+static func can_kill(node: Node) -> bool:
+	"""Check if a node can be killed (has kill method)"""
+	return node != null and node.has_method("kill")
+
+
+static func kill(node: Node, killed_pos: Vector3 = Vector3.ZERO, message: String = "") -> bool:
+	"""
+	Kill a node if it supports the kill method.
+	Returns true if the kill was executed, false if not supported.
+	"""
+	if not can_kill(node):
+		return false
+	node.kill(killed_pos, message)
+	return true

@@ -82,10 +82,8 @@ func take_damage(amount: int) -> bool:
 	if amount <= 0:
 		return false
 
-	# Check for ArmorComponent and process damage reduction
-	var final_damage = amount
-	if armor_component and armor_component.has_method("process_damage"):
-		final_damage = armor_component.process_damage(amount)
+	# Use ArmorProcessor interface for damage reduction
+	var final_damage = ArmorProcessor.process_damage(armor_component, amount)
 
 	# Apply remaining damage to health
 	var _old_health = current_health
@@ -204,11 +202,9 @@ func _play_sound(sound: AudioStream):
 	else:
 		# Fallback: create temporary audio player
 		var pos = Vector3.ZERO
-		if owner_node:
-			if owner_node.has_method("get_global_position"):
-				pos = owner_node.get_global_position()
-			elif "global_position" in owner_node:
-				pos = owner_node.global_position
+		# Use typed check for Node3D which has global_position
+		if owner_node and owner_node is Node3D:
+			pos = owner_node.global_position
 		Utils.play_sound(sound, get_tree().root, pos)
 
 # Convenience methods for common use cases

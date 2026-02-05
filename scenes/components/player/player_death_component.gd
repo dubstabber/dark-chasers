@@ -129,10 +129,9 @@ func _process_death_animation(delta: float) -> void:
 	if killed_pos != Vector3.ZERO:
 		# Enemy-caused death: throw player backward
 		player.velocity = - direction * death_throw
-		
-		# Smooth camera rotation to face enemy
-		if camera and camera.has_method("orient_toward_position"):
-			camera.orient_toward_position(killed_pos, delta)
+
+		# Smooth camera rotation to face enemy using PlayerCameraInterface
+		PlayerCameraInterface.orient_toward_position(camera, killed_pos, delta)
 	else:
 		# Fall damage death: stay in place
 		player.velocity = Vector3.ZERO
@@ -145,9 +144,11 @@ func _process_death_animation(delta: float) -> void:
 
 
 func _apply_death_camera_lowering(delta: float) -> void:
-	if camera and camera.has_method("apply_death_camera_lowering"):
-		camera.apply_death_camera_lowering(delta)
-	elif head:
+	# Use PlayerCameraInterface for camera death effects
+	if PlayerCameraInterface.apply_death_camera_lowering(camera, delta):
+		return
+	# Fallback: manually lower head position
+	if head:
 		var crouch_depth = movement_component.crouching_depth if movement_component else -0.5
 		var death_camera_depth = crouch_depth * camera_death_depth_multiplier
 		head.position.y = lerp(head.position.y, death_camera_depth, delta * dead_lerp_speed)
@@ -170,11 +171,11 @@ func _handle_weapon_death() -> void:
 
 func _setup_death_camera() -> void:
 	if killed_pos == Vector3.ZERO:
-		# Fall death: center head pitch
-		if camera and camera.has_method("center_pitch"):
-			camera.center_pitch()
-		elif head:
-			head.rotation.x = 0.0
+		# Fall death: center head pitch using PlayerCameraInterface
+		if not PlayerCameraInterface.center_pitch(camera):
+			# Fallback: manually center head rotation
+			if head:
+				head.rotation.x = 0.0
 
 
 func _configure_death_collision() -> void:
@@ -257,10 +258,11 @@ func _enable_revival_collision() -> void:
 
 
 func _reset_death_effects() -> void:
-	if camera and camera.has_method("reset_camera"):
-		camera.reset_camera()
-	elif head:
-		head.position.y = 0.0
+	# Use PlayerCameraInterface for camera reset
+	if not PlayerCameraInterface.reset_camera(camera):
+		# Fallback: manually reset head position
+		if head:
+			head.position.y = 0.0
 	
 	if damage_effects:
 		damage_effects.clear_death_overlay()

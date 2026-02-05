@@ -34,7 +34,8 @@ func get_level_node() -> Node3D:
 
 func get_keys_collected() -> Array:
 	var level = get_level_node()
-	if level and "keys_collected" in level:
+	# Level is a known class with keys_collected property
+	if level and level is Level:
 		return level.keys_collected
 	return []
 

@@ -43,10 +43,9 @@ func spawn_splatter(hit_pos: Vector3, shot_direction: Vector3 = Vector3.ZERO) ->
 	particle.global_position = hit_pos + offset + Vector3(0, y_offset, 0)
 	particle.linear_velocity = Vector3(0, upward_velocity, 0)
 	
-	# Apply blood color to particle shader
-	if particle.has_method("set_blood_color"):
-		particle.set_blood_color(blood_color)
-	else:
+	# Apply blood color using BloodColorable interface
+	if not BloodColorable.set_color(particle, blood_color):
+		# Fallback: manually set shader parameter on sprite
 		var sprite := particle.get_node_or_null("AnimatedSprite3D") as AnimatedSprite3D
 		if sprite and sprite.material_override:
 			# Duplicate material to avoid affecting other instances
@@ -116,9 +115,9 @@ func _spawn_decal(hit_pos: Vector3, hit_normal: Vector3, collider: Node3D) -> vo
 	decal.global_position = hit_pos + hit_normal * (decal.size.y * 0.05)
 	decal.global_transform.basis = _calculate_decal_rotation(hit_normal)
 	
-	if decal.has_method("set_blood_color"):
-		decal.set_blood_color(blood_color)
-	else:
+	# Apply blood color using BloodColorable interface
+	if not BloodColorable.set_color(decal, blood_color):
+		# Fallback: use modulate for decals without the interface
 		decal.modulate = Color(blood_color.r * 0.5, blood_color.g * 0.5, blood_color.b * 0.5, 1.0)
 	
 	blood_decal_spawned.emit(hit_pos, hit_normal)

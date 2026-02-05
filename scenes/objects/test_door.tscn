@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://btyxvfk53peer"]
 
-[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_fg03c"]
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_fg03c"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_010u4"]
 transparency = 1

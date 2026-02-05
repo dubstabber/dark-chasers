@@ -1,5 +1,7 @@
 class_name WeaponManager extends Node3D
 
+const WeaponSoundControllerScript = preload("res://weapon_manager/weapon_sound_controller.gd")
+
 signal lighter_on
 signal lighter_off
 signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
@@ -11,6 +13,7 @@ signal weapon_switched(weapon: WeaponResource)
 var _bob_controller := WeaponBobController.new()
 var _switch_controller := WeaponSwitchController.new()
 var _hit_executor := WeaponHitExecutor.new()
+var _sound_controller := WeaponSoundControllerScript.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -72,8 +75,9 @@ func _ready() -> void:
 	right_hand = gun_base.get_node_or_null("RightHandSlot")
 	base_gun_position = gun_base.position
 	
-	# Initialize hit executor with scene references
+	# Initialize controllers with scene references
 	_hit_executor.setup(get_tree(), bullet_raycast)
+	_sound_controller.setup(hit_sound_player, weapon_sound_player)
 	
 	# Initialize ammo component references for all weapons
 	_setup_weapon_ammo_components()
@@ -349,7 +353,7 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 	# Equip new weapon
 	current_weapon = next_weapon
 	bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
-	hit_sound_player.stream = current_weapon.hit_sound if current_weapon.hit_sound else null
+	_sound_controller.set_hit_sound_stream(current_weapon)
 	current_weapon.weapon_manager = self
 	
 	# Retry setting up all ammo components if they weren't initialized during _ready
@@ -383,49 +387,18 @@ func _equip_from_slot(slot: Array[WeaponResource]) -> void:
 
 
 # ========================================================================== #
-# Weapon sound functions (for use in AnimationPlayer)
+# Weapon sound functions (for use in AnimationPlayer, delegated to controller)
 # ========================================================================== #
 func play_weapon_draw_sound() -> void:
-	if not current_weapon or not weapon_sound_player:
-		return
-	
-	var sound_to_play: AudioStream = null
-	var is_playing_backwards: bool = animation_player.get_playing_speed() < 0.0
-
-	if is_playing_backwards:
-		sound_to_play = current_weapon.holster_sound
-	else:
-		sound_to_play = current_weapon.draw_sound
-	
-	if sound_to_play:
-		weapon_sound_player.stream = sound_to_play
-		weapon_sound_player.play()
+	_sound_controller.play_draw_sound(current_weapon, animation_player)
 
 
 func play_weapon_holster_sound() -> void:
-	if not current_weapon or not weapon_sound_player:
-		return
-	
-	var sound_to_play: AudioStream = null
-	var is_playing_backwards: bool = animation_player.get_playing_speed() < 0.0
-
-	if is_playing_backwards:
-		sound_to_play = current_weapon.draw_sound
-	else:
-		sound_to_play = current_weapon.holster_sound
-	
-	if sound_to_play:
-		weapon_sound_player.stream = sound_to_play
-		weapon_sound_player.play()
+	_sound_controller.play_holster_sound(current_weapon, animation_player)
 
 
 func play_hit_sound() -> void:
-	if not current_weapon or not hit_sound_player:
-		return
-	
-	if current_weapon.hit_sound:
-		hit_sound_player.stream = current_weapon.hit_sound
-		hit_sound_player.play()
+	_sound_controller.play_hit_sound(current_weapon)
 
 
 func light_lighter() -> void:

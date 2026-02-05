@@ -1,6 +1,7 @@
 extends Level
 
 const GE = preload("res://scenes/resources/game_event_types.gd")
+const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
 
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 
@@ -20,7 +21,6 @@ func _exit_tree():
 func _subscribe_to_domain_events() -> void:
 	# Subscribe directly to domain-specific event types (Phase E: Event-ID-only)
 	# This replaces the legacy string dispatch tables (EVENT_MAPs)
-
 	# Key events
 	GameEventBus.subscribe(GE.KEY_SPAWN_AO_ONI_LIBRARY, _on_key_spawn_ao_oni_library)
 	GameEventBus.subscribe(GE.KEY_AO_ONI_TRIES_BARS, _on_key_ao_oni_tries_bars)
@@ -109,13 +109,13 @@ func test_respawn(p):
 
 
 func _on_ladder_body_entered(body):
-	if body.is_in_group("player"):
-		body.is_climbing = true
+	if body.is_in_group("player") and body.movement_component:
+		body.movement_component.set_climbing(true)
 
 
 func _on_ladder_body_exited(body):
-	if body.is_in_group("player"):
-		body.is_climbing = false
+	if body.is_in_group("player") and body.movement_component:
+		body.movement_component.set_climbing(false)
 
 
 func _door_locked(text, triggering_player):
@@ -148,31 +148,48 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 	aooni.connect("tree_exited", global_music.stop)
 
 
-func _on_key_ao_oni_tries_bars(event: RefCounted) -> void:
-	var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
-	enemies.add_child(aooni)
-	aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniBars.global_position
-	aooni.current_room = "SecondFloor"
-	aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/BarsAoOniRunAway)
-	aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak.position)
-	aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak2.position)
-	aooni.connect("tree_exited", _on_ao_oni_gave_up)
-	for player in players.get_children():
-		player.blocked_movement = true
-	aooni.makepath()
-	CameraManager.set_active_camera($NavigationRegion3D/Cameras/BarsCamera2)
-	await get_tree().create_timer(3.0).timeout
-	Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
-	await get_tree().create_timer(0.6).timeout
-	Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
-	await get_tree().create_timer(0.25).timeout
-	Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
-	await get_tree().create_timer(0.25).timeout
-	Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
-	await get_tree().create_timer(0.5).timeout
-	Utils.play_sound(Preloads.BAR_SHAKE_SOUND, aooni)
-	await get_tree().create_timer(2.5).timeout
-	aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsGiveup.position)
+var _bars_aooni: CharacterBody3D = null
+
+func _on_key_ao_oni_tries_bars(_event: RefCounted) -> void:
+	var seq = SequenceDataScript.create(&"ao_oni_tries_bars")
+	seq.custom(_spawn_bars_aooni)
+	seq.block_players()
+	seq.camera_cut($NavigationRegion3D/Cameras/BarsCamera2)
+	seq.wait(3.0)
+	seq.custom(_play_bar_shake)
+	seq.wait(0.6)
+	seq.custom(_play_bar_shake)
+	seq.wait(0.25)
+	seq.custom(_play_bar_shake)
+	seq.wait(0.25)
+	seq.custom(_play_bar_shake)
+	seq.wait(0.5)
+	seq.custom(_play_bar_shake)
+	seq.wait(2.5)
+	seq.custom(_bars_aooni_give_up)
+	SequenceDirector.play_sequence(seq)
+
+
+func _spawn_bars_aooni() -> void:
+	_bars_aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+	enemies.add_child(_bars_aooni)
+	_bars_aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniBars.global_position
+	_bars_aooni.current_room = "SecondFloor"
+	_bars_aooni.add_disappear_zone($NavigationRegion3D/DisappearZones/BarsAoOniRunAway)
+	_bars_aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak.position)
+	_bars_aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsBreak2.position)
+	_bars_aooni.connect("tree_exited", _on_ao_oni_gave_up)
+	_bars_aooni.makepath()
+
+
+func _play_bar_shake() -> void:
+	if is_instance_valid(_bars_aooni):
+		Utils.play_sound(Preloads.BAR_SHAKE_SOUND, _bars_aooni)
+
+
+func _bars_aooni_give_up() -> void:
+	if is_instance_valid(_bars_aooni):
+		_bars_aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniBarsGiveup.position)
 
 
 func _on_key_teleport_to_void(event: RefCounted) -> void:
@@ -222,37 +239,35 @@ func _on_button_play_piano(event: RefCounted) -> void:
 
 
 func _on_button_show_moving_bars(_event: RefCounted) -> void:
-	for player in players.get_children():
-		player.blocked_movement = true
-	global_music.stream = Preloads.EVENT_SOUND
-	global_music.play()
-	await get_tree().create_timer(3.4).timeout
-	for player in players.get_children():
-		CameraManager.set_active_camera(player.camera_3d)
-		player.blocked_movement = false
-	hud.show_event_text("[color=#6c6c6c]You:[/color] I should head to the 1st floor and check that out...", false, 3.0)
+	var seq = SequenceDataScript.create(&"show_moving_bars")
+	seq.block_players()
+	seq.play_music(Preloads.EVENT_SOUND)
+	seq.wait(3.4)
+	seq.camera_restore()
+	seq.unblock_players()
+	seq.show_text("[color=#6c6c6c]You:[/color] I should head to the 1st floor and check that out...", 3.0)
+	SequenceDirector.play_sequence(seq)
 
 
 func _on_button_show_secret_door(_event: RefCounted) -> void:
-	for player in players.get_children():
-		player.blocked_movement = true
-	await get_tree().create_timer(1.0).timeout
-	for player in players.get_children():
-		CameraManager.set_active_camera(player.camera_3d)
-		player.blocked_movement = false
-	hud.show_event_text("[color=#6c6c6c]You:[/color] Hmm... I wonder where that passage leads to?", false, 3.0)
+	var seq = SequenceDataScript.create(&"show_secret_door")
+	seq.block_players()
+	seq.wait(1.0)
+	seq.camera_restore()
+	seq.unblock_players()
+	seq.show_text("[color=#6c6c6c]You:[/color] Hmm... I wonder where that passage leads to?", 3.0)
+	SequenceDirector.play_sequence(seq)
 
 
 func _on_button_show_open_exit(_event: RefCounted) -> void:
-	for player in players.get_children():
-		player.blocked_movement = true
-	global_music.stream = Preloads.EVENT_SOUND
-	global_music.play()
-	await get_tree().create_timer(3.4).timeout
-	for player in players.get_children():
-		CameraManager.set_active_camera(player.camera_3d)
-		player.blocked_movement = false
-	hud.show_event_text("[color=#6c6c6c]You:[/color] I activated the switch. I better get out of here quickly!", false, 3.0)
+	var seq = SequenceDataScript.create(&"show_open_exit")
+	seq.block_players()
+	seq.play_music(Preloads.EVENT_SOUND)
+	seq.wait(3.4)
+	seq.camera_restore()
+	seq.unblock_players()
+	seq.show_text("[color=#6c6c6c]You:[/color] I activated the switch. I better get out of here quickly!", 3.0)
+	SequenceDirector.play_sequence(seq)
 
 
 # --- Area Event Handlers ---
@@ -262,8 +277,18 @@ func _on_area_entered_mansion_text(_event: RefCounted) -> void:
 
 
 func _on_area_monster_crawls_library(_event: RefCounted) -> void:
-	for player in players.get_children():
-		player.blocked_movement = true
+	var seq = SequenceDataScript.create(&"monster_crawls_library")
+	seq.block_players()
+	seq.custom(_spawn_crawling_aooni)
+	seq.wait(4.5)
+	seq.camera_restore()
+	seq.unblock_players()
+	seq.show_text("[color=#6c6c6c]You:[/color] What the eff was that!?", 3.0)
+	seq.play_music(Preloads.CREEP_AMB_SOUND, -5.0)
+	SequenceDirector.play_sequence(seq)
+
+
+func _spawn_crawling_aooni() -> void:
 	var aooni = Preloads.AOONI_SCENE.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 	aooni.global_position = $NavigationRegion3D/EventSpawners/AoOniCrawler.global_position
@@ -272,14 +297,6 @@ func _on_area_monster_crawls_library(_event: RefCounted) -> void:
 	aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawler2.position)
 	aooni.waypoints.push_back($NavigationRegion3D/EventSpawners/AoOniCrawlerEnd.position)
 	aooni.makepath()
-	await get_tree().create_timer(4.5).timeout
-	for player in players.get_children():
-		CameraManager.set_active_camera(player.camera_3d)
-		player.blocked_movement = false
-	hud.show_event_text("[color=#6c6c6c]You:[/color] What the eff was that!?", false, 3.0)
-	global_music.stream = Preloads.CREEP_AMB_SOUND
-	global_music.volume_db = -5
-	global_music.play()
 
 
 func _on_area_piano_alarm(_event: RefCounted) -> void:
@@ -313,14 +330,19 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 
 func _on_area_spawn_ilopulu(event: RefCounted) -> void:
 	var body = event.get_body()
-	global_music.stream = Preloads.EVENT_SOUND
-	global_music.play()
-	await get_tree().create_timer(1.0).timeout
+	var seq = SequenceDataScript.create(&"spawn_ilopulu")
+	seq.play_music(Preloads.EVENT_SOUND)
+	seq.wait(1.0)
+	seq.custom(_spawn_ilopulu.bind(body))
+	SequenceDirector.play_sequence(seq)
+
+
+func _spawn_ilopulu(target: Node) -> void:
 	var ilopulu = Preloads.ILOPULU_SCENE.instantiate()
 	enemies.add_child(ilopulu)
 	ilopulu.global_position = $NavigationRegion3D/EventSpawners/IlopuluSpawn.global_position
 	ilopulu.current_room = "BigHall"
-	ilopulu.current_target = body
+	ilopulu.current_target = target
 	ilopulu.makepath()
 	ilopulu.add_disappear_zone($NavigationRegion3D/DisappearZones/ExitBigHallway)
 

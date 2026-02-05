@@ -1,6 +1,6 @@
 [gd_scene load_steps=38 format=4 uid="uid://b4l0xb0padsci"]
 
-[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_nhaao"]
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_nhaao"]
 [ext_resource type="AudioStream" uid="uid://bryw155gw6q1g" path="res://sounds/sfx/DSSTNMOV.wav" id="2_oeqx6"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_eab58"]

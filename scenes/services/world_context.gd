@@ -6,11 +6,15 @@ extends Node
 ## Usage:
 ##   - Add as autoload named "WorldContext" in Project Settings
 ##   - Or inject manually via set_level_node()
+##
+## Group fallbacks are gated behind _use_group_fallback (dev-only; disabled by default).
+## Production scenes should use explicit registration via Level._ready().
 
 signal level_changed(level_node: Node3D)
 
 var _level_node: Node3D = null
-var _use_group_fallback: bool = true
+## Group fallback is disabled by default. Enable only for debugging legacy scenes.
+var _use_group_fallback: bool = false
 
 
 func _ready() -> void:
@@ -29,6 +33,8 @@ func _try_find_from_groups() -> void:
 func get_level_node() -> Node3D:
 	if not is_instance_valid(_level_node) and _use_group_fallback:
 		_try_find_from_groups()
+		if _level_node:
+			push_warning("WorldContext: Auto-discovered level via group fallback. Use Level._ready() for explicit wiring.")
 	return _level_node
 
 
@@ -74,4 +80,16 @@ func get_enemies_node() -> Node3D:
 	var level = get_level_node()
 	if level and level is Level:
 		return level.enemies
+	return null
+
+
+func get_corpses_node() -> Node3D:
+	"""Get the corpses container from the current level.
+	
+	Returns:
+		Node3D: The corpses container node, or null if not available.
+	"""
+	var level = get_level_node()
+	if level and level is Level:
+		return level.corpses
 	return null

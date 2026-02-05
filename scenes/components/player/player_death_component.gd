@@ -234,15 +234,16 @@ func respawn(health_amount: int = -1) -> void:
 func _spawn_corpse() -> void:
 	if not player or not corpse_sprite:
 		return
-	var corpses_parents = player.get_tree().get_nodes_in_group("corpse")
-	if corpses_parents.size() > 0:
-		var corpse_copy = corpse_sprite.duplicate()
-		if corpse_copy:
-			var corpses_parent = corpses_parents[0]
-			corpses_parent.add_child(corpse_copy)
-			corpse_copy.global_transform = corpse_sprite.global_transform
-			corpse_copy.visible = true
-			corpse_copy.layers = 1
+	# Use WorldContext for explicit corpse container access (replaces group scan)
+	var corpses_parent = WorldContext.get_corpses_node()
+	if not corpses_parent:
+		return
+	var corpse_copy = corpse_sprite.duplicate()
+	if corpse_copy:
+		corpses_parent.add_child(corpse_copy)
+		corpse_copy.global_transform = corpse_sprite.global_transform
+		corpse_copy.visible = true
+		corpse_copy.layers = 1
 
 
 func _handle_weapon_revival() -> void:

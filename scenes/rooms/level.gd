@@ -10,6 +10,7 @@ var keys_collected: Array = []
 @onready var player_spawners = get_node_or_null("%PlayerSpawners")
 @onready var players = get_node_or_null("%Players")
 @onready var enemies = get_node_or_null("%Enemies")
+@onready var corpses = get_node_or_null("%Corpses")
 
 
 func _ready():

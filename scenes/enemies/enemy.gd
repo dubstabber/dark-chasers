@@ -274,6 +274,10 @@ func _get_distance_to_target() -> float:
 
 
 func makepath() -> void:
+	# Retry finding map_transitions if null (handles timing with Level._ready())
+	if not is_instance_valid(map_transitions) and _enemy_context:
+		map_transitions = _enemy_context.get_transitions_node()
+	
 	if current_target:
 		if current_target.current_room == current_room or not current_room:
 			_pending_transition_name = ""

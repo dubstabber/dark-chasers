@@ -13,7 +13,13 @@ signal key_collected(body, type, message_text)
 @export var key_type: String
 
 func _ready():
-	$Sprite3D.texture = Preloads.get_key_texture(key_type)
+	if Engine.is_editor_hint():
+		# In editor, load texture directly to avoid placeholder autoload issue
+		var key_icons: KeyIconLibrary = load("res://scenes/resources/key_icon_library.tres")
+		if key_icons:
+			$Sprite3D.texture = key_icons.get_texture(key_type)
+	else:
+		$Sprite3D.texture = Preloads.get_key_texture(key_type)
 
 
 func _on_body_entered(body):

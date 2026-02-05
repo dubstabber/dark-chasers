@@ -36,12 +36,13 @@ func check_targets() -> void:
 		current_target = null
 		target_died.emit()
 	
-	if not detection_enabled or not chase_player or not players_node:
+	if not detection_enabled or not chase_player:
 		return
 	
 	if not _owner_enemy:
 		return
 	
+	# Retry finding players_node if null or invalid (handles timing with Level._ready())
 	if not is_instance_valid(players_node):
 		_find_players_node()
 		if not players_node:

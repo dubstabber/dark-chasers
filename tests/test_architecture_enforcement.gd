@@ -8,6 +8,10 @@ extends SceneTree
 ## 2. String-based "match event:" routing in room scripts
 ## 3. has_method() duck-typing in gameplay code (with exceptions)
 ## 4. get_nodes_in_group() as primary wiring (with exceptions)
+## 5. "prop" in node duck-typing outside interfaces/adapters
+##
+## Warnings (non-blocking):
+## - Scripts exceeding 500 LOC (SRP pressure)
 
 const SCAN_DIRS := [
 	"res://scenes/",
@@ -26,6 +30,7 @@ const EXCLUDE_FILES := [
 ]
 
 var violations := []
+var warnings := []
 var scanned_files := 0
 
 func _init():
@@ -97,6 +102,10 @@ func scan_file(path: String):
 		check_match_event(path, line, line_num)
 		check_has_method(path, line, line_num)
 		check_group_wiring(path, line, line_num)
+		check_in_operator_duck_typing(path, line, line_num)
+	
+	# Check file length (warning only)
+	check_file_length(path, lines.size())
 
 
 func check_make_current(path: String, line: String, line_num: int):
@@ -148,10 +157,13 @@ func check_has_method(path: String, line: String, line_num: int):
 
 func check_group_wiring(path: String, line: String, line_num: int):
 	# Ban: get_nodes_in_group / get_first_node_in_group as primary wiring
-	# Exception: context services (EnemyContext, WorldContext), debug tools
+	# Exception: context services (EnemyContext, WorldContext), player.gd (debug-gated fallback)
 	if "get_nodes_in_group(" in line or "get_first_node_in_group(" in line:
 		# Check if it's in a context/service file (allowed as centralized fallback)
 		if "context" in path.to_lower() or "services/" in path:
+			return
+		# Check if it's in player.gd (allowed - debug-gated fallback with warning)
+		if path.ends_with("player.gd"):
 			return
 		# Check if it's a comment
 		if line.strip_edges().begins_with("#"):
@@ -166,6 +178,55 @@ func check_group_wiring(path: String, line: String, line_num: int):
 		)
 
 
+func check_in_operator_duck_typing(path: String, line: String, line_num: int):
+	# Ban: "prop" in node duck-typing outside interfaces/adapters/components
+	# Pattern: if "property_name" in some_node or "method" in object
+	var stripped := line.strip_edges()
+	
+	# Skip comments
+	if stripped.begins_with("#"):
+		return
+	
+	# Allow in interface files (adapter zones)
+	if "interfaces/" in path:
+		return
+	
+	# Allow in component files (need flexibility for various owner types)
+	if "components/" in path:
+		return
+	
+	# Allow in services (pool services, etc. need property checks)
+	if "services/" in path:
+		return
+	
+	# Allow in test files (already excluded, but be safe)
+	if "tests/" in path:
+		return
+	
+	# Regex-like check for pattern: "string" in variable (duck-typing)
+	# Look for: "some_prop" in node_var or 'some_prop' in node_var
+	var in_pattern := RegEx.new()
+	in_pattern.compile('["\'][a-z_]+["\']\\s+in\\s+[a-z_]')
+	if in_pattern.search(line):
+		add_violation(
+			"IN_OPERATOR_DUCK_TYPING",
+			path,
+			line_num,
+			"Duck-typing via 'prop' in node. Use typed capability interfaces.",
+			stripped
+		)
+
+
+func check_file_length(path: String, line_count: int):
+	const MAX_LOC := 500
+	if line_count > MAX_LOC:
+		warnings.append({
+			"type": "FILE_TOO_LONG",
+			"path": path,
+			"message": "Script has %d lines (>%d). Consider splitting for SRP." % [line_count, MAX_LOC]
+		})
+
+
 func add_violation(rule: String, path: String, line_num: int, message: String, code: String):
 	violations.append({
 		"rule": rule,
@@ -178,6 +239,12 @@ func add_violation(rule: String, path: String, line_num: int, message: String, c
 
 func print_results():
 	print("\n📁 Scanned %d files" % scanned_files)
+	
+	# Print warnings (non-blocking)
+	if not warnings.is_empty():
+		print("\n⚠️  %d warnings (non-blocking):" % warnings.size())
+		for w in warnings:
+			print("  %s: %s" % [w.path, w.message])
 	
 	if violations.is_empty():
 		print("\n✅ No architecture violations found!")

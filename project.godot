@@ -12,12 +12,12 @@ config_version=5
 
 config/name="dark-chasers"
 run/main_scene="uid://c2jqgo5cy7g7l"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
-EnemyDb="*res://scenes/globals/enemyDB.gd"
+EnemyDb="*res://scenes/globals/enemy_db.gd"
 Utils="*res://scenes/globals/utils.gd"
 Preloads="*res://scenes/globals/preloads.gd"
 EnemyContext="*res://scenes/services/enemy_context.gd"

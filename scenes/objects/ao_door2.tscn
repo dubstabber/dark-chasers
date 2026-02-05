@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://coi5t3tlf2d2p"]
 
-[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_hqq76"]
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_hqq76"]
 [ext_resource type="ArrayMesh" uid="uid://dlc0vb52u0mlc" path="res://models/mansion1/doors/door2.res" id="1_wwxnc"]
 [ext_resource type="AudioStream" uid="uid://cwtqpiklh7vhx" path="res://sounds/sfx/DOORLOCK.ogg" id="2_8ie41"]
 

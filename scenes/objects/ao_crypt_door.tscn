@@ -1,6 +1,6 @@
 [gd_scene load_steps=14 format=4 uid="uid://cx3yuy3wirqdh"]
 
-[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_7d3ox"]
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_7d3ox"]
 [ext_resource type="AudioStream" uid="uid://cgadjp53g6sy0" path="res://sounds/sfx/DSDOROPN.ogg" id="2_6q3wu"]
 [ext_resource type="AudioStream" uid="uid://cwtqpiklh7vhx" path="res://sounds/sfx/DOORLOCK.ogg" id="3_stn3u"]
 

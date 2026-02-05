@@ -1,5 +1,7 @@
 extends Node3D
 
+## Implements TransitionsData interface for typed access.
+
 var map_transitions := {
 	"FirstFloor": {"FirstFloorUpstairs": "SecondFloor", "BigHallEntry": "BigHall"},
 	"SecondFloor":
@@ -29,3 +31,11 @@ var map_transitions := {
 }
 
 var enemy_exceptions := ["ThirdFloorAbyss"]
+
+
+func get_map_transitions() -> Dictionary:
+	return map_transitions
+
+
+func get_enemy_exceptions() -> Array:
+	return enemy_exceptions

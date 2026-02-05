@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=4 uid="uid://bnstoxt6sla53"]
 
-[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/Door.gd" id="1_a0d8a"]
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_a0d8a"]
 [ext_resource type="AudioStream" uid="uid://bryw155gw6q1g" path="res://sounds/sfx/DSSTNMOV.wav" id="2_pnxeu"]
 [ext_resource type="AudioStream" uid="uid://brej2lxffj27" path="res://sounds/sfx/DSPSTOP.wav" id="3_wg1y3"]
 

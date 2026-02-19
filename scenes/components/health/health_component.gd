@@ -46,11 +46,12 @@ func _ready():
 
 
 func _validate_node_references() -> void:
-	"""Validate that node references are set and log warnings for missing ones"""
-	if not owner_node:
-		push_warning("HealthComponent: 'owner_node' is not set. destroy_on_death will be disabled.")
-	if not audio_player:
-		push_warning("HealthComponent: 'audio_player' is not set. Sound effects will use fallback.")
+	"""Validate that node references are set and log warnings for missing ones.
+	Only warns if the feature requiring the reference is actually enabled."""
+	if destroy_on_death and not owner_node:
+		push_warning("HealthComponent: 'owner_node' is not set but destroy_on_death is enabled. destroy_on_death will not work.")
+	if (damage_sound or heal_sound or death_sound) and not audio_player:
+		push_warning("HealthComponent: 'audio_player' is not set but sounds are configured. Sound effects will use fallback.")
 
 func _process(delta):
 	# Handle invulnerability timer

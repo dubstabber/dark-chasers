@@ -1,8 +1,6 @@
 class_name DoorBlockingComponent
 extends Node
 
-signal blocking_detected
-
 var _body: AnimatableBody3D
 var _meshes: Array[MeshInstance3D] = []
 var _allowed_sides_checker: Callable

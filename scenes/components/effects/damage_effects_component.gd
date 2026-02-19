@@ -43,11 +43,10 @@ func _ready():
 
 
 func _validate_node_references() -> void:
-	"""Validate that required node references are set and log warnings for missing ones"""
-	if not color_rect:
-		push_warning("DamageEffectsComponent: 'color_rect' is not set. Damage visual effects will be disabled.")
-	if not health_component:
-		push_warning("DamageEffectsComponent: 'health_component' is not set. Auto damage blink will be disabled.")
+	"""Validate that required node references are set and log warnings for missing ones.
+	Only warns if both references are missing (component is essentially non-functional)."""
+	if not color_rect and not health_component:
+		push_warning("DamageEffectsComponent: No references set. Component is non-functional - consider removing it.")
 
 
 func _on_damage_taken(_amount: int, _current_health: int) -> void:

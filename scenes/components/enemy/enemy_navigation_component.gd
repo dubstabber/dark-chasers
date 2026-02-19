@@ -2,8 +2,8 @@
 class_name EnemyNavigationComponent
 extends Node
 
+## Signals emitted by concrete subclasses (e.g., GodotNavigationComponent)
 signal target_reached()
-signal path_changed()
 signal link_reached(details: Dictionary)
 signal waypoint_reached(details: Dictionary)
 

@@ -2,7 +2,6 @@ class_name DoorAudioComponent
 extends Node
 
 signal sound_started(sound_player: AudioStreamPlayer3D, is_open_sound: bool)
-signal sound_stopped(is_open_sound: bool)
 
 @export var open_sound: AudioStream
 @export var close_sound: AudioStream

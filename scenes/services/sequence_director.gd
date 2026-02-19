@@ -1,3 +1,4 @@
+class_name SequenceDirector
 extends Node
 
 const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")

@@ -54,7 +54,7 @@ func spawn_enemy_at_index(index: int) -> Node:
 	_enemies_container.add_child(enemy)
 	enemy.position = spawner.position
 	
-	if is_wandering and "is_wandering" in enemy:
+	if is_wandering and enemy is Enemy:
 		enemy.is_wandering = true
 	
 	_setup_respawn_timer(index, spawner)
@@ -96,7 +96,7 @@ func _on_respawn_timer_timeout(index: int, timer: Timer) -> void:
 	_enemies_container.add_child(enemy)
 	enemy.position = spawners[index].position
 	
-	if is_wandering and "is_wandering" in enemy:
+	if is_wandering and enemy is Enemy:
 		enemy.is_wandering = true
 	
 	timer.wait_time = randf_range(min_respawn_time, max_respawn_time)

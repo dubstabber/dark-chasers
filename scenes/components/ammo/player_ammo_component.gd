@@ -21,8 +21,8 @@ var _ammo_config: AmmoConfig
 
 
 func _ready() -> void:
-	# Get ammo configuration from the global config
-	_ammo_config = AmmoConfig.get_instance()
+	# Get ammo configuration from the Services autoload
+	_ammo_config = Services.ammo_config
 	
 	# Initialize default ammo pools for this player
 	_initialize_default_pools()

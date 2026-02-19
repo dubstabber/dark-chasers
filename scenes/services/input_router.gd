@@ -1,3 +1,4 @@
+class_name InputRouter
 extends Node
 
 ## Centralized handler for app-level input (quit, fullscreen, debug toggles).

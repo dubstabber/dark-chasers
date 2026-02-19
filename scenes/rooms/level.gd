@@ -68,24 +68,20 @@ func _on_key_event(event: RefCounted) -> void:
 
 
 func _on_button_event(event: RefCounted) -> void:
-	# Handle camera switching if button has a temporary_camera configured
-	var camera = event.get_node("camera")
-	if camera:
-		Services.camera_manager.set_active_camera(camera)
-
-	# Handle door opening if button has a door_to_open configured
-	var door = event.get_node("door")
-	if door and door is Openable:
-		door.open()
+	_handle_trigger_event(event)
 
 
 func _on_area_event(event: RefCounted) -> void:
-	# Handle camera switching if area has a temporary_camera configured
+	_handle_trigger_event(event)
+
+
+func _handle_trigger_event(event: RefCounted) -> void:
+	# Handle camera switching if event has a camera configured
 	var camera = event.get_node("camera")
 	if camera:
 		Services.camera_manager.set_active_camera(camera)
 
-	# Handle door opening if area has a door_to_open configured
+	# Handle door opening if event has a door configured
 	var door = event.get_node("door")
 	if door and door is Openable:
 		door.open()
@@ -117,15 +113,16 @@ func handle_transition(body, area3dname, marker):
 		push_warning("handle_transition: body.current_room is empty for %s" % body.name)
 		return
 
-	if from_room not in transitions.map_transitions:
+	var map_transitions = TransitionsData.get_map_transitions(transitions)
+	if from_room not in map_transitions:
 		push_warning("handle_transition: from_room '%s' not in map_transitions for %s" % [from_room, body.name])
 		return
 
-	if area3dname not in transitions.map_transitions[from_room]:
+	if area3dname not in map_transitions[from_room]:
 		push_warning("handle_transition: transition '%s' not found from room '%s' for %s" % [area3dname, from_room, body.name])
 		return
 
-	var to_room = transitions.map_transitions[from_room][area3dname]
+	var to_room = map_transitions[from_room][area3dname]
 	RoomAware.set_current_room(body, to_room)
 	body.global_position = marker.global_position
 
@@ -134,18 +131,18 @@ func handle_transition(body, area3dname, marker):
 
 
 func _on_transition_entered(body, transitor):
-	if body.is_in_group("player") and transitor:
-		if body.has_node("InteractionComponent"):
+	if body is Player and transitor:
+		if body.interaction_component:
 			body.interaction_component.set_transit_point(transitor)
 
 
 func _on_transition_exited(body):
-	if body.is_in_group("player"):
-		if body.has_node("InteractionComponent"):
+	if body is Player:
+		if body.interaction_component:
 			body.interaction_component.clear_transit_point()
 
 
-func _key_body_entered(body, key_type, message_text):
+func _key_body_entered(_body, key_type, message_text):
 	# Add log message to HUD
 	if hud:
 		hud.add_log(message_text)
@@ -184,3 +181,24 @@ func refresh_key_display():
 
 
 func _door_locked(_text, _triggering_player): pass
+
+
+func spawn_player() -> void:
+	"""Virtual: Override in subclass for custom spawn behavior.
+	
+	Default implementation instantiates a player from the scene catalog,
+	adds it to the players node, and respawns at a random spawner.
+	Subclasses like mansion_1 override this for custom intro sequences.
+	"""
+	var player = Services.preloads.get_scene_catalog().player_scene.instantiate() as Player
+	players.add_child(player)
+	setup_player(player)
+	respawn(player)
+
+
+func respawn(player: CharacterBody3D) -> void:
+	"""Virtual: Override in subclass for custom respawn logic.
+	
+	Default implementation places the player at a random spawner position.
+	"""
+	player.position = player_spawners.get_children().pick_random().global_position

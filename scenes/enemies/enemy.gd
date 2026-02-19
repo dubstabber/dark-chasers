@@ -1,7 +1,7 @@
 class_name Enemy extends CharacterBody3D
 
 @export var current_room: String
-@export var disappear_zones: Array[Area3D]
+@export var disappear_zones: Array[Area3D] ## Legacy: migrated to EnemyDisappearZoneComponent
 @export var is_wandering := false
 @export var chase_player := true
 @export var can_open_door := true
@@ -17,6 +17,8 @@ var _ai_component: EnemyAIComponent
 var _health_component: HealthComponent
 var _wandering_component: EnemyWanderingComponent
 var _room_pathing_component: RoomPathingComponent
+var _transition_component: EnemyTransitionComponent
+var _disappear_zone_component: EnemyDisappearZoneComponent
 var _door_opener_component: EnemyDoorOpenerComponent
 var _kill_zone_component: EnemyKillZoneComponent
 var _motor_component: EnemyMotorComponent
@@ -34,7 +36,6 @@ var ground_type: String
 var moving_state := "idle"
 var is_flying := false
 var is_killed := false
-var _pending_transition_name: String = ""
 
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var wandering_timer = $Timers/WanderingTimer
@@ -44,8 +45,6 @@ var _pending_transition_name: String = ""
 
 func _ready():
 	_setup_context()
-	for disappear_zone in disappear_zones:
-		disappear_zone.connect("body_entered", _on_disappear_area)
 	_setup_components()
 
 
@@ -60,6 +59,8 @@ func _setup_context() -> void:
 func _setup_components() -> void:
 	_blood_component = get_node_or_null("BloodEffectComponent")
 	_room_pathing_component = get_node_or_null("RoomPathingComponent")
+	_transition_component = get_node_or_null("EnemyTransitionComponent")
+	_disappear_zone_component = get_node_or_null("EnemyDisappearZoneComponent")
 	_door_opener_component = get_node_or_null("EnemyDoorOpenerComponent")
 	_brain_component = get_node_or_null("EnemyBrain")
 	if _door_opener_component:
@@ -70,14 +71,29 @@ func _setup_components() -> void:
 	_setup_ai_component()
 	_setup_health_component()
 	_setup_wandering_component()
+	_setup_transition_component()
+	_setup_disappear_zone_component()
+
+
+func _setup_transition_component() -> void:
+	if _transition_component:
+		_transition_component.setup(_nav_component, _disappear_zone_component)
+
+
+func _setup_disappear_zone_component() -> void:
+	if _disappear_zone_component:
+		# Migrate legacy disappear_zones export to component
+		for zone in disappear_zones:
+			if is_instance_valid(zone):
+				_disappear_zone_component.add_zone(zone)
 
 
 func _setup_motor_component() -> void:
 	_motor_component = get_node_or_null("EnemyMotorComponent")
-	if _motor_component:
-		_motor_component.speed = speed
-		_motor_component.accel = accel
-		_motor_component.is_flying = is_flying
+	assert(_motor_component != null, "Enemy '%s' requires an EnemyMotorComponent child node" % name)
+	_motor_component.speed = speed
+	_motor_component.accel = accel
+	_motor_component.is_flying = is_flying
 
 
 func _setup_kill_zone_component() -> void:
@@ -147,8 +163,8 @@ func _physics_process(delta):
 	_apply_gravity(delta)
 	
 	if not is_killed:
-		if not current_target and chase_player:
-			_check_for_targets()
+		if _ai_component:
+			_ai_component.update_scanning(delta)
 		if current_target or not waypoints.is_empty():
 			_process_chase_movement(delta)
 		elif is_wandering:
@@ -158,29 +174,19 @@ func _physics_process(delta):
 	
 	_do_move_and_slide()
 	
-	# Manual overlap check for disappear zones (fallback if signal doesn't fire)
-	_check_disappear_zone_overlap()
+	if _disappear_zone_component:
+		_disappear_zone_component.update(delta)
 
 
 func _apply_gravity(delta: float) -> void:
-	if _motor_component:
-		_motor_component.apply_gravity(delta)
-	elif not is_on_floor() and not is_flying:
-		velocity.y -= gravity * delta
+	_motor_component.apply_gravity(delta)
 
 
 func _process_chase_movement(delta: float) -> void:
 	var next_pos = _get_next_path_position()
 	
-	if _motor_component:
-		_motor_component.move_toward_position(next_pos, delta)
-		direction = _motor_component.direction
-	else:
-		var horizontal_direction = Vector3(next_pos.x - global_position.x, 0, next_pos.z - global_position.z).normalized()
-		direction = horizontal_direction
-		var target_velocity = horizontal_direction * (speed + jump_speed)
-		velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
-		velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
+	_motor_component.move_toward_position(next_pos, delta)
+	direction = _motor_component.direction
 	
 	# Use Mortal interface to check if target is dead
 	if current_target and Mortal.is_dead(current_target):
@@ -200,36 +206,22 @@ func _process_wandering_movement(delta: float) -> void:
 		_wandering_component.update(delta)
 		direction = _wandering_component.direction
 	
-	if _motor_component:
-		_motor_component.move_in_direction(direction, delta)
-	else:
-		var target_velocity = direction * (speed + jump_speed)
-		velocity.x = lerp(velocity.x, target_velocity.x, accel * delta)
-		velocity.z = lerp(velocity.z, target_velocity.z, accel * delta)
+	_motor_component.move_in_direction(direction, delta)
 	
 	if is_on_floor() or is_flying:
 		_do_look_forward()
 
 
 func _stop_movement() -> void:
-	if _motor_component:
-		_motor_component.stop()
-	else:
-		velocity = Vector3.ZERO
+	_motor_component.stop()
 
 
 func _do_move_and_slide() -> void:
-	if _motor_component:
-		_motor_component.move_and_slide()
-	else:
-		move_and_slide()
+	_motor_component.move_and_slide()
 
 
 func _do_look_forward() -> void:
-	if _motor_component:
-		_motor_component.look_forward()
-	else:
-		look_forward()
+	_motor_component.look_forward()
 
 
 func look_forward() -> void:
@@ -239,7 +231,7 @@ func look_forward() -> void:
 
 func _check_for_targets() -> void:
 	if _ai_component:
-		_ai_component.check_targets()
+		_ai_component.update_scanning(0.0)
 
 
 func _on_target_acquired(target: Node3D) -> void:
@@ -274,48 +266,19 @@ func _get_distance_to_target() -> float:
 
 
 func makepath() -> void:
-	# Retry finding map_transitions if null (handles timing with Level._ready())
-	if not is_instance_valid(map_transitions) and _enemy_context:
-		map_transitions = _enemy_context.get_transitions_node()
-	
-	if current_target:
-		if current_target.current_room == current_room or not current_room:
-			_pending_transition_name = ""
-			_set_nav_target(current_target.global_position)
-		elif map_transitions:
-			var path_to_player = find_path_to_player()
-			if path_to_player and not path_to_player.is_empty():
-				var transition_point = path_to_player[0]
-				_pending_transition_name = transition_point
-				var trans_node = map_transitions.get_node(transition_point)
-				var _dist = global_position.distance_to(trans_node.global_position)
-
-				_set_nav_target(trans_node.global_position)
-			else:
-				# No valid path found; fall back to direct navigation
-				_pending_transition_name = ""
-				_set_nav_target(current_target.global_position)
-		else:
-			_pending_transition_name = ""
+	if _transition_component:
+		_transition_component.makepath()
+	elif current_target:
+		_set_nav_target(current_target.global_position)
 	elif not waypoints.is_empty():
-		_pending_transition_name = ""
 		_set_nav_target(waypoints[0])
 
 
-func find_path_to_player():
-	if not current_target:
-		return null
-	
-	if _room_pathing_component:
-		return _room_pathing_component.find_path_to_room(current_room, current_target.current_room)
-	
-	push_warning("Enemy: No room pathing component found")
-	return []
-
-
-func add_disappear_zone(area):
-	disappear_zones.append(area)
-	area.connect("body_entered", _on_disappear_area)
+func add_disappear_zone(area: Area3D) -> void:
+	if _disappear_zone_component:
+		_disappear_zone_component.add_zone(area)
+	else:
+		disappear_zones.append(area)
 
 
 func _on_find_path_timer_timeout():
@@ -344,16 +307,10 @@ func _on_wandering_timer_timeout():
 
 
 func _on_navigation_agent_3d_target_reached():
-	# Handle room transition when reaching a transition point
-	if _pending_transition_name != "" and map_transitions:
-		var transition_node = map_transitions.get_node_or_null(_pending_transition_name)
-		if transition_node:
-			_execute_transition(transition_node)
-		else:
-			Services.utils.debug_warning("Enemy: transition_node not found: %s" % _pending_transition_name)
-		_pending_transition_name = ""
+	# Delegate transition handling to component
+	if _transition_component and _transition_component.handle_target_reached():
 		return
-	
+
 	if not waypoints.is_empty():
 		waypoints.pop_front()
 		if waypoints.is_empty():
@@ -362,49 +319,30 @@ func _on_navigation_agent_3d_target_reached():
 
 func _on_navigation_agent_3d_link_reached(details):
 	if details.owner.is_in_group("jump-up"):
-		if _motor_component:
-			_motor_component.apply_jump(jump_velocity)
-			_motor_component.jump_speed = gravity
-		else:
-			velocity.y = jump_velocity
-			jump_speed = gravity
+		_motor_component.apply_jump(jump_velocity)
+		_motor_component.jump_speed = gravity
 	if details.owner.is_in_group("jump-down"):
-		if _motor_component:
-			_motor_component.jump_speed = gravity
-		else:
-			jump_speed = gravity
+		_motor_component.jump_speed = gravity
 
 
 func _on_navigation_agent_3d_waypoint_reached(_details):
-	if _motor_component:
-		_motor_component.jump_speed = 0
-	else:
-		jump_speed = 0
+	_motor_component.jump_speed = 0
 
 
-func _on_disappear_area(body):
-	if body == self:
-		queue_free()
+func take_damage(amount: int) -> void:
+	take_damage_at_position(amount, global_position + Vector3(0, 1.0, 0))
 
 
-func _check_disappear_zone_overlap() -> void:
-	for zone in disappear_zones:
-		if is_instance_valid(zone) and zone.overlaps_body(self):
-			Services.utils.debug_log("Enemy: detected overlap with %s, calling queue_free" % zone.name)
-			queue_free()
-			return
-
-
-func take_damage(_amount: int) -> void:
-	take_damage_at_position(_amount, global_position + Vector3(0, 1.0, 0))
-
-
-func take_damage_at_position(_amount: int, hit_pos: Vector3) -> void:
+func take_damage_at_position(amount: int, hit_pos: Vector3) -> void:
+	if _health_component:
+		_health_component.take_damage(amount)
 	if _blood_component:
 		_blood_component.spawn_splatter(hit_pos, Vector3.ZERO)
 
 
 func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
+	if _health_component:
+		_health_component.take_damage(amount)
 	if _blood_component:
 		_blood_component.spawn_splatter(hit_pos, shot_direction)
 		_blood_component.trace_to_walls(amount, hit_pos, shot_direction)
@@ -414,50 +352,6 @@ func get_target_position() -> Vector3:
 	if current_target:
 		return current_target.global_position
 	return global_position
-
-
-func _execute_transition(transition_node: Node3D) -> void:
-	# Check for disappear zones before transitioning - enemy should disappear, not teleport
-	for zone in disappear_zones:
-		if is_instance_valid(zone) and zone.overlaps_body(self):
-			queue_free()
-			return
-	
-	# Get the transition graph from EnemyContext
-	if not _enemy_context:
-		return
-	
-	var transition_graph = _enemy_context.get_transition_graph()
-	if transition_graph.is_empty():
-		return
-	
-	var transition_name = transition_node.name
-	
-	if current_room not in transition_graph:
-		return
-	
-	if transition_name not in transition_graph[current_room]:
-		return
-	
-	# Find the marker (spawn point) within the transition
-	var marker: Marker3D = null
-	for child in transition_node.get_children():
-		if child.is_in_group("spawn_point"):
-			marker = child
-			break
-	
-	if not marker:
-		push_warning("Enemy._execute_transition: No spawn_point marker found in %s" % transition_name)
-		return
-	
-	# Execute the transition
-	var to_room = transition_graph[current_room][transition_name]
-	current_room = to_room
-	global_position = marker.global_position
-	
-	# Restart pathfinding with short delay
-	find_path_timer.wait_time = 0.1
-	find_path_timer.start()
 
 
 func set_navigation_enabled(enabled: bool) -> void:

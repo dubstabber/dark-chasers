@@ -19,17 +19,18 @@ extends Node
 ##   sequence_director — read by: level scripts (play sequences)
 ##   input_router    — standalone (app-level input); no external callers expected
 
-var enemy_db: Node
-var utils: Node
-var preloads: Node
-var enemy_context: Node
-var world_context: Node
-var camera_manager: Node
-var audio_pool: Node
-var vfx_pool: Node
-var event_bus: Node
-var sequence_director: Node
-var input_router: Node
+var enemy_db: EnemyDb
+var utils: Utils
+var preloads: Preloads
+var enemy_context: EnemyContext
+var world_context: WorldContext
+var camera_manager: CameraManager
+var audio_pool: AudioPoolService
+var vfx_pool: VfxPoolService
+var event_bus: GameEventBus
+var sequence_director: SequenceDirector
+var input_router: InputRouter
+var ammo_config: AmmoConfig
 
 
 func _enter_tree() -> void:
@@ -44,6 +45,7 @@ func _enter_tree() -> void:
 	event_bus = _add_service("GameEventBus", preload("res://scenes/services/game_event_bus.gd"))
 	sequence_director = _add_service("SequenceDirector", preload("res://scenes/services/sequence_director.gd"))
 	input_router = _add_service("InputRouter", preload("res://scenes/services/input_router.gd"))
+	ammo_config = _add_service("AmmoConfig", preload("res://scenes/systems/ammo_system/ammo_config.gd"))
 
 
 func _add_service(service_name: String, script: GDScript) -> Node:

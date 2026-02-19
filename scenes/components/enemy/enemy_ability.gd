@@ -1,3 +1,4 @@
+@abstract
 class_name EnemyAbility
 extends Resource
 
@@ -11,13 +12,13 @@ func can_activate(context: EnemyAbilityContext) -> bool:
 	return context.time_since_last_ability >= cooldown
 
 
-func activate(_enemy: CharacterBody3D) -> void:
-	pass
+@abstract
+func activate(_enemy: CharacterBody3D) -> void
 
 
-func process(_enemy: CharacterBody3D, _delta: float) -> AbilityStatus:
-	return AbilityStatus.COMPLETED
+@abstract
+func process(_enemy: CharacterBody3D, _delta: float) -> AbilityStatus
 
 
-func deactivate(_enemy: CharacterBody3D) -> void:
-	pass
+@abstract
+func deactivate(_enemy: CharacterBody3D) -> void

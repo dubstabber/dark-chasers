@@ -9,17 +9,21 @@ signal target_died()
 @export var chase_player: bool = true
 @export var check_line_of_sight: bool = true
 @export var line_of_sight_origin: Node3D
+@export var scan_interval: float = 0.2
+@export var scan_jitter: float = 0.05
 
 var current_target: CharacterBody3D = null
 var players_node: Node3D = null
 
 var _owner_enemy: CharacterBody3D = null
 var _enemy_context: Node = null
+var _scan_timer: float = 0.0
 
 
 func _ready() -> void:
 	_owner_enemy = owner as CharacterBody3D
 	_find_players_node()
+	_scan_timer = randf_range(0.0, scan_interval)
 
 
 func _find_players_node() -> void:
@@ -31,7 +35,21 @@ func _find_players_node() -> void:
 	# Note: EnemyContext handles group fallback internally; no need to duplicate here
 
 
-func check_targets() -> void:
+func update_scanning(delta: float) -> void:
+	if current_target:
+		# Already have a target — just check if it's still alive
+		if Mortal.is_dead(current_target):
+			current_target = null
+			target_died.emit()
+		return
+
+	_scan_timer -= delta
+	if _scan_timer <= 0.0:
+		_scan_timer = scan_interval + randf_range(-scan_jitter, scan_jitter)
+		_scan_for_targets()
+
+
+func _scan_for_targets() -> void:
 	if current_target and Mortal.is_dead(current_target):
 		current_target = null
 		target_died.emit()

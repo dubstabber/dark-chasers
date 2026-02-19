@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b78wse81qlgqi"]
+[gd_scene load_steps=14 format=3 uid="uid://b78wse81qlgqi"]
 
 [ext_resource type="Script" uid="uid://cnk1ff78egyhh" path="res://scenes/objects/flower_pot.gd" id="1_2hyoh"]
 [ext_resource type="Texture2D" uid="uid://flaycw7esskt" path="res://images/objects/flower-pot/1075A0.png" id="1_lxn2p"]
 [ext_resource type="Texture2D" uid="uid://ksj20e4ggmsj" path="res://images/objects/flower-pot/1075B0.png" id="2_6khna"]
+[ext_resource type="Script" uid="uid://cjfetq51s581y" path="res://scenes/components/destructible_component.gd" id="4_rnpxf"]
+[ext_resource type="AudioStream" uid="uid://58pj3hxfrieb" path="res://sounds/sfx/SND1048.wav" id="5_355wx"]
+[ext_resource type="Script" uid="uid://cas04n52fxase" path="res://scenes/resources/scrap_definition.gd" id="6_rrjj5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w1ps"]
 size = Vector3(0.34668, 0.671997, 0.345459)
@@ -24,6 +27,38 @@ animations = [{
 "speed": 30.0
 }]
 
+[sub_resource type="Resource" id="Resource_355wx"]
+script = ExtResource("6_rrjj5")
+scrap_type = "pot scrap"
+count = 10
+horizontal_velocity = 4.0
+metadata/_custom_type_script = "uid://cas04n52fxase"
+
+[sub_resource type="Resource" id="Resource_rrjj5"]
+script = ExtResource("6_rrjj5")
+scrap_type = "circle ground scrap"
+count_variation = Array[int]([6, 10])
+horizontal_velocity = 2.0
+vertical_velocity = 3.5
+metadata/_custom_type_script = "uid://cas04n52fxase"
+
+[sub_resource type="Resource" id="Resource_6il8t"]
+script = ExtResource("6_rrjj5")
+scrap_type = "small ground scrap"
+count_variation = Array[int]([4, 6])
+horizontal_velocity = 2.0
+vertical_velocity = 3.5
+metadata/_custom_type_script = "uid://cas04n52fxase"
+
+[sub_resource type="Resource" id="Resource_nt7oo"]
+script = ExtResource("6_rrjj5")
+scrap_type = "grass scrap"
+count = 10
+horizontal_velocity = 3.0
+vertical_velocity = 1.0
+position_offset = Vector3(0, -0.1, 0)
+metadata/_custom_type_script = "uid://cas04n52fxase"
+
 [node name="FlowerPot" type="StaticBody3D" groups=["entity"]]
 collision_layer = 8
 collision_mask = 0
@@ -44,3 +79,13 @@ billboard = 2
 shaded = true
 texture_filter = 2
 sprite_frames = SubResource("SpriteFrames_sbim7")
+
+[node name="DestructibleComponent" type="Node" parent="."]
+script = ExtResource("4_rnpxf")
+health = 20
+destroy_sound = ExtResource("5_355wx")
+scrap_definitions = Array[ExtResource("6_rrjj5")]([SubResource("Resource_355wx"), SubResource("Resource_rrjj5"), SubResource("Resource_6il8t"), SubResource("Resource_nt7oo")])
+free_on_destroy = false
+metadata/_custom_type_script = "uid://cjfetq51s581y"
+
+[connection signal="destroyed" from="DestructibleComponent" to="." method="_on_destructible_destroyed"]

@@ -6,32 +6,8 @@ extends Enemy
 @onready var health_component: HealthComponent = $HealthComponent
 
 
-func _physics_process(delta: float) -> void:
-	super._physics_process(delta)
-	if animation_component:
-		animation_component.update_animation_state()
-
-
 func _on_sound_interval_timeout() -> void:
 	mouse_sound_player.play()
-
-
-func take_damage(amount: int) -> void:
-	super.take_damage(amount)
-	if health_component:
-		health_component.take_damage(amount)
-
-
-func take_damage_at_position(amount: int, hit_pos: Vector3) -> void:
-	super.take_damage_at_position(amount, hit_pos)
-	if health_component:
-		health_component.take_damage(amount)
-
-
-func take_damage_with_direction(amount: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
-	super.take_damage_with_direction(amount, hit_pos, shot_direction)
-	if health_component:
-		health_component.take_damage(amount)
 
 
 func _on_died() -> void:

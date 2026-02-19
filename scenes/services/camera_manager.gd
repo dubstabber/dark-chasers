@@ -1,3 +1,4 @@
+class_name CameraManager
 extends Node
 
 ## Centralized camera management service.

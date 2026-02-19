@@ -47,7 +47,7 @@ func _ready():
 	
 	# Test 8: AmmoConfig
 	print("\n8. Testing AmmoConfig:")
-	var config = AmmoConfig.get_instance()
+	var config = Services.ammo_config
 	print("Available ammo types: ", config.get_all_ammo_types())
 	print("Pistol ammo config: ", config.get_ammo_config("pistol_ammo"))
 	

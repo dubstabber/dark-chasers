@@ -22,17 +22,6 @@ func _ready():
 	_setup_spawner_controller()
 
 
-func spawn_player():
-	var player = Services.preloads.get_scene_catalog().player_scene.instantiate() as Player
-	players.add_child(player)
-	setup_player(player)
-	respawn(player)
-
-
-func respawn(p):
-	p.position = player_spawners.get_children().pick_random().global_position
-
-
 func _setup_spawner_controller() -> void:
 	if current_game_mode != GAME_MODE.STANDARD:
 		return

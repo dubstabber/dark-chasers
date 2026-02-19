@@ -1,3 +1,4 @@
+class_name Preloads
 extends Node
 
 ## Preloads autoload - compatibility adapter over Resource-based catalogs.

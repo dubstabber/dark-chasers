@@ -1,3 +1,4 @@
+class_name WorldContext
 extends Node
 
 ## Provides centralized access to world/level references for non-enemy systems.

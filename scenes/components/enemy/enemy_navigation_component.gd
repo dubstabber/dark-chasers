@@ -1,3 +1,4 @@
+@abstract
 class_name EnemyNavigationComponent
 extends Node
 
@@ -22,13 +23,12 @@ func set_target(pos: Vector3) -> void:
 	_on_target_set(pos)
 
 
-func _on_target_set(_pos: Vector3) -> void:
-	pass
+@abstract
+func _on_target_set(_pos: Vector3) -> void
 
 
-func get_next_path_position() -> Vector3:
-	push_error("EnemyNavigationComponent.get_next_path_position() must be implemented by subclass")
-	return Vector3.ZERO
+@abstract
+func get_next_path_position() -> Vector3
 
 
 func get_next_movement_direction() -> Vector3:
@@ -49,14 +49,12 @@ func get_horizontal_direction() -> Vector3:
 	).normalized()
 
 
-func is_target_reached() -> bool:
-	push_error("EnemyNavigationComponent.is_target_reached() must be implemented by subclass")
-	return false
+@abstract
+func is_target_reached() -> bool
 
 
-func distance_to_target() -> float:
-	push_error("EnemyNavigationComponent.distance_to_target() must be implemented by subclass")
-	return 0.0
+@abstract
+func distance_to_target() -> float
 
 
 func is_navigation_finished() -> bool:

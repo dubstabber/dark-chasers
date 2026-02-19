@@ -38,6 +38,10 @@ func _ready() -> void:
 		_update_speed_scale()
 
 
+func _physics_process(_delta: float) -> void:
+	update_animation_state()
+
+
 func _update_speed_scale() -> void:
 	if not scale_speed_with_movement:
 		return
@@ -49,13 +53,13 @@ func _update_speed_scale() -> void:
 
 
 func _get_owner_speed() -> float:
-	if _owner_enemy and "speed" in _owner_enemy:
+	if _owner_enemy is Enemy:
 		return _owner_enemy.speed
 	return 0.0
 
 
 func _get_owner_velocity() -> Vector3:
-	if _owner_enemy and "velocity" in _owner_enemy:
+	if _owner_enemy is Enemy:
 		return _owner_enemy.velocity
 	return Vector3.ZERO
 
@@ -74,7 +78,7 @@ func update_animation_state() -> void:
 		_play_state_animation()
 		state_changed.emit(current_state)
 		
-		if _owner_enemy and "moving_state" in _owner_enemy:
+		if _owner_enemy is Enemy:
 			_owner_enemy.moving_state = current_state
 
 

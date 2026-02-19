@@ -3,8 +3,6 @@ extends Area3D
 
 const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
 
-signal key_collected(body, type, message_text)
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.KEY_SPAWN_AO_ONI_LIBRARY).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"key_spawn_ao_oni_library").
@@ -60,7 +58,5 @@ func _on_body_entered(body):
 			"message": message_text
 		}, self)
 
-		# Keep legacy signal for backward compatibility
-		key_collected.emit(body, key_type, message_text)
 		Services.utils.play_sound(Services.preloads.get_sfx_catalog().key_collected, body)
 		queue_free()

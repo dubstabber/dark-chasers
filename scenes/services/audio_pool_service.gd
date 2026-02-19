@@ -1,3 +1,4 @@
+class_name AudioPoolService
 extends Node
 
 ## Audio pooling service to reduce churn from short-lived audio nodes.

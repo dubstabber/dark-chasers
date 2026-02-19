@@ -1,3 +1,4 @@
+class_name GameEventBus
 extends Node
 
 const GameEventScript = preload("res://scenes/resources/game_event.gd")

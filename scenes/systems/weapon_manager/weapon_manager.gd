@@ -83,7 +83,7 @@ func _ready() -> void:
 	_setup_weapon_ammo_components()
 	
 	# Connect to player's weapon pickup signal
-	if player and player.has_signal("weapon_added"):
+	if player and WeaponReceiver.check(player):
 		player.weapon_added.connect(_on_weapon_added)
 	
 	# Connect animation player signals to track shooting animations

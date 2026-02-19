@@ -1,3 +1,4 @@
+class_name EnemyContext
 extends Node
 
 const TransitionsDataScript = preload("res://scenes/interfaces/transitions_data.gd")

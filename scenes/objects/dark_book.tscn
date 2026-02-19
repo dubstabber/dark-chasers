@@ -1,10 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://2qiuthtyghl1"]
+[gd_scene load_steps=8 format=3 uid="uid://2qiuthtyghl1"]
 
 [ext_resource type="Texture2D" uid="uid://dpikbkj6vhhfv" path="res://images/objects/dark-book/1068A0.png" id="1_7g4mc"]
 [ext_resource type="Script" uid="uid://bygxc4a42xnp" path="res://scenes/objects/dark_book.gd" id="1_pkehj"]
+[ext_resource type="Script" uid="uid://cjfetq51s581y" path="res://scenes/components/destructible_component.gd" id="3_68sox"]
+[ext_resource type="AudioStream" uid="uid://c30smgd213f78" path="res://sounds/sfx/SND1023.wav" id="4_0d24n"]
+[ext_resource type="Script" uid="uid://cas04n52fxase" path="res://scenes/resources/scrap_definition.gd" id="5_khil7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i1quk"]
 size = Vector3(0.243896, 0.0458984, 0.195312)
+
+[sub_resource type="Resource" id="Resource_sesr4"]
+script = ExtResource("5_khil7")
+scrap_type = "paper scrap"
+count = 18
+metadata/_custom_type_script = "uid://cas04n52fxase"
 
 [node name="DarkBook" type="StaticBody3D" groups=["entity"]]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0)
@@ -20,3 +29,9 @@ billboard = 2
 shaded = true
 texture_filter = 2
 texture = ExtResource("1_7g4mc")
+
+[node name="DestructibleComponent" type="Node" parent="."]
+script = ExtResource("3_68sox")
+destroy_sound = ExtResource("4_0d24n")
+scrap_definitions = Array[ExtResource("5_khil7")]([SubResource("Resource_sesr4")])
+metadata/_custom_type_script = "uid://cjfetq51s581y"

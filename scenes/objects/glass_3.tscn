@@ -1,10 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://nnix111hmhh4"]
+[gd_scene load_steps=8 format=3 uid="uid://nnix111hmhh4"]
 
 [ext_resource type="Script" uid="uid://0lax4sx4ont5" path="res://scenes/objects/break_glass.gd" id="1_5yk5s"]
 [ext_resource type="Texture2D" uid="uid://bo5b7d7pycowb" path="res://images/objects/glasses/1165A0.png" id="2_yxn2v"]
+[ext_resource type="Script" uid="uid://cjfetq51s581y" path="res://scenes/components/destructible_component.gd" id="3_efu4i"]
+[ext_resource type="AudioStream" uid="uid://2u5xhqhrtksv" path="res://sounds/sfx/GLASSBRK.wav" id="4_imp0w"]
+[ext_resource type="Script" uid="uid://cas04n52fxase" path="res://scenes/resources/scrap_definition.gd" id="5_c41rw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q301n"]
 size = Vector3(0.095459, 0.138672, 0.105469)
+
+[sub_resource type="Resource" id="Resource_uckip"]
+script = ExtResource("5_c41rw")
+scrap_type = "glass scrap"
+count = 21
+horizontal_velocity = 7.0
+metadata/_custom_type_script = "uid://cas04n52fxase"
 
 [node name="Glass3" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
@@ -19,3 +29,9 @@ texture = ExtResource("2_yxn2v")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_q301n")
+
+[node name="DestructibleComponent" type="Node" parent="."]
+script = ExtResource("3_efu4i")
+destroy_sound = ExtResource("4_imp0w")
+scrap_definitions = Array[ExtResource("5_c41rw")]([SubResource("Resource_uckip")])
+metadata/_custom_type_script = "uid://cjfetq51s581y"

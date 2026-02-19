@@ -89,11 +89,11 @@ func _play_hit_sound(weapon: WeaponResource, collider: Node, hit_pos: Vector3) -
 
 
 func _apply_damage(weapon: WeaponResource, collider: Node, hit_pos: Vector3) -> void:
-	"""Apply damage to the hit collider using DirectionalDamageable interface"""
+	"""Apply damage to the hit collider using Damageable interface"""
 	var shot_direction := -_bullet_raycast.global_transform.basis.z.normalized()
 
 	# Use typed interface for damage application (priority: directional > positional > basic)
-	DirectionalDamageable.deal_damage(collider, weapon.damage, hit_pos, shot_direction)
+	Damageable.deal_damage(collider, weapon.damage, hit_pos, shot_direction)
 
 	if collider.is_in_group("destroyable"):
 		collider.queue_free()

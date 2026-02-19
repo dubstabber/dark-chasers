@@ -1,3 +1,4 @@
+class_name VfxPoolService
 extends Node
 
 ## VFX pooling service to reduce instancing spikes for bursty effects.

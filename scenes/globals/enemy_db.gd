@@ -1,3 +1,4 @@
+class_name EnemyDb
 extends Node
 
 ## Database of static-image enemy definitions.

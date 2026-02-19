@@ -1,13 +1,10 @@
-class_name AmmoConfig extends RefCounted
+class_name AmmoConfig extends Node
 
 ## Ammo Configuration Class
 ##
 ## This class holds shared ammo type configurations that are used by all players.
 ## It replaces the singleton AmmoManager with a configuration-only approach that
 ## supports multiplayer by providing ammo type definitions without managing state.
-
-# Singleton instance for global access
-static var _instance: AmmoConfig
 
 # Default ammo type configurations shared across all players
 var _default_ammo_configs: Dictionary = {
@@ -17,17 +14,6 @@ var _default_ammo_configs: Dictionary = {
 	"rifle_rounds": {"max": 300, "default": 100},
 	"energy_cells": {"max": 400, "default": 50}
 }
-
-
-static func get_instance() -> AmmoConfig:
-	"""Get the singleton instance of AmmoConfig
-	
-	Returns:
-		AmmoConfig: The singleton instance
-	"""
-	if not _instance:
-		_instance = AmmoConfig.new()
-	return _instance
 
 
 func get_default_ammo_configs() -> Dictionary:

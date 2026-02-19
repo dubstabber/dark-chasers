@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=13 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
@@ -10,6 +10,8 @@
 [ext_resource type="Script" uid="uid://diaw03b2phyih" path="res://scenes/components/enemy/enemy_kill_zone_component.gd" id="8_killzone"]
 [ext_resource type="Script" uid="uid://de28ybvafqnke" path="res://scenes/components/enemy/enemy_motor_component.gd" id="9_motor"]
 [ext_resource type="Script" uid="uid://dc5sm8mi6vrt6" path="res://scenes/components/enemy/enemy_brain.gd" id="10_y5th1"]
+[ext_resource type="Script" uid="uid://drjhbqeko807o" path="res://scenes/components/enemy/enemy_disappear_zone_component.gd" id="11_tihwb"]
+[ext_resource type="Script" uid="uid://47csay82d1kd" path="res://scenes/components/enemy/enemy_transition_component.gd" id="12_p7w77"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -80,6 +82,14 @@ script = ExtResource("9_motor")
 [node name="EnemyBrain" type="Node" parent="."]
 script = ExtResource("10_y5th1")
 metadata/_custom_type_script = "uid://dc5sm8mi6vrt6"
+
+[node name="EnemyDisappearZoneComponent" type="Node" parent="."]
+script = ExtResource("11_tihwb")
+metadata/_custom_type_script = "uid://drjhbqeko807o"
+
+[node name="EnemyTransitionComponent" type="Node" parent="."]
+script = ExtResource("12_p7w77")
+metadata/_custom_type_script = "uid://47csay82d1kd"
 
 [connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
 [connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]

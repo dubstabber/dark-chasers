@@ -11,7 +11,7 @@ func _ready():
 
 	# Test 1: Basic ammo config operations
 	print("\n1. Testing basic ammo config operations:")
-	var config = AmmoConfig.get_instance()
+	var config = Services.ammo_config
 	var pistol_config = config.get_ammo_config("pistol_ammo")
 	print("Pistol ammo config: ", pistol_config)
 

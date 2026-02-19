@@ -62,5 +62,5 @@ func _on_body_entered(body):
 
 		# Keep legacy signal for backward compatibility
 		key_collected.emit(body, key_type, message_text)
-		Services.utils.play_sound(Services.preloads.KEY_COLLECTED_SOUND, body)
+		Services.utils.play_sound(Services.preloads.get_sfx_catalog().key_collected, body)
 		queue_free()

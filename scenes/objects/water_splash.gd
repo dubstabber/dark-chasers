@@ -11,6 +11,7 @@ func _ready():
 
 func _on_body_entered(body):
 	var pitch = base_pitch + randf_range(-pitch_variation, pitch_variation)
-	var player = Services.utils.play_sound(Services.preloads.WATER_SPLASH_SOUND, body, body.global_position, volume_db)
+	var sfx: SfxCatalog = Services.preloads.get_sfx_catalog()
+	var player = Services.utils.play_sound(sfx.water_splash, body, body.global_position, volume_db)
 	if player:
 		player.pitch_scale = pitch

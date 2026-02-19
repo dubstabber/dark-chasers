@@ -38,13 +38,13 @@ func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
-	Services.utils.play_sound(Services.preloads.SPAWN_SOUND, p)
+	Services.utils.play_sound(Services.preloads.get_sfx_catalog().spawn, p)
 
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/TestSpawn.position
 	p.current_room = "FirstFloor"
-	Services.utils.play_sound(Services.preloads.SPAWN_SOUND, p)
+	Services.utils.play_sound(Services.preloads.get_sfx_catalog().spawn, p)
 
 
 func _on_ladder_body_entered(body):

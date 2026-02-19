@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="SfxCatalog" load_steps=12 format=3 uid="uid://sfx_catalog"]
+
+[ext_resource type="Script" path="res://scenes/resources/sfx_catalog.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/DSKEYPIC.wav" id="2_key_collected"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/footsteps/water/DSSPLSML.wav" id="3_water_splash"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/DSSLOP.wav" id="4_kill_player"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/CREVENT.wav" id="5_event_trigger"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/DSTELEPT.ogg" id="6_spawn"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/BARSHAKE.ogg" id="7_bar_shake"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/WALLCUT.wav" id="8_wall_cut"]
+[ext_resource type="AudioStream" path="res://sounds/music/CREEPAMB.wav" id="9_creep_ambience"]
+[ext_resource type="AudioStream" path="res://sounds/music/AOSEE.wav" id="10_ao_see"]
+[ext_resource type="AudioStream" path="res://sounds/music/D_RUNNIN.ogg" id="11_d_running"]
+
+[resource]
+script = ExtResource("1_script")
+key_collected = ExtResource("2_key_collected")
+water_splash = ExtResource("3_water_splash")
+kill_player = ExtResource("4_kill_player")
+event_trigger = ExtResource("5_event_trigger")
+spawn = ExtResource("6_spawn")
+bar_shake = ExtResource("7_bar_shake")
+wall_cut = ExtResource("8_wall_cut")
+creep_ambience = ExtResource("9_creep_ambience")
+ao_see = ExtResource("10_ao_see")
+d_running = ExtResource("11_d_running")

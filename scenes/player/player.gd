@@ -41,7 +41,7 @@ func _ready():
 		_auto_discover_hud()
 
 	if health_component:
-		health_component.death_sound = Services.preloads.KILL_PLAYER_SOUND
+		health_component.death_sound = Services.preloads.get_sfx_catalog().kill_player
 		health_component.damage_taken.connect(_on_health_component_damage_taken)
 
 	if armor_component:

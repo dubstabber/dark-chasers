@@ -17,9 +17,9 @@ func _on_body_entered(body):
 		var healed = HealableInterface.heal(body, heal_value)
 		if healed:
 			if pickup_sound:
-				Utils.play_sound(pickup_sound, get_parent(), position)
+				Services.utils.play_sound(pickup_sound, get_parent(), position)
 			item_pickedup.emit(event_string)
-			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+			Services.event_bus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
 				"message": event_string,
 				"item": self,
 				"body": body
@@ -27,4 +27,4 @@ func _on_body_entered(body):
 			queue_free()
 		else:
 			# Optional: Show message that health is full
-			print("Health is already full!")
+			Services.utils.debug_log("Health: already full")

@@ -54,12 +54,11 @@ func _input(event: InputEvent) -> void:
 		_toggle_debug_camera()
 
 
-func _physics_process(delta: float) -> void:
+## Called by Player._physics_process each frame.
+## Gravity, move_and_slide(), and last_velocity are now owned by Player.
+func process_physics_input(delta: float) -> void:
 	if not player or not movement_component:
 		return
-	
-	if not player.is_on_floor() and not movement_component.clip_mode:
-		player.velocity.y -= _get_gravity() * delta
 	
 	if _is_movement_blocked():
 		_stop_all_movement()
@@ -68,9 +67,6 @@ func _physics_process(delta: float) -> void:
 	if not _is_player_dead():
 		_process_movement_input(delta)
 		_process_action_input()
-	
-	_update_last_velocity()
-	player.move_and_slide()
 
 
 func _process_movement_input(delta: float) -> void:
@@ -124,10 +120,10 @@ func _toggle_debug_camera() -> void:
 		return
 	
 	# Use CameraManager for centralized camera switching
-	if CameraManager.is_camera_active(camera):
-		CameraManager.set_active_camera(debug_cam)
+	if Services.camera_manager.is_camera_active(camera):
+		Services.camera_manager.set_active_camera(debug_cam)
 	else:
-		CameraManager.set_active_camera(camera)
+		Services.camera_manager.set_active_camera(camera)
 	debug_camera_toggled.emit()
 
 
@@ -157,11 +153,6 @@ func _get_last_velocity_y() -> float:
 	if player:
 		return player.last_velocity.y
 	return 0.0
-
-
-func _update_last_velocity() -> void:
-	if player:
-		player.last_velocity = player.velocity
 
 
 func _stop_all_movement() -> void:

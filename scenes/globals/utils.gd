@@ -27,10 +27,20 @@ func play_sound(sound_source: AudioStream, parent_node: Node = self, pos: Vector
 	var final_pos = pos
 	if pos == Vector3.ZERO and parent_node is Node3D:
 		final_pos = parent_node.global_position
-	return AudioPoolService.play_sound_3d(sound_source, final_pos, volume)
+	return Services.audio_pool.play_sound_3d(sound_source, final_pos, volume)
 
 
 func play_footstep_sound(sound_source: AudioStream, parent_node: Node = self):
 	# Use pooled audio service (parent_node kept for API compatibility)
 	var pos = parent_node.global_position if parent_node is Node3D else Vector3.ZERO
-	return AudioPoolService.play_footstep(sound_source, pos)
+	return Services.audio_pool.play_footstep(sound_source, pos)
+
+
+func debug_log(message: String) -> void:
+	if OS.is_debug_build() or Engine.is_editor_hint():
+		print(message)
+
+
+func debug_warning(message: String) -> void:
+	if OS.is_debug_build() or Engine.is_editor_hint():
+		push_warning(message)

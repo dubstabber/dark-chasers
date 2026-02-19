@@ -15,11 +15,11 @@ var keys_collected: Array = []
 
 func _ready():
 	# Register with context services (replaces group-based discovery)
-	WorldContext.set_level_node(self)
+	Services.world_context.set_level_node(self)
 	if players:
-		EnemyContext.set_players_node(players)
+		Services.enemy_context.set_players_node(players)
 	if transitions:
-		EnemyContext.set_transitions_node(transitions)
+		Services.enemy_context.set_transitions_node(transitions)
 	
 	# Keep groups as fallback/debug convenience (can be removed later)
 	add_to_group("level")
@@ -30,11 +30,11 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	# Subscribe to typed events from GameEventBus (replaces group-based signal wiring)
-	GameEventBus.subscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
-	GameEventBus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
-	GameEventBus.subscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
-	GameEventBus.subscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
-	GameEventBus.subscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
+	Services.event_bus.subscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
+	Services.event_bus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
+	Services.event_bus.subscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
+	Services.event_bus.subscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
+	Services.event_bus.subscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
 	
 	if transitions:
 		for t in transitions.get_children():
@@ -48,11 +48,11 @@ func _ready():
 
 func _exit_tree():
 	# Unsubscribe from event bus when level is removed
-	GameEventBus.unsubscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
-	GameEventBus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
-	GameEventBus.unsubscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
-	GameEventBus.unsubscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
-	GameEventBus.unsubscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
+	Services.event_bus.unsubscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
+	Services.event_bus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
+	Services.event_bus.unsubscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
+	Services.event_bus.unsubscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
+	Services.event_bus.unsubscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
 
 
 # === GENERIC EVENT HANDLERS ===
@@ -71,7 +71,7 @@ func _on_button_event(event: RefCounted) -> void:
 	# Handle camera switching if button has a temporary_camera configured
 	var camera = event.get_node("camera")
 	if camera:
-		CameraManager.set_active_camera(camera)
+		Services.camera_manager.set_active_camera(camera)
 
 	# Handle door opening if button has a door_to_open configured
 	var door = event.get_node("door")
@@ -83,7 +83,7 @@ func _on_area_event(event: RefCounted) -> void:
 	# Handle camera switching if area has a temporary_camera configured
 	var camera = event.get_node("camera")
 	if camera:
-		CameraManager.set_active_camera(camera)
+		Services.camera_manager.set_active_camera(camera)
 
 	# Handle door opening if area has a door_to_open configured
 	var door = event.get_node("door")
@@ -151,7 +151,7 @@ func _key_body_entered(body, key_type, message_text):
 		hud.add_log(message_text)
 
 	# Add key to collection if not already collected
-	if key_type and key_type not in keys_collected:
+	if key_type and key_type != "useless" and key_type not in keys_collected:
 		keys_collected.push_back(key_type)
 
 		# Update the key display in the HUD

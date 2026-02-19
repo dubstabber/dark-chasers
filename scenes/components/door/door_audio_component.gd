@@ -20,24 +20,24 @@ func setup(parent: Node3D) -> void:
 
 func play_open_sound() -> void:
 	if open_sound and _sound_parent:
-		var new_sound = Utils.play_sound(open_sound, _sound_parent)
+		var new_sound = Services.utils.play_sound(open_sound, _sound_parent)
 		_update_current_sound_reference(new_sound, true)
 
 
 func play_close_sound() -> void:
 	if close_sound and _sound_parent:
-		var new_sound = Utils.play_sound(close_sound, _sound_parent)
+		var new_sound = Services.utils.play_sound(close_sound, _sound_parent)
 		_update_current_sound_reference(new_sound, false)
 
 
 func play_stop_sound() -> void:
 	if stop_sound and _sound_parent:
-		Utils.play_sound(stop_sound, _sound_parent)
+		Services.utils.play_sound(stop_sound, _sound_parent)
 
 
 func play_locked_sound() -> void:
 	if locked_sound and _sound_parent:
-		Utils.play_sound(locked_sound, _sound_parent)
+		Services.utils.play_sound(locked_sound, _sound_parent)
 
 
 func stop_looping_sounds() -> void:

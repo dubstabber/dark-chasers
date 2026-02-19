@@ -9,6 +9,8 @@ func _ready():
 	test_weapon_hit_executor_creation()
 	test_weapon_resource_is_pure_config()
 	test_weapon_manager_fire_methods_exist()
+	test_weapon_manager_owns_ammo_wiring()
+	test_player_no_ammo_wiring()
 	
 	print("=== ALL WEAPON SYSTEM REFACTOR TESTS COMPLETED ===")
 
@@ -46,7 +48,7 @@ func test_weapon_manager_fire_methods_exist():
 	
 	# We can't instantiate WeaponManager without a scene, but we can verify the class exists
 	# and check method existence via script inspection
-	var script = load("res://weapon_manager/weapon_manager.gd") as GDScript
+	var script = load("res://scenes/systems/weapon_manager/weapon_manager.gd") as GDScript
 	assert(script != null, "WeaponManager script should load")
 	
 	# Check that the script source contains the new public methods
@@ -60,6 +62,34 @@ func test_weapon_manager_fire_methods_exist():
 	assert("Input.is_action_just_pressed" not in source, "WeaponManager should not poll Input directly")
 	assert("_unhandled_input" not in source, "WeaponManager should not have _unhandled_input")
 	print("✓ WeaponManager has public fire methods and no input polling")
+
+
+func test_weapon_manager_owns_ammo_wiring():
+	print("\n--- Testing WeaponManager owns ammo wiring ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_manager.gd") as GDScript
+	var source = script.source_code
+	
+	# WeaponManager must have _setup_weapon_ammo_components
+	assert("func _setup_weapon_ammo_components" in source, "WeaponManager should have _setup_weapon_ammo_components")
+	# WeaponManager must wire ammo_component on pickup
+	assert("ammo_component = player_ammo_component" in source, "WeaponManager should wire ammo_component")
+	# WeaponManager must wire weapon_manager reference
+	assert("weapon_manager = self" in source, "WeaponManager should wire weapon_manager = self")
+	
+	print("✓ WeaponManager is sole owner of ammo wiring")
+
+
+func test_player_no_ammo_wiring():
+	print("\n--- Testing Player has no ammo wiring ---")
+	
+	var script = load("res://scenes/player/player.gd") as GDScript
+	var source = script.source_code
+	
+	# Player must NOT have _setup_weapon_ammo_components (moved to WeaponManager)
+	assert("func _setup_weapon_ammo_components" not in source, "Player should NOT have _setup_weapon_ammo_components (WeaponManager owns this)")
+	
+	print("✓ Player has no ammo wiring (WeaponManager owns it)")
 
 
 func test_weapon_input_component_exists():

@@ -35,29 +35,33 @@ func try_interact() -> bool:
 		return false
 	
 	var collider = interaction_raycast.get_collider()
-	if not collider:
-		# Check for pending transit
+	if collider:
+		interacted.emit(collider)
+
+		# Handle door interaction using Openable interface
+		var root_node = collider.get_parent()
+		if root_node is Openable:
+			root_node.open_with_point(interaction_raycast.get_collision_point(), player)
+			door_opened.emit(root_node)
+			return true
+
+		# Handle button interaction - buttons are in "button" group and have press() method
+		# Note: Button is a known scene type, so we can call press() directly
+		if collider.is_in_group("button"):
+			collider.press(player)
+			button_pressed.emit(collider)
+			return true
+
+		# If we hit a non-interactable collider (wall/prop/etc), still allow transit usage.
 		if pending_transit:
 			_use_transit()
 			return true
 		return false
-	
-	interacted.emit(collider)
 
-	# Handle door interaction using Openable interface
-	var root_node = collider.get_parent()
-	if root_node is Openable:
-		root_node.open_with_point(interaction_raycast.get_collision_point(), player)
-		door_opened.emit(root_node)
+	# No collider hit: check for pending transit
+	if pending_transit:
+		_use_transit()
 		return true
-
-	# Handle button interaction - buttons are in "button" group and have press() method
-	# Note: Button is a known scene type, so we can call press() directly
-	if collider.is_in_group("button"):
-		collider.press(player)
-		button_pressed.emit(collider)
-		return true
-
 	return false
 
 

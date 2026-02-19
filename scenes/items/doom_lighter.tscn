@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://b4b0lxjduwj4b" path="res://images/items/LIT1H0.png" id="1_8kfoi"]
 [ext_resource type="Script" uid="uid://ck4p816vkcs66" path="res://scenes/items/wieldable.gd" id="1_up2y7"]
-[ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://weapon_manager/weapons/doom_lighter.tres" id="2_1ie13"]
+[ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://scenes/systems/weapon_manager/weapons/doom_lighter.tres" id="2_1ie13"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8kfoi"]
 size = Vector3(0.293564, 0.246067, 0.288145)

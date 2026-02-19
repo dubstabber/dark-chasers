@@ -20,13 +20,13 @@ func _on_body_entered(body: Node3D) -> void:
 		# Only consume the item if armor was successfully added
 		if armor_added:
 			if pickup_sound:
-				Utils.play_sound(pickup_sound, get_parent(), position)
+				Services.utils.play_sound(pickup_sound, get_parent(), position)
 			item_pickedup.emit(event_string)
-			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+			Services.event_bus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
 				"message": event_string,
 				"item": self,
 				"body": body
 			}, self)
 			queue_free()
 		else:
-			print("Armor is already at maximum!")
+			Services.utils.debug_log("Shield: armor already at maximum")

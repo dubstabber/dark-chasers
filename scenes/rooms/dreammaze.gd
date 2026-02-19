@@ -7,7 +7,7 @@ func _ready():
 	
 
 func spawn_player():
-	var player = Preloads.PLAYER_SCENE.instantiate() as Player
+	var player = Services.preloads.PLAYER_SCENE.instantiate() as Player
 	players.add_child(player)
 	setup_player(player) # Centralized HUD connection via Level base class
 	respawn(player)

@@ -1,7 +1,10 @@
 extends Node
 
 ## Tests for Phase 4: Movement/Input responsibility separation
-## Verifies that PlayerMovementComponent no longer reads Input directly
+## Verifies that:
+## - PlayerMovementComponent no longer reads Input directly
+## - Player owns _physics_process (gravity, move_and_slide, last_velocity)
+## - PlayerInputComponent does NOT have its own _physics_process
 
 func _ready():
 	print("=== MOVEMENT INPUT SEPARATION TESTS ===")
@@ -9,6 +12,9 @@ func _ready():
 	test_movement_component_no_input_polling()
 	test_movement_accepts_input_state_params()
 	test_input_component_passes_state()
+	test_player_owns_physics_process()
+	test_input_component_no_physics_process()
+	test_player_owns_move_and_slide()
 	
 	print("=== ALL MOVEMENT INPUT SEPARATION TESTS COMPLETED ===")
 
@@ -53,3 +59,39 @@ func test_input_component_passes_state():
 	assert("is_crouching, is_sprinting" in source or "is_crouching_input, is_sprinting_input" in source or "is_crouching, is_sprinting)" in source, "PlayerInputComponent should pass crouch/sprint state to movement")
 	
 	print("✓ PlayerInputComponent passes input state to movement component")
+
+
+func test_player_owns_physics_process():
+	print("\n--- Testing Player owns _physics_process ---")
+	
+	var script = load("res://scenes/player/player.gd") as GDScript
+	var source = script.source_code
+	
+	assert("func _physics_process" in source, "Player should define _physics_process")
+	assert("velocity.y -= gravity" in source, "Player should apply gravity")
+	
+	print("✓ Player owns _physics_process with gravity")
+
+
+func test_input_component_no_physics_process():
+	print("\n--- Testing PlayerInputComponent has no _physics_process ---")
+	
+	var script = load("res://scenes/components/input/player_input_component.gd") as GDScript
+	var source = script.source_code
+	
+	assert("func _physics_process" not in source, "PlayerInputComponent should NOT define _physics_process")
+	assert("process_physics_input" in source, "PlayerInputComponent should expose process_physics_input for Player to call")
+	
+	print("✓ PlayerInputComponent has no _physics_process (Player calls it)")
+
+
+func test_player_owns_move_and_slide():
+	print("\n--- Testing Player owns move_and_slide ---")
+	
+	var player_src = load("res://scenes/player/player.gd").source_code
+	var input_src = load("res://scenes/components/input/player_input_component.gd").source_code
+	
+	assert("move_and_slide()" in player_src, "Player should call move_and_slide()")
+	assert("move_and_slide()" not in input_src, "PlayerInputComponent should NOT call move_and_slide()")
+	
+	print("✓ Player owns move_and_slide (not input component)")

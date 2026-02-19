@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://j6edle4gs6tp" path="res://images/items/KTCRH0.png" id="1_srs15"]
 [ext_resource type="Script" uid="uid://ck4p816vkcs66" path="res://scenes/items/wieldable.gd" id="1_wihrt"]
-[ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://weapon_manager/weapons/silver_crowbar.tres" id="2_yu2la"]
+[ext_resource type="Resource" uid="uid://djpa0nptavvfd" path="res://scenes/systems/weapon_manager/weapons/silver_crowbar.tres" id="2_yu2la"]
 [ext_resource type="AudioStream" uid="uid://lkgpafvrsw8t" path="res://sounds/sfx/CROWPICK.wav" id="3_yu2la"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_srs15"]

@@ -235,7 +235,7 @@ func _spawn_corpse() -> void:
 	if not player or not corpse_sprite:
 		return
 	# Use WorldContext for explicit corpse container access (replaces group scan)
-	var corpses_parent = WorldContext.get_corpses_node()
+	var corpses_parent = Services.world_context.get_corpses_node()
 	if not corpses_parent:
 		return
 	var corpse_copy = corpse_sprite.duplicate()

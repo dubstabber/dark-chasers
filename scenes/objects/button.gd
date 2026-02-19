@@ -29,7 +29,7 @@ func press(body):
 		#
 		# The event_type_id is the SOLE stable identity - no event_name string dispatch.
 		if event_type_id != &"":
-			GameEventBus.emit(event_type_id, {
+			Services.event_bus.emit(event_type_id, {
 				"body": body,
 				"button": self,
 				"door": door_to_open,
@@ -38,7 +38,7 @@ func press(body):
 
 		# Also emit generic BUTTON_PRESSED for base Level class handling
 		# (camera switching, door opening from payload)
-		GameEventBus.emit(GameEventTypesScript.BUTTON_PRESSED, {
+		Services.event_bus.emit(GameEventTypesScript.BUTTON_PRESSED, {
 			"body": body,
 			"button": self,
 			"door": door_to_open,
@@ -50,19 +50,14 @@ func press(body):
 
 		is_pressed = true
 		change_sprite()
-		if press_sound: Utils.play_sound(press_sound, self)
+		if press_sound: Services.utils.play_sound(press_sound, self)
 		if not one_use:
 			await get_tree().create_timer(1.0).timeout
 			is_pressed = false
 			change_sprite()
-			if press_sound: Utils.play_sound(press_sound, self)
+			if press_sound: Services.utils.play_sound(press_sound, self)
 
 
 func change_sprite():
-	match button_type:
-		"lever":
-			if is_pressed: sprite_3d.texture = Preloads.BUTTON_DOWN_5_IMAGE
-			else: sprite_3d.texture = Preloads.BUTTON_UP_5_IMAGE
-		"circle":
-			if is_pressed: sprite_3d.texture = Preloads.BUTTON_DOWN_1_IMAGE
-			else: sprite_3d.texture = Preloads.BUTTON_UP_1_IMAGE
+	if sprite_3d and button_type:
+		sprite_3d.texture = Services.preloads.get_button_images().get_texture(button_type, is_pressed)

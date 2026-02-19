@@ -6,6 +6,37 @@ extends RefCounted
 
 # Static atlas cache: signature -> {texture: ImageTexture, max_sprite_size: Vector2i}
 static var _atlas_cache: Dictionary = {}
+static var _atlas_cache_order: Array[String] = []
+
+
+static func clear_cache() -> void:
+	_atlas_cache.clear()
+	_atlas_cache_order.clear()
+
+
+static func _get_max_cache_size() -> int:
+	if Engine.is_editor_hint():
+		return 256
+	return 64
+
+
+static func _touch_signature(signature: String) -> void:
+	var idx := _atlas_cache_order.find(signature)
+	if idx >= 0:
+		_atlas_cache_order.remove_at(idx)
+	_atlas_cache_order.append(signature)
+
+
+static func _evict_if_needed(max_size: int) -> void:
+	while _atlas_cache_order.size() > max_size:
+		var oldest: String = _atlas_cache_order.pop_front()
+		_atlas_cache.erase(oldest)
+
+
+static func _put_cache(signature: String, atlas_texture: ImageTexture, max_sprite_size: Vector2i) -> void:
+	_atlas_cache[signature] = {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
+	_touch_signature(signature)
+	_evict_if_needed(_get_max_cache_size())
 
 
 static func generate(
@@ -42,6 +73,7 @@ static func generate(
 	
 	if signature in _atlas_cache:
 		var cached = _atlas_cache[signature]
+		_touch_signature(signature)
 		return {"texture": cached.texture, "max_sprite_size": cached.max_sprite_size}
 	
 	# Collect sprites and determine dimensions
@@ -59,7 +91,7 @@ static func generate(
 	
 	# Store in cache
 	if atlas_texture:
-		_atlas_cache[signature] = {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
+		_put_cache(signature, atlas_texture, max_sprite_size)
 	
 	return {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
 

@@ -2,4 +2,5 @@ extends Decal
 
 
 func _ready() -> void:
-	texture_albedo = Preloads.DOOM_DECAL_IMAGES[randi() % Preloads.DOOM_DECAL_IMAGES.size()]
+	var catalog: ParticleCatalog = Services.preloads.get_particle_catalog()
+	texture_albedo = catalog.get_random_doom_decal()

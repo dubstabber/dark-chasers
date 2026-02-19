@@ -44,7 +44,7 @@ func play_sequence(sequence: RefCounted) -> void:
 	_can_skip = sequence.skippable
 	
 	sequence_started.emit(sequence.id)
-	GameEventBus.emit(GameEventTypesScript.SEQUENCE_STARTED, {"sequence_id": sequence.id})
+	Services.event_bus.emit(GameEventTypesScript.SEQUENCE_STARTED, {"sequence_id": sequence.id})
 	
 	await _execute_sequence()
 
@@ -87,7 +87,7 @@ func _end_current() -> void:
 	_current_step = 0
 	
 	sequence_ended.emit(ended_id)
-	GameEventBus.emit(GameEventTypesScript.SEQUENCE_ENDED, {"sequence_id": ended_id})
+	Services.event_bus.emit(GameEventTypesScript.SEQUENCE_ENDED, {"sequence_id": ended_id})
 	
 	# Play next queued sequence
 	if not _sequence_queue.is_empty():
@@ -108,7 +108,7 @@ func _execute_sequence() -> void:
 		await _execute_action(action)
 		
 		sequence_step_completed.emit(_current_sequence.id, i)
-		GameEventBus.emit(GameEventTypesScript.SEQUENCE_STEP, {
+		Services.event_bus.emit(GameEventTypesScript.SEQUENCE_STEP, {
 			"sequence_id": _current_sequence.id,
 			"step_index": i
 		})
@@ -129,14 +129,14 @@ func _execute_action(action: RefCounted) -> void:
 		
 		SequenceActionScript.Type.CAMERA_CUT:
 			if action.camera:
-				CameraManager.set_active_camera(action.camera)
+				Services.camera_manager.set_active_camera(action.camera)
 		
 		SequenceActionScript.Type.CAMERA_RESTORE:
 			_restore_player_cameras()
 		
 		SequenceActionScript.Type.PLAY_SOUND:
 			if action.sound:
-				Utils.play_sound(action.sound, action.sound_source, action.position, action.volume_db)
+				Services.utils.play_sound(action.sound, action.sound_source, action.position, action.volume_db)
 		
 		SequenceActionScript.Type.SHOW_TEXT:
 			_show_event_text(action.text, action.duration)
@@ -165,7 +165,7 @@ func _block_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = true
-	GameEventBus.emit(GameEventTypesScript.PLAYER_BLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypesScript.PLAYER_BLOCKED, {"players": players})
 
 
 func _unblock_players(targets: Array[Node]) -> void:
@@ -173,31 +173,31 @@ func _unblock_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = false
-	GameEventBus.emit(GameEventTypesScript.PLAYER_UNBLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypesScript.PLAYER_UNBLOCKED, {"players": players})
 
 
 func _get_players(targets: Array[Node]) -> Array[Node]:
 	if not targets.is_empty():
 		return targets
-	return Array(EnemyContext.get_players(), TYPE_OBJECT, &"Node", null)
+	return Array(Services.enemy_context.get_players(), TYPE_OBJECT, &"Node", null)
 
 
 func _restore_player_cameras() -> void:
-	var players := EnemyContext.get_players()
+	var players = Services.enemy_context.get_players()
 	for player in players:
 		if player is Player and player.camera_3d:
-			CameraManager.set_active_camera(player.camera_3d)
+			Services.camera_manager.set_active_camera(player.camera_3d)
 			break
 
 
 func _show_event_text(text: String, duration: float) -> void:
-	var hud := WorldContext.get_hud()
+	var hud = Services.world_context.get_hud()
 	if hud:
 		hud.show_event_text(text, false, duration)
 
 
 func _hide_event_text() -> void:
-	var hud := WorldContext.get_hud()
+	var hud = Services.world_context.get_hud()
 	if hud:
 		hud.hide_event_text()
 
@@ -206,7 +206,7 @@ func _spawn_enemy(action: RefCounted) -> void:
 	if not action.enemy_scene:
 		return
 	
-	var enemies_node := WorldContext.get_enemies_node()
+	var enemies_node = Services.world_context.get_enemies_node()
 	if not enemies_node:
 		return
 	
@@ -222,7 +222,7 @@ func _spawn_enemy(action: RefCounted) -> void:
 
 
 func _play_music(action: RefCounted) -> void:
-	var level := WorldContext.get_level_node()
+	var level = Services.world_context.get_level_node()
 	if not level:
 		return
 	
@@ -234,7 +234,7 @@ func _play_music(action: RefCounted) -> void:
 
 
 func _stop_music() -> void:
-	var level := WorldContext.get_level_node()
+	var level = Services.world_context.get_level_node()
 	if not level:
 		return
 	

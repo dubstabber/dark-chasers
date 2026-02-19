@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 var scrap_type: String
+var _catalog: ParticleCatalog
 
 var grounded_frame: int
 var is_moving: bool = true
@@ -12,6 +13,7 @@ var is_settled: bool = false # Track if particle has settled to prevent further 
 @onready var sprite_3d = $Sprite3D
 
 func _ready():
+	_catalog = Services.preloads.get_particle_catalog()
 	# Ensure immediate initialization to prevent spawn delays
 	if scrap_type:
 		_initialize_texture()
@@ -29,40 +31,40 @@ func _process(delta):
 
 	match scrap_type:
 		"small wood scrap":
-			_handle_scrap_animation(Preloads.SMALL_WOOD_IMAGES)
+			_handle_scrap_animation(_catalog.small_wood_images)
 		"big wood scrap":
-			_handle_scrap_animation(Preloads.BIG_WOOD_IMAGES)
+			_handle_scrap_animation(_catalog.big_wood_images)
 		"white scrap":
-			_handle_scrap_animation(Preloads.WHITE_SCRAP_IMAGES)
+			_handle_scrap_animation(_catalog.white_scrap_images)
 		"pot scrap":
-			_handle_scrap_animation(Preloads.POT_SCRAP_IMAGES)
+			_handle_scrap_animation(_catalog.pot_scrap_images)
 		"circle ground scrap":
 			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
-				if sprite_3d.texture != Preloads.CIRCLE_GROUND_SCRAP_IMAGE:
-					sprite_3d.texture = Preloads.CIRCLE_GROUND_SCRAP_IMAGE
+				if sprite_3d.texture != _catalog.circle_ground_scrap_image:
+					sprite_3d.texture = _catalog.circle_ground_scrap_image
 			else:
 				queue_free()
 		"small ground scrap":
 			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
-				if sprite_3d.texture != Preloads.SMALL_GROUND_SCRAP_IMAGE:
-					sprite_3d.texture = Preloads.SMALL_GROUND_SCRAP_IMAGE
+				if sprite_3d.texture != _catalog.small_ground_scrap_image:
+					sprite_3d.texture = _catalog.small_ground_scrap_image
 			else:
 				queue_free()
 		"grass scrap":
 			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
-				sprite_3d.texture = Preloads.GRASS_SCRAP_IMAGES.pick_random()
+				sprite_3d.texture = _catalog.grass_scrap_images.pick_random()
 			else:
 				queue_free()
 		"paper scrap":
 			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
 				if not sprite_3d.texture:
-					sprite_3d.texture = Preloads.PAPER_SCRAP_IMAGES.pick_random()
+					sprite_3d.texture = _catalog.paper_scrap_images.pick_random()
 			else:
 				queue_free()
 		"glass scrap":
 			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
 				if not sprite_3d.texture:
-					sprite_3d.texture = Preloads.GLASS_SCRAP_IMAGES.pick_random()
+					sprite_3d.texture = _catalog.glass_scrap_images.pick_random()
 			else:
 				queue_free()
 
@@ -96,34 +98,38 @@ func _initialize_texture():
 	if not sprite_3d:
 		sprite_3d = $Sprite3D
 
+	# Ensure catalog is loaded for set_scrap_type calls before _ready
+	if not _catalog:
+		_catalog = Services.preloads.get_particle_catalog()
+	
 	# Set initial texture immediately to prevent delay
 	if sprite_3d and scrap_type:
 		match scrap_type:
 			"small wood scrap":
-				current_texture_index = randi() % Preloads.SMALL_WOOD_IMAGES.size()
-				sprite_3d.texture = Preloads.SMALL_WOOD_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.small_wood_images.size()
+				sprite_3d.texture = _catalog.small_wood_images[current_texture_index]
 			"big wood scrap":
-				current_texture_index = randi() % Preloads.BIG_WOOD_IMAGES.size()
-				sprite_3d.texture = Preloads.BIG_WOOD_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.big_wood_images.size()
+				sprite_3d.texture = _catalog.big_wood_images[current_texture_index]
 			"white scrap":
-				current_texture_index = randi() % Preloads.WHITE_SCRAP_IMAGES.size()
-				sprite_3d.texture = Preloads.WHITE_SCRAP_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.white_scrap_images.size()
+				sprite_3d.texture = _catalog.white_scrap_images[current_texture_index]
 			"pot scrap":
-				current_texture_index = randi() % Preloads.POT_SCRAP_IMAGES.size()
-				sprite_3d.texture = Preloads.POT_SCRAP_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.pot_scrap_images.size()
+				sprite_3d.texture = _catalog.pot_scrap_images[current_texture_index]
 			"circle ground scrap":
-				sprite_3d.texture = Preloads.CIRCLE_GROUND_SCRAP_IMAGE
+				sprite_3d.texture = _catalog.circle_ground_scrap_image
 			"small ground scrap":
-				sprite_3d.texture = Preloads.SMALL_GROUND_SCRAP_IMAGE
+				sprite_3d.texture = _catalog.small_ground_scrap_image
 			"grass scrap":
-				current_texture_index = randi() % Preloads.GRASS_SCRAP_IMAGES.size()
-				sprite_3d.texture = Preloads.GRASS_SCRAP_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.grass_scrap_images.size()
+				sprite_3d.texture = _catalog.grass_scrap_images[current_texture_index]
 			"paper scrap":
-				current_texture_index = randi() % Preloads.PAPER_SCRAP_IMAGES.size()
-				sprite_3d.texture = Preloads.PAPER_SCRAP_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.paper_scrap_images.size()
+				sprite_3d.texture = _catalog.paper_scrap_images[current_texture_index]
 			"glass scrap":
-				current_texture_index = randi() % Preloads.GLASS_SCRAP_IMAGES.size()
-				sprite_3d.texture = Preloads.GLASS_SCRAP_IMAGES[current_texture_index]
+				current_texture_index = randi() % _catalog.glass_scrap_images.size()
+				sprite_3d.texture = _catalog.glass_scrap_images[current_texture_index]
 
 func _handle_scrap_animation(texture_array: Array):
 	var velocity_threshold = 0.06

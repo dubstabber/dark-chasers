@@ -19,4 +19,4 @@ func _on_triggered(_body = null) -> void:
 
 func trigger() -> void:
 	if target_camera:
-		CameraManager.set_active_camera(target_camera)
+		Services.camera_manager.set_active_camera(target_camera)

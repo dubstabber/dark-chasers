@@ -7,8 +7,8 @@ const GameEventScript = preload("res://scenes/resources/game_event.gd")
 ##
 ## Usage:
 ##   - Add as autoload named "GameEventBus" in Project Settings
-##   - Emit: GameEventBus.emit_event(GameEvent.new(&"event_type", {payload}))
-##   - Subscribe: GameEventBus.subscribe(&"event_type", callback)
+##   - Emit: Services.event_bus.emit_event(GameEvent.new(&"event_type", {payload}))
+##   - Subscribe: Services.event_bus.subscribe(&"event_type", callback)
 
 signal event_emitted(event: RefCounted)
 

@@ -52,7 +52,7 @@ func is_wandering() -> bool:
 	return _is_wandering
 
 
-func update(delta: float) -> void:
+func update(_delta: float) -> void:
 	if not enabled or not _is_wandering:
 		return
 	
@@ -78,7 +78,7 @@ func _turn_around() -> void:
 	direction = - direction.normalized()
 	direction_changed.emit(direction)
 	if _debug_prints:
-		print("Wandering: turned around, new direction: ", direction)
+		Services.utils.debug_log("Wandering: turned around, new direction: %s" % direction)
 
 
 func _change_direction() -> void:

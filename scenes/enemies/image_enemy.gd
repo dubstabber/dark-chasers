@@ -19,9 +19,9 @@ func _ready():
 	
 	# Get enemy definition by name or pick random
 	if specific_enemy:
-		enemy_data = EnemyDb.get_by_name(specific_enemy)
+		enemy_data = Services.enemy_db.get_by_name(specific_enemy)
 	if not enemy_data:
-		enemy_data = EnemyDb.get_random()
+		enemy_data = Services.enemy_db.get_random()
 	
 	image.texture = enemy_data.image
 	

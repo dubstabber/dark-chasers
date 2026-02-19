@@ -192,12 +192,12 @@ func _register_ammo_type(ammo_type: String, max_amount: int = 100, initial_amoun
 
 func debug_print_ammo_status() -> void:
 	"""Print current ammo status for all types (debug only)"""
-	print("=== Player Ammo Status ===")
+	Services.utils.debug_log("=== Player Ammo Status ===")
 	for ammo_type in get_all_ammo_types():
 		var current = get_ammo(ammo_type)
 		var max_amount = get_max_ammo(ammo_type)
 		var percentage = get_ammo_percentage(ammo_type)
-		print("%s: %d/%d (%.1f%%)" % [ammo_type, current, max_amount, percentage * 100])
+		Services.utils.debug_log("%s: %d/%d (%.1f%%)" % [ammo_type, current, max_amount, percentage * 100])
 
 
 func reset_all_ammo() -> void:

@@ -86,13 +86,13 @@ func _exit_tree() -> void:
 
 func _toggle_door(force := false) -> void:
 	var is_unlocked := true
-	if not force and key_needed and not WorldContext.has_key(key_needed):
+	if not force and key_needed and not Services.world_context.has_key(key_needed):
 		is_unlocked = false
 
 	if not is_unlocked:
 		door_locked.emit(locked_message, _triggering_player)
 		if not Engine.is_editor_hint():
-			GameEventBus.emit(GameEventTypesScript.DOOR_LOCKED, {
+			Services.event_bus.emit(GameEventTypesScript.DOOR_LOCKED, {
 				"text": locked_message,
 				"triggering_player": _triggering_player,
 				"door": self
@@ -188,7 +188,7 @@ func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null
 			_audio_component.play_locked_sound()
 		door_locked.emit(locked_message, _triggering_player)
 		if not Engine.is_editor_hint():
-			GameEventBus.emit(GameEventTypesScript.DOOR_LOCKED, {
+			Services.event_bus.emit(GameEventTypesScript.DOOR_LOCKED, {
 				"text": locked_message,
 				"triggering_player": _triggering_player,
 				"door": self

@@ -205,7 +205,7 @@ func _play_sound(sound: AudioStream):
 		# Use typed check for Node3D which has global_position
 		if owner_node and owner_node is Node3D:
 			pos = owner_node.global_position
-		Utils.play_sound(sound, get_tree().root, pos)
+		Services.utils.play_sound(sound, get_tree().root, pos)
 
 # Convenience methods for common use cases
 func damage(amount: int) -> bool:

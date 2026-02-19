@@ -32,7 +32,7 @@ var _crouching_depth: float = -0.5
 
 func _ready():
 	_validate_node_references()
-	CameraManager.register_camera(self)
+	Services.camera_manager.register_camera(self)
 
 
 func _validate_node_references() -> void:

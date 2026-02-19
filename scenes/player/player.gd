@@ -21,7 +21,7 @@ var debug_camera: Camera3D # temporary
 @onready var camera_3d = $nek/head/eyes/Camera3D # PlayerCamera extends Camera3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer
 @onready var sprite_animation_player = $SpriteAnimationPlayer
-@onready var footstep_surface_detector: FootstepSurfaceDetector = $FootstepSurfaceDetector
+@onready var footstep_surface_detector = $FootstepSurfaceDetector
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var armor_component = $ArmorComponent
 @onready var ammo_component: PlayerAmmoComponent = $PlayerAmmoComponent
@@ -41,17 +41,35 @@ func _ready():
 		_auto_discover_hud()
 
 	if health_component:
-		health_component.death_sound = Preloads.KILL_PLAYER_SOUND
+		health_component.death_sound = Services.preloads.KILL_PLAYER_SOUND
 		health_component.damage_taken.connect(_on_health_component_damage_taken)
 
 	if armor_component:
 		armor_component.max_armor = 100
 		armor_component.current_armor = 0
 
-	if weapon_manager:
-		_setup_weapon_ammo_components()
-	
 	_setup_modular_components()
+
+
+func _physics_process(delta: float) -> void:
+	# Player owns the physics step (gravity, move_and_slide, last_velocity).
+	# Input gathering and movement math are delegated to components.
+	if not movement_component:
+		return
+
+	# Apply gravity
+	if not is_on_floor() and not movement_component.clip_mode:
+		velocity.y -= gravity * delta
+
+	# Let input component gather input and feed movement component
+	if input_component:
+		input_component.process_physics_input(delta)
+
+	# Record velocity before move for landing detection etc.
+	last_velocity = velocity
+
+	# Execute the actual physics move
+	move_and_slide()
 
 
 func _setup_modular_components() -> void:
@@ -155,17 +173,6 @@ func _auto_discover_hud() -> void:
 	if hud_nodes.size() > 0:
 		push_warning("Player: Auto-discovered HUD via group fallback. Prefer explicit wiring.")
 		set_hud(hud_nodes[0])
-
-
-func _setup_weapon_ammo_components():
-	"""Set up ammo component references for all weapons in the weapon manager"""
-	if not weapon_manager or not ammo_component:
-		return
-
-	for slot_index in range(1, 10): # Slots 1-9
-		var slot_weapons = weapon_manager.get_slot_weapons(slot_index)
-		for weapon in slot_weapons:
-			weapon.ammo_component = ammo_component
 
 
 func respawn(health_amount: int = -1):

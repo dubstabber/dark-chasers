@@ -82,7 +82,7 @@ func _create_key_column() -> MarginContainer:
 
 func _create_key_texture_rect(key_type: String) -> MarginContainer:
 	"""Create a TextureRect for a specific key type wrapped in a MarginContainer"""
-	var tex = Preloads.get_key_texture(key_type)
+	var tex = Services.preloads.get_key_texture(key_type)
 	if not tex:
 		return null
 	var key_texture_rect = TextureRect.new()
@@ -104,7 +104,7 @@ func _create_key_texture_rect(key_type: String) -> MarginContainer:
 
 func get_collected_keys_from_level() -> Array:
 	"""Get collected keys from the current level/map"""
-	return WorldContext.get_keys_collected()
+	return Services.world_context.get_keys_collected()
 
 
 func refresh_display() -> void:

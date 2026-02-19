@@ -9,14 +9,15 @@ extends SceneTree
 ## 3. has_method() duck-typing in gameplay code (with exceptions)
 ## 4. get_nodes_in_group() as primary wiring (with exceptions)
 ## 5. "prop" in node duck-typing outside interfaces/adapters
+## 6. App-level input polling (menu/fullscreen) in room scripts (use InputRouter)
 ##
 ## Warnings (non-blocking):
 ## - Scripts exceeding 500 LOC (SRP pressure)
 
 const SCAN_DIRS := [
 	"res://scenes/",
-	"res://weapon_manager/",
-	"res://ammo_system/",
+	"res://scenes/systems/weapon_manager/",
+	"res://scenes/systems/ammo_system/",
 ]
 
 const EXCLUDE_DIRS := [
@@ -103,6 +104,7 @@ func scan_file(path: String):
 		check_has_method(path, line, line_num)
 		check_group_wiring(path, line, line_num)
 		check_in_operator_duck_typing(path, line, line_num)
+		check_app_input_in_rooms(path, line, line_num)
 	
 	# Check file length (warning only)
 	check_file_length(path, lines.size())
@@ -130,7 +132,7 @@ func check_match_event(path: String, line: String, line_num: int):
 				"STRING_EVENT_ROUTING",
 				path,
 				line_num,
-				"String-based event routing in room script. Use typed events + GameEventBus.",
+				"String-based event routing in room script. Use typed events + Services.event_bus.",
 				stripped
 			)
 
@@ -213,6 +215,24 @@ func check_in_operator_duck_typing(path: String, line: String, line_num: int):
 			path,
 			line_num,
 			"Duck-typing via 'prop' in node. Use typed capability interfaces.",
+			stripped
+		)
+
+
+func check_app_input_in_rooms(path: String, line: String, line_num: int):
+	# Ban: app-level input polling in room scripts (handled by InputRouter autoload)
+	if "rooms/" not in path:
+		return
+	var stripped := line.strip_edges()
+	if stripped.begins_with("#"):
+		return
+	# Check for quit/fullscreen input actions that should be in InputRouter
+	if "is_action" in line and ("menu" in line or "toggle-window-mode" in line or "quit" in line):
+		add_violation(
+			"APP_INPUT_IN_ROOM",
+			path,
+			line_num,
+			"App-level input polling in room script. Use InputRouter autoload.",
 			stripped
 		)
 

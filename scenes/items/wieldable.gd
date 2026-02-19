@@ -12,13 +12,13 @@ signal item_pickedup(event_string)
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group('player'):
 		if pickup_sound:
-			Utils.play_sound(pickup_sound, get_parent(), position)
+			Services.utils.play_sound(pickup_sound, get_parent(), position)
 		if body.has_signal("weapon_added"):
 			body.weapon_added.emit(wieldable_item)
 		# Emit the pickup message for HUD display
 		if event_string:
 			item_pickedup.emit(event_string)
-			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+			Services.event_bus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
 				"message": event_string,
 				"item": self,
 				"body": body

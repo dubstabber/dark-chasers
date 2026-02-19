@@ -19,7 +19,7 @@ func _ready():
 		if key_icons:
 			$Sprite3D.texture = key_icons.get_texture(key_type)
 	else:
-		$Sprite3D.texture = Preloads.get_key_texture(key_type)
+		$Sprite3D.texture = Services.preloads.get_key_texture(key_type)
 
 
 func _on_body_entered(body):
@@ -46,7 +46,7 @@ func _on_body_entered(body):
 		# Emit domain-specific typed event via GameEventBus
 		# The event_type_id is the SOLE stable identity - no event_name string dispatch.
 		if event_type_id != &"":
-			GameEventBus.emit(event_type_id, {
+			Services.event_bus.emit(event_type_id, {
 				"body": body,
 				"key_type": key_type,
 				"message": message_text
@@ -54,7 +54,7 @@ func _on_body_entered(body):
 
 		# Also emit generic KEY_COLLECTED for base Level class handling
 		# (key collection tracking, HUD updates)
-		GameEventBus.emit(GameEventTypesScript.KEY_COLLECTED, {
+		Services.event_bus.emit(GameEventTypesScript.KEY_COLLECTED, {
 			"body": body,
 			"key_type": key_type,
 			"message": message_text
@@ -62,5 +62,5 @@ func _on_body_entered(body):
 
 		# Keep legacy signal for backward compatibility
 		key_collected.emit(body, key_type, message_text)
-		Utils.play_sound(Preloads.KEY_COLLECTED_SOUND, body)
+		Services.utils.play_sound(Services.preloads.KEY_COLLECTED_SOUND, body)
 		queue_free()

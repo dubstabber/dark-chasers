@@ -55,10 +55,10 @@ func test_armor_component_uses_utils_audio():
 	# Verify no ad-hoc AudioStreamPlayer.new()
 	assert("AudioStreamPlayer.new()" not in source, "ArmorComponent should not create ad-hoc AudioStreamPlayers")
 	
-	# Verify Utils.play_sound is used
-	assert("Utils.play_sound" in source, "ArmorComponent should use Utils.play_sound")
+	# Verify Services.utils.play_sound is used
+	assert("Services.utils.play_sound" in source, "ArmorComponent should use Services.utils.play_sound")
 	
-	print("✓ ArmorComponent uses Utils.play_sound instead of ad-hoc audio")
+	print("✓ ArmorComponent uses Services.utils.play_sound instead of ad-hoc audio")
 
 
 func test_image_enemy_scaling_logic():

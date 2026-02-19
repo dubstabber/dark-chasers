@@ -37,6 +37,10 @@ var _atlas_generation_pending := false
 # Shader material for directional rendering
 var directional_material: ShaderMaterial
 
+var _last_synced_alpha_cut_mode = null
+var _last_synced_alpha_cut_threshold = null
+var _last_synced_render_priority = null
+
 # Cached references
 var _state_node: Node = null # Node providing moving_state/shooting_state
 
@@ -99,10 +103,8 @@ func _ready() -> void:
 		material_override = directional_material
 	else:
 		directional_material = material_override
-	
-	directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
-	directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
-	directional_material.render_priority = self.render_priority
+
+	_sync_shader_params(true)
 	
 	# Generate atlas after material is set up - this ensures correct shader parameters
 	# even if scene was saved with stale values
@@ -110,14 +112,32 @@ func _ready() -> void:
 	generate_atlas()
 
 
+func _sync_shader_params(force: bool = false) -> void:
+	if not (directional_material and directional_material.shader):
+		return
+
+	var alpha_cut_mode = self.alpha_cut
+	if force or _last_synced_alpha_cut_mode != alpha_cut_mode:
+		directional_material.set_shader_parameter("alpha_cut_mode", alpha_cut_mode)
+		_last_synced_alpha_cut_mode = alpha_cut_mode
+
+	var alpha_cut_threshold_value = self.alpha_cut_threshold
+	if force or _last_synced_alpha_cut_threshold != alpha_cut_threshold_value:
+		directional_material.set_shader_parameter("alpha_cut_threshold", alpha_cut_threshold_value)
+		_last_synced_alpha_cut_threshold = alpha_cut_threshold_value
+
+	var render_priority_value = self.render_priority
+	if force or _last_synced_render_priority != render_priority_value:
+		directional_material.render_priority = render_priority_value
+		_last_synced_render_priority = render_priority_value
+
+
 func _process(_delta: float) -> void:
 	# Update per-frame shader parameters
 	if directional_material and directional_material.shader:
 		# target_position is now calculated from MODEL_MATRIX in shader (per-instance)
 		# Synchronise shader parameters each frame
-		directional_material.set_shader_parameter("alpha_cut_mode", self.alpha_cut)
-		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
-		directional_material.render_priority = self.render_priority
+		_sync_shader_params()
 
 
 func _get(property: StringName):

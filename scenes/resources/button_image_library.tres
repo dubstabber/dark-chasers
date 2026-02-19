@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ButtonImageLibrary" load_steps=6 format=3 uid="uid://button_image_library"]
+
+[ext_resource type="Script" path="res://scenes/resources/button_image_library.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://images/textures/BSW05A.png" id="2_lever_up"]
+[ext_resource type="Texture2D" path="res://images/textures/BSW05B.png" id="3_lever_down"]
+[ext_resource type="Texture2D" path="res://images/textures/BSW01A.png" id="4_circle_up"]
+[ext_resource type="Texture2D" path="res://images/textures/BSW01B.png" id="5_circle_down"]
+
+[resource]
+script = ExtResource("1_script")
+lever_up = ExtResource("2_lever_up")
+lever_down = ExtResource("3_lever_down")
+circle_up = ExtResource("4_circle_up")
+circle_down = ExtResource("5_circle_down")

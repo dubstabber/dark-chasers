@@ -88,7 +88,7 @@ func _physics_process(_delta: float):
 	if not player:
 		return
 	
-	# NOTE: Gravity is applied by player.gd to avoid double application
+	# Gravity and move_and_slide() are owned by Player._physics_process
 	
 	# Track grounded state changes
 	var currently_grounded = player.is_on_floor()

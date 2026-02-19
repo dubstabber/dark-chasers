@@ -21,7 +21,7 @@ signal item_pickedup(event_string)
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group('player'):
 		if not AmmoConsumerInterface.check(body):
-			print("Player cannot receive ammo!")
+			Services.utils.debug_warning("Ammo: Player cannot receive ammo!")
 			return
 		
 		var ammo_added = false
@@ -30,15 +30,15 @@ func _on_body_entered(body: Node3D) -> void:
 		elif target_all_weapons:
 			ammo_added = AmmoConsumerInterface.add_universal_ammo(body, ammo_value)
 		else:
-			print("Ammo pickup has no ammo_type specified and is not universal ammo!")
+			Services.utils.debug_warning("Ammo: pickup has no ammo_type specified and is not universal ammo!")
 			return
 
 		# Only consume the item if ammo was successfully added
 		if ammo_added:
 			if pickup_sound:
-				Utils.play_sound(pickup_sound, get_parent(), position)
+				Services.utils.play_sound(pickup_sound, get_parent(), position)
 			item_pickedup.emit(event_string)
-			GameEventBus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+			Services.event_bus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
 				"message": event_string,
 				"item": self,
 				"body": body
@@ -46,6 +46,6 @@ func _on_body_entered(body: Node3D) -> void:
 			queue_free()
 		else:
 			if ammo_type != "":
-				print("Could not add ammo - %s at maximum!" % ammo_type)
+				Services.utils.debug_log("Ammo: could not add ammo - %s at maximum!" % ammo_type)
 			else:
-				print("Could not add universal ammo - all weapons at maximum!")
+				Services.utils.debug_log("Ammo: could not add universal ammo - all weapons at maximum!")

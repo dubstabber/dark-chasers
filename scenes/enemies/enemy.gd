@@ -50,7 +50,7 @@ func _ready():
 
 
 func _setup_context() -> void:
-	_enemy_context = EnemyContext
+	_enemy_context = Services.enemy_context
 	if _enemy_context:
 		players = _enemy_context.get_players_node()
 		map_transitions = _enemy_context.get_transitions_node()
@@ -246,7 +246,7 @@ func _on_target_acquired(target: Node3D) -> void:
 	current_target = target
 	makepath()
 	if debug_prints:
-		print("Enemy detected new target, immediately calculating path")
+		Services.utils.debug_log("Enemy: detected new target, immediately calculating path")
 
 
 func _on_target_died() -> void:
@@ -350,7 +350,7 @@ func _on_navigation_agent_3d_target_reached():
 		if transition_node:
 			_execute_transition(transition_node)
 		else:
-			print("_on_navigation_agent_3d_target_reached: transition_node not found: %s" % _pending_transition_name)
+			Services.utils.debug_warning("Enemy: transition_node not found: %s" % _pending_transition_name)
 		_pending_transition_name = ""
 		return
 	
@@ -390,7 +390,7 @@ func _on_disappear_area(body):
 func _check_disappear_zone_overlap() -> void:
 	for zone in disappear_zones:
 		if is_instance_valid(zone) and zone.overlaps_body(self):
-			print("_check_disappear_zone_overlap: detected overlap with %s, calling queue_free" % zone.name)
+			Services.utils.debug_log("Enemy: detected overlap with %s, calling queue_free" % zone.name)
 			queue_free()
 			return
 

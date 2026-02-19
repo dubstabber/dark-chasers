@@ -24,7 +24,7 @@ var _connected_player: CharacterBody3D = null
 
 func _ready():
 	timer.connect("timeout", hide_event_text)
-	CameraManager.active_camera_changed.connect(_on_active_camera_changed)
+	Services.camera_manager.active_camera_changed.connect(_on_active_camera_changed)
 
 	# Initialize key display if keys are already collected
 	call_deferred("_initialize_key_display")

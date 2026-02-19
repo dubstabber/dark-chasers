@@ -22,4 +22,4 @@ func trigger() -> void:
 	if sound:
 		var parent_3d = get_parent() as Node3D
 		if parent_3d:
-			Utils.play_sound(sound, parent_3d, parent_3d.global_position, volume_db)
+			Services.utils.play_sound(sound, parent_3d, parent_3d.global_position, volume_db)

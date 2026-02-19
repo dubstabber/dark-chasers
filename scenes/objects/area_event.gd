@@ -31,7 +31,7 @@ func _body_entered(body):
 		#
 		# The event_type_id is the SOLE stable identity - no event_name string dispatch.
 		if event_type_id != &"":
-			GameEventBus.emit(event_type_id, {
+			Services.event_bus.emit(event_type_id, {
 				"body": body,
 				"area": self,
 				"door": door_to_open,
@@ -40,7 +40,7 @@ func _body_entered(body):
 
 		# Also emit generic AREA_ENTERED for base Level class handling
 		# (camera switching, door opening from payload)
-		GameEventBus.emit(GameEventTypesScript.AREA_ENTERED, {
+		Services.event_bus.emit(GameEventTypesScript.AREA_ENTERED, {
 			"body": body,
 			"area": self,
 			"door": door_to_open,

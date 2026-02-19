@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="SceneCatalog" load_steps=7 format=3 uid="uid://scene_catalog"]
+
+[ext_resource type="Script" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ao_oni.tscn" id="4_aooni"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/ilopulu.tscn" id="5_ilopulu"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/white_face.tscn" id="6_whiteface"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/image_enemy.tscn" id="7_image_enemy"]
+
+[resource]
+script = ExtResource("1_script")
+player_scene = ExtResource("2_player")
+hud_scene = ExtResource("3_hud")
+aooni_scene = ExtResource("4_aooni")
+ilopulu_scene = ExtResource("5_ilopulu")
+whiteface_scene = ExtResource("6_whiteface")
+image_enemy_scene = ExtResource("7_image_enemy")

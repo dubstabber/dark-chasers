@@ -9,14 +9,7 @@ var _vfx_catalog: VfxCatalog
 var _particle_catalog: ParticleCatalog
 var _button_images: ButtonImageLibrary
 var _sfx_catalog: SfxCatalog
-
-const PLAYER_SCENE := preload("res://scenes/player/player.tscn")
-const HUD_SCENE := preload("res://scenes/hud.tscn")
-
-const IMAGE_ENEMY_SCENE := preload("res://scenes/enemies/image_enemy.tscn")
-const AOONI_SCENE := preload("res://scenes/enemies/ao_oni.tscn")
-const ILOPULU_SCENE := preload("res://scenes/enemies/ilopulu.tscn")
-const WHITEFACE_SCENE := preload("res://scenes/enemies/white_face.tscn")
+var _scene_catalog: SceneCatalog
 
 
 func get_key_icons() -> KeyIconLibrary:
@@ -49,13 +42,11 @@ func get_sfx_catalog() -> SfxCatalog:
 	return _sfx_catalog
 
 
+func get_scene_catalog() -> SceneCatalog:
+	if not _scene_catalog:
+		_scene_catalog = load("res://scenes/resources/scene_catalog.tres")
+	return _scene_catalog
+
+
 func get_key_texture(key_type: String) -> Texture2D:
 	return get_key_icons().get_texture(key_type)
-
-# All sounds migrated to SfxCatalog - use get_sfx_catalog()
-# Break sounds and SCRAP_SCENE migrated to ParticleCatalog - use get_particle_catalog()
-# Button images migrated to ButtonImageLibrary - use get_button_images()
-
-const AO_RED_BLOOD_PARTICLE := preload("res://scenes/particles/ao_red_blood_particle.tscn")
-const AO_BLUE_BLOOD_PARTICLE := preload("res://scenes/particles/ao_blue_blood_particle.tscn")
-const BLOOD_SPLAT_DECAL := preload("res://scenes/particles/blood_splat_decal.tscn")

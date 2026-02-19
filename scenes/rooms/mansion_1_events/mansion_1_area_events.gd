@@ -72,7 +72,7 @@ func _spawn_crawling_aooni() -> void:
 	if not (level and enemies):
 		return
 
-	var aooni = Services.preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(library_camera_spawn)
@@ -104,7 +104,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 	if piano_button_node and piano_button_node.is_pressed:
 		return
 
-	var aooni = Services.preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(piano_spawn)
@@ -177,7 +177,7 @@ func _spawn_ilopulu(target: Node) -> void:
 	if not (level and enemies):
 		return
 
-	var ilopulu = Services.preloads.ILOPULU_SCENE.instantiate()
+	var ilopulu = Services.preloads.get_scene_catalog().ilopulu_scene.instantiate()
 	enemies.add_child(ilopulu)
 
 	var spawn_node = level.get_node_or_null(ilopulu_spawn)

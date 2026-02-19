@@ -41,7 +41,7 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var aooni = Services.preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(aooni_chase_spawn)
@@ -103,7 +103,7 @@ func _spawn_bars_aooni() -> void:
 	if not (level and enemies):
 		return
 
-	_bars_aooni = Services.preloads.AOONI_SCENE.instantiate() as CharacterBody3D
+	_bars_aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(_bars_aooni)
 
 	var spawn_node = level.get_node_or_null(bars_spawn)
@@ -158,7 +158,7 @@ func _on_key_spawn_white_face(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var whiteface = Services.preloads.WHITEFACE_SCENE.instantiate()
+	var whiteface = Services.preloads.get_scene_catalog().whiteface_scene.instantiate()
 	enemies.add_child(whiteface)
 
 	var spawn_node = level.get_node_or_null(whiteface_spawn)

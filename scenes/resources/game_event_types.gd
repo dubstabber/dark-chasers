@@ -27,6 +27,7 @@ const MONSTER_DISAPPEARED := &"monster_disappeared"
 # Player events
 const PLAYER_BLOCKED := &"player_blocked"
 const PLAYER_UNBLOCKED := &"player_unblocked"
+const PLAYER_MODE_CHANGED := &"player_mode_changed"
 
 # Area trigger events
 const AREA_ENTERED := &"area_entered"

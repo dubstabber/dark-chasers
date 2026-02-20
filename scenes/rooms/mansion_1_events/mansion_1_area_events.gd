@@ -233,8 +233,8 @@ func _on_area_change_to_next_map(_event: RefCounted) -> void:
 
 func _on_area_kill_player(event: RefCounted) -> void:
 	var body = event.get_body()
-	if body is Mortal:
-		body.kill()
+	if Mortal.can_kill(body):
+		Mortal.kill(body)
 
 
 func _on_monster_disappeared() -> void:

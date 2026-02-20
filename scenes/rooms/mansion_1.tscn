@@ -12378,6 +12378,7 @@ current_room = "BigHall"
 [node name="Ao oni Test" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -47.6345, 202.197, -26.7313)
 current_room = "FirstFloor"
+chase_player = false
 
 [node name="Ao mika Test" parent="NavigationRegion3D/Enemies" instance=ExtResource("142_dc1jo")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -48.6751, 202.197, -31.5108)

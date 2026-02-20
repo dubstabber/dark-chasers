@@ -1,7 +1,7 @@
 class_name Enemy extends CharacterBody3D
 
 @export var current_room: String
-@export var disappear_zones: Array[Area3D] ## Legacy: migrated to EnemyDisappearZoneComponent
+@export var disappear_zones: Array[Area3D] ## Bridge: forwarded to EnemyDisappearZoneComponent at _ready()
 @export var is_wandering := false
 @export var chase_player := true
 @export var can_open_door := true
@@ -38,7 +38,6 @@ var is_flying := false
 var is_killed := false
 
 @onready var find_path_timer = $Timers/FindPathTimer
-@onready var wandering_timer = $Timers/WanderingTimer
 @onready var graphics = $Graphics
 @onready var interaction_ray = $Interaction
 
@@ -224,11 +223,6 @@ func _do_look_forward() -> void:
 	_motor_component.look_forward()
 
 
-func look_forward() -> void:
-	if velocity:
-		rotation.y = atan2(velocity.x, velocity.z) + PI
-
-
 func _check_for_targets() -> void:
 	if _ai_component:
 		_ai_component.update_scanning(0.0)
@@ -299,11 +293,6 @@ func _on_interaction_timer_timeout():
 		if not _door_opener_component.check_and_open_door() and is_wandering:
 			if _door_opener_component.is_facing_door():
 				direction = Vector3(-direction.x, 0, -direction.z)
-
-
-func _on_wandering_timer_timeout():
-	wandering_timer.wait_time = randf_range(0.2, 2.8)
-	direction = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
 
 
 func _on_navigation_agent_3d_target_reached():

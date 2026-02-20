@@ -25,6 +25,7 @@ var _connected_player: CharacterBody3D = null
 func _ready():
 	timer.connect("timeout", hide_event_text)
 	Services.camera_manager.active_camera_changed.connect(_on_active_camera_changed)
+	Services.event_bus.subscribe(GameEventTypes.PLAYER_MODE_CHANGED, _on_player_mode_changed_event)
 
 	# Initialize key display if keys are already collected
 	call_deferred("_initialize_key_display")
@@ -215,7 +216,19 @@ func hide_event_text():
 	event_label.set_text_with_aooni_font("")
 
 
-func _on_player_mode_changed(mode, value):
+func _on_player_mode_changed_event(event: RefCounted) -> void:
+	var mode = event.payload.get("mode", "")
+	var value = event.payload.get("value", false)
+	var event_player = event.payload.get("player", null)
+	
+	# Only respond if this HUD belongs to the player that triggered the event
+	if event_player and _connected_player and event_player != _connected_player:
+		return
+	
+	_apply_mode_change(mode, value)
+
+
+func _apply_mode_change(mode: String, value: bool) -> void:
 	match mode:
 		"clip_mode":
 			if value:

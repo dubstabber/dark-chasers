@@ -14,7 +14,6 @@ signal debug_camera_toggled()
 @export var movement_component: PlayerMovementComponent
 @export var interaction_component: InteractionComponent
 @export var animation_player: AnimationPlayer
-@export var hud: CanvasLayer
 
 
 func _ready():
@@ -99,9 +98,11 @@ func _process_action_input() -> void:
 	if Input.is_action_just_pressed("toggle-clip-mode"):
 		var new_clip_mode = movement_component.toggle_clip_mode()
 		clip_mode_toggled.emit(new_clip_mode)
-		# HUD is a known scene with _on_player_mode_changed method
-		if hud:
-			hud._on_player_mode_changed("clip_mode", new_clip_mode)
+		Services.event_bus.emit(GameEventTypes.PLAYER_MODE_CHANGED, {
+			"mode": "clip_mode",
+			"value": new_clip_mode,
+			"player": player
+		}, self)
 	
 	if Input.is_action_just_pressed("use"):
 		if interaction_component:
@@ -125,10 +126,6 @@ func _toggle_debug_camera() -> void:
 	else:
 		Services.camera_manager.set_active_camera(camera)
 	debug_camera_toggled.emit()
-
-
-func set_hud(new_hud: CanvasLayer) -> void:
-	hud = new_hud
 
 
 func _is_movement_blocked() -> bool:

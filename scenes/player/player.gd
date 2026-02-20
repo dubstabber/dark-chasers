@@ -89,8 +89,6 @@ func _setup_modular_components() -> void:
 	
 	if input_component:
 		input_component.respawn_requested.connect(respawn)
-		if hud:
-			input_component.set_hud(hud)
 
 
 func _on_footstep_triggered() -> void:

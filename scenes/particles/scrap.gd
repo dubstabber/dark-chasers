@@ -14,7 +14,7 @@ var _process_scrap_behavior: Callable
 @onready var sprite_3d: Sprite3D = $Sprite3D
 
 func _ready():
-	_catalog = Services.preloads.get_particle_catalog()
+	_catalog = Services.get_particle_catalog()
 	# Ensure immediate initialization to prevent spawn delays
 	if scrap_type:
 		_configure_process_behavior()
@@ -63,7 +63,7 @@ func set_scrap_type(t):
 
 func _configure_process_behavior() -> void:
 	if not _catalog:
-		_catalog = Services.preloads.get_particle_catalog()
+		_catalog = Services.get_particle_catalog()
 
 	match scrap_type:
 		"small wood scrap":
@@ -123,7 +123,7 @@ func _initialize_texture():
 
 	# Ensure catalog is loaded for set_scrap_type calls before _ready
 	if not _catalog:
-		_catalog = Services.preloads.get_particle_catalog()
+		_catalog = Services.get_particle_catalog()
 	
 	# Set initial texture immediately to prevent delay
 	if sprite_3d and scrap_type:

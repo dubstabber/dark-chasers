@@ -2,8 +2,6 @@ extends Area3D
 
 const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
 
-signal event_triggered(body)
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.AREA_PIANO_ALARM).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"area_piano_alarm").
@@ -45,6 +43,3 @@ func _body_entered(body):
 			"door": door_to_open,
 			"camera": temporary_camera
 		}, self)
-
-		# Signal for effect components attached as children
-		event_triggered.emit(body)

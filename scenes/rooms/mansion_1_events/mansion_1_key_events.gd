@@ -41,7 +41,7 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(aooni_chase_spawn)
@@ -57,7 +57,7 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.preloads.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().ao_see
 		music.volume_db = -5
 		music.play()
 		aooni.tree_exited.connect(music.stop)
@@ -103,7 +103,7 @@ func _spawn_bars_aooni() -> void:
 	if not (level and enemies):
 		return
 
-	_bars_aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	_bars_aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(_bars_aooni)
 
 	var spawn_node = level.get_node_or_null(bars_spawn)
@@ -128,7 +128,7 @@ func _spawn_bars_aooni() -> void:
 
 func _play_bar_shake() -> void:
 	if is_instance_valid(_bars_aooni):
-		Services.utils.play_sound(Services.preloads.get_sfx_catalog().bar_shake, _bars_aooni)
+		Services.utils.play_sound(Services.get_sfx_catalog().bar_shake, _bars_aooni)
 
 
 func _bars_aooni_give_up() -> void:
@@ -158,7 +158,7 @@ func _on_key_spawn_white_face(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var whiteface = Services.preloads.get_scene_catalog().whiteface_scene.instantiate()
+	var whiteface = Services.get_scene_catalog().whiteface_scene.instantiate()
 	enemies.add_child(whiteface)
 
 	var spawn_node = level.get_node_or_null(whiteface_spawn)

@@ -1,6 +1,5 @@
 @tool
-extends Node3D
-class_name Openable
+class_name Door extends Node3D
 
 const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
 
@@ -121,6 +120,8 @@ func _toggle_door(force := false) -> void:
 		elif _playing_forward:
 			_anim.play_backwards("Open")
 			_playing_forward = false
+			_has_reversed_due_block = false
+			set_physics_process(true) # Enable blocking check during close
 			if _audio_component:
 				_audio_component.play_close_sound()
 		else:
@@ -135,6 +136,7 @@ func _toggle_door(force := false) -> void:
 			return
 		_anim.play_backwards("Open")
 		_playing_forward = false
+		_has_reversed_due_block = false
 		set_physics_process(true) # Enable blocking check during close
 		if _audio_component:
 			_audio_component.play_close_sound()
@@ -161,6 +163,8 @@ func _on_animation_finished(anim_name: String) -> void:
 		if _is_open and not _anim.is_playing():
 			_anim.play_backwards("Open")
 			_playing_forward = false
+			_has_reversed_due_block = false
+			set_physics_process(true) # Enable blocking check during auto-close
 			if _audio_component:
 				_audio_component.play_close_sound()
 

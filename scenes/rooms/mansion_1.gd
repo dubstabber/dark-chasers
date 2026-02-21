@@ -16,7 +16,7 @@ func _exit_tree():
 
 
 func spawn_player():
-	var player = Services.preloads.get_scene_catalog().player_scene.instantiate() as Player
+	var player = Services.get_scene_catalog().player_scene.instantiate() as Player
 	players.add_child(player)
 	# player.blocked_movement = true
 	setup_player(player) # Centralized HUD connection via Level base class
@@ -39,13 +39,13 @@ func respawn(p):
 	p.position = player_spawners.get_children().pick_random().global_position
 	p.current_room = "FirstFloor"
 	p.rotate_y(3.15)
-	Services.utils.play_sound(Services.preloads.get_sfx_catalog().spawn, p)
+	Services.utils.play_sound(Services.get_sfx_catalog().spawn, p)
 
 
 func test_respawn(p):
 	p.position = $NavigationRegion3D/TestSpawn.position
 	p.current_room = "FirstFloor"
-	Services.utils.play_sound(Services.preloads.get_sfx_catalog().spawn, p)
+	Services.utils.play_sound(Services.get_sfx_catalog().spawn, p)
 
 
 func _on_ladder_body_entered(body):
@@ -74,5 +74,5 @@ func open_all_doors():
 	var doors_node = get_node_or_null("Doors")
 	if doors_node:
 		for door in doors_node.get_children():
-			if door is Openable:
+			if door is DoorScript:
 				door.open()

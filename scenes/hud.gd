@@ -147,9 +147,15 @@ func show_black_screen():
 	black_screen.color.a = 1.0
 
 
-func fade_black_screen():
+func _restart_tween() -> Tween:
+	if tween:
+		tween.kill()
 	tween = create_tween()
-	tween.tween_property(black_screen, "color:a", 0, 2.0)
+	return tween
+
+
+func fade_black_screen():
+	_restart_tween().tween_property(black_screen, "color:a", 0, 2.0)
 
 
 func add_log(text: String):
@@ -162,11 +168,9 @@ func show_event_text(text: String, _faded: bool = true, text_time: float = 0.0):
 	faded = _faded
 	if faded:
 		if event_label.get_child_count():
-			tween = create_tween()
-			await tween.tween_property(event_label, "modulate:a", 0, 1.0).finished
+			await _restart_tween().tween_property(event_label, "modulate:a", 0, 1.0).finished
 		event_label.set_text_with_aooni_font(text)
-		tween = create_tween()
-		tween.tween_property(event_label, "modulate:a", 1, 0.4)
+		_restart_tween().tween_property(event_label, "modulate:a", 1, 0.4)
 	else:
 		event_label.set_text_with_aooni_font(text)
 		event_label.modulate.a = 1
@@ -209,8 +213,7 @@ func _get_hud_owner() -> CharacterBody3D:
 
 func hide_event_text():
 	if faded:
-		tween = create_tween()
-		await tween.tween_property(event_label, "modulate:a", 0, 1.0).finished
+		await _restart_tween().tween_property(event_label, "modulate:a", 0, 1.0).finished
 	else:
 		event_label.modulate.a = 0
 	event_label.set_text_with_aooni_font("")

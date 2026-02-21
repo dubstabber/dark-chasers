@@ -52,7 +52,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(piano_spawn)
@@ -72,7 +72,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.preloads.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().ao_see
 		music.volume_db = -5
 		music.play()
 		aooni.tree_exited.connect(music.stop)
@@ -83,7 +83,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 func _on_button_show_moving_bars(_event: RefCounted) -> void:
 	var seq = SequenceDataScript.create(&"show_moving_bars")
 	seq.block_players()
-	seq.play_music(Services.preloads.get_sfx_catalog().event_trigger)
+	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(3.4)
 	seq.camera_restore()
 	seq.unblock_players()
@@ -104,7 +104,7 @@ func _on_button_show_secret_door(_event: RefCounted) -> void:
 func _on_button_show_open_exit(_event: RefCounted) -> void:
 	var seq = SequenceDataScript.create(&"show_open_exit")
 	seq.block_players()
-	seq.play_music(Services.preloads.get_sfx_catalog().event_trigger)
+	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(3.4)
 	seq.camera_restore()
 	seq.unblock_players()

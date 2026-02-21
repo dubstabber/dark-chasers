@@ -36,6 +36,7 @@ var ammo_component: PlayerAmmoComponent # Reference to the player's ammo compone
 @export var damage_entity_sound: AudioStream
 @export var damage := 10
 @export var hit_particle: PackedScene
+@export var hit_muzzle_flash: bool = false
 @export var hit_decal: PackedScene
 
 @export_group("Ammo Settings")

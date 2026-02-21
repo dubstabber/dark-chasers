@@ -3,7 +3,7 @@ extends RefCounted
 
 ## A single action within a sequence.
 ## Used by SequenceDirector to execute timed scripted sequences.
-## Access via: const SequenceAction = preload("res://scenes/resources/sequence_action.gd")
+## Access via: SequenceAction
 
 enum Type {
 	WAIT,
@@ -37,41 +37,41 @@ var custom_callable: Callable = Callable()
 
 
 static func wait(seconds: float) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.WAIT
 	action.duration = seconds
 	return action
 
 
 static func block_players(players: Array = []) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.BLOCK_PLAYER
 	action.target_players = players
 	return action
 
 
 static func unblock_players(players: Array = []) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.UNBLOCK_PLAYER
 	action.target_players = players
 	return action
 
 
 static func camera_cut(cam: Camera3D) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.CAMERA_CUT
 	action.camera = cam
 	return action
 
 
 static func camera_restore() -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.CAMERA_RESTORE
 	return action
 
 
 static func play_sound(stream: AudioStream, source: Node = null, pos: Vector3 = Vector3.ZERO, volume: float = -25.0) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.PLAY_SOUND
 	action.sound = stream
 	action.sound_source = source
@@ -81,7 +81,7 @@ static func play_sound(stream: AudioStream, source: Node = null, pos: Vector3 = 
 
 
 static func show_text(message: String, display_duration: float = 3.0) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.SHOW_TEXT
 	action.text = message
 	action.duration = display_duration
@@ -89,13 +89,13 @@ static func show_text(message: String, display_duration: float = 3.0) -> RefCoun
 
 
 static func hide_text() -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.HIDE_TEXT
 	return action
 
 
 static func spawn_enemy(scene: PackedScene, pos: Vector3, room: String = "", target: Node = null) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.SPAWN_ENEMY
 	action.enemy_scene = scene
 	action.spawn_position = pos
@@ -105,7 +105,7 @@ static func spawn_enemy(scene: PackedScene, pos: Vector3, room: String = "", tar
 
 
 static func play_music(stream: AudioStream, volume: float = -5.0) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.PLAY_MUSIC
 	action.sound = stream
 	action.volume_db = volume
@@ -113,13 +113,13 @@ static func play_music(stream: AudioStream, volume: float = -5.0) -> RefCounted:
 
 
 static func stop_music() -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.STOP_MUSIC
 	return action
 
 
 static func custom(callable: Callable) -> RefCounted:
-	var action = preload("res://scenes/resources/sequence_action.gd").new()
+	var action = SequenceAction.new()
 	action.action_type = Type.CUSTOM
 	action.custom_callable = callable
 	return action

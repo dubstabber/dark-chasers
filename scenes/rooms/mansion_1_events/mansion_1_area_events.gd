@@ -2,6 +2,7 @@ extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
 
 const GE = preload("res://scenes/resources/game_event_types.gd")
 const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
+const DoorScript = preload("res://scenes/objects/door.gd")
 
 @export var library_camera_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/AoOniCrawler")
 @export var library_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/CrawlingAoOniArea")
@@ -62,7 +63,7 @@ func _on_area_monster_crawls_library(_event: RefCounted) -> void:
 	seq.camera_restore()
 	seq.unblock_players()
 	seq.show_text("[color=#6c6c6c]You:[/color] What the eff was that!?", 3.0)
-	seq.play_music(Services.preloads.get_sfx_catalog().creep_ambience, -5.0)
+	seq.play_music(Services.get_sfx_catalog().creep_ambience, -5.0)
 	Services.sequence_director.play_sequence(seq)
 
 
@@ -72,7 +73,7 @@ func _spawn_crawling_aooni() -> void:
 	if not (level and enemies):
 		return
 
-	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(library_camera_spawn)
@@ -104,7 +105,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 	if piano_button_node and piano_button_node.is_pressed:
 		return
 
-	var aooni = Services.preloads.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(piano_spawn)
@@ -125,7 +126,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.preloads.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().ao_see
 		music.volume_db = -5
 		music.play()
 		aooni.tree_exited.connect(music.stop)
@@ -139,12 +140,12 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 		return
 
 	var wide_door_node = level.get_node_or_null(wide_door)
-	if wide_door_node and wide_door_node is Openable:
+	if wide_door_node and wide_door_node is DoorScript:
 		wide_door_node.open()
 
 	var music := _music()
 	if music:
-		music.stream = Services.preloads.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().ao_see
 		music.volume_db = -5
 		music.play()
 
@@ -165,7 +166,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 func _on_area_spawn_ilopulu(event: RefCounted) -> void:
 	var body = event.get_body()
 	var seq = SequenceDataScript.create(&"spawn_ilopulu")
-	seq.play_music(Services.preloads.get_sfx_catalog().event_trigger)
+	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(1.0)
 	seq.custom(_spawn_ilopulu.bind(body))
 	Services.sequence_director.play_sequence(seq)
@@ -177,7 +178,7 @@ func _spawn_ilopulu(target: Node) -> void:
 	if not (level and enemies):
 		return
 
-	var ilopulu = Services.preloads.get_scene_catalog().ilopulu_scene.instantiate()
+	var ilopulu = Services.get_scene_catalog().ilopulu_scene.instantiate()
 	enemies.add_child(ilopulu)
 
 	var spawn_node = level.get_node_or_null(ilopulu_spawn)
@@ -198,12 +199,12 @@ func _on_area_open_ao_mika_wardrobe(_event: RefCounted) -> void:
 		return
 
 	var wardrobe_door_node = level.get_node_or_null(wardrobe_door)
-	if wardrobe_door_node and wardrobe_door_node is Openable:
+	if wardrobe_door_node and wardrobe_door_node is DoorScript:
 		wardrobe_door_node.open()
 
 	var music := _music()
 	if music:
-		music.stream = Services.preloads.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().ao_see
 		music.volume_db = -5
 		music.play()
 

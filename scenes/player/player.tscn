@@ -910,7 +910,6 @@ shader_parameter/atlas_dimensions = Vector2(186, 135)
 shader_parameter/max_sprite_size = Vector2(31, 45)
 shader_parameter/current_frame = 0
 shader_parameter/direction_mode = 0
-shader_parameter/target_position = Vector3(0, 0, 0)
 shader_parameter/billboard_mode = 2
 shader_parameter/alpha_cut_mode = 0
 shader_parameter/alpha_cut_threshold = 0.5
@@ -1189,8 +1188,7 @@ script = ExtResource("7_epsiy")
 footstep_material_library = ExtResource("8_aki86")
 
 [node name="WeaponManager" parent="." node_paths=PackedStringArray("player", "gun_base", "animation_player", "hit_sound_player", "weapon_sound_player", "bullet_raycast") instance=ExtResource("5_2logq")]
-slot_1 = Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti")])
-slot_2 = Array[ExtResource("8_pitn3")]([ExtResource("5_3vbji")])
+slots = [Array[ExtResource("8_pitn3")]([ExtResource("11_1oeti")]), Array[ExtResource("8_pitn3")]([ExtResource("5_3vbji")]), [], [], [], [], [], [], []]
 player = NodePath("..")
 gun_base = NodePath("../nek/head/eyes/Camera3D/GunBase3D")
 animation_player = NodePath("../nek/head/eyes/WeaponAnimationPlayer")

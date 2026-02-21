@@ -2,8 +2,6 @@ extends StaticBody3D
 
 const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
 
-signal button_pressed(body)
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.BUTTON_CHECK_TV).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"button_check_tv").
@@ -44,9 +42,6 @@ func press(body):
 			"camera": temporary_camera
 		}, self)
 
-		# Signal for effect components attached as children
-		button_pressed.emit(body)
-
 		is_pressed = true
 		change_sprite()
 		if press_sound: Services.utils.play_sound(press_sound, self)
@@ -59,4 +54,4 @@ func press(body):
 
 func change_sprite():
 	if sprite_3d and button_type:
-		sprite_3d.texture = Services.preloads.get_button_images().get_texture(button_type, is_pressed)
+		sprite_3d.texture = Services.get_button_images().get_texture(button_type, is_pressed)

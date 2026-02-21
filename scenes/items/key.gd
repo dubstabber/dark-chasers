@@ -17,7 +17,7 @@ func _ready():
 		if key_icons:
 			$Sprite3D.texture = key_icons.get_texture(key_type)
 	else:
-		$Sprite3D.texture = Services.preloads.get_key_texture(key_type)
+		$Sprite3D.texture = Services.get_key_icons().get_texture(key_type)
 
 
 func _on_body_entered(body):
@@ -57,5 +57,5 @@ func _on_body_entered(body):
 			"message": message_text
 		}, self)
 
-		Services.utils.play_sound(Services.preloads.get_sfx_catalog().key_collected, body)
+		Services.utils.play_sound(Services.get_sfx_catalog().key_collected, body)
 		queue_free()

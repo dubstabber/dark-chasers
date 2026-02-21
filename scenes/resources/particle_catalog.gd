@@ -31,6 +31,8 @@ extends Resource
 
 @export_group("Decal Images")
 @export var doom_decal_images: Array[Texture2D] = []
+@export var blood_splat_images: Array[Texture2D] = []
+@export var blood_splat_weights: Array[int] = []
 
 @export_group("Scenes")
 @export var scrap_scene: PackedScene

@@ -1,6 +1,7 @@
 class_name Level extends Node3D
 
 const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
+const DoorScript = preload("res://scenes/objects/door.gd")
 
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
@@ -77,7 +78,7 @@ func _handle_trigger_event(event: RefCounted) -> void:
 
 	# Handle door opening if event has a door configured
 	var door = event.get_node("door")
-	if door and door is Openable:
+	if door and door is DoorScript:
 		door.open()
 
 
@@ -184,7 +185,7 @@ func spawn_player() -> void:
 	adds it to the players node, and respawns at a random spawner.
 	Subclasses like mansion_1 override this for custom intro sequences.
 	"""
-	var player = Services.preloads.get_scene_catalog().player_scene.instantiate() as Player
+	var player = Services.get_scene_catalog().player_scene.instantiate() as Player
 	players.add_child(player)
 	setup_player(player)
 	respawn(player)

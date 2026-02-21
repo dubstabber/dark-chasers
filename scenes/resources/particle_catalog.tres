@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ParticleCatalog" load_steps=58 format=3 uid="uid://bar2ewhhc72jv"]
+[gd_resource type="Resource" script_class="ParticleCatalog" load_steps=65 format=3 uid="uid://bar2ewhhc72jv"]
 
 [ext_resource type="Script" uid="uid://3txjhthiy0lw" path="res://scenes/resources/particle_catalog.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://i0t3gd02elu1" path="res://images/particles/1045A0.png" id="2"]
@@ -57,6 +57,13 @@
 [ext_resource type="AudioStream" uid="uid://2u5xhqhrtksv" path="res://sounds/sfx/GLASSBRK.wav" id="55"]
 [ext_resource type="AudioStream" uid="uid://58pj3hxfrieb" path="res://sounds/sfx/SND1048.wav" id="56"]
 [ext_resource type="PackedScene" uid="uid://diiuvppg4ykmv" path="res://scenes/particles/scrap.tscn" id="57"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat1.png" id="58"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat2.png" id="59"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat3.png" id="60"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat4.png" id="61"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat5.png" id="62"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat6.png" id="63"]
+[ext_resource type="Texture2D" path="res://images/particles/bsplat7.png" id="64"]
 
 [resource]
 script = ExtResource("1")
@@ -74,4 +81,6 @@ circle_ground_scrap_image = ExtResource("28")
 small_ground_scrap_image = ExtResource("29")
 grass_scrap_images = Array[Texture2D]([ExtResource("30"), ExtResource("31"), ExtResource("32"), ExtResource("33")])
 doom_decal_images = Array[Texture2D]([ExtResource("48"), ExtResource("49"), ExtResource("50"), ExtResource("51"), ExtResource("52")])
+blood_splat_images = Array[Texture2D]([ExtResource("58"), ExtResource("59"), ExtResource("60"), ExtResource("61"), ExtResource("62"), ExtResource("63"), ExtResource("64")])
+blood_splat_weights = Array[int]([2, 1, 5, 5, 5, 5, 6])
 scrap_scene = ExtResource("57")

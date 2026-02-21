@@ -44,15 +44,7 @@ var selected_slot_position: int:
 # --------------------------------------------------------------------------
 # Weapon slot resources (numbers correspond to keyboard shortcuts 1-9)
 # --------------------------------------------------------------------------
-@export var slot_1: Array[WeaponResource] = []
-@export var slot_2: Array[WeaponResource] = []
-@export var slot_3: Array[WeaponResource] = []
-@export var slot_4: Array[WeaponResource] = []
-@export var slot_5: Array[WeaponResource] = []
-@export var slot_6: Array[WeaponResource] = []
-@export var slot_7: Array[WeaponResource] = []
-@export var slot_8: Array[WeaponResource] = []
-@export var slot_9: Array[WeaponResource] = []
+@export var slots: Array = [[], [], [], [], [], [], [], [], []]
 
 # --------------------------------------------------------------------------
 # Scene references
@@ -72,6 +64,7 @@ func _ready() -> void:
 	left_hand = gun_base.get_node_or_null("LeftHandSlot")
 	right_hand = gun_base.get_node_or_null("RightHandSlot")
 	base_gun_position = gun_base.position
+	_ensure_min_slot_count(9)
 	
 	# Initialize controllers with scene references
 	_hit_executor.setup(get_tree(), bullet_raycast)
@@ -101,8 +94,9 @@ func _setup_weapon_ammo_components() -> void:
 		return
 	
 	# Set up ammo component reference for all weapons in all slots
-	var all_slots = [slot_1, slot_2, slot_3, slot_4, slot_5, slot_6, slot_7, slot_8, slot_9]
-	for slot in all_slots:
+	for slot in slots:
+		if not (slot is Array):
+			continue
 		for weapon in slot:
 			if weapon:
 				weapon.ammo_component = player_ammo_component
@@ -160,21 +154,30 @@ func _apply_offsets() -> void:
 # --------------------------------------------------------------------------
 # Weapon pickup helpers
 # --------------------------------------------------------------------------
-func _get_slot_array(slot_index: int) -> Array[WeaponResource]:
-	match slot_index:
-		1: return slot_1
-		2: return slot_2
-		3: return slot_3
-		4: return slot_4
-		5: return slot_5
-		6: return slot_6
-		7: return slot_7
-		8: return slot_8
-		9: return slot_9
+func _ensure_min_slot_count(min_count: int) -> void:
+	while slots.size() < min_count:
+		slots.append([])
+
+	for i in range(slots.size()):
+		if not (slots[i] is Array):
+			slots[i] = []
+
+
+func _get_slot_array(slot_index: int) -> Array:
+	if slot_index < 1:
+		return []
+
+	var array_index := slot_index - 1
+	if array_index >= slots.size():
+		return []
+
+	var slot: Variant = slots[array_index]
+	if slot is Array:
+		return slot
 	return []
 
 
-func get_slot_weapons(slot_index: int) -> Array[WeaponResource]:
+func get_slot_weapons(slot_index: int) -> Array:
 	"""Get weapons in a specific slot (public method for ammo management)
 
 	Args:
@@ -197,7 +200,7 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 		new_weapon.weapon_manager = self
 	
 	var slot_index: int = clamp(new_weapon.slot, 1, 9)
-	var slot_array: Array[WeaponResource] = _get_slot_array(slot_index)
+	var slot_array: Array = _get_slot_array(slot_index)
 	
 	# Insert weapon (or get existing position) and equip it
 	var weapon_position := _switch_controller.insert_weapon_sorted(new_weapon, slot_array)
@@ -310,11 +313,11 @@ func _process_weapon_switch(slot_index: int) -> void:
 	# Perform the actual weapon switch
 	await _equip_from_slot(slot_array)
 
-func _equip_from_slot(slot: Array[WeaponResource]) -> void:
+func _equip_from_slot(slot: Array) -> void:
 	if slot.size() <= selected_slot_position:
 		selected_slot_position = 0
 
-	var next_weapon := slot[selected_slot_position]
+	var next_weapon := slot[selected_slot_position] as WeaponResource
 	if current_weapon == next_weapon:
 		return
 
@@ -478,8 +481,9 @@ func add_ammo_to_weapons(amount: int, all_weapons: bool = false) -> bool:
 	var ammo_types_added = {}
 
 	if all_weapons:
-		var all_slots = [slot_1, slot_2, slot_3, slot_4, slot_5, slot_6, slot_7, slot_8, slot_9]
-		for slot in all_slots:
+		for slot in slots:
+			if not (slot is Array):
+				continue
 			for weapon in slot:
 				if weapon and not weapon.infinite_ammo and weapon.ammo_type != "":
 					if not ammo_types_added.has(weapon.ammo_type):

@@ -18,7 +18,7 @@ func _ready() -> void:
 
 
 func _prewarm_pools() -> void:
-	var vfx_catalog = Services.preloads.get_vfx_catalog()
+	var vfx_catalog = Services.get_vfx_catalog()
 	if vfx_catalog and vfx_catalog.scrap_scene:
 		_ensure_pool(vfx_catalog.scrap_scene.resource_path, vfx_catalog.scrap_scene)
 

@@ -29,7 +29,7 @@ func _setup_spawner_controller() -> void:
 		return
 	
 	_spawner_controller = EnemySpawnerControllerScript.new()
-	_spawner_controller.enemy_scene = Services.preloads.get_scene_catalog().image_enemy_scene
+	_spawner_controller.enemy_scene = Services.get_scene_catalog().image_enemy_scene
 	_spawner_controller.min_respawn_time = 10.0
 	_spawner_controller.max_respawn_time = 30.0
 	_spawner_controller.delay_between_spawners = 1.0

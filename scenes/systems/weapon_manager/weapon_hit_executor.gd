@@ -12,12 +12,42 @@ extends RefCounted
 
 var _scene_tree: SceneTree
 var _bullet_raycast: RayCast3D
+var _muzzle_flash_light: OmniLight3D
+var _muzzle_flash_timer: Timer
 
 
 func setup(scene_tree: SceneTree, bullet_raycast: RayCast3D) -> void:
 	"""Initialize the executor with required references"""
 	_scene_tree = scene_tree
 	_bullet_raycast = bullet_raycast
+
+
+func _ensure_muzzle_flash_nodes() -> void:
+	if not _scene_tree or not is_instance_valid(_scene_tree.root):
+		return
+
+	if not is_instance_valid(_muzzle_flash_light):
+		_muzzle_flash_light = OmniLight3D.new()
+		_muzzle_flash_light.light_color = Color.YELLOW
+		_muzzle_flash_light.light_energy = 0.16
+		_muzzle_flash_light.omni_range = 0.12
+		_muzzle_flash_light.visible = false
+
+	if _muzzle_flash_light.get_parent() == null:
+		_scene_tree.root.add_child(_muzzle_flash_light)
+		if _muzzle_flash_light.get_parent() == null:
+			_scene_tree.root.call_deferred("add_child", _muzzle_flash_light)
+
+	if not is_instance_valid(_muzzle_flash_timer):
+		_muzzle_flash_timer = Timer.new()
+		_muzzle_flash_timer.one_shot = true
+		_muzzle_flash_timer.wait_time = 0.1
+		_muzzle_flash_timer.timeout.connect(_hide_muzzle_flash)
+
+	if _muzzle_flash_timer.get_parent() == null:
+		_scene_tree.root.add_child(_muzzle_flash_timer)
+		if _muzzle_flash_timer.get_parent() == null:
+			_scene_tree.root.call_deferred("add_child", _muzzle_flash_timer)
 
 
 func execute_hit(weapon: WeaponResource) -> void:
@@ -60,6 +90,27 @@ func _spawn_hit_particle(weapon: WeaponResource, hit_pos: Vector3, hit_normal: V
 	
 	if particle.has_signal("animation_finished"):
 		particle.connect("animation_finished", particle.queue_free)
+	
+	if weapon.hit_muzzle_flash:
+		_spawn_muzzle_flash(hit_pos, hit_normal)
+
+
+func _spawn_muzzle_flash(hit_pos: Vector3, hit_normal: Vector3) -> void:
+	"""Spawn a brief muzzle flash light at hit point"""
+	_ensure_muzzle_flash_nodes()
+	if not is_instance_valid(_muzzle_flash_light) or not _muzzle_flash_light.is_inside_tree():
+		return
+
+	_muzzle_flash_light.global_position = hit_pos + hit_normal * 0.1
+	_muzzle_flash_light.visible = true
+
+	if is_instance_valid(_muzzle_flash_timer) and _muzzle_flash_timer.is_inside_tree():
+		_muzzle_flash_timer.start()
+
+
+func _hide_muzzle_flash() -> void:
+	if is_instance_valid(_muzzle_flash_light):
+		_muzzle_flash_light.visible = false
 
 
 func _spawn_hit_decal(weapon: WeaponResource, collider: Node, hit_pos: Vector3, hit_normal: Vector3) -> void:

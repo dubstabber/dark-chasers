@@ -39,8 +39,7 @@ func _ready():
 		_auto_discover_hud()
 
 	if health_component:
-		health_component.death_sound = Services.preloads.get_sfx_catalog().kill_player
-		health_component.damage_taken.connect(_on_health_component_damage_taken)
+		health_component.death_sound = Services.get_sfx_catalog().kill_player
 
 	if armor_component:
 		armor_component.max_armor = 100
@@ -127,17 +126,6 @@ func _on_death_component_died():
 	elif _death_message != "" and hud:
 		hud.add_log(_death_message)
 	_death_message = ""
-
-
-func _on_health_component_damage_taken(_amount: int, _current_health: int):
-	"""Called when the player takes damage
-
-	This is where you can add player-specific damage effects like:
-	- Screen shake
-	- Damage indicators
-	- Visual effects
-	- Camera effects
-	"""
 
 
 func set_hud(new_hud: CanvasLayer):

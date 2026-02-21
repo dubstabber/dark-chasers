@@ -1,5 +1,7 @@
 extends Node
 
+const BitmapFontCatalogScript = preload("res://scenes/resources/bitmap_font_catalog.gd")
+
 
 ## Single entry-point for all game services.
 ## Replaces individual autoloads with a centralized service registry.
@@ -32,6 +34,14 @@ var sequence_director: SequenceDirector
 var input_router: InputRouter
 var ammo_config: AmmoConfig
 
+var _key_icons: KeyIconLibrary
+var _vfx_catalog: VfxCatalog
+var _particle_catalog: ParticleCatalog
+var _button_images: ButtonImageLibrary
+var _sfx_catalog: SfxCatalog
+var _scene_catalog: SceneCatalog
+var _bitmap_font_catalog: BitmapFontCatalogScript
+
 
 func _enter_tree() -> void:
 	enemy_db = _add_service("EnemyDb", preload("res://scenes/globals/enemy_db.gd"))
@@ -54,3 +64,45 @@ func _add_service(service_name: String, script: GDScript) -> Node:
 	node.set_script(script)
 	add_child(node)
 	return node
+
+
+func get_key_icons() -> KeyIconLibrary:
+	if not _key_icons:
+		_key_icons = load("res://scenes/resources/key_icon_library.tres")
+	return _key_icons
+
+
+func get_vfx_catalog() -> VfxCatalog:
+	if not _vfx_catalog:
+		_vfx_catalog = load("res://scenes/resources/vfx_catalog.tres")
+	return _vfx_catalog
+
+
+func get_particle_catalog() -> ParticleCatalog:
+	if not _particle_catalog:
+		_particle_catalog = load("res://scenes/resources/particle_catalog.tres")
+	return _particle_catalog
+
+
+func get_button_images() -> ButtonImageLibrary:
+	if not _button_images:
+		_button_images = load("res://scenes/resources/button_image_library.tres")
+	return _button_images
+
+
+func get_sfx_catalog() -> SfxCatalog:
+	if not _sfx_catalog:
+		_sfx_catalog = load("res://scenes/resources/sfx_catalog.tres")
+	return _sfx_catalog
+
+
+func get_scene_catalog() -> SceneCatalog:
+	if not _scene_catalog:
+		_scene_catalog = load("res://scenes/resources/scene_catalog.tres")
+	return _scene_catalog
+
+
+func get_bitmap_font_catalog() -> BitmapFontCatalogScript:
+	if not _bitmap_font_catalog:
+		_bitmap_font_catalog = load("res://scenes/resources/bitmap_font_catalog.tres")
+	return _bitmap_font_catalog

@@ -82,7 +82,7 @@ func _create_key_column() -> MarginContainer:
 
 func _create_key_texture_rect(key_type: String) -> MarginContainer:
 	## Create a TextureRect for a specific key type wrapped in a MarginContainer.
-	var tex = Services.preloads.get_key_texture(key_type)
+	var tex = Services.get_key_icons().get_texture(key_type)
 	if not tex:
 		return null
 	var key_texture_rect = TextureRect.new()

@@ -30,7 +30,7 @@ func _destroy() -> void:
 	if destroy_sound:
 		Services.utils.play_sound(destroy_sound, parent.get_parent(), parent.position)
 
-	var catalog: ParticleCatalog = Services.preloads.get_particle_catalog()
+	var catalog: ParticleCatalog = Services.get_particle_catalog()
 
 	for definition in scrap_definitions:
 		var count = definition.count

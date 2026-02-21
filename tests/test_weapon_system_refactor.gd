@@ -13,6 +13,7 @@ func _ready():
 	test_player_no_ammo_wiring()
 	
 	print("=== ALL WEAPON SYSTEM REFACTOR TESTS COMPLETED ===")
+	get_tree().quit()
 
 
 func test_weapon_hit_executor_creation():
@@ -72,10 +73,9 @@ func test_weapon_manager_owns_ammo_wiring():
 	
 	# WeaponManager must have _setup_weapon_ammo_components
 	assert("func _setup_weapon_ammo_components" in source, "WeaponManager should have _setup_weapon_ammo_components")
-	# WeaponManager must wire ammo_component on pickup
-	assert("ammo_component = player_ammo_component" in source, "WeaponManager should wire ammo_component")
-	# WeaponManager must wire weapon_manager reference
-	assert("weapon_manager = self" in source, "WeaponManager should wire weapon_manager = self")
+	# WeaponManager must delegate ammo wiring through the ammo controller
+	assert("_ammo_controller.wire_weapon_manager" in source, "WeaponManager should delegate weapon ammo wiring to WeaponAmmoController")
+	assert("_ammo_controller.initialize_slot_weapons" in source, "WeaponManager should initialize slot weapon ammo wiring via WeaponAmmoController")
 	
 	print("✓ WeaponManager is sole owner of ammo wiring")
 

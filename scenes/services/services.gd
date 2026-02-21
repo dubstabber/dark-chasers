@@ -11,7 +11,6 @@ const BitmapFontCatalogScript = preload("res://scenes/resources/bitmap_font_cata
 ## Ownership boundaries (who may call what):
 ##   enemy_db        — read by: enemies, level scripts
 ##   utils           — read by: any gameplay code (audio helper)
-##   preloads        — read by: any gameplay code (deprecated → use typed catalogs)
 ##   enemy_context   — read by: enemy components | written by: Level
 ##   world_context   — read by: HUD, gameplay systems | written by: Level
 ##   camera_manager  — read by: player input, level scripts, button/area events
@@ -23,7 +22,6 @@ const BitmapFontCatalogScript = preload("res://scenes/resources/bitmap_font_cata
 
 var enemy_db: EnemyDb
 var utils: Utils
-var preloads: Preloads
 var enemy_context: EnemyContext
 var world_context: WorldContext
 var camera_manager: CameraManager
@@ -46,7 +44,6 @@ var _bitmap_font_catalog: BitmapFontCatalogScript
 func _enter_tree() -> void:
 	enemy_db = _add_service("EnemyDb", preload("res://scenes/globals/enemy_db.gd"))
 	utils = _add_service("Utils", preload("res://scenes/globals/utils.gd"))
-	preloads = _add_service("Preloads", preload("res://scenes/globals/preloads.gd"))
 	enemy_context = _add_service("EnemyContext", preload("res://scenes/services/enemy_context.gd"))
 	world_context = _add_service("WorldContext", preload("res://scenes/services/world_context.gd"))
 	camera_manager = _add_service("CameraManager", preload("res://scenes/services/camera_manager.gd"))

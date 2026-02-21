@@ -1,5 +1,7 @@
 class_name WeaponManager extends Node3D
 
+const WeaponAmmoControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ammo_controller.gd")
+
 signal lighter_on
 signal lighter_off
 signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
@@ -12,6 +14,7 @@ var _bob_controller := WeaponBobController.new()
 var _switch_controller := WeaponSwitchController.new()
 var _hit_executor := WeaponHitExecutor.new()
 var _sound_controller := WeaponSoundController.new()
+var _ammo_controller := WeaponAmmoControllerScript.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -96,13 +99,7 @@ func _setup_weapon_ammo_components() -> void:
 		return
 	
 	# Set up ammo component reference for all weapons in all slots
-	for slot in slots:
-		if not (slot is Array):
-			continue
-		for weapon in slot:
-			if weapon:
-				weapon.ammo_component = player_ammo_component
-				weapon.weapon_manager = self
+	_ammo_controller.initialize_slot_weapons(slots, player_ammo_component, self)
 	
 	_ammo_components_initialized = true
 
@@ -209,8 +206,7 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	# Set up ammo component reference for the new weapon
 	var player_ammo_component = _get_player_ammo_component()
 	if player_ammo_component:
-		new_weapon.ammo_component = player_ammo_component
-		new_weapon.weapon_manager = self
+		_ammo_controller.wire_weapon_manager(new_weapon, player_ammo_component, self)
 	
 	var slot_index: int = clamp(new_weapon.slot, 1, 9)
 	var slot_array: Array = _get_slot_array(slot_index)
@@ -264,19 +260,12 @@ func stop_auto_hitting() -> void:
 
 func _reset_to_idle_after_auto_fire() -> void:
 	"""Reset weapon to idle state after auto-fire ends"""
-	if animation_player.is_playing():
-		await animation_player.animation_finished
-	
-	if is_auto_hitting:
-		return # User started firing again
-	
-	if current_weapon and current_weapon.pullout_anim_name and not animation_player.is_playing():
-		animation_player.stop()
-		animation_player.current_animation = current_weapon.pullout_anim_name
-		var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
-		if pullout_anim:
-			animation_player.seek(pullout_anim.length, true, true)
-			lighter_off.emit()
+	await _ammo_controller.reset_after_auto_fire(
+		animation_player,
+		current_weapon,
+		is_auto_hitting,
+		Callable(self, "_emit_lighter_off")
+	)
 
 
 func hit() -> void:
@@ -355,7 +344,9 @@ func _equip_from_slot(slot: Array) -> void:
 	current_weapon = next_weapon
 	bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
 	_sound_controller.set_hit_sound_stream(current_weapon)
-	current_weapon.weapon_manager = self
+	var player_ammo_component = _get_player_ammo_component()
+	if player_ammo_component:
+		_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, self)
 	
 	# Retry setting up all ammo components if they weren't initialized during _ready
 	if not _ammo_components_initialized:
@@ -363,9 +354,9 @@ func _equip_from_slot(slot: Array) -> void:
 	
 	# Ensure ammo component is set (in case it wasn't set during initialization)
 	if not current_weapon.ammo_component:
-		var player_ammo_component = _get_player_ammo_component()
+		player_ammo_component = _get_player_ammo_component()
 		if player_ammo_component:
-			current_weapon.ammo_component = player_ammo_component
+			_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, self)
 
 	# Connect to weapon's ammo signals
 	if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
@@ -486,31 +477,13 @@ func add_ammo_to_weapons(amount: int, all_weapons: bool = false) -> bool:
 	Returns:
 		bool: True if ammo was added to at least one weapon, False otherwise
 	"""
-	var player_ammo_component = _get_player_ammo_component()
-	if not player_ammo_component:
-		return false
-
-	var ammo_added = false
-	var ammo_types_added = {}
-
-	if all_weapons:
-		for slot in slots:
-			if not (slot is Array):
-				continue
-			for weapon in slot:
-				if weapon and not weapon.infinite_ammo and weapon.ammo_type != "":
-					if not ammo_types_added.has(weapon.ammo_type):
-						if player_ammo_component.add_ammo(weapon.ammo_type, amount):
-							ammo_added = true
-							ammo_types_added[weapon.ammo_type] = true
-	else:
-		if current_weapon and not current_weapon.infinite_ammo:
-			if current_weapon.ammo_type != "":
-				ammo_added = player_ammo_component.add_ammo(current_weapon.ammo_type, amount)
-			else:
-				push_warning("WeaponManager: Current weapon '%s' has no ammo_type specified!" % current_weapon.name)
-
-	return ammo_added
+	return _ammo_controller.add_ammo_to_weapons(
+		slots,
+		current_weapon,
+		_get_player_ammo_component(),
+		amount,
+		all_weapons
+	)
 
 
 func _on_weapon_ammo_depleted():
@@ -524,21 +497,13 @@ func _on_weapon_ammo_depleted():
 
 	# Stop auto-hitting behavior
 	is_auto_hitting = false
+	await _ammo_controller.reset_after_auto_fire(
+		animation_player,
+		current_weapon,
+		is_auto_hitting,
+		Callable(self, "_emit_lighter_off")
+	)
 
-	# Wait for current animation to finish, then reset to idle frame
-	if animation_player.is_playing():
-		await animation_player.animation_finished
 
-	# Double-check that we're still not auto-hitting (user might have pressed mouse again)
-	if is_auto_hitting:
-		return
-
-	# Reset to idle frame (same logic as mouse button release)
-	if current_weapon.pullout_anim_name and not animation_player.is_playing():
-		animation_player.stop()
-
-		animation_player.current_animation = current_weapon.pullout_anim_name
-		var pullout_anim := animation_player.get_animation(current_weapon.pullout_anim_name)
-		if pullout_anim:
-			animation_player.seek(pullout_anim.length, true, true)
-			lighter_off.emit()
+func _emit_lighter_off() -> void:
+	lighter_off.emit()

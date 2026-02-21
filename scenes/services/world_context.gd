@@ -32,10 +32,12 @@ func _try_find_from_groups() -> void:
 
 
 func get_level_node() -> Node3D:
-	if not is_instance_valid(_level_node) and _use_group_fallback:
-		_try_find_from_groups()
-		if _level_node:
-			push_warning("WorldContext: Auto-discovered level via group fallback. Use Level._ready() for explicit wiring.")
+	if not is_instance_valid(_level_node):
+		_level_node = null
+		if _use_group_fallback:
+			_try_find_from_groups()
+			if _level_node:
+				push_warning("WorldContext: Auto-discovered level via group fallback. Use Level._ready() for explicit wiring.")
 	return _level_node
 
 

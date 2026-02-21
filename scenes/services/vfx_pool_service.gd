@@ -1,6 +1,8 @@
 class_name VfxPoolService
 extends Node
 
+const PoolableVfxScript = preload("res://scenes/interfaces/poolable_vfx.gd")
+
 ## VFX pooling service to reduce instancing spikes for bursty effects.
 ## Maintains pools of reusable scene instances (scrap, particles, decals).
 
@@ -33,8 +35,9 @@ func _ensure_pool(path: String, scene: PackedScene) -> void:
 	for i in range(default_pool_size):
 		var instance = scene.instantiate()
 		instance.set_meta("_pool_path", path)
-		instance.visible = false
+		instance.set_meta("_pool_in_use", false)
 		add_child(instance)
+		_return_to_pool(instance)
 		_pools[path].append(instance)
 
 
@@ -50,8 +53,8 @@ func get_instance(scene: PackedScene) -> Node:
 	
 	# Find available instance
 	for instance in _pools[path]:
-		if not instance.visible:
-			instance.visible = true
+		if not _is_in_use(instance):
+			_mark_borrowed(instance)
 			_active[path] = _active.get(path, 0) + 1
 			return instance
 	
@@ -60,6 +63,8 @@ func get_instance(scene: PackedScene) -> Node:
 	var overflow = scene.instantiate()
 	overflow.set_meta("_pool_path", path)
 	overflow.set_meta("_pool_overflow", true)
+	_mark_borrowed(overflow)
+	_active[path] = _active.get(path, 0) + 1
 	return overflow
 
 
@@ -71,24 +76,17 @@ func release_instance(instance: Node) -> void:
 	
 	# Handle overflow instances
 	if instance.get_meta("_pool_overflow", false):
+		PoolableVfxScript.on_returned(instance)
+		if path in _active:
+			_active[path] = max(0, _active[path] - 1)
 		instance.queue_free()
 		return
 	
 	# Return to pool
-	instance.visible = false
-	if instance.get_parent() != self:
-		instance.get_parent().remove_child(instance)
-		add_child(instance)
+	_return_to_pool(instance)
 	
 	if path in _active:
 		_active[path] = max(0, _active[path] - 1)
-	
-	# Reset common properties
-	if instance is RigidBody3D:
-		instance.linear_velocity = Vector3.ZERO
-		instance.angular_velocity = Vector3.ZERO
-	if "position" in instance:
-		instance.position = Vector3.ZERO
 
 
 func get_pool_stats() -> Dictionary:
@@ -96,7 +94,7 @@ func get_pool_stats() -> Dictionary:
 	for path in _pools:
 		var available = 0
 		for instance in _pools[path]:
-			if not instance.visible:
+			if not _is_in_use(instance):
 				available += 1
 		stats[path] = {
 			"pool_size": _pools[path].size(),
@@ -104,3 +102,29 @@ func get_pool_stats() -> Dictionary:
 			"available": available
 		}
 	return stats
+
+
+func _is_in_use(instance: Node) -> bool:
+	return bool(instance.get_meta("_pool_in_use", false))
+
+
+func _mark_borrowed(instance: Node) -> void:
+	instance.set_meta("_pool_in_use", true)
+	instance.visible = true
+	PoolableVfxScript.on_borrowed(instance)
+
+
+func _return_to_pool(instance: Node) -> void:
+	if instance.get_parent() != self:
+		instance.get_parent().remove_child(instance)
+		add_child(instance)
+
+	if instance is RigidBody3D:
+		instance.linear_velocity = Vector3.ZERO
+		instance.angular_velocity = Vector3.ZERO
+	if "position" in instance:
+		instance.position = Vector3.ZERO
+
+	PoolableVfxScript.on_returned(instance)
+	instance.visible = false
+	instance.set_meta("_pool_in_use", false)

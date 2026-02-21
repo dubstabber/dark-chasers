@@ -37,7 +37,7 @@ func get_current_sequence_id() -> StringName:
 
 func play_sequence(sequence: RefCounted) -> void:
 	if _is_playing:
-		_cancel_current()
+		await _cancel_current(false)
 	
 	_current_sequence = sequence
 	_is_playing = true
@@ -60,20 +60,20 @@ func queue_sequence(sequence: RefCounted) -> void:
 func skip_current() -> void:
 	if _is_playing and _can_skip and _current_sequence:
 		sequence_skipped.emit(_current_sequence.id)
-		_end_current()
+		await _end_current()
 
 
 func cancel_current() -> void:
 	if _is_playing:
-		_cancel_current()
+		await _cancel_current()
 
 
-func _cancel_current() -> void:
+func _cancel_current(start_next_queued: bool = true) -> void:
 	if _current_sequence:
-		_end_current()
+		await _end_current(start_next_queued)
 
 
-func _end_current() -> void:
+func _end_current(start_next_queued: bool = true) -> void:
 	if not _current_sequence:
 		return
 	
@@ -91,7 +91,7 @@ func _end_current() -> void:
 	Services.event_bus.emit(GameEventTypesScript.SEQUENCE_ENDED, {"sequence_id": ended_id})
 	
 	# Play next queued sequence
-	if not _sequence_queue.is_empty():
+	if start_next_queued and not _sequence_queue.is_empty():
 		var next: RefCounted = _sequence_queue.pop_front()
 		play_sequence(next)
 
@@ -114,7 +114,7 @@ func _execute_sequence() -> void:
 			"step_index": i
 		})
 	
-	_end_current()
+	await _end_current()
 
 
 func _execute_action(action: RefCounted) -> void:

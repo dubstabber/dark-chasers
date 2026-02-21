@@ -15,6 +15,9 @@ const MAX_CACHE_SIZE: int = 128
 var _footstep_surface_child_cache: Dictionary = {}
 const MAX_SURFACE_CACHE_SIZE: int = 128
 
+var _triangle_surface_map_cache: Dictionary = {}
+const MAX_TRIANGLE_MAP_CACHE_SIZE: int = 64
+
 
 func play_footstep():
 	var query = PhysicsRayQueryParameters3D.create(global_position, global_position + Vector3(0, -1, 0))
@@ -106,6 +109,7 @@ func _get_surface_material(collider: Node3D) -> Material:
 func _get_surface_material_uncached(collider: Node3D) -> Material:
 	var mesh_instance = null
 	var meshes = []
+	var hit_position: Vector3 = last_result.get('position', global_position)
 	if collider is CSGShape3D:
 		if collider is CSGCombiner3D:
 			#composite mesh
@@ -128,58 +132,113 @@ func _get_surface_material_uncached(collider: Node3D) -> Material:
 					meshes = mesh_instances
 	
 	if meshes:
-		#TODO: Handle multiple meshes
-		mesh_instance = meshes[0]
+		mesh_instance = _pick_mesh_instance_for_hit(meshes, hit_position)
 	
-	if mesh_instance and 'mesh' in mesh_instance:
+	if mesh_instance is MeshInstance3D:
 		var mesh = mesh_instance.mesh
+		if mesh == null:
+			return null
 		if mesh.get_surface_count() == 0:
 			return null
 		elif mesh.get_surface_count() == 1:
 			return mesh.surface_get_material(0)
 		else:
-			var face = null
-			
-			var ray = last_result['position'] - global_position
-			var faces = mesh.get_faces()
-			
-			var aabb = mesh.get_aabb() as AABB
-			var accuracy = round(4 * aabb.size.length_squared()) # dynamically calculate a reasonable grid size
-			var snap = aabb.size / accuracy # this will be the size of our units to snap to
-			
-			var coord = null
-			
-			for i in range(len(faces) / 3.0):
-				# first, figure out what face we're standing on
-				var face_idx = i * 3
-				var a = mesh_instance.to_global(faces[face_idx])
-				var b = mesh_instance.to_global(faces[face_idx + 1])
-				var c = mesh_instance.to_global(faces[face_idx + 2])
-				var ray_t = Geometry3D.ray_intersects_triangle(global_position, ray, a, b, c)
-				if ray_t:
-					face = faces.slice(face_idx, face_idx + 3)
-					# round out vert coordinates to avoid floating point errors
-					coord = [round(faces[face_idx] / snap), round(faces[face_idx + 1] / snap), round(faces[face_idx + 2] / snap)]
-					break
-			var mat = null
-			if face:
-				for surface in range(mesh.get_surface_count()):
-					var surf = mesh.surface_get_arrays(surface)[0]
-					var has_vert_a = false
-					var has_vert_b = false
-					var has_vert_c = false
-					for vert in surf:
-						var vert_coord = round(vert / snap)
-						has_vert_a = has_vert_a or vert_coord == coord[0]
-						has_vert_b = has_vert_b or vert_coord == coord[1]
-						has_vert_c = has_vert_c or vert_coord == coord[2]
-						if has_vert_a and has_vert_b and has_vert_c:
-							# we found it! note the material and break free!
-							mat = mesh.surface_get_material(surface)
-							break
-					if has_vert_a and has_vert_b and has_vert_c:
-						break
-			return mat
+			var hit_triangle_index: int = int(last_result.get("face_index", -1))
+			if hit_triangle_index < 0:
+				hit_triangle_index = _find_hit_triangle_index(mesh_instance, mesh, hit_position)
+
+			if hit_triangle_index >= 0:
+				var surface_index: int = _get_surface_index_for_triangle(mesh, hit_triangle_index)
+				if surface_index >= 0 and surface_index < mesh.get_surface_count():
+					return mesh.surface_get_material(surface_index)
+			return null
+	return null
+
+
+func _find_hit_triangle_index(mesh_instance: MeshInstance3D, mesh: Mesh, hit_position: Vector3) -> int:
+	var ray: Vector3 = hit_position - global_position
+	var faces: PackedVector3Array = mesh.get_faces()
+
+	for i in range(int(faces.size() / 3.0)):
+		var face_idx: int = i * 3
+		var a: Vector3 = mesh_instance.to_global(faces[face_idx])
+		var b: Vector3 = mesh_instance.to_global(faces[face_idx + 1])
+		var c: Vector3 = mesh_instance.to_global(faces[face_idx + 2])
+		var ray_t = Geometry3D.ray_intersects_triangle(global_position, ray, a, b, c)
+		if ray_t:
+			return i
+
+	return -1
+
+
+func _get_surface_index_for_triangle(mesh: Mesh, triangle_index: int) -> int:
+	var mesh_id: int = mesh.get_instance_id()
+	var triangle_to_surface: Array = _triangle_surface_map_cache.get(mesh_id, [])
+
+	if triangle_to_surface.is_empty():
+		triangle_to_surface = _build_triangle_surface_map(mesh)
+		if _triangle_surface_map_cache.size() >= MAX_TRIANGLE_MAP_CACHE_SIZE:
+			var keys: Array = _triangle_surface_map_cache.keys()
+			for i in range(MAX_TRIANGLE_MAP_CACHE_SIZE >> 1):
+				_triangle_surface_map_cache.erase(keys[i])
+		_triangle_surface_map_cache[mesh_id] = triangle_to_surface
+
+	if triangle_index < 0 or triangle_index >= triangle_to_surface.size():
+		return -1
+
+	return int(triangle_to_surface[triangle_index])
+
+
+func _build_triangle_surface_map(mesh: Mesh) -> Array:
+	var triangle_to_surface: Array = []
+	for surface_index in range(mesh.get_surface_count()):
+		var arrays: Array = mesh.surface_get_arrays(surface_index)
+		if arrays.is_empty():
+			continue
+
+		var triangle_count: int = 0
+		var index_data = arrays[Mesh.ARRAY_INDEX]
+		if index_data is PackedInt32Array and not index_data.is_empty():
+			var indices: PackedInt32Array = index_data
+			triangle_count = int(indices.size() / 3.0)
+		else:
+			var vertex_data = arrays[Mesh.ARRAY_VERTEX]
+			if vertex_data is PackedVector3Array:
+				var vertices: PackedVector3Array = vertex_data
+				triangle_count = int(vertices.size() / 3.0)
+
+		for _i in range(triangle_count):
+			triangle_to_surface.append(surface_index)
+
+	return triangle_to_surface
+
+
+func _pick_mesh_instance_for_hit(meshes: Array, hit_position: Vector3) -> MeshInstance3D:
+	var best_mesh: MeshInstance3D = null
+	var best_distance_sq := INF
+
+	for candidate in meshes:
+		if not (candidate is MeshInstance3D):
+			continue
+		if candidate.mesh == null:
+			continue
+
+		var candidate_transform: Transform3D = candidate.global_transform if candidate.is_inside_tree() else candidate.transform
+		var local_hit: Vector3 = candidate_transform.affine_inverse() * hit_position
+		var mesh_aabb: AABB = candidate.mesh.get_aabb()
+		var distance_sq: float = 0.0 if mesh_aabb.has_point(local_hit) else local_hit.distance_squared_to(mesh_aabb.get_center())
+
+		if distance_sq < best_distance_sq:
+			best_distance_sq = distance_sq
+			best_mesh = candidate
+
+	if best_mesh:
+		return best_mesh
+
+	for fallback in meshes:
+		if fallback is MeshInstance3D:
+			return fallback
+
 	return null
 
 func _play_footstep(footstep_profile: AudioStreamRandomizer):

@@ -41,9 +41,7 @@ folder_colors={
 "res://scenes/": "green",
 "res://shaders/": "pink",
 "res://sounds/": "yellow",
-"res://tests/": "purple",
-"res://utils/": "gray",
-"res://weapon_manager/": "gray"
+"res://tests/": "purple"
 }
 
 [importer_defaults]

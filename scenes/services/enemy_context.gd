@@ -35,10 +35,12 @@ func _try_find_from_groups() -> void:
 
 
 func get_players_node() -> Node3D:
-	if not is_instance_valid(_players_node) and _use_group_fallback:
-		_players_node = get_tree().get_first_node_in_group("players")
-		if _players_node:
-			push_warning("EnemyContext: Auto-discovered players via group fallback. Use Level._ready() for explicit wiring.")
+	if not is_instance_valid(_players_node):
+		_players_node = null
+		if _use_group_fallback:
+			_players_node = get_tree().get_first_node_in_group("players")
+			if _players_node:
+				push_warning("EnemyContext: Auto-discovered players via group fallback. Use Level._ready() for explicit wiring.")
 	return _players_node
 
 
@@ -54,10 +56,12 @@ func get_players() -> Array[Node3D]:
 
 
 func get_transitions_node() -> Node3D:
-	if not is_instance_valid(_transitions_node) and _use_group_fallback:
-		_transitions_node = get_tree().get_first_node_in_group("transitions")
-		if _transitions_node:
-			push_warning("EnemyContext: Auto-discovered transitions via group fallback. Use Level._ready() for explicit wiring.")
+	if not is_instance_valid(_transitions_node):
+		_transitions_node = null
+		if _use_group_fallback:
+			_transitions_node = get_tree().get_first_node_in_group("transitions")
+			if _transitions_node:
+				push_warning("EnemyContext: Auto-discovered transitions via group fallback. Use Level._ready() for explicit wiring.")
 	return _transitions_node
 
 

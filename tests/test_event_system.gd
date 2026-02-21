@@ -19,12 +19,15 @@ func _ready():
 	test_event_bus_history()
 	test_sequence_action_creation()
 	test_sequence_data_builder()
+	await test_sequence_director_cancel_runs_async_cleanup()
+	await test_sequence_director_skip_runs_async_cleanup()
 	test_domain_specific_event_routing()
 	test_generic_and_domain_events_both_fire()
 	test_payload_policy_event_scripts_no_double_camera_handling()
 	test_payload_policy_level_handles_generic_payloads()
 
 	print("=== ALL EVENT SYSTEM TESTS COMPLETED ===")
+	get_tree().quit()
 
 
 func test_game_event_creation():
@@ -137,6 +140,55 @@ func test_sequence_data_builder():
 	assert(sequence.actions[1].action_type == SequenceActionScript.Type.SHOW_TEXT, "Second action should be show_text")
 	
 	print("✓ SequenceData builder works correctly")
+
+
+func test_sequence_director_cancel_runs_async_cleanup() -> void:
+	print("\n--- Testing SequenceDirector cancel awaits cleanup ---")
+
+	var cleanup_state := {"completed": false}
+	var sequence = SequenceDataScript.create(&"cancel_cleanup_test") \
+		.wait(3.0)
+	sequence.add_cleanup(SequenceActionScript.custom(func():
+		var timer := get_tree().create_timer(0.01)
+		timer.timeout.connect(func():
+			cleanup_state["completed"] = true
+		, CONNECT_ONE_SHOT)
+		return timer.timeout
+	))
+
+	Services.sequence_director.play_sequence(sequence)
+	await get_tree().process_frame
+	await Services.sequence_director.cancel_current()
+
+	assert(cleanup_state.get("completed", false), "Cancel should await async cleanup actions")
+	assert(not Services.sequence_director.is_playing(), "SequenceDirector should not be playing after cancel")
+
+	print("✓ SequenceDirector cancel cleanup works correctly")
+
+
+func test_sequence_director_skip_runs_async_cleanup() -> void:
+	print("\n--- Testing SequenceDirector skip awaits cleanup ---")
+
+	var cleanup_state := {"completed": false}
+	var sequence = SequenceDataScript.create(&"skip_cleanup_test") \
+		.wait(3.0) \
+		.set_skippable(true)
+	sequence.add_cleanup(SequenceActionScript.custom(func():
+		var timer := get_tree().create_timer(0.01)
+		timer.timeout.connect(func():
+			cleanup_state["completed"] = true
+		, CONNECT_ONE_SHOT)
+		return timer.timeout
+	))
+
+	Services.sequence_director.play_sequence(sequence)
+	await get_tree().process_frame
+	await Services.sequence_director.skip_current()
+
+	assert(cleanup_state.get("completed", false), "Skip should await async cleanup actions")
+	assert(not Services.sequence_director.is_playing(), "SequenceDirector should not be playing after skip")
+
+	print("✓ SequenceDirector skip cleanup works correctly")
 
 
 func _on_test_event(event: RefCounted) -> void:

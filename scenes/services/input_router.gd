@@ -2,7 +2,7 @@ class_name InputRouter
 extends Node
 
 ## Centralized handler for app-level input (quit, fullscreen, debug toggles).
-## Add as autoload to handle these inputs globally instead of in room scripts.
+## Owned by the Services autoload (Services.input_router), not a separate autoload.
 
 signal quit_requested
 signal fullscreen_toggled(is_fullscreen: bool)

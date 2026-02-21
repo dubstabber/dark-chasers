@@ -7,11 +7,12 @@ func _ready():
 	print("=== ASSET REGISTRIES TESTS ===")
 	
 	test_particle_catalog_exists()
-	test_preloads_has_catalog_accessor()
+	test_services_has_catalog_accessor()
 	test_armor_component_uses_utils_audio()
 	test_image_enemy_scaling_logic()
 	
 	print("=== ALL ASSET REGISTRIES TESTS COMPLETED ===")
+	get_tree().quit()
 
 
 func test_particle_catalog_exists():
@@ -30,20 +31,17 @@ func test_particle_catalog_exists():
 	print("✓ ParticleCatalog exists and has populated arrays")
 
 
-func test_preloads_has_catalog_accessor():
-	print("\n--- Testing Preloads Catalog Accessor ---")
+func test_services_has_catalog_accessor():
+	print("\n--- Testing Services Catalog Accessors ---")
 	
-	var script = load("res://scenes/globals/preloads.gd") as GDScript
+	var script = load("res://scenes/services/services.gd") as GDScript
 	var source = script.source_code
 	
-	# Verify get_particle_catalog method exists
-	assert("func get_particle_catalog()" in source, "Preloads should have get_particle_catalog method")
-	assert("_particle_catalog: ParticleCatalog" in source, "Preloads should have _particle_catalog field")
+	assert("func get_particle_catalog()" in source, "Services should have get_particle_catalog method")
+	assert("func get_vfx_catalog()" in source, "Services should have get_vfx_catalog method")
+	assert("var preloads:" not in source, "Services should no longer expose a preloads service")
 	
-	# Verify deprecation comments exist
-	assert("# DEPRECATED" in source, "Preloads should have deprecation comments for old arrays")
-	
-	print("✓ Preloads has get_particle_catalog accessor and deprecation comments")
+	print("✓ Services exposes catalog accessors without legacy preloads path")
 
 
 func test_armor_component_uses_utils_audio():

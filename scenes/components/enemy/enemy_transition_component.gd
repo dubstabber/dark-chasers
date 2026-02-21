@@ -8,6 +8,7 @@ var _owner_enemy: Enemy = null
 var _enemy_context: Node = null
 var _nav_component: EnemyNavigationComponent = null
 var _disappear_zone_component: EnemyDisappearZoneComponent = null
+var _room_pathing_component: RoomPathingComponent = null
 
 var map_transitions: Node3D = null
 var pending_transition_name: String = ""
@@ -20,9 +21,10 @@ func _ready() -> void:
 		map_transitions = _enemy_context.get_transitions_node()
 
 
-func setup(nav_component: EnemyNavigationComponent, disappear_zone_component: EnemyDisappearZoneComponent) -> void:
+func setup(nav_component: EnemyNavigationComponent, disappear_zone_component: EnemyDisappearZoneComponent, room_pathing_component: RoomPathingComponent = null) -> void:
 	_nav_component = nav_component
 	_disappear_zone_component = disappear_zone_component
+	_room_pathing_component = room_pathing_component
 
 
 func makepath() -> void:
@@ -72,11 +74,10 @@ func _find_path_to_player() -> Array:
 	if not target:
 		return []
 
-	var room_pathing = _owner_enemy.get_node_or_null("RoomPathingComponent")
-	if room_pathing:
-		return room_pathing.find_path_to_room(_owner_enemy.current_room, target.current_room)
+	if _room_pathing_component:
+		return _room_pathing_component.find_path_to_room(_owner_enemy.current_room, target.current_room)
 
-	push_warning("Enemy: No room pathing component found")
+	push_warning("EnemyTransitionComponent: No room pathing component found")
 	return []
 
 
@@ -117,8 +118,7 @@ func _execute_transition(transition_node: Node3D) -> void:
 	_owner_enemy.global_position = marker.global_position
 
 	# Restart pathfinding with short delay
-	_owner_enemy.find_path_timer.wait_time = 0.1
-	_owner_enemy.find_path_timer.start()
+	_owner_enemy.restart_pathfinding(0.1)
 
 
 func _set_nav_target(pos: Vector3) -> void:

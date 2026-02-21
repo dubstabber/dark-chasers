@@ -1,12 +1,19 @@
-[gd_scene load_steps=11 format=3 uid="uid://curr1hvhg2u61"]
+[gd_scene load_steps=13 format=3 uid="uid://curr1hvhg2u61"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_0h1jq"]
 [ext_resource type="Script" uid="uid://cmiodefddvvp3" path="res://scenes/enemies/ilopulu.gd" id="2_ci2av"]
 [ext_resource type="Texture2D" uid="uid://d28181lghvf1g" path="res://images/enemies/ilopulu/ILOPA0.png" id="3_gw83j"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="3_xf0aw"]
 [ext_resource type="Texture2D" uid="uid://2tagxmyilbhx" path="res://images/enemies/ilopulu/ILOPB0.png" id="4_o86ge"]
 [ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="5_m8loj"]
 [ext_resource type="PackedScene" uid="uid://dqb5x8m2kv4rl" path="res://scenes/particles/ao_blue_blood_particle.tscn" id="6_0ua07"]
 [ext_resource type="PackedScene" uid="uid://bv7k2m8qx5npl" path="res://scenes/particles/blood_splat_decal.tscn" id="7_xf0aw"]
+
+[sub_resource type="Resource" id="Resource_jygoe"]
+resource_local_to_scene = true
+script = ExtResource("3_xf0aw")
+speed = 9.0
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_rpvyw"]
 animations = [{
@@ -40,8 +47,7 @@ height = 2.30754
 
 [node name="Ilopulu" instance=ExtResource("1_0h1jq")]
 script = ExtResource("2_ci2av")
-speed = 9.0
-death_message = "was given nightmares by Ilopulu."
+stats = SubResource("Resource_jygoe")
 
 [node name="Interaction" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.261483, 0)

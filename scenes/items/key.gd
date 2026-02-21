@@ -50,8 +50,7 @@ func _on_body_entered(body):
 				"message": message_text
 			}, self)
 
-		# Also emit generic KEY_COLLECTED for base Level class handling
-		# (key collection tracking, HUD updates)
+		# Emit generic event for base Level class handling (key collection tracking)
 		Services.event_bus.emit(GameEventTypesScript.KEY_COLLECTED, {
 			"body": body,
 			"key_type": key_type,

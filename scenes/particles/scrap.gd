@@ -9,13 +9,15 @@ var last_texture_change_time: float = 0.0
 var texture_change_interval: float = 0.12 # Controlled animation timing
 var current_texture_index: int = 0 # Track current texture to avoid immediate repeats
 var is_settled: bool = false # Track if particle has settled to prevent further animation
+var _process_scrap_behavior: Callable
 
-@onready var sprite_3d = $Sprite3D
+@onready var sprite_3d: Sprite3D = $Sprite3D
 
 func _ready():
 	_catalog = Services.preloads.get_particle_catalog()
 	# Ensure immediate initialization to prevent spawn delays
 	if scrap_type:
+		_configure_process_behavior()
 		_initialize_texture()
 
 func _process(delta):
@@ -28,45 +30,8 @@ func _process(delta):
 		return
 
 	last_texture_change_time += delta
-
-	match scrap_type:
-		"small wood scrap":
-			_handle_scrap_animation(_catalog.small_wood_images)
-		"big wood scrap":
-			_handle_scrap_animation(_catalog.big_wood_images)
-		"white scrap":
-			_handle_scrap_animation(_catalog.white_scrap_images)
-		"pot scrap":
-			_handle_scrap_animation(_catalog.pot_scrap_images)
-		"circle ground scrap":
-			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
-				if sprite_3d.texture != _catalog.circle_ground_scrap_image:
-					sprite_3d.texture = _catalog.circle_ground_scrap_image
-			else:
-				queue_free()
-		"small ground scrap":
-			if abs(linear_velocity.x) > 0.01 or abs(linear_velocity.y) > 0.01 or abs(linear_velocity.z) > 0.01:
-				if sprite_3d.texture != _catalog.small_ground_scrap_image:
-					sprite_3d.texture = _catalog.small_ground_scrap_image
-			else:
-				queue_free()
-		"grass scrap":
-			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
-				sprite_3d.texture = _catalog.grass_scrap_images.pick_random()
-			else:
-				queue_free()
-		"paper scrap":
-			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
-				if not sprite_3d.texture:
-					sprite_3d.texture = _catalog.paper_scrap_images.pick_random()
-			else:
-				queue_free()
-		"glass scrap":
-			if abs(linear_velocity.x) > 0.05 or abs(linear_velocity.y) > 0.05 or abs(linear_velocity.z) > 0.05:
-				if not sprite_3d.texture:
-					sprite_3d.texture = _catalog.glass_scrap_images.pick_random()
-			else:
-				queue_free()
+	if _process_scrap_behavior.is_valid():
+		_process_scrap_behavior.call()
 
 func set_scrap_type(t):
 	scrap_type = t
@@ -90,8 +55,66 @@ func set_scrap_type(t):
 		"glass scrap":
 			sprite_3d.scale = Vector3(0.6, 0.6, 0.6)
 
+	_configure_process_behavior()
+
 	# Initialize texture immediately to prevent spawn delay
 	_initialize_texture()
+
+
+func _configure_process_behavior() -> void:
+	if not _catalog:
+		_catalog = Services.preloads.get_particle_catalog()
+
+	match scrap_type:
+		"small wood scrap":
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.small_wood_images)
+		"big wood scrap":
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.big_wood_images)
+		"white scrap":
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.white_scrap_images)
+		"pot scrap":
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.pot_scrap_images)
+		"circle ground scrap":
+			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.circle_ground_scrap_image, 0.01)
+		"small ground scrap":
+			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.small_ground_scrap_image, 0.01)
+		"grass scrap":
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.grass_scrap_images, 0.05, false)
+		"paper scrap":
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.paper_scrap_images, 0.05, true)
+		"glass scrap":
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.glass_scrap_images, 0.05, true)
+		_:
+			_process_scrap_behavior = Callable()
+
+
+func _process_animated_scrap(texture_array: Array) -> void:
+	_handle_scrap_animation(texture_array)
+
+
+func _process_ground_scrap(texture: Texture2D, velocity_threshold: float) -> void:
+	if _is_above_velocity_threshold(velocity_threshold):
+		if sprite_3d.texture != texture:
+			sprite_3d.texture = texture
+	else:
+		queue_free()
+
+
+func _process_random_scrap(texture_array: Array, velocity_threshold: float, set_once: bool) -> void:
+	if _is_above_velocity_threshold(velocity_threshold):
+		if texture_array.is_empty():
+			return
+		if set_once:
+			if not sprite_3d.texture:
+				sprite_3d.texture = texture_array.pick_random()
+		else:
+			sprite_3d.texture = texture_array.pick_random()
+	else:
+		queue_free()
+
+
+func _is_above_velocity_threshold(threshold: float) -> bool:
+	return abs(linear_velocity.x) > threshold or abs(linear_velocity.y) > threshold or abs(linear_velocity.z) > threshold
 
 func _initialize_texture():
 	# Get sprite reference immediately if not available

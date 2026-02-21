@@ -40,6 +40,7 @@ var directional_material: ShaderMaterial
 var _last_synced_alpha_cut_mode = null
 var _last_synced_alpha_cut_threshold = null
 var _last_synced_render_priority = null
+var _shader_sync_dirty: bool = true
 
 # Cached references
 var _state_node: Node = null # Node providing moving_state/shooting_state
@@ -51,18 +52,13 @@ var _state_node: Node = null # Node providing moving_state/shooting_state
 @export_enum("Disabled", "Discard", "Opaque Pre-Pass", "Alpha Hash") var sprite_alpha_cut_mode: int = 0:
 	set(value):
 		sprite_alpha_cut_mode = value
-		if directional_material:
-			directional_material.set_shader_parameter("alpha_cut_mode", sprite_alpha_cut_mode)
-			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
+		_mark_shader_sync_dirty()
 
 # Alpha cut threshold for Discard/Pre-Pass
 @export_range(0.0, 1.0, 0.01) var alpha_cut_threshold: float = 0.5:
 	set(value):
 		alpha_cut_threshold = value
-		if directional_material:
-			directional_material.set_shader_parameter("alpha_cut_threshold", alpha_cut_threshold)
-			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
-			directional_material.set_shader_parameter("shaded_enabled", 1 if self.shaded else 0)
+		_mark_shader_sync_dirty()
 
 
 @export var target_node_path: NodePath = NodePath(""):
@@ -131,12 +127,13 @@ func _sync_shader_params(force: bool = false) -> void:
 		directional_material.render_priority = render_priority_value
 		_last_synced_render_priority = render_priority_value
 
+	_shader_sync_dirty = false
+
 
 func _process(_delta: float) -> void:
-	# Update per-frame shader parameters
+	if not _shader_sync_dirty:
+		return
 	if directional_material and directional_material.shader:
-		# target_position is now calculated from MODEL_MATRIX in shader (per-instance)
-		# Synchronise shader parameters each frame
 		_sync_shader_params()
 
 
@@ -166,12 +163,11 @@ func _set(property: StringName, value) -> bool:
 	var prop_name = str(property)
 	
 	if prop_name == "billboard":
-		if directional_material:
+		if directional_material and directional_material.shader:
 			directional_material.set_shader_parameter("billboard_mode", value)
-	
+
 	if prop_name == "render_priority":
-		if directional_material:
-			directional_material.render_priority = value
+		_mark_shader_sync_dirty()
 
 
 	if prop_name.ends_with(IDLE_SUFFIX):
@@ -326,5 +322,10 @@ func generate_atlas():
 		directional_material.set_shader_parameter("alpha_cut_threshold", self.alpha_cut_threshold)
 		directional_material.render_priority = self.render_priority
 		directional_material.set_shader_parameter("debug_mode", debug_mode)
+		_shader_sync_dirty = false
 
 	notify_property_list_changed()
+
+
+func _mark_shader_sync_dirty() -> void:
+	_shader_sync_dirty = true

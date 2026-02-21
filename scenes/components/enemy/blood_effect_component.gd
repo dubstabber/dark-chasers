@@ -1,6 +1,8 @@
 class_name BloodEffectComponent
 extends Node
 
+const COLLISION_MASK_WALLS: int = 1 << 2
+
 signal blood_splattered(position: Vector3)
 signal blood_decal_spawned(position: Vector3, normal: Vector3)
 
@@ -95,7 +97,7 @@ func _trace_single_ray(hit_pos: Vector3, shot_direction: Vector3, noise: float) 
 	var query = PhysicsRayQueryParameters3D.create(hit_pos, ray_end)
 	if _owner_node:
 		query.exclude = [_owner_node]
-	query.collision_mask = 4 # Walls layer (layer 3)
+	query.collision_mask = COLLISION_MASK_WALLS
 	
 	var result = space_state.intersect_ray(query)
 	

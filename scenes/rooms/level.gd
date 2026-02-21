@@ -20,13 +20,7 @@ func _ready():
 		Services.enemy_context.set_players_node(players)
 	if transitions:
 		Services.enemy_context.set_transitions_node(transitions)
-	
-	# Keep groups as fallback/debug convenience (can be removed later)
-	add_to_group("level")
-	if hud:
-		hud.add_to_group("hud")
 
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	# Subscribe to typed events from GameEventBus (replaces group-based signal wiring)

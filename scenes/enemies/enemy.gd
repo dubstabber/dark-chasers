@@ -1,15 +1,18 @@
 class_name Enemy extends CharacterBody3D
 
+@export var stats: EnemyStats ## Preferred: configure via resource for reusable enemy types
 @export var current_room: String
 @export var disappear_zones: Array[Area3D] ## Bridge: forwarded to EnemyDisappearZoneComponent at _ready()
-@export var is_wandering := false
-@export var chase_player := true
-@export var can_open_door := true
-@export var speed: float = 7.0
-@export var accel: float = 10.0
 @export var debug_prints := false
-@export var death_message: String = ""
-@export var jump_velocity: float = 12.0
+
+@export_group("Inline Overrides", "override_")
+@export var override_is_wandering := false
+@export var override_chase_player := true
+@export var override_can_open_door := true
+@export var override_speed: float = 7.0
+@export var override_accel: float = 10.0
+@export var override_death_message: String = ""
+@export var override_jump_velocity: float = 12.0
 
 var _blood_component: BloodEffectComponent
 var _nav_component: EnemyNavigationComponent
@@ -36,6 +39,22 @@ var ground_type: String
 var moving_state := "idle"
 var is_flying := false
 var is_killed := false
+
+# Stats accessors - prefer EnemyStats resource, fall back to inline overrides
+var speed: float:
+	get: return stats.speed if stats else override_speed
+var accel: float:
+	get: return stats.accel if stats else override_accel
+var jump_velocity: float:
+	get: return stats.jump_velocity if stats else override_jump_velocity
+var chase_player: bool:
+	get: return stats.chase_player if stats else override_chase_player
+var can_open_door: bool:
+	get: return stats.can_open_door if stats else override_can_open_door
+var is_wandering: bool:
+	get: return stats.is_wandering if stats else override_is_wandering
+var death_message: String:
+	get: return stats.death_message if stats else override_death_message
 
 @onready var find_path_timer = $Timers/FindPathTimer
 @onready var graphics = $Graphics
@@ -76,7 +95,7 @@ func _setup_components() -> void:
 
 func _setup_transition_component() -> void:
 	if _transition_component:
-		_transition_component.setup(_nav_component, _disappear_zone_component)
+		_transition_component.setup(_nav_component, _disappear_zone_component, _room_pathing_component)
 
 
 func _setup_disappear_zone_component() -> void:
@@ -182,11 +201,6 @@ func _apply_gravity(delta: float) -> void:
 
 
 func _process_chase_movement(delta: float) -> void:
-	var next_pos = _get_next_path_position()
-	
-	_motor_component.move_toward_position(next_pos, delta)
-	direction = _motor_component.direction
-	
 	# Use Mortal interface to check if target is dead
 	if current_target and Mortal.is_dead(current_target):
 		current_target = null
@@ -195,6 +209,16 @@ func _process_chase_movement(delta: float) -> void:
 		_stop_movement()
 		find_path_timer.wait_time = 0.1
 		return
+	
+	var next_pos = _get_next_path_position()
+	
+	# When navigation is finished but we still have a target, move directly toward it
+	# This ensures the enemy closes the final gap instead of stopping at nav distance
+	if current_target and _nav_component and _nav_component.is_navigation_finished():
+		next_pos = current_target.global_position
+	
+	_motor_component.move_toward_position(next_pos, delta)
+	direction = _motor_component.direction
 	
 	if is_on_floor() or is_flying:
 		_do_look_forward()
@@ -273,6 +297,11 @@ func add_disappear_zone(area: Area3D) -> void:
 		_disappear_zone_component.add_zone(area)
 	else:
 		disappear_zones.append(area)
+
+
+func restart_pathfinding(delay: float = 0.1) -> void:
+	find_path_timer.wait_time = delay
+	find_path_timer.start()
 
 
 func _on_find_path_timer_timeout():

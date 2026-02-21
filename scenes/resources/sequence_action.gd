@@ -1,3 +1,4 @@
+class_name SequenceAction
 extends RefCounted
 
 ## A single action within a sequence.

@@ -1,3 +1,4 @@
+class_name SequenceData
 extends RefCounted
 
 const SequenceActionScript = preload("res://scenes/resources/sequence_action.gd")

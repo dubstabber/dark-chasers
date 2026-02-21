@@ -120,10 +120,6 @@ func _should_damage_entity(entity: Node) -> bool:
 		return true
 	if damage_enemies and entity is Enemy:
 		return true
-	if damage_players and entity.is_in_group("player"):
-		return true
-	if damage_enemies and entity.is_in_group("entity"):
-		return true
 	return false
 
 

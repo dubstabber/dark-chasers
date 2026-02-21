@@ -59,8 +59,6 @@ var _was_sprinting_before_airborne: bool = false
 var _initial_collision_mask: int
 var _was_grounded: bool = true
 
-var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
-
 
 func _ready():
 	_validate_node_references()

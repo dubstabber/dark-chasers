@@ -51,6 +51,18 @@ var ammo_component: PlayerAmmoComponent # Reference to the player's ammo compone
 ## Ammo Management Methods
 ## These methods handle ammo consumption, checking, and reloading
 
+func _has_valid_ammo_setup() -> bool:
+	"""Validate that ammo_type and ammo_component are properly configured.
+	Logs errors if configuration is invalid. Does NOT check infinite_ammo."""
+	if ammo_type == "":
+		push_error("Weapon '%s' has no ammo_type specified!" % name)
+		return false
+	if not ammo_component:
+		push_error("Weapon '%s' has no ammo_component reference!" % name)
+		return false
+	return true
+
+
 func can_fire() -> bool:
 	"""Check if the weapon can fire (has enough ammo or infinite ammo)
 
@@ -59,17 +71,8 @@ func can_fire() -> bool:
 	"""
 	if infinite_ammo:
 		return true
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
+	if not _has_valid_ammo_setup():
 		return false
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
-		return false
-
 	return ammo_component.has_ammo(ammo_type, ammo_per_shot)
 
 
@@ -84,15 +87,7 @@ func consume_ammo(amount: int = -1) -> bool:
 	"""
 	if infinite_ammo:
 		return true
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
-		return false
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
+	if not _has_valid_ammo_setup():
 		return false
 
 	# Use weapon's ammo_per_shot if amount not specified
@@ -121,15 +116,7 @@ func reload(amount: int = -1) -> bool:
 	"""
 	if infinite_ammo:
 		return false
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
-		return false
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
+	if not _has_valid_ammo_setup():
 		return false
 
 	var current = ammo_component.get_ammo(ammo_type)
@@ -161,17 +148,8 @@ func get_current_ammo() -> int:
 	"""
 	if infinite_ammo:
 		return -1 # Sentinel value representing infinite ammo
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
+	if not _has_valid_ammo_setup():
 		return 0
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
-		return 0
-
 	return ammo_component.get_ammo(ammo_type)
 
 
@@ -183,17 +161,8 @@ func get_max_ammo_amount() -> int:
 	"""
 	if infinite_ammo:
 		return -1 # Sentinel value representing infinite ammo
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
+	if not _has_valid_ammo_setup():
 		return 0
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
-		return 0
-
 	return ammo_component.get_max_ammo(ammo_type)
 
 
@@ -205,15 +174,6 @@ func get_ammo_percentage() -> float:
 	"""
 	if infinite_ammo:
 		return 1.0
-
-	# All weapons must have ammo_type specified
-	if ammo_type == "":
-		push_error("Weapon '%s' has no ammo_type specified!" % name)
+	if not _has_valid_ammo_setup():
 		return 1.0
-
-	# Must have ammo component reference
-	if not ammo_component:
-		push_error("Weapon '%s' has no ammo_component reference!" % name)
-		return 1.0
-
 	return ammo_component.get_ammo_percentage(ammo_type)

@@ -18,17 +18,15 @@ func _hud() -> Node:
 
 
 func _players() -> Node:
-	var level := _level()
-	if not level:
+	if not Services.enemy_context:
 		return null
-	return level.get_node_or_null("NavigationRegion3D/Players")
+	return Services.enemy_context.get_players_node()
 
 
 func _enemies() -> Node:
-	var level := _level()
-	if not level:
+	if not Services.world_context:
 		return null
-	return level.get_node_or_null("NavigationRegion3D/Enemies")
+	return Services.world_context.get_enemies_node()
 
 
 func _music() -> AudioStreamPlayer:

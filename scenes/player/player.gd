@@ -6,7 +6,7 @@ signal weapon_added(weapon: WeaponResource)
 
 var current_room: String
 var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
-var last_velocity = Vector2.ZERO
+var last_velocity: Vector3 = Vector3.ZERO
 
 var blocked_movement := false
 
@@ -15,8 +15,6 @@ var _died_from_fall_damage := false
 var _death_message: String = ""
 
 var hud: CanvasLayer: set = set_hud
-
-var debug_camera: Camera3D # temporary
 
 @onready var camera_3d = $nek/head/eyes/Camera3D # PlayerCamera extends Camera3D
 @onready var animation_player = $nek/head/eyes/AnimationPlayer

@@ -14,13 +14,13 @@ class_name FirstPersonSprite3D extends Sprite3D
 var sprite_material: ShaderMaterial
 
 # Override render_priority to sync with shader material
-var _render_priority: int = 0:
+var _sprite_render_priority: int = 0:
 	set(value):
-		_render_priority = value
+		_sprite_render_priority = value
 		render_priority = value
 		sync_render_priority()
 	get:
-		return _render_priority
+		return _sprite_render_priority
 
 func _enter_tree():
 	# Ensure material/uniforms are set both in editor and at runtime

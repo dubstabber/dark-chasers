@@ -36,8 +36,7 @@ func press(body):
 				"camera": temporary_camera
 			}, self)
 
-		# Also emit generic BUTTON_PRESSED for base Level class handling
-		# (camera switching, door opening from payload)
+		# Emit generic event for base Level class handling (door/camera from payload)
 		Services.event_bus.emit(GameEventTypesScript.BUTTON_PRESSED, {
 			"body": body,
 			"button": self,
@@ -45,7 +44,7 @@ func press(body):
 			"camera": temporary_camera
 		}, self)
 
-		# Keep legacy signal for effect components to connect to
+		# Signal for effect components attached as children
 		button_pressed.emit(body)
 
 		is_pressed = true

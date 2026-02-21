@@ -21,12 +21,12 @@ var _pending_color: Color = Color(-1, -1, -1, -1)
 
 func _ready() -> void:
 	_selected_texture = _get_weighted_random_splat()
+	texture_albedo = _selected_texture
+	modulate = Color.WHITE
 	
 	# Apply pending color if set_blood_color was called before _ready
 	if _pending_color.r >= 0:
-		texture_albedo = _create_colored_texture(_selected_texture, _pending_color)
-	else:
-		texture_albedo = _selected_texture
+		_apply_blood_tint(_pending_color)
 	
 	# Random rotation for variety (replaces flip_h/flip_v from Sprite3D)
 	# Decals don't have flip properties, so we rotate in 90-degree increments
@@ -35,7 +35,7 @@ func _ready() -> void:
 
 
 func _get_weighted_random_splat() -> Texture2D:
-	"""Select a blood splat image using weighted random selection"""
+	## Select a blood splat image using weighted random selection.
 	var total_weight := 0
 	for weight in BLOOD_SPLAT_WEIGHTS:
 		total_weight += weight
@@ -63,31 +63,9 @@ func set_blood_color(color: Color) -> void:
 	if not _selected_texture:
 		_pending_color = dimmed_color
 		return
-	
-	# Create a recolored texture since modulate only multiplies RGB
-	# and can't change hue (e.g., blue to red)
-	texture_albedo = _create_colored_texture(_selected_texture, dimmed_color)
+
+	_apply_blood_tint(dimmed_color)
 
 
-func _create_colored_texture(source: Texture2D, target_color: Color) -> ImageTexture:
-	var img := source.get_image()
-	if img == null:
-		return null
-	
-	img = img.duplicate()
-	
-	for y in range(img.get_height()):
-		for x in range(img.get_width()):
-			var pixel := img.get_pixel(x, y)
-			# Extract luminance (brightness) from original pixel
-			var luminance := maxf(maxf(pixel.r, pixel.g), pixel.b)
-			# Apply target color with original luminance
-			var new_color := Color(
-				target_color.r * luminance,
-				target_color.g * luminance,
-				target_color.b * luminance,
-				pixel.a
-			)
-			img.set_pixel(x, y, new_color)
-	
-	return ImageTexture.create_from_image(img)
+func _apply_blood_tint(tint_color: Color) -> void:
+	modulate = tint_color

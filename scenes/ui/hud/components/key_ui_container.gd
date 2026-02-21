@@ -39,7 +39,7 @@ func update_keys_ui(collected_keys: Array) -> void:
 
 
 func _create_and_populate_column(keys: Array) -> void:
-	"""Create a column and populate it with the given keys (newest at top, oldest at bottom)"""
+	## Create a column and populate it with the given keys (newest at top, oldest at bottom).
 	var column_container = _create_key_column()
 	var column = column_container.get_child(0) as VBoxContainer
 	add_child(column_container)
@@ -55,7 +55,7 @@ func _create_and_populate_column(keys: Array) -> void:
 
 
 func _distribute_remaining_keys(remaining_keys: Array) -> void:
-	"""Distribute remaining keys across subsequent columns (3 keys max per column)"""
+	## Distribute remaining keys across subsequent columns (3 keys max per column).
 	var remaining_count = remaining_keys.size()
 	var additional_columns = ceili(float(remaining_count) / float(MAX_KEYS_PER_COLUMN))
 
@@ -68,7 +68,7 @@ func _distribute_remaining_keys(remaining_keys: Array) -> void:
 
 
 func _create_key_column() -> MarginContainer:
-	"""Create a new VBoxContainer column for keys wrapped in a MarginContainer"""
+	## Create a new VBoxContainer column for keys wrapped in a MarginContainer.
 	var column = VBoxContainer.new()
 	column.alignment = BoxContainer.ALIGNMENT_BEGIN # Top alignment for all columns
 
@@ -81,7 +81,7 @@ func _create_key_column() -> MarginContainer:
 
 
 func _create_key_texture_rect(key_type: String) -> MarginContainer:
-	"""Create a TextureRect for a specific key type wrapped in a MarginContainer"""
+	## Create a TextureRect for a specific key type wrapped in a MarginContainer.
 	var tex = Services.preloads.get_key_texture(key_type)
 	if not tex:
 		return null
@@ -103,11 +103,11 @@ func _create_key_texture_rect(key_type: String) -> MarginContainer:
 
 
 func get_collected_keys_from_level() -> Array:
-	"""Get collected keys from the current level/map"""
+	## Get collected keys from the current level/map.
 	return Services.world_context.get_keys_collected()
 
 
 func refresh_display() -> void:
-	"""Refresh the key display by getting keys from the current level"""
+	## Refresh the key display by getting keys from the current level.
 	var collected_keys = get_collected_keys_from_level()
 	update_keys_ui(collected_keys)

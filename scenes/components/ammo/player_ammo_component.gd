@@ -29,7 +29,7 @@ func _ready() -> void:
 
 
 func _initialize_default_pools() -> void:
-	"""Initialize ammo pools with default values for this player"""
+	## Initialize ammo pools with default values for this player.
 	var configs = _ammo_config.get_default_ammo_configs()
 	for ammo_type in configs:
 		var config = configs[ammo_type]
@@ -40,52 +40,22 @@ func _initialize_default_pools() -> void:
 ## Public API Methods
 
 func get_ammo(ammo_type: String) -> int:
-	"""Get current ammo amount for a specific type
-	
-	Args:
-		ammo_type: The ammo type to check (e.g., "pistol_ammo")
-		
-	Returns:
-		int: Current ammo amount, 0 if type doesn't exist
-	"""
+	## Get current ammo amount for a specific type.
 	return _ammo_pools.get(ammo_type, 0)
 
 
 func get_max_ammo(ammo_type: String) -> int:
-	"""Get maximum ammo amount for a specific type
-	
-	Args:
-		ammo_type: The ammo type to check
-		
-	Returns:
-		int: Maximum ammo amount, 0 if type doesn't exist
-	"""
+	## Get maximum ammo amount for a specific type.
 	return _max_ammo_pools.get(ammo_type, 0)
 
 
 func has_ammo(ammo_type: String, amount: int = 1) -> bool:
-	"""Check if there's enough ammo of a specific type
-	
-	Args:
-		ammo_type: The ammo type to check
-		amount: Amount needed (default: 1)
-		
-	Returns:
-		bool: True if enough ammo is available
-	"""
+	## Check if there is enough ammo of a specific type.
 	return get_ammo(ammo_type) >= amount
 
 
 func consume_ammo(ammo_type: String, amount: int = 1) -> bool:
-	"""Consume ammo of a specific type
-	
-	Args:
-		ammo_type: The ammo type to consume
-		amount: Amount to consume (default: 1)
-		
-	Returns:
-		bool: True if ammo was consumed, False if insufficient ammo
-	"""
+	## Consume ammo of a specific type.
 	if not has_ammo(ammo_type, amount):
 		return false
 	
@@ -95,15 +65,7 @@ func consume_ammo(ammo_type: String, amount: int = 1) -> bool:
 
 
 func add_ammo(ammo_type: String, amount: int) -> bool:
-	"""Add ammo of a specific type
-	
-	Args:
-		ammo_type: The ammo type to add
-		amount: Amount to add
-		
-	Returns:
-		bool: True if ammo was added, False if already at maximum or invalid
-	"""
+	## Add ammo of a specific type.
 	if amount <= 0:
 		return false
 	
@@ -128,12 +90,7 @@ func add_ammo(ammo_type: String, amount: int) -> bool:
 
 
 func set_max_ammo(ammo_type: String, max_amount: int) -> void:
-	"""Set maximum ammo for a specific type
-	
-	Args:
-		ammo_type: The ammo type
-		max_amount: New maximum amount
-	"""
+	## Set maximum ammo for a specific type.
 	if max_amount < 0:
 		return
 	
@@ -149,14 +106,7 @@ func set_max_ammo(ammo_type: String, max_amount: int) -> void:
 
 
 func get_ammo_percentage(ammo_type: String) -> float:
-	"""Get current ammo as a percentage of maximum
-	
-	Args:
-		ammo_type: The ammo type to check
-		
-	Returns:
-		float: Ammo percentage (0.0 to 1.0)
-	"""
+	## Get current ammo as a percentage of maximum.
 	var max_amount = get_max_ammo(ammo_type)
 	if max_amount <= 0:
 		return 1.0
@@ -164,11 +114,7 @@ func get_ammo_percentage(ammo_type: String) -> float:
 
 
 func get_all_ammo_types() -> Array[String]:
-	"""Get list of all registered ammo types for this player
-	
-	Returns:
-		Array[String]: List of ammo type names
-	"""
+	## Get list of all registered ammo types for this player.
 	var types: Array[String] = []
 	for ammo_type in _ammo_pools.keys():
 		types.append(ammo_type)
@@ -176,13 +122,7 @@ func get_all_ammo_types() -> Array[String]:
 
 
 func _register_ammo_type(ammo_type: String, max_amount: int = 100, initial_amount: int = 0) -> void:
-	"""Register a new ammo type for this player
-	
-	Args:
-		ammo_type: Name of the ammo type
-		max_amount: Maximum amount for this type
-		initial_amount: Initial amount to set
-	"""
+	## Register a new ammo type for this player.
 	if not _ammo_pools.has(ammo_type):
 		_max_ammo_pools[ammo_type] = max_amount
 		_ammo_pools[ammo_type] = initial_amount
@@ -191,7 +131,7 @@ func _register_ammo_type(ammo_type: String, max_amount: int = 100, initial_amoun
 ## Debug and Utility Methods
 
 func debug_print_ammo_status() -> void:
-	"""Print current ammo status for all types (debug only)"""
+	## Print current ammo status for all types (debug only).
 	Services.utils.debug_log("=== Player Ammo Status ===")
 	for ammo_type in get_all_ammo_types():
 		var current = get_ammo(ammo_type)
@@ -201,7 +141,7 @@ func debug_print_ammo_status() -> void:
 
 
 func reset_all_ammo() -> void:
-	"""Reset all ammo to default values (useful for testing/debugging)"""
+	## Reset all ammo to default values (useful for testing/debugging).
 	_ammo_pools.clear()
 	_max_ammo_pools.clear()
 	_initialize_default_pools()
@@ -214,11 +154,7 @@ func reset_all_ammo() -> void:
 ## Multiplayer Support Methods
 
 func get_ammo_state() -> Dictionary:
-	"""Get complete ammo state for saving/networking
-	
-	Returns:
-		Dictionary: Complete ammo state with current and max values
-	"""
+	## Get complete ammo state for saving/networking.
 	return {
 		"ammo_pools": _ammo_pools.duplicate(),
 		"max_ammo_pools": _max_ammo_pools.duplicate()
@@ -226,11 +162,7 @@ func get_ammo_state() -> Dictionary:
 
 
 func set_ammo_state(state: Dictionary) -> void:
-	"""Set complete ammo state from save/network data
-	
-	Args:
-		state: Dictionary containing ammo_pools and max_ammo_pools
-	"""
+	## Set complete ammo state from save/network data.
 	if state.has("ammo_pools"):
 		_ammo_pools = state.ammo_pools.duplicate()
 	if state.has("max_ammo_pools"):

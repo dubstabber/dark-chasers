@@ -1,10 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://df5xupi3f3c1k"]
+[gd_scene load_steps=7 format=3 uid="uid://df5xupi3f3c1k"]
 
 [ext_resource type="Script" uid="uid://bmwkeugmdbtge" path="res://scenes/objects/dish_1.gd" id="1_51owe"]
 [ext_resource type="Texture2D" uid="uid://bna80c641aaxx" path="res://images/objects/static/1155A0.png" id="1_t5xtt"]
+[ext_resource type="Script" uid="uid://cjfetq51s581y" path="res://scenes/components/destructible_component.gd" id="3_dcomp"]
+[ext_resource type="Script" uid="uid://cas04n52fxase" path="res://scenes/resources/scrap_definition.gd" id="4_scrap"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vo531"]
 size = Vector3(0.230469, 0.0800781, 0.257568)
+
+[sub_resource type="Resource" id="Resource_dish_scrap"]
+script = ExtResource("4_scrap")
+scrap_type = "white scrap"
+count_variation = Array[int]([4, 6])
+horizontal_velocity = 3.0
+vertical_velocity = 2.5
+metadata/_custom_type_script = "uid://cas04n52fxase"
 
 [node name="Dish5" type="StaticBody3D" groups=["entity"]]
 collision_layer = 4
@@ -20,3 +30,9 @@ texture = ExtResource("1_t5xtt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_vo531")
+
+[node name="DestructibleComponent" type="Node" parent="."]
+script = ExtResource("3_dcomp")
+health = 8
+scrap_definitions = Array[ExtResource("4_scrap")]([SubResource("Resource_dish_scrap")])
+metadata/_custom_type_script = "uid://cjfetq51s581y"

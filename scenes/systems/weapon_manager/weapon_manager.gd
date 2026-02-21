@@ -1,7 +1,5 @@
 class_name WeaponManager extends Node3D
 
-const WeaponSoundControllerScript = preload("res://scenes/systems/weapon_manager/weapon_sound_controller.gd")
-
 signal lighter_on
 signal lighter_off
 signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
@@ -13,7 +11,7 @@ signal weapon_switched(weapon: WeaponResource)
 var _bob_controller := WeaponBobController.new()
 var _switch_controller := WeaponSwitchController.new()
 var _hit_executor := WeaponHitExecutor.new()
-var _sound_controller := WeaponSoundControllerScript.new()
+var _sound_controller := WeaponSoundController.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -131,6 +129,9 @@ func _get_player_ammo_component() -> PlayerAmmoComponent:
 
 
 func _process(delta: float) -> void:
+	# Skip bobbing when no weapon is equipped
+	if not current_weapon:
+		return
 	_update_speed(delta)
 	_update_bob(delta)
 	_apply_offsets()
@@ -198,26 +199,10 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	var slot_index: int = clamp(new_weapon.slot, 1, 9)
 	var slot_array: Array[WeaponResource] = _get_slot_array(slot_index)
 	
-	# If we already own this weapon, simply equip it
-	if new_weapon in slot_array:
-		selected_slot_index = slot_index
-		selected_slot_position = slot_array.find(new_weapon)
-		await _equip_from_slot(slot_array)
-		return
-	
-	# Insert weapon respecting slot_priority (lower value = higher priority)
-	var inserted := false
-	for i in range(slot_array.size()):
-		if new_weapon.slot_priority < slot_array[i].slot_priority:
-			slot_array.insert(i, new_weapon)
-			inserted = true
-			break
-	if not inserted:
-		slot_array.append(new_weapon)
-	
-	# Equip the newly picked-up weapon
+	# Insert weapon (or get existing position) and equip it
+	var weapon_position := _switch_controller.insert_weapon_sorted(new_weapon, slot_array)
 	selected_slot_index = slot_index
-	selected_slot_position = slot_array.find(new_weapon)
+	selected_slot_position = weapon_position
 	await _equip_from_slot(slot_array)
 
 

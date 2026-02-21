@@ -30,6 +30,8 @@ var current_state: String = "idle"
 var is_dead: bool = false
 
 var _owner_enemy: Node = null
+var _state_initialized: bool = false
+var _last_is_moving: bool = false
 
 
 func _ready() -> void:
@@ -39,7 +41,16 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	update_animation_state()
+	if is_dead:
+		return
+
+	var is_moving := _get_owner_velocity().length() > velocity_threshold
+	if _state_initialized and is_moving == _last_is_moving:
+		return
+
+	_state_initialized = true
+	_last_is_moving = is_moving
+	_apply_animation_state(is_moving)
 
 
 func _update_speed_scale() -> void:
@@ -67,10 +78,14 @@ func _get_owner_velocity() -> Vector3:
 func update_animation_state() -> void:
 	if is_dead:
 		return
-	
-	var velocity = _get_owner_velocity()
-	var is_moving = velocity.length() > velocity_threshold
-	
+
+	var is_moving := _get_owner_velocity().length() > velocity_threshold
+	_state_initialized = true
+	_last_is_moving = is_moving
+	_apply_animation_state(is_moving)
+
+
+func _apply_animation_state(is_moving: bool) -> void:
 	var new_state = "move" if is_moving else "idle"
 	
 	if new_state != current_state:
@@ -94,9 +109,6 @@ func _play_animation(anim_name: String) -> void:
 				if animation_player.has_animation(anim_name):
 					animation_player.play(anim_name)
 					animation_changed.emit(anim_name)
-				elif animation_player.get_animation_list().has(anim_name):
-					animation_player.play(anim_name)
-					animation_changed.emit(anim_name)
 		AnimationType.ANIMATED_SPRITE_3D:
 			if animated_sprite and animated_sprite.sprite_frames and animated_sprite.sprite_frames.has_animation(anim_name):
 				if str(animated_sprite.animation) != anim_name:
@@ -113,6 +125,7 @@ func play_death_animation() -> void:
 
 func reset() -> void:
 	is_dead = false
+	_state_initialized = false
 	current_state = "idle"
 	_play_state_animation()
 

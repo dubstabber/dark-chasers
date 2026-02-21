@@ -57,6 +57,9 @@ func _ready() -> void:
 
 	if Engine.is_editor_hint():
 		_update_debug_visualization()
+	
+	# Disable physics processing until door is closing (blocking check not needed when idle)
+	set_physics_process(false)
 
 
 func _setup_components() -> void:
@@ -132,6 +135,7 @@ func _toggle_door(force := false) -> void:
 			return
 		_anim.play_backwards("Open")
 		_playing_forward = false
+		set_physics_process(true) # Enable blocking check during close
 		if _audio_component:
 			_audio_component.play_close_sound()
 	else:
@@ -146,6 +150,7 @@ func _on_animation_finished(anim_name: String) -> void:
 		return
 
 	_is_open = _playing_forward
+	set_physics_process(false) # Disable blocking check when animation done
 
 	if _audio_component:
 		_audio_component.stop_looping_sounds()

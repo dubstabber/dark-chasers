@@ -43,6 +43,9 @@ func _ready():
 		current_health = max_health
 	
 	_validate_node_references()
+	
+	# Disable processing until invulnerability is needed
+	set_process(false)
 
 
 func _validate_node_references() -> void:
@@ -57,6 +60,8 @@ func _process(delta):
 	# Handle invulnerability timer
 	if invulnerability_timer > 0.0:
 		invulnerability_timer -= delta
+		if invulnerability_timer <= 0.0:
+			set_process(false)
 
 func set_max_health(value: int):
 	max_health = max(1, value)
@@ -101,6 +106,7 @@ func take_damage(amount: int) -> bool:
 	# Start invulnerability if configured
 	if invulnerability_duration > 0.0:
 		invulnerability_timer = invulnerability_duration
+		set_process(true)
 
 	# Check for death
 	if current_health <= 0 and not is_dead:

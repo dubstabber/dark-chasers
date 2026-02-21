@@ -111,20 +111,7 @@ func _process_action_input() -> void:
 
 
 func _toggle_debug_camera() -> void:
-	if not camera or not player:
-		return
-
-	# Get debug_camera from player (set by level script after _ready)
-	# Player is a known class with debug_camera property
-	var debug_cam = player.debug_camera
-	if not debug_cam:
-		return
-	
-	# Use CameraManager for centralized camera switching
-	if Services.camera_manager.is_camera_active(camera):
-		Services.camera_manager.set_active_camera(debug_cam)
-	else:
-		Services.camera_manager.set_active_camera(camera)
+	Services.camera_manager.toggle_debug_camera()
 	debug_camera_toggled.emit()
 
 

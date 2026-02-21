@@ -46,11 +46,7 @@ static func generate(
 	movement_sprites: Dictionary,
 	shooting_sprites: Dictionary
 ) -> Dictionary:
-	"""Generate an atlas texture from sprite sets.
-	
-	Returns:
-		Dictionary with keys: texture (ImageTexture or null), max_sprite_size (Vector2i)
-	"""
+	## Generate an atlas texture from sprite sets.
 	if not _has_any_sprites(idle_sprites, movement_sprites, shooting_sprites):
 		return {"texture": null, "max_sprite_size": Vector2i.ZERO}
 	
@@ -129,7 +125,7 @@ static func _compute_signature(
 	movement_sprites: Dictionary,
 	shooting_sprites: Dictionary
 ) -> String:
-	"""Generate a unique signature from the sprite set for cache keying."""
+	## Generate a unique signature from the sprite set for cache keying.
 	var parts: PackedStringArray = []
 	parts.append(str(direction_mode))
 	

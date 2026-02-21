@@ -38,8 +38,7 @@ func _body_entered(body):
 				"camera": temporary_camera
 			}, self)
 
-		# Also emit generic AREA_ENTERED for base Level class handling
-		# (camera switching, door opening from payload)
+		# Emit generic event for base Level class handling (door/camera from payload)
 		Services.event_bus.emit(GameEventTypesScript.AREA_ENTERED, {
 			"body": body,
 			"area": self,
@@ -47,5 +46,5 @@ func _body_entered(body):
 			"camera": temporary_camera
 		}, self)
 
-		# Keep legacy signal for effect components to connect to
+		# Signal for effect components attached as children
 		event_triggered.emit(body)

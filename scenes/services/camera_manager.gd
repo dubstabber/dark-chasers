@@ -12,10 +12,33 @@ extends Node
 signal active_camera_changed(new_camera: Camera3D)
 
 var _active_camera: Camera3D = null
+var _debug_camera: Camera3D = null
+var _player_camera: Camera3D = null
 
 
 func get_active_camera() -> Camera3D:
 	return _active_camera
+
+
+func set_debug_camera(camera: Camera3D) -> void:
+	_debug_camera = camera
+
+
+func set_player_camera(camera: Camera3D) -> void:
+	_player_camera = camera
+
+
+func toggle_debug_camera() -> bool:
+	"""Toggle between debug and player camera. Returns true if debug camera is now active."""
+	if not _debug_camera or not _player_camera:
+		return false
+	
+	if _active_camera == _debug_camera:
+		set_active_camera(_player_camera)
+		return false
+	else:
+		set_active_camera(_debug_camera)
+		return true
 
 
 func set_active_camera(camera: Camera3D) -> void:

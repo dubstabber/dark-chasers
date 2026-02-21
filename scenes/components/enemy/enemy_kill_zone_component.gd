@@ -6,7 +6,7 @@ signal player_killed(player: Node3D)
 @export var death_message: String = ""
 @export var enabled: bool = true
 
-var _owner_enemy: Node = null
+var _owner_enemy: Enemy = null
 
 
 func _ready() -> void:
@@ -29,10 +29,8 @@ func _on_body_entered(body: Node3D) -> void:
 		player_killed.emit(body)
 		
 		if _owner_enemy:
-			if "current_target" in _owner_enemy:
-				_owner_enemy.current_target = null
-			if "velocity" in _owner_enemy:
-				_owner_enemy.velocity = Vector3.ZERO
+			_owner_enemy.current_target = null
+			_owner_enemy.velocity = Vector3.ZERO
 
 
 func set_death_message_value(msg: String) -> void:

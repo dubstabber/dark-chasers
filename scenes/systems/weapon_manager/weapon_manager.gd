@@ -25,6 +25,8 @@ var is_auto_hitting := false
 var is_shooting := false # Tracks if a shooting/hit animation is playing
 var _ammo_components_initialized := false # Track if ammo components have been set up
 
+const BOB_IDLE_EPSILON_SQUARED := 0.0001
+
 # Controller property accessors
 var current_weapon: WeaponResource:
 	get: return _switch_controller.get_current_weapon()
@@ -123,9 +125,20 @@ func _get_player_ammo_component() -> PlayerAmmoComponent:
 
 
 func _process(delta: float) -> void:
-	# Skip bobbing when no weapon is equipped
-	if not current_weapon:
+	# Skip bobbing when no weapon is equipped or core refs are unavailable
+	if not current_weapon or not player or not gun_base:
 		return
+
+	var player_is_moving := player.velocity.length_squared() > BOB_IDLE_EPSILON_SQUARED
+	var bob_offset := _bob_controller.get_offset()
+	var has_significant_bob := bob_offset.length_squared() > BOB_IDLE_EPSILON_SQUARED
+	var should_update_bob := player_is_moving or is_shooting or is_auto_hitting or has_significant_bob
+
+	if not should_update_bob:
+		if gun_base.position != base_gun_position:
+			gun_base.position = base_gun_position
+		return
+
 	_update_speed(delta)
 	_update_bob(delta)
 	_apply_offsets()

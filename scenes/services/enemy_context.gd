@@ -7,7 +7,7 @@ const TransitionsDataScript = preload("res://scenes/interfaces/transitions_data.
 ## This decouples enemies from direct group lookups and scene topology.
 ##
 ## Usage:
-##   - Add as autoload named "EnemyContext" in Project Settings
+##   - Access via Services.enemy_context (owned/created by Services singleton)
 ##   - Or inject manually via set_players_node() / set_transitions_node()
 ##
 ## Group fallbacks are gated behind _use_group_fallback (dev-only; disabled by default).

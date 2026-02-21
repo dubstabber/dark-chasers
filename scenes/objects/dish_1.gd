@@ -99,8 +99,7 @@ func _spawn_blood_decal(collider: Node, decal_scene: PackedScene, hit_pos: Vecto
 	decal.global_transform.basis = _calculate_decal_rotation(hit_normal)
 
 	# Apply red blood color
-	if decal.has_method("set_blood_color"):
-		decal.set_blood_color(Color.RED)
+	BloodColorable.set_color(decal, Color.RED)
 
 
 func _calculate_decal_rotation(normal: Vector3) -> Basis:

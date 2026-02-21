@@ -9,7 +9,7 @@ const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd
 ## Replaces hand-rolled await timer chains in room scripts.
 ##
 ## Usage:
-##   - Add as autoload named "SequenceDirector" in Project Settings
+##   - Access via Services.sequence_director (owned/created by Services singleton)
 ##   - Create sequences with SequenceBuilder or SequenceAction arrays
 ##   - Play with play_sequence() or queue_sequence()
 

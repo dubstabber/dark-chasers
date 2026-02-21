@@ -31,6 +31,14 @@ func _ready():
 	call_deferred("_initialize_key_display")
 
 
+func _exit_tree() -> void:
+	if Services.camera_manager and Services.camera_manager.active_camera_changed.is_connected(_on_active_camera_changed):
+		Services.camera_manager.active_camera_changed.disconnect(_on_active_camera_changed)
+	if Services.event_bus:
+		Services.event_bus.unsubscribe(GameEventTypes.PLAYER_MODE_CHANGED, _on_player_mode_changed_event)
+	disconnect_from_player()
+
+
 func _on_active_camera_changed(new_camera: Camera3D) -> void:
 	# Show player UI only when player camera is active
 	# Use CameraOwner interface for typed camera access
@@ -110,7 +118,15 @@ func disconnect_from_player() -> void:
 			_connected_player.weapon_manager.weapon_ammo_changed.disconnect(_on_player_ammo_changed)
 		if _connected_player.weapon_manager.weapon_switched.is_connected(_on_player_weapon_switched):
 			_connected_player.weapon_manager.weapon_switched.disconnect(_on_player_weapon_switched)
-	
+
+	if _connected_player.ammo_component:
+		var reserve_ammo_callback := _on_player_reserve_ammo_changed.bind(_connected_player)
+		if _connected_player.ammo_component.ammo_changed.is_connected(reserve_ammo_callback):
+			_connected_player.ammo_component.ammo_changed.disconnect(reserve_ammo_callback)
+
+	if _connected_player.damage_effects_component:
+		_connected_player.damage_effects_component.color_rect = null
+
 	_connected_player = null
 
 

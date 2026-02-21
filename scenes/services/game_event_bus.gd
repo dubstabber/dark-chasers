@@ -7,7 +7,7 @@ const GameEventScript = preload("res://scenes/resources/game_event.gd")
 ## Replaces string-based event routing with a publish/subscribe pattern.
 ##
 ## Usage:
-##   - Add as autoload named "GameEventBus" in Project Settings
+##   - Access via Services.event_bus (owned/created by Services singleton)
 ##   - Emit: Services.event_bus.emit_event(GameEvent.new(&"event_type", {payload}))
 ##   - Subscribe: Services.event_bus.subscribe(&"event_type", callback)
 
@@ -24,9 +24,18 @@ func emit_event(event: RefCounted) -> void:
 	
 	if event.event_type in _subscribers:
 		var callbacks: Array = _subscribers[event.event_type]
-		for callback: Callable in callbacks:
+		var invalid_callbacks: Array[Callable] = []
+		for callback: Callable in callbacks.duplicate():
 			if callback.is_valid():
 				callback.call(event)
+			else:
+				invalid_callbacks.append(callback)
+
+		for invalid_callback in invalid_callbacks:
+			callbacks.erase(invalid_callback)
+
+		if callbacks.is_empty():
+			_subscribers.erase(event.event_type)
 
 
 func emit(event_type: StringName, payload: Dictionary = {}, source: Node = null) -> void:

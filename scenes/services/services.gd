@@ -59,9 +59,10 @@ func _enter_tree() -> void:
 
 
 func _add_service(service_name: String, script: GDScript) -> Node:
-	var node := Node.new()
+	var service_instance: Variant = script.new()
+	assert(service_instance is Node, "Services._add_service('%s') requires a script that extends Node" % service_name)
+	var node := service_instance as Node
 	node.name = service_name
-	node.set_script(script)
 	add_child(node)
 	return node
 

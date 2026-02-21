@@ -5,7 +5,7 @@ extends Node
 ## This decouples game systems from direct group lookups and scene topology.
 ##
 ## Usage:
-##   - Add as autoload named "WorldContext" in Project Settings
+##   - Access via Services.world_context (owned/created by Services singleton)
 ##   - Or inject manually via set_level_node()
 ##
 ## Group fallbacks are gated behind _use_group_fallback (dev-only; disabled by default).

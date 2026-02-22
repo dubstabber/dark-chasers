@@ -6,14 +6,43 @@ extends Node
 func _ready():
 	print("=== WEAPON SYSTEM REFACTOR TESTS ===")
 	
+	test_weapon_fire_controller_creation()
+	test_weapon_ui_event_controller_creation()
 	test_weapon_hit_executor_creation()
 	test_weapon_resource_is_pure_config()
 	test_weapon_manager_fire_methods_exist()
+	test_weapon_manager_delegates_to_controllers()
 	test_weapon_manager_owns_ammo_wiring()
 	test_player_no_ammo_wiring()
 	
 	print("=== ALL WEAPON SYSTEM REFACTOR TESTS COMPLETED ===")
 	get_tree().quit()
+
+
+func test_weapon_fire_controller_creation():
+	print("\n--- Testing WeaponFireController Creation ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_fire_controller.gd") as GDScript
+	assert(script != null, "WeaponFireController script should load")
+	var controller = script.new()
+	assert(controller != null, "WeaponFireController should be instantiable")
+	assert(controller.has_method("try_fire"), "WeaponFireController should have try_fire")
+	assert(controller.has_method("try_auto_fire"), "WeaponFireController should have try_auto_fire")
+	assert(controller.has_method("consume_and_execute_hit"), "WeaponFireController should have consume_and_execute_hit")
+	print("✓ WeaponFireController created successfully")
+
+
+func test_weapon_ui_event_controller_creation():
+	print("\n--- Testing WeaponUiEventController Creation ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_ui_event_controller.gd") as GDScript
+	assert(script != null, "WeaponUiEventController script should load")
+	var controller = script.new()
+	assert(controller != null, "WeaponUiEventController should be instantiable")
+	assert(controller.has_method("connect_weapon_signals"), "WeaponUiEventController should have connect_weapon_signals")
+	assert(controller.has_method("disconnect_weapon_signals"), "WeaponUiEventController should have disconnect_weapon_signals")
+	assert(controller.has_method("emit_weapon_equipped"), "WeaponUiEventController should have emit_weapon_equipped")
+	print("✓ WeaponUiEventController created successfully")
 
 
 func test_weapon_hit_executor_creation():
@@ -63,6 +92,22 @@ func test_weapon_manager_fire_methods_exist():
 	assert("Input.is_action_just_pressed" not in source, "WeaponManager should not poll Input directly")
 	assert("_unhandled_input" not in source, "WeaponManager should not have _unhandled_input")
 	print("✓ WeaponManager has public fire methods and no input polling")
+
+
+func test_weapon_manager_delegates_to_controllers():
+	print("\n--- Testing WeaponManager delegates to extracted controllers ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_manager.gd") as GDScript
+	var source = script.source_code
+	
+	assert("_fire_controller.try_fire" in source, "WeaponManager should delegate single-fire logic to WeaponFireController")
+	assert("_fire_controller.try_auto_fire" in source, "WeaponManager should delegate auto-fire logic to WeaponFireController")
+	assert("_fire_controller.consume_and_execute_hit" in source, "WeaponManager should delegate hit execution to WeaponFireController")
+	assert("_ui_event_controller.connect_weapon_signals" in source, "WeaponManager should delegate weapon signal wiring to WeaponUiEventController")
+	assert("_ui_event_controller.emit_weapon_equipped" in source, "WeaponManager should delegate equip UI events to WeaponUiEventController")
+	assert("_ui_event_controller.forward_ammo_change" in source, "WeaponManager should delegate ammo UI forwarding to WeaponUiEventController")
+	
+	print("✓ WeaponManager delegates firing and UI event boundaries to controllers")
 
 
 func test_weapon_manager_owns_ammo_wiring():

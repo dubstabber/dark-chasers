@@ -19,6 +19,7 @@ const BitmapFontCatalogScript = preload("res://scenes/resources/bitmap_font_cata
 ##   event_bus       — read/write by: emitters + subscribers (Level, interactables, sequences)
 ##   sequence_director — read by: level scripts (play sequences)
 ##   input_router    — standalone (app-level input); no external callers expected
+##   level_manager   — read by: scene transition initiators (teleports, map events)
 
 var enemy_db: EnemyDb
 var utils: Utils
@@ -30,6 +31,7 @@ var vfx_pool: VfxPoolService
 var event_bus: GameEventBus
 var sequence_director: SequenceDirector
 var input_router: InputRouter
+var level_manager: Node
 var ammo_config: AmmoConfig
 
 var _key_icons: KeyIconLibrary
@@ -52,6 +54,7 @@ func _enter_tree() -> void:
 	event_bus = _add_service("GameEventBus", preload("res://scenes/services/game_event_bus.gd"))
 	sequence_director = _add_service("SequenceDirector", preload("res://scenes/services/sequence_director.gd"))
 	input_router = _add_service("InputRouter", preload("res://scenes/services/input_router.gd"))
+	level_manager = _add_service("LevelManager", preload("res://scenes/services/level_manager.gd"))
 	ammo_config = _add_service("AmmoConfig", preload("res://scenes/systems/ammo_system/ammo_config.gd"))
 
 

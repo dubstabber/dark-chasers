@@ -16,3 +16,12 @@ brown = ExtResource("4_brown")
 gold = ExtResource("5_gold")
 emerald = ExtResource("6_emerald")
 silver = ExtResource("7_silver")
+pickup_messages = {
+"brown": "Picked up a rusty brown key.",
+"emerald": "Picked up an emerald key.",
+"gold": "Picked up a fancy gold key.",
+"ruby": "Picked up a ruby key.",
+"silver": "Picked up a shiny silver key.",
+"useless": "Congratulations! You just picked up the useless key!",
+"weird": "Picked up some odd looking key."
+}

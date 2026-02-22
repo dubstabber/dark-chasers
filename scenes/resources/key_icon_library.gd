@@ -11,6 +11,7 @@ extends Resource
 @export var gold: Texture2D
 @export var emerald: Texture2D
 @export var silver: Texture2D
+@export var pickup_messages: Dictionary = {}
 
 
 func get_texture(key_type: String) -> Texture2D:
@@ -33,3 +34,9 @@ func get_all_textures() -> Dictionary:
 		"emerald": emerald,
 		"silver": silver
 	}
+
+
+func get_pickup_message(key_type: String) -> String:
+	if key_type in pickup_messages:
+		return str(pickup_messages[key_type])
+	return "Picked up a key."

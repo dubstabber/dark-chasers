@@ -1,6 +1,8 @@
 class_name WeaponManager extends Node3D
 
 const WeaponAmmoControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ammo_controller.gd")
+const WeaponFireControllerScript = preload("res://scenes/systems/weapon_manager/weapon_fire_controller.gd")
+const WeaponUiEventControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ui_event_controller.gd")
 
 signal lighter_on
 signal lighter_off
@@ -15,6 +17,8 @@ var _switch_controller := WeaponSwitchController.new()
 var _hit_executor := WeaponHitExecutor.new()
 var _sound_controller := WeaponSoundController.new()
 var _ammo_controller := WeaponAmmoControllerScript.new()
+var _fire_controller := WeaponFireControllerScript.new()
+var _ui_event_controller := WeaponUiEventControllerScript.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -223,28 +227,12 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 # ========================================================================== #
 func try_fire() -> void:
 	"""Attempt to fire the current weapon (single shot)"""
-	if not current_weapon or not current_weapon.shoot_anim_name:
-		return
-	if animation_player.is_playing() or is_switching_weapon:
-		return
-	if not current_weapon.can_fire():
-		return
-	animation_player.play(current_weapon.shoot_anim_name)
+	_fire_controller.try_fire(current_weapon, animation_player, is_switching_weapon)
 
 
 func try_auto_fire() -> void:
 	"""Attempt to continue auto-fire for automatic weapons"""
-	if not current_weapon or not is_auto_hitting:
-		return
-	if not current_weapon.can_fire():
-		return
-	if animation_player.is_playing():
-		return
-	
-	if current_weapon.repeat_shoot_anim_name:
-		animation_player.play(current_weapon.repeat_shoot_anim_name)
-	elif current_weapon.shoot_anim_name:
-		animation_player.play(current_weapon.shoot_anim_name)
+	_fire_controller.try_auto_fire(current_weapon, animation_player, is_auto_hitting)
 
 
 func start_auto_hitting() -> void:
@@ -269,16 +257,7 @@ func _reset_to_idle_after_auto_fire() -> void:
 
 
 func hit() -> void:
-	if not current_weapon:
-		return
-	
-	# Consume ammo before hitting (for non-melee weapons)
-	if not current_weapon.melee_attack:
-		if not current_weapon.consume_ammo():
-			return # Don't hit if insufficient ammo
-	
-	# Execute hit via the hit executor (handles particles, decals, damage)
-	_hit_executor.execute_hit(current_weapon)
+	_fire_controller.consume_and_execute_hit(current_weapon, _hit_executor)
 
 
 func switch_weapon(slot_index: int) -> void:
@@ -327,11 +306,11 @@ func _equip_from_slot(slot: Array) -> void:
 
 	# Put away current weapon if one is equipped
 	if current_weapon and current_weapon.pullout_anim_name:
-		# Disconnect signals from the old weapon
-		if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
-			current_weapon.ammo_changed.disconnect(_on_weapon_ammo_changed)
-		if current_weapon.ammo_depleted.is_connected(_on_weapon_ammo_depleted):
-			current_weapon.ammo_depleted.disconnect(_on_weapon_ammo_depleted)
+		_ui_event_controller.disconnect_weapon_signals(
+			current_weapon,
+			Callable(self, "_on_weapon_ammo_changed"),
+			Callable(self, "_on_weapon_ammo_depleted")
+		)
 
 		# Wait for any current animation to finish before starting holster
 		if animation_player.is_playing():
@@ -358,19 +337,17 @@ func _equip_from_slot(slot: Array) -> void:
 		if player_ammo_component:
 			_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, self)
 
-	# Connect to weapon's ammo signals
-	if current_weapon.ammo_changed.is_connected(_on_weapon_ammo_changed):
-		current_weapon.ammo_changed.disconnect(_on_weapon_ammo_changed)
-	current_weapon.ammo_changed.connect(_on_weapon_ammo_changed)
+	_ui_event_controller.connect_weapon_signals(
+		current_weapon,
+		Callable(self, "_on_weapon_ammo_changed"),
+		Callable(self, "_on_weapon_ammo_depleted")
+	)
 
-	# Connect to weapon's ammo depleted signal
-	if current_weapon.ammo_depleted.is_connected(_on_weapon_ammo_depleted):
-		current_weapon.ammo_depleted.disconnect(_on_weapon_ammo_depleted)
-	current_weapon.ammo_depleted.connect(_on_weapon_ammo_depleted)
-
-	# Emit weapon switched signal and initial ammo state
-	weapon_switched.emit(current_weapon)
-	weapon_ammo_changed.emit(current_weapon.get_current_ammo(), current_weapon.get_max_ammo_amount())
+	_ui_event_controller.emit_weapon_equipped(
+		current_weapon,
+		Callable(self, "_emit_weapon_switched"),
+		Callable(self, "_emit_weapon_ammo_changed")
+	)
 
 	# Play draw animation for new weapon
 	if current_weapon.pullout_anim_name:
@@ -439,7 +416,7 @@ func _on_animation_started(anim_name: String) -> void:
 		return
 	
 	# Check if this is a shooting animation
-	if anim_name == current_weapon.shoot_anim_name or anim_name == current_weapon.repeat_shoot_anim_name:
+	if _fire_controller.is_shooting_animation(anim_name, current_weapon):
 		is_shooting = true
 
 
@@ -452,7 +429,7 @@ func _on_animation_finished(anim_name: String) -> void:
 		return
 	
 	# Check if this was a shooting animation
-	if anim_name == current_weapon.shoot_anim_name or anim_name == current_weapon.repeat_shoot_anim_name:
+	if _fire_controller.is_shooting_animation(anim_name, current_weapon):
 		is_shooting = false
 
 
@@ -464,7 +441,11 @@ func _on_weapon_ammo_changed(current_ammo: int, max_ammo: int):
 
 	Forwards the ammo change signal to any connected systems (like the HUD).
 	"""
-	weapon_ammo_changed.emit(current_ammo, max_ammo)
+	_ui_event_controller.forward_ammo_change(
+		current_ammo,
+		max_ammo,
+		Callable(self, "_emit_weapon_ammo_changed")
+	)
 
 
 func add_ammo_to_weapons(amount: int, all_weapons: bool = false) -> bool:
@@ -507,3 +488,11 @@ func _on_weapon_ammo_depleted():
 
 func _emit_lighter_off() -> void:
 	lighter_off.emit()
+
+
+func _emit_weapon_switched(weapon: WeaponResource) -> void:
+	weapon_switched.emit(weapon)
+
+
+func _emit_weapon_ammo_changed(current_ammo: int, max_ammo: int) -> void:
+	weapon_ammo_changed.emit(current_ammo, max_ammo)

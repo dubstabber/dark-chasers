@@ -22,24 +22,8 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.is_in_group('player'):
-		var message_text: String
-		match key_type:
-			"ruby":
-				message_text = "Picked up a ruby key."
-			"weird":
-				message_text = "Picked up some odd looking key."
-			"brown":
-				message_text = "Picked up a rusty brown key."
-			"gold":
-				message_text = "Picked up a fancy gold key."
-			"emerald":
-				message_text = "Picked up an emerald key."
-			"silver":
-				message_text = "Picked up a shiny silver key."
-			"useless":
-				message_text = 'Congratulations! You just picked up the useless key!'
-			_:
-				message_text = "Picked up a key."
+		var key_icons := Services.get_key_icons()
+		var message_text := key_icons.get_pickup_message(key_type) if key_icons else "Picked up a key."
 
 		# Emit domain-specific typed event via GameEventBus
 		# The event_type_id is the SOLE stable identity - no event_name string dispatch.

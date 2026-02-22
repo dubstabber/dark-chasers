@@ -1,6 +1,7 @@
 extends Area3D
 
 @export var level_name: String
+@export var target_spawn_id: StringName = &""
 
 var spawn_marker: Marker3D
 
@@ -12,8 +13,15 @@ func _ready():
 				spawn_marker = n
 
 
-func _on_body_entered(body):
+func _on_body_entered(body: Node3D) -> void:
 	if level_name:
-		get_tree().change_scene_to_file(level_name)
+		if Services and Services.level_manager:
+			Services.level_manager.request_level_transition(level_name, {
+				"spawn_id": target_spawn_id,
+				"from_teleport": get_path(),
+				"body": body
+			})
+		else:
+			push_warning("Teleport: Services.level_manager not available; cannot transition to %s" % level_name)
 	elif spawn_marker:
-		body.position = spawn_marker.global_position
+		body.global_position = spawn_marker.global_position

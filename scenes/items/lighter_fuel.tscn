@@ -12,7 +12,7 @@ collision_layer = 8
 script = ExtResource("1_ammo")
 ammo_value = 100
 pickup_sound = ExtResource("2_pickup_sound")
-event_string = "Picked up lighter fuel."
+pickup_message = "Picked up lighter fuel."
 target_weapon_name = "Doom lighter"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

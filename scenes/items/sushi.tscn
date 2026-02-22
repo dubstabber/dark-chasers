@@ -10,7 +10,7 @@ size = Vector3(0.522461, 0.220703, 0.501953)
 [node name="Sushi" type="Area3D" groups=["item"]]
 collision_layer = 8
 script = ExtResource("1_bbw8y")
-event_string = "Ate sushi!"
+pickup_message = "Ate sushi!"
 pickup_sound = ExtResource("2_ytmuv")
 heal_value = 25
 

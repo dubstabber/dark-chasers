@@ -10,7 +10,7 @@ size = Vector3(0.743027, 0.781376, 0.741394)
 [node name="AoHealth" type="Area3D" groups=["item"]]
 collision_layer = 8
 script = ExtResource("1_ry0ds")
-event_string = "Obtainted Health Replenishment."
+pickup_message = "Obtainted Health Replenishment."
 pickup_sound = ExtResource("2_t4eb7")
 heal_value = 50
 

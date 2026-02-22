@@ -11,7 +11,7 @@ size = Vector3(0.690826, 0.627703, 0.672795)
 collision_layer = 8
 script = ExtResource("1_bc5sw")
 pickup_sound = ExtResource("2_361eh")
-event_string = "Obtained Armor Replenishment."
+pickup_message = "Obtained Armor Replenishment."
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(0.33, 0, 0, 0, 0.33, 0, 0, 0, 0.33, 0, 0, 0)

@@ -19,10 +19,6 @@ config/icon="res://icon.svg"
 
 Services="*res://scenes/services/services.gd"
 
-[debug]
-
-gdscript/warnings/unused_signal=0
-
 [display]
 
 window/stretch/mode="canvas_items"

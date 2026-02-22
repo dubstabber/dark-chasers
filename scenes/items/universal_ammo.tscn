@@ -11,7 +11,7 @@ collision_layer = 8
 script = ExtResource("1_ammo")
 ammo_value = 50
 pickup_sound = ExtResource("2_pickup_sound")
-event_string = "Picked up universal ammo pack."
+pickup_message = "Picked up universal ammo pack."
 target_all_weapons = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

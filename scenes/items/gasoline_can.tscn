@@ -12,7 +12,7 @@ collision_layer = 8
 script = ExtResource("1_6wour")
 ammo_value = 2000
 pickup_sound = ExtResource("2_3bxe7")
-event_string = "Picked Up a Gasoline Can."
+pickup_message = "Picked Up a Gasoline Can."
 ammo_type = "lighter_fuel"
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

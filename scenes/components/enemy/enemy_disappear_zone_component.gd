@@ -17,9 +17,11 @@ const CHECK_INTERVAL: float = 0.5
 
 func _ready() -> void:
 	_owner_enemy = owner as CharacterBody3D
+	if _owner_enemy == null:
+		# Fallback for dynamically created nodes where `owner` may not be set.
+		_owner_enemy = get_parent() as CharacterBody3D
 	for zone in disappear_zones:
-		if is_instance_valid(zone):
-			zone.body_entered.connect(_on_disappear_area)
+		_ensure_zone_connected(zone)
 
 
 func update(delta: float) -> void:
@@ -30,8 +32,69 @@ func update(delta: float) -> void:
 
 
 func add_zone(area: Area3D) -> void:
+	if not is_instance_valid(area):
+		return
+	if disappear_zones.has(area):
+		return
 	disappear_zones.append(area)
-	area.body_entered.connect(_on_disappear_area)
+	_ensure_zone_connected(area)
+
+
+## Ensures the component zones reflect the enemy-provided list (typically from `Enemy.disappear_zones`).
+## Returns true if already in sync (set-equal, no duplicates), false if it had to repair.
+func sync_with_enemy_zones(enemy_zones: Array[Area3D]) -> bool:
+	var desired := _unique_valid_zones(enemy_zones)
+	var in_sync := _zones_equivalent(disappear_zones, desired)
+	if in_sync:
+		# Still ensure connections exist (safe no-op if already connected)
+		for z in desired:
+			_ensure_zone_connected(z)
+		return true
+
+	# Disconnect zones that are no longer desired
+	var cb := Callable(self, "_on_disappear_area")
+	for old_zone in disappear_zones:
+		if is_instance_valid(old_zone) and not desired.has(old_zone):
+			if old_zone.body_entered.is_connected(cb):
+				old_zone.body_entered.disconnect(cb)
+
+	# Replace list and ensure connections for desired zones
+	disappear_zones = desired
+	for z in disappear_zones:
+		_ensure_zone_connected(z)
+	return false
+
+
+func _ensure_zone_connected(zone: Area3D) -> void:
+	if not is_instance_valid(zone):
+		return
+	var cb := Callable(self, "_on_disappear_area")
+	if not zone.body_entered.is_connected(cb):
+		zone.body_entered.connect(cb)
+
+
+func _unique_valid_zones(zones: Array[Area3D]) -> Array[Area3D]:
+	var unique: Array[Area3D] = []
+	for z in zones:
+		if is_instance_valid(z) and not unique.has(z):
+			unique.append(z)
+	return unique
+
+
+func _zones_equivalent(a: Array[Area3D], b: Array[Area3D]) -> bool:
+	# Equivalent iff both represent the same set of valid zones and contain no duplicates.
+	var ua := _unique_valid_zones(a)
+	var ub := _unique_valid_zones(b)
+	if ua.size() != a.size():
+		return false
+	if ub.size() != b.size():
+		return false
+	if ua.size() != ub.size():
+		return false
+	for z in ua:
+		if not ub.has(z):
+			return false
+	return true
 
 
 func has_zones() -> bool:

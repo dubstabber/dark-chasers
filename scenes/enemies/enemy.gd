@@ -100,10 +100,17 @@ func _setup_transition_component() -> void:
 
 func _setup_disappear_zone_component() -> void:
 	if _disappear_zone_component:
-		# Migrate legacy disappear_zones export to component
-		for zone in disappear_zones:
-			if is_instance_valid(zone):
-				_disappear_zone_component.add_zone(zone)
+		_sanitize_disappear_zones_export()
+		# Keep designer-facing export list as configuration, but make the component authoritative at runtime.
+		_disappear_zone_component.sync_with_enemy_zones(disappear_zones)
+
+
+func _sanitize_disappear_zones_export() -> void:
+	var unique: Array[Area3D] = []
+	for z in disappear_zones:
+		if is_instance_valid(z) and not unique.has(z):
+			unique.append(z)
+	disappear_zones = unique
 
 
 func _setup_motor_component() -> void:
@@ -293,10 +300,13 @@ func makepath() -> void:
 
 
 func add_disappear_zone(area: Area3D) -> void:
+	if not is_instance_valid(area):
+		return
+	# Keep the exported list mirrored for inspector/debuggability.
+	if not disappear_zones.has(area):
+		disappear_zones.append(area)
 	if _disappear_zone_component:
 		_disappear_zone_component.add_zone(area)
-	else:
-		disappear_zones.append(area)
 
 
 func restart_pathfinding(delay: float = 0.1) -> void:

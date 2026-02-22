@@ -76,9 +76,62 @@ func get_subscriber_count(event_type: StringName) -> int:
 
 
 func _record_event(event: RefCounted) -> void:
-	_event_history.append(event)
+	_event_history.append(_build_history_snapshot(event))
 	if _event_history.size() > _history_limit:
 		_event_history.pop_front()
+
+
+func _build_history_snapshot(event: RefCounted) -> RefCounted:
+	var payload_snapshot_variant: Variant = _sanitize_history_payload_variant(event.payload)
+	var payload_snapshot: Dictionary = {}
+	if payload_snapshot_variant is Dictionary:
+		payload_snapshot = payload_snapshot_variant
+
+	var snapshot := GameEventScript.new(event.event_type, payload_snapshot, null)
+	snapshot.timestamp = event.timestamp
+	return snapshot
+
+
+func _sanitize_history_payload_variant(value: Variant) -> Variant:
+	match typeof(value):
+		TYPE_DICTIONARY:
+			return _sanitize_history_payload_dictionary(value)
+		TYPE_ARRAY:
+			return _sanitize_history_payload_array(value)
+		TYPE_OBJECT:
+			if value == null:
+				return null
+			if value is Node:
+				var node := value as Node
+				var node_path := ""
+				if node.is_inside_tree():
+					node_path = str(node.get_path())
+				return {
+					"_type": "Node",
+					"path": node_path,
+					"name": node.name,
+				}
+			var object_value := value as Object
+			return {"_type": object_value.get_class()}
+		_:
+			return value
+
+
+func _sanitize_history_payload_dictionary(payload: Dictionary) -> Dictionary:
+	var sanitized: Dictionary = {}
+	for raw_key: Variant in payload.keys():
+		var key: Variant = raw_key
+		if typeof(key) == TYPE_OBJECT:
+			key = str(key)
+		sanitized[key] = _sanitize_history_payload_variant(payload[raw_key])
+	return sanitized
+
+
+func _sanitize_history_payload_array(values: Array) -> Array:
+	var sanitized: Array = []
+	for value: Variant in values:
+		sanitized.append(_sanitize_history_payload_variant(value))
+	return sanitized
 
 
 func get_recent_events(count: int = 10) -> Array:

@@ -1,5 +1,7 @@
 class_name Enemy extends CharacterBody3D
 
+const EnemyPathTimingControllerScript = preload("res://scenes/components/enemy/enemy_path_timing_controller.gd")
+
 @export var stats: EnemyStats ## Preferred: configure via resource for reusable enemy types
 @export var current_room: String
 @export var disappear_zones: Array[Area3D] ## Bridge: forwarded to EnemyDisappearZoneComponent at _ready()
@@ -26,6 +28,7 @@ var _door_opener_component: EnemyDoorOpenerComponent
 var _kill_zone_component: EnemyKillZoneComponent
 var _motor_component: EnemyMotorComponent
 var _brain_component: EnemyBrain
+var _path_timing_controller := EnemyPathTimingControllerScript.new()
 var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -316,14 +319,7 @@ func restart_pathfinding(delay: float = 0.1) -> void:
 
 func _on_find_path_timer_timeout():
 	var distance_to_target = _get_distance_to_target()
-	if distance_to_target < 20 or not waypoints.is_empty():
-		find_path_timer.wait_time = 0.1
-	elif distance_to_target < 35:
-		find_path_timer.wait_time = 0.3 # Reduced from 0.5
-	elif distance_to_target < 50:
-		find_path_timer.wait_time = 0.5 # Reduced from 0.8
-	else:
-		find_path_timer.wait_time = 0.8 # Significantly reduced from 1.7
+	find_path_timer.wait_time = _path_timing_controller.compute_wait_time(distance_to_target, not waypoints.is_empty())
 	makepath()
 
 

@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const HudPlayerBindingControllerScript = preload("res://scenes/components/player/hud_player_binding_controller.gd")
+
 var tween: Tween
 var faded: bool
 
@@ -20,6 +22,8 @@ var faded: bool
 
 
 var _connected_player: CharacterBody3D = null
+var _reserve_ammo_callback: Callable
+var _player_binding_controller := HudPlayerBindingControllerScript.new()
 
 
 func _ready():
@@ -74,59 +78,42 @@ func connect_to_player(player: CharacterBody3D) -> void:
 		disconnect_from_player()
 	
 	_connected_player = player
+	_reserve_ammo_callback = Callable(self, "_on_player_reserve_ammo_changed").bind(player)
+	_player_binding_controller.connect_player_signals(
+		player,
+		Callable(self, "_on_player_health_changed"),
+		Callable(self, "_on_player_armor_changed"),
+		Callable(self, "_on_player_ammo_changed"),
+		Callable(self, "_on_player_weapon_switched"),
+		_reserve_ammo_callback,
+		damage_overlay
+	)
 	
-	# Connect to HealthComponent
 	if player.health_component:
-		player.health_component.health_changed.connect(_on_player_health_changed)
 		update_health_display(player.health_component.current_health, player.health_component.max_health)
 	
-	# Connect to ArmorComponent
 	if player.armor_component:
-		player.armor_component.armor_changed.connect(_on_player_armor_changed)
 		update_armor_display(player.armor_component.current_armor, player.armor_component.max_armor)
 	
-	# Connect to WeaponManager
 	if player.weapon_manager:
-		player.weapon_manager.weapon_ammo_changed.connect(_on_player_ammo_changed)
-		player.weapon_manager.weapon_switched.connect(_on_player_weapon_switched)
-		# Initialize ammo display
 		call_deferred("_initialize_ammo_from_player", player)
-	
-	# Connect to AmmoComponent for reserve ammo updates
-	if player.ammo_component:
-		player.ammo_component.ammo_changed.connect(_on_player_reserve_ammo_changed.bind(player))
-	
-	# Wire up DamageEffectsComponent to use HUD's damage overlay
-	# Player is a typed class, so we can access damage_effects_component directly
-	if player.damage_effects_component:
-		player.damage_effects_component.color_rect = damage_overlay
 
 
 func disconnect_from_player() -> void:
 	"""Disconnect HUD from the current player's components"""
 	if not _connected_player:
 		return
-	
-	if _connected_player.health_component and _connected_player.health_component.health_changed.is_connected(_on_player_health_changed):
-		_connected_player.health_component.health_changed.disconnect(_on_player_health_changed)
-	
-	if _connected_player.armor_component and _connected_player.armor_component.armor_changed.is_connected(_on_player_armor_changed):
-		_connected_player.armor_component.armor_changed.disconnect(_on_player_armor_changed)
-	
-	if _connected_player.weapon_manager:
-		if _connected_player.weapon_manager.weapon_ammo_changed.is_connected(_on_player_ammo_changed):
-			_connected_player.weapon_manager.weapon_ammo_changed.disconnect(_on_player_ammo_changed)
-		if _connected_player.weapon_manager.weapon_switched.is_connected(_on_player_weapon_switched):
-			_connected_player.weapon_manager.weapon_switched.disconnect(_on_player_weapon_switched)
 
-	if _connected_player.ammo_component:
-		var reserve_ammo_callback := _on_player_reserve_ammo_changed.bind(_connected_player)
-		if _connected_player.ammo_component.ammo_changed.is_connected(reserve_ammo_callback):
-			_connected_player.ammo_component.ammo_changed.disconnect(reserve_ammo_callback)
+	_player_binding_controller.disconnect_player_signals(
+		_connected_player,
+		Callable(self, "_on_player_health_changed"),
+		Callable(self, "_on_player_armor_changed"),
+		Callable(self, "_on_player_ammo_changed"),
+		Callable(self, "_on_player_weapon_switched"),
+		_reserve_ammo_callback
+	)
 
-	if _connected_player.damage_effects_component:
-		_connected_player.damage_effects_component.color_rect = null
-
+	_reserve_ammo_callback = Callable()
 	_connected_player = null
 
 

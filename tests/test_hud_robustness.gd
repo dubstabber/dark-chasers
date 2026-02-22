@@ -9,6 +9,7 @@ func _ready():
 	test_hud_no_parent_chain_traversal()
 	test_hud_explicit_container_references()
 	test_hud_ownership_explicit()
+	test_hud_player_signal_binding_delegation()
 	
 	print("=== ALL HUD ROBUSTNESS TESTS COMPLETED ===")
 
@@ -63,3 +64,16 @@ func test_hud_ownership_explicit():
 	assert("get_children()" not in get_hud_owner_body, "_get_hud_owner should not iterate children")
 	
 	print("✓ HUD ownership is explicit via _connected_player")
+
+
+func test_hud_player_signal_binding_delegation():
+	print("\n--- Testing HUD delegates player signal wiring ---")
+	
+	var script = load("res://scenes/hud.gd") as GDScript
+	var source = script.source_code
+	
+	assert("HudPlayerBindingControllerScript" in source, "HUD should preload HudPlayerBindingController")
+	assert("_player_binding_controller.connect_player_signals" in source, "HUD should delegate connect_to_player signal wiring")
+	assert("_player_binding_controller.disconnect_player_signals" in source, "HUD should delegate disconnect_from_player signal wiring")
+	
+	print("✓ HUD delegates player signal wiring to HudPlayerBindingController")

@@ -1,6 +1,8 @@
 class_name PlayerMovementComponent
 extends Node
 
+const PlayerSlideControllerScript = preload("res://scenes/components/movement/player_slide_controller.gd")
+
 ## Handles all player movement: walking, sprinting, crouching, sliding, jumping, climbing, clip mode
 
 signal movement_state_changed(state: MovementState)
@@ -44,8 +46,7 @@ var direction: Vector3 = Vector3.ZERO
 var current_state: MovementState = MovementState.IDLE
 var previous_state: MovementState = MovementState.IDLE
 
-var slide_timer: float = 0.0
-var slide_vector: Vector2 = Vector2.ZERO
+var _slide_controller := PlayerSlideControllerScript.new()
 
 var is_climbing: bool = false
 var clip_mode: bool = false
@@ -168,20 +169,18 @@ func _update_crouch_state(delta: float, input_dir: Vector2, is_crouching_input: 
 
 func _update_slide(delta: float) -> void:
 	if current_state == MovementState.SLIDING:
-		slide_timer -= delta
-		if slide_timer <= 0:
+		if _slide_controller.update(delta):
 			_end_slide()
 
 
 func _start_slide(input_dir: Vector2) -> void:
-	slide_timer = slide_duration
-	slide_vector = input_dir
+	_slide_controller.start_slide(input_dir, slide_duration)
 	_set_state(MovementState.SLIDING)
 	slide_started.emit()
 
 
 func _end_slide() -> void:
-	slide_timer = 0.0
+	_slide_controller.end_slide()
 	_set_state(MovementState.CROUCHING)
 	slide_ended.emit()
 
@@ -198,8 +197,9 @@ func _update_direction(delta: float, input_dir: Vector2) -> void:
 			player.velocity.x = 0
 			player.velocity.z = 0
 	elif current_state == MovementState.SLIDING:
+		var slide_vector := _slide_controller.get_slide_vector()
 		direction = (player.transform.basis * Vector3(slide_vector.x, 0, slide_vector.y)).normalized()
-		current_speed = (slide_timer + 0.1) * slide_speed
+		current_speed = (_slide_controller.get_slide_timer() + 0.1) * slide_speed
 	elif player.is_on_floor():
 		direction = lerp(direction, (player.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized(), delta * lerp_speed)
 	else:

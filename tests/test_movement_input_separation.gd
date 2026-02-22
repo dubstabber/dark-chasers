@@ -11,6 +11,7 @@ func _ready():
 	
 	test_movement_component_no_input_polling()
 	test_movement_accepts_input_state_params()
+	test_movement_component_delegates_slide_state()
 	test_input_component_passes_state()
 	test_player_owns_physics_process()
 	test_input_component_no_physics_process()
@@ -45,6 +46,20 @@ func test_movement_accepts_input_state_params():
 	assert("is_sprinting_input: bool" in source, "process_movement should accept is_sprinting_input param")
 	
 	print("✓ PlayerMovementComponent accepts input state parameters")
+
+
+func test_movement_component_delegates_slide_state():
+	print("\n--- Testing PlayerMovementComponent delegates slide state ---")
+	
+	var script = load("res://scenes/components/movement/player_movement_component.gd") as GDScript
+	var source = script.source_code
+	
+	assert("PlayerSlideControllerScript" in source, "PlayerMovementComponent should preload PlayerSlideController")
+	assert("_slide_controller.start_slide" in source, "PlayerMovementComponent should delegate slide start")
+	assert("_slide_controller.update" in source, "PlayerMovementComponent should delegate slide timer updates")
+	assert("_slide_controller.get_slide_vector" in source, "PlayerMovementComponent should read slide vector from PlayerSlideController")
+	
+	print("✓ PlayerMovementComponent delegates slide state to PlayerSlideController")
 
 
 func test_input_component_passes_state():

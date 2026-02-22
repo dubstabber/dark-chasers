@@ -3,6 +3,7 @@ class_name WeaponManager extends Node3D
 const WeaponAmmoControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ammo_controller.gd")
 const WeaponFireControllerScript = preload("res://scenes/systems/weapon_manager/weapon_fire_controller.gd")
 const WeaponUiEventControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ui_event_controller.gd")
+const WeaponEquipControllerScript = preload("res://scenes/systems/weapon_manager/weapon_equip_controller.gd")
 
 signal lighter_on
 signal lighter_off
@@ -19,6 +20,7 @@ var _sound_controller := WeaponSoundController.new()
 var _ammo_controller := WeaponAmmoControllerScript.new()
 var _fire_controller := WeaponFireControllerScript.new()
 var _ui_event_controller := WeaponUiEventControllerScript.new()
+var _equip_controller := WeaponEquipControllerScript.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -90,8 +92,39 @@ func _ready() -> void:
 	if animation_player:
 		animation_player.animation_started.connect(_on_animation_started)
 		animation_player.animation_finished.connect(_on_animation_finished)
+
+	_configure_equip_controller()
 	
 	switch_weapon(2) # default
+
+
+func _configure_equip_controller() -> void:
+	_equip_controller.setup(
+		self,
+		_switch_controller,
+		_ammo_controller,
+		_ui_event_controller,
+		_sound_controller,
+		animation_player,
+		bullet_raycast,
+		Callable(self, "_get_slot_array"),
+		Callable(self, "_get_player_ammo_component"),
+		Callable(self, "_setup_weapon_ammo_components"),
+		Callable(self, "_are_ammo_components_initialized"),
+		Callable(self, "_set_is_auto_hitting"),
+		Callable(self, "_on_weapon_ammo_changed"),
+		Callable(self, "_on_weapon_ammo_depleted"),
+		Callable(self, "_emit_weapon_switched"),
+		Callable(self, "_emit_weapon_ammo_changed")
+	)
+
+
+func _are_ammo_components_initialized() -> bool:
+	return _ammo_components_initialized
+
+
+func _set_is_auto_hitting(value: bool) -> void:
+	is_auto_hitting = value
 
 
 func _setup_weapon_ammo_components() -> void:
@@ -219,7 +252,7 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 	var weapon_position := _switch_controller.insert_weapon_sorted(new_weapon, slot_array)
 	selected_slot_index = slot_index
 	selected_slot_position = weapon_position
-	await _equip_from_slot(slot_array)
+	await _equip_controller.equip_selected_slot(slot_array)
 
 
 # ========================================================================== #
@@ -261,98 +294,7 @@ func hit() -> void:
 
 
 func switch_weapon(slot_index: int) -> void:
-	var slot_array = _get_slot_array(slot_index)
-	if slot_array.is_empty():
-		return
-
-	if _switch_controller.is_switching:
-		_switch_controller.queue_switch(slot_index)
-	else:
-		_switch_controller.start_switching()
-		_start_weapon_switch_process(slot_index)
-
-
-func _start_weapon_switch_process(slot_index: int) -> void:
-	await _process_weapon_switch(slot_index)
-	await _process_weapon_switch_queue()
-
-
-func _process_weapon_switch_queue() -> void:
-	while _switch_controller.has_queued_switch():
-		var next_slot = _switch_controller.pop_queued_switch()
-		await _process_weapon_switch(next_slot)
-	_switch_controller.finish_switching()
-
-
-func _process_weapon_switch(slot_index: int) -> void:
-	var slot_array = _get_slot_array(slot_index)
-	var target_weapon = _switch_controller.resolve_target_weapon(slot_index, slot_array)
-	
-	if target_weapon == null:
-		return # Already on target or slot empty
-	
-	# Perform the actual weapon switch
-	await _equip_from_slot(slot_array)
-
-func _equip_from_slot(slot: Array) -> void:
-	if slot.size() <= selected_slot_position:
-		selected_slot_position = 0
-
-	var next_weapon := slot[selected_slot_position] as WeaponResource
-	if current_weapon == next_weapon:
-		return
-
-	is_auto_hitting = false
-
-	# Put away current weapon if one is equipped
-	if current_weapon and current_weapon.pullout_anim_name:
-		_ui_event_controller.disconnect_weapon_signals(
-			current_weapon,
-			Callable(self, "_on_weapon_ammo_changed"),
-			Callable(self, "_on_weapon_ammo_depleted")
-		)
-
-		# Wait for any current animation to finish before starting holster
-		if animation_player.is_playing():
-			await animation_player.animation_finished
-
-		animation_player.play_backwards(current_weapon.pullout_anim_name)
-		await animation_player.animation_finished
-
-	# Equip new weapon
-	current_weapon = next_weapon
-	bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
-	_sound_controller.set_hit_sound_stream(current_weapon)
-	var player_ammo_component = _get_player_ammo_component()
-	if player_ammo_component:
-		_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, self)
-	
-	# Retry setting up all ammo components if they weren't initialized during _ready
-	if not _ammo_components_initialized:
-		_setup_weapon_ammo_components()
-	
-	# Ensure ammo component is set (in case it wasn't set during initialization)
-	if not current_weapon.ammo_component:
-		player_ammo_component = _get_player_ammo_component()
-		if player_ammo_component:
-			_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, self)
-
-	_ui_event_controller.connect_weapon_signals(
-		current_weapon,
-		Callable(self, "_on_weapon_ammo_changed"),
-		Callable(self, "_on_weapon_ammo_depleted")
-	)
-
-	_ui_event_controller.emit_weapon_equipped(
-		current_weapon,
-		Callable(self, "_emit_weapon_switched"),
-		Callable(self, "_emit_weapon_ammo_changed")
-	)
-
-	# Play draw animation for new weapon
-	if current_weapon.pullout_anim_name:
-		animation_player.play(current_weapon.pullout_anim_name)
-		await animation_player.animation_finished
+	_equip_controller.switch_weapon(slot_index)
 
 
 # ========================================================================== #

@@ -8,6 +8,7 @@ func _ready():
 	
 	test_weapon_fire_controller_creation()
 	test_weapon_ui_event_controller_creation()
+	test_weapon_equip_controller_creation()
 	test_weapon_hit_executor_creation()
 	test_weapon_resource_is_pure_config()
 	test_weapon_manager_fire_methods_exist()
@@ -57,6 +58,19 @@ func test_weapon_hit_executor_creation():
 	print("✓ WeaponHitExecutor created successfully")
 
 
+func test_weapon_equip_controller_creation():
+	print("\n--- Testing WeaponEquipController Creation ---")
+
+	var script = load("res://scenes/systems/weapon_manager/weapon_equip_controller.gd") as GDScript
+	assert(script != null, "WeaponEquipController script should load")
+	var controller = script.new()
+	assert(controller != null, "WeaponEquipController should be instantiable")
+	assert(controller.has_method("setup"), "WeaponEquipController should have setup")
+	assert(controller.has_method("switch_weapon"), "WeaponEquipController should have switch_weapon")
+	assert(controller.has_method("equip_selected_slot"), "WeaponEquipController should have equip_selected_slot")
+	print("✓ WeaponEquipController created successfully")
+
+
 func test_weapon_resource_is_pure_config():
 	print("\n--- Testing WeaponResource is Pure Config ---")
 	
@@ -103,11 +117,12 @@ func test_weapon_manager_delegates_to_controllers():
 	assert("_fire_controller.try_fire" in source, "WeaponManager should delegate single-fire logic to WeaponFireController")
 	assert("_fire_controller.try_auto_fire" in source, "WeaponManager should delegate auto-fire logic to WeaponFireController")
 	assert("_fire_controller.consume_and_execute_hit" in source, "WeaponManager should delegate hit execution to WeaponFireController")
-	assert("_ui_event_controller.connect_weapon_signals" in source, "WeaponManager should delegate weapon signal wiring to WeaponUiEventController")
-	assert("_ui_event_controller.emit_weapon_equipped" in source, "WeaponManager should delegate equip UI events to WeaponUiEventController")
+	assert("_equip_controller.switch_weapon" in source, "WeaponManager should delegate switch flow to WeaponEquipController")
+	assert("_equip_controller.equip_selected_slot" in source, "WeaponManager should delegate equip flow to WeaponEquipController")
+	assert("_equip_controller.setup" in source, "WeaponManager should configure WeaponEquipController dependencies")
 	assert("_ui_event_controller.forward_ammo_change" in source, "WeaponManager should delegate ammo UI forwarding to WeaponUiEventController")
 	
-	print("✓ WeaponManager delegates firing and UI event boundaries to controllers")
+	print("✓ WeaponManager delegates firing and equip boundaries to controllers")
 
 
 func test_weapon_manager_owns_ammo_wiring():

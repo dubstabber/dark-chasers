@@ -18,19 +18,18 @@ var _bars_aooni: CharacterBody3D = null
 
 
 func _level() -> Level:
-	var n: Node = self
-	while n != null:
-		if n is Level:
-			return n as Level
-		n = n.get_parent()
+	if not Services.world_context:
+		return null
+	var level := Services.world_context.get_level_node()
+	if level and level is Level:
+		return level as Level
 	return null
 
 
 func _hud() -> Node:
-	var level := _level()
-	if not level:
+	if not Services.world_context:
 		return null
-	return level.get_node_or_null("HUD")
+	return Services.world_context.get_hud()
 
 
 func _players() -> Node:

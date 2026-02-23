@@ -1,6 +1,6 @@
 [gd_scene load_steps=933 format=3 uid="uid://bbe1tk0hhej0g"]
 
-[ext_resource type="Script" uid="uid://l1lrb43ix2i3" path="res://scenes/rooms/dreammaze.gd" id="1_bt6le"]
+[ext_resource type="Script" uid="uid://l1lrb43ix2i3" path="res://scenes/maps/dreammaze.gd" id="1_bt6le"]
 [ext_resource type="PackedScene" uid="uid://j37rkfrjqae2" path="res://models/dreammaze/dreammaze.glb" id="1_kwt5g"]
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_fn1fw"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="5_yjp8p"]

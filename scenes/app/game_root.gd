@@ -14,10 +14,16 @@ extends Node
 
 
 func _ready() -> void:
+	_register_level_host_with_level_manager()
+
 	var startup_scene := _select_startup_scene()
 	if not startup_scene:
 		push_warning("GameRoot: No startup scene configured. Assign default_game_scene (and optionally main_menu_scene).")
 		return
+
+	if _request_startup_transition(startup_scene) == OK:
+		return
+
 	_load_scene_into_level_host(startup_scene)
 
 
@@ -45,3 +51,31 @@ func _load_scene_into_level_host(scene: PackedScene) -> void:
 
 	var scene_instance := scene.instantiate()
 	level_host.add_child(scene_instance)
+
+
+func _register_level_host_with_level_manager() -> void:
+	if not (Services and Services.level_manager):
+		push_warning("GameRoot: Services.level_manager is unavailable; startup will use direct LevelHost loading.")
+		return
+
+	if not Services.level_manager.has_method("register_level_host"):
+		push_warning("GameRoot: Services.level_manager does not support register_level_host.")
+		return
+
+	Services.level_manager.register_level_host(level_host)
+
+
+func _request_startup_transition(scene: PackedScene) -> Error:
+	if not (Services and Services.level_manager):
+		return ERR_UNAVAILABLE
+
+	if not Services.level_manager.has_method("request_level_transition"):
+		return ERR_UNAVAILABLE
+
+	if scene.resource_path == "":
+		push_warning("GameRoot: Startup scene has no resource_path. Falling back to direct instantiation.")
+		return ERR_UNAVAILABLE
+
+	return Services.level_manager.request_level_transition(scene.resource_path, {
+		"startup": true
+	})

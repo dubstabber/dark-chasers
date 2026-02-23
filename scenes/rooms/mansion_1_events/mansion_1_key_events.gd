@@ -1,4 +1,4 @@
-extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
+extends Node
 
 @export var aooni_chase_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/FirstAoOniChase")
 @export var aooni_chase_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/LibraryExitArea")
@@ -15,6 +15,55 @@ extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
 @export var whiteface_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/WhiteFaceSpawn")
 
 var _bars_aooni: CharacterBody3D = null
+
+
+func _level() -> Level:
+	var n: Node = self
+	while n != null:
+		if n is Level:
+			return n as Level
+		n = n.get_parent()
+	return null
+
+
+func _hud() -> Node:
+	var level := _level()
+	if not level:
+		return null
+	return level.get_node_or_null("HUD")
+
+
+func _players() -> Node:
+	if not Services.enemy_context:
+		return null
+	return Services.enemy_context.get_players_node()
+
+
+func _enemies() -> Node:
+	if not Services.world_context:
+		return null
+	return Services.world_context.get_enemies_node()
+
+
+func _music() -> AudioStreamPlayer:
+	var level := _level()
+	if not level:
+		return null
+	return level.get_node_or_null("GlobalMusic") as AudioStreamPlayer
+
+
+func _show_monster_disappeared_text() -> void:
+	var hud := _hud()
+	if not hud:
+		return
+	var random_texts := [
+		"[color=#6c6c6c]You:[/color] I think he dissapeared..",
+		"[color=#6c6c6c]You:[/color] I have the feeling it's gone...",
+		"[color=#6c6c6c]You:[/color] Phew, that was close...",
+		"[color=#6c6c6c]You:[/color] I think he's away.",
+		"[color=#6c6c6c]You:[/color] I think that thing is gone...",
+	]
+	hud.show_event_text(random_texts.pick_random(), false, 3.0)
 
 
 func _ready() -> void:

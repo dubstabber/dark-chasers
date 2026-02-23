@@ -43,10 +43,9 @@ func _enemies() -> Node:
 
 
 func _music() -> AudioStreamPlayer:
-	var level := _level()
-	if not level:
+	if not Services.world_context:
 		return null
-	return level.get_node_or_null("GlobalMusic") as AudioStreamPlayer
+	return Services.world_context.get_global_music_player()
 
 
 func _show_monster_disappeared_text() -> void:

@@ -74,6 +74,18 @@ func get_hud() -> CanvasLayer:
 	return null
 
 
+func get_global_music_player() -> AudioStreamPlayer:
+	"""Get the global music player from the current level.
+	
+	Returns:
+		AudioStreamPlayer: The global music player node, or null if not available.
+	"""
+	var level = get_level_node()
+	if level:
+		return level.get_node_or_null("GlobalMusic") as AudioStreamPlayer
+	return null
+
+
 func get_enemies_node() -> Node3D:
 	"""Get the enemies container from the current level.
 	

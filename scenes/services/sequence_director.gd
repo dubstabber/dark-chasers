@@ -219,11 +219,7 @@ func _spawn_enemy(action: RefCounted) -> void:
 
 
 func _play_music(action: RefCounted) -> void:
-	var level = Services.world_context.get_level_node()
-	if not level:
-		return
-	
-	var music_player = level.get_node_or_null("GlobalMusic")
+	var music_player = Services.world_context.get_global_music_player()
 	if music_player and action.sound:
 		music_player.stream = action.sound
 		music_player.volume_db = action.volume_db
@@ -231,10 +227,6 @@ func _play_music(action: RefCounted) -> void:
 
 
 func _stop_music() -> void:
-	var level = Services.world_context.get_level_node()
-	if not level:
-		return
-	
-	var music_player = level.get_node_or_null("GlobalMusic")
+	var music_player = Services.world_context.get_global_music_player()
 	if music_player:
 		music_player.stop()

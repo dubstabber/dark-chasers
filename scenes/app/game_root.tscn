@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/app/game_root.gd" id="1_game_root_script"]
+[ext_resource type="PackedScene" path="res://scenes/maps/mansion_1/mansion_1.tscn" id="2_default_game_scene"]
+
+[node name="GameRoot" type="Node"]
+script = ExtResource("1_game_root_script")
+default_game_scene = ExtResource("2_default_game_scene")
+
+[node name="LevelHost" type="Node" parent="."]

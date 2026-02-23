@@ -39,8 +39,8 @@ func _ready():
 func test_setter_no_recursion():
 	print("\n--- Testing Setter Does Not Recurse ---")
 	
-	var damage_effects = preload("res://scenes/components/effects/damage_effects_component.gd").new()
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var damage_effects = DamageEffectsComponent.new()
+	var health_comp = HealthComponent.new()
 	add_child(damage_effects)
 	add_child(health_comp)
 	
@@ -50,7 +50,7 @@ func test_setter_no_recursion():
 	print("✓ Setter assignment works without recursion")
 	
 	# Test re-assignment (was causing recursion before fix)
-	var health_comp2 = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp2 = HealthComponent.new()
 	add_child(health_comp2)
 	damage_effects.health_component = health_comp2
 	assert(damage_effects.health_component == health_comp2, "Health component should be reassigned")
@@ -63,8 +63,8 @@ func test_setter_no_recursion():
 func test_health_component_signal_connection():
 	print("\n--- Testing Health Component Signal Connection ---")
 	
-	var damage_effects = preload("res://scenes/components/effects/damage_effects_component.gd").new()
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var damage_effects = DamageEffectsComponent.new()
+	var health_comp = HealthComponent.new()
 	add_child(damage_effects)
 	add_child(health_comp)
 	
@@ -84,9 +84,9 @@ func test_health_component_signal_connection():
 func test_health_component_reassignment():
 	print("\n--- Testing Health Component Reassignment ---")
 	
-	var damage_effects = preload("res://scenes/components/effects/damage_effects_component.gd").new()
-	var health_comp1 = preload("res://scenes/components/health/health_component.gd").new()
-	var health_comp2 = preload("res://scenes/components/health/health_component.gd").new()
+	var damage_effects = DamageEffectsComponent.new()
+	var health_comp1 = HealthComponent.new()
+	var health_comp2 = HealthComponent.new()
 	add_child(damage_effects)
 	add_child(health_comp1)
 	add_child(health_comp2)
@@ -119,8 +119,8 @@ func test_health_component_reassignment():
 func test_health_component_null_assignment():
 	print("\n--- Testing Health Component Null Assignment ---")
 	
-	var damage_effects = preload("res://scenes/components/effects/damage_effects_component.gd").new()
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var damage_effects = DamageEffectsComponent.new()
+	var health_comp = HealthComponent.new()
 	add_child(damage_effects)
 	add_child(health_comp)
 	

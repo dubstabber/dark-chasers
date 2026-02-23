@@ -1,7 +1,5 @@
 extends SceneTree
 
-const DetectorScript = preload("res://scenes/systems/dynamic_footstep_system/scripts/footstep_surface_detector.gd")
-
 
 func _init() -> void:
 	print("=== FOOTSTEP SURFACE DETECTOR TESTS ===")
@@ -13,7 +11,7 @@ func _init() -> void:
 
 
 func test_pick_mesh_instance_for_hit_prefers_containing_mesh() -> void:
-	var detector = DetectorScript.new()
+	var detector = DarkChasersFootstepSurfaceDetector.new()
 	var left_mesh := _make_mesh_instance(Vector3(-2, 0, 0))
 	var right_mesh := _make_mesh_instance(Vector3(2, 0, 0))
 
@@ -27,7 +25,7 @@ func test_pick_mesh_instance_for_hit_prefers_containing_mesh() -> void:
 
 
 func test_pick_mesh_instance_for_hit_falls_back_to_valid_mesh() -> void:
-	var detector = DetectorScript.new()
+	var detector = DarkChasersFootstepSurfaceDetector.new()
 	var node_without_mesh := Node3D.new()
 	var valid_mesh := _make_mesh_instance(Vector3.ZERO)
 
@@ -41,7 +39,7 @@ func test_pick_mesh_instance_for_hit_falls_back_to_valid_mesh() -> void:
 
 
 func test_surface_index_for_triangle_map_uses_surface_order() -> void:
-	var detector = DetectorScript.new()
+	var detector = DarkChasersFootstepSurfaceDetector.new()
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _make_triangle_arrays(Vector3(0, 0, 0)))
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _make_triangle_arrays(Vector3(2, 0, 0)))

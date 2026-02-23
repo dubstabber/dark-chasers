@@ -24,7 +24,7 @@ func _ready():
 
 func run_basic_tests():
 	print("\n🧪 RUNNING BASIC HEALTH COMPONENT TESTS...")
-	var basic_tests = preload("res://tests/test_health_component.gd").new()
+	var basic_tests = load("res://tests/test_health_component.gd").new()
 	add_child(basic_tests)
 	
 	# Wait for tests to complete
@@ -36,7 +36,7 @@ func run_basic_tests():
 
 func run_extended_tests():
 	print("\n🔬 RUNNING EXTENDED HEALTH COMPONENT TESTS...")
-	var extended_tests = preload("res://tests/test_health_component_extended.gd").new()
+	var extended_tests = load("res://tests/test_health_component_extended.gd").new()
 	add_child(extended_tests)
 	
 	# Wait for tests to complete
@@ -48,7 +48,7 @@ func run_extended_tests():
 
 func run_armor_tests():
 	print("\n⚔️ RUNNING ARMOR INTEGRATION TESTS...")
-	var armor_tests = preload("res://tests/test_health_component_armor.gd").new()
+	var armor_tests = load("res://tests/test_health_component_armor.gd").new()
 	add_child(armor_tests)
 	
 	# Wait for tests to complete

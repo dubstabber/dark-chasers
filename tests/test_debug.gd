@@ -5,7 +5,7 @@ func _ready():
 
 	# Test just the basic health component first
 	print("Creating health component...")
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	print("Health component loaded")
 
 	add_child(health_comp)

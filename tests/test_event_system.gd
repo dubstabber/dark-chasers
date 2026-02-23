@@ -2,11 +2,6 @@ extends Node
 
 ## Tests for GameEventBus and SequenceDirector
 
-const GameEventScript = preload("res://scenes/resources/game_event.gd")
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
-const SequenceActionScript = preload("res://scenes/resources/sequence_action.gd")
-
 var received_events: Array = []
 
 
@@ -33,7 +28,7 @@ func _ready():
 func test_game_event_creation():
 	print("\n--- Testing GameEvent Creation ---")
 	
-	var event = GameEventScript.new(&"test_event", {"key": "value", "number": 42})
+	var event = GameEvent.new(&"test_event", {"key": "value", "number": 42})
 	
 	assert(event.event_type == &"test_event", "Event type should match")
 	assert(event.payload.get("key") == "value", "Payload key should match")
@@ -105,17 +100,17 @@ func test_event_bus_history():
 func test_sequence_action_creation():
 	print("\n--- Testing SequenceAction Creation ---")
 	
-	var wait_action = SequenceActionScript.wait(2.5)
-	assert(wait_action.action_type == SequenceActionScript.Type.WAIT, "Wait action type should match")
+	var wait_action = SequenceAction.wait(2.5)
+	assert(wait_action.action_type == SequenceAction.Type.WAIT, "Wait action type should match")
 	assert(wait_action.duration == 2.5, "Wait duration should match")
 	
-	var text_action = SequenceActionScript.show_text("Hello World", 5.0)
-	assert(text_action.action_type == SequenceActionScript.Type.SHOW_TEXT, "Show text action type should match")
+	var text_action = SequenceAction.show_text("Hello World", 5.0)
+	assert(text_action.action_type == SequenceAction.Type.SHOW_TEXT, "Show text action type should match")
 	assert(text_action.text == "Hello World", "Text should match")
 	assert(text_action.duration == 5.0, "Duration should match")
 	
-	var music_action = SequenceActionScript.play_music(null, -10.0)
-	assert(music_action.action_type == SequenceActionScript.Type.PLAY_MUSIC, "Play music action type should match")
+	var music_action = SequenceAction.play_music(null, -10.0)
+	assert(music_action.action_type == SequenceAction.Type.PLAY_MUSIC, "Play music action type should match")
 	assert(music_action.volume_db == -10.0, "Volume should match")
 	
 	print("✓ SequenceAction creation works correctly")
@@ -124,7 +119,7 @@ func test_sequence_action_creation():
 func test_sequence_data_builder():
 	print("\n--- Testing SequenceData Builder ---")
 	
-	var sequence = SequenceDataScript.create(&"test_sequence") \
+	var sequence = SequenceData.create(&"test_sequence") \
 		.wait(1.0) \
 		.show_text("Step 1", 2.0) \
 		.wait(0.5) \
@@ -136,8 +131,8 @@ func test_sequence_data_builder():
 	assert(sequence.skippable == false, "Should not be skippable")
 	
 	# Verify action types
-	assert(sequence.actions[0].action_type == SequenceActionScript.Type.WAIT, "First action should be wait")
-	assert(sequence.actions[1].action_type == SequenceActionScript.Type.SHOW_TEXT, "Second action should be show_text")
+	assert(sequence.actions[0].action_type == SequenceAction.Type.WAIT, "First action should be wait")
+	assert(sequence.actions[1].action_type == SequenceAction.Type.SHOW_TEXT, "Second action should be show_text")
 	
 	print("✓ SequenceData builder works correctly")
 
@@ -146,9 +141,9 @@ func test_sequence_director_cancel_runs_async_cleanup() -> void:
 	print("\n--- Testing SequenceDirector cancel awaits cleanup ---")
 
 	var cleanup_state := {"completed": false}
-	var sequence = SequenceDataScript.create(&"cancel_cleanup_test") \
+	var sequence = SequenceData.create(&"cancel_cleanup_test") \
 		.wait(3.0)
-	sequence.add_cleanup(SequenceActionScript.custom(func():
+	sequence.add_cleanup(SequenceAction.custom(func():
 		var timer := get_tree().create_timer(0.01)
 		timer.timeout.connect(func():
 			cleanup_state["completed"] = true
@@ -170,10 +165,10 @@ func test_sequence_director_skip_runs_async_cleanup() -> void:
 	print("\n--- Testing SequenceDirector skip awaits cleanup ---")
 
 	var cleanup_state := {"completed": false}
-	var sequence = SequenceDataScript.create(&"skip_cleanup_test") \
+	var sequence = SequenceData.create(&"skip_cleanup_test") \
 		.wait(3.0) \
 		.set_skippable(true)
-	sequence.add_cleanup(SequenceActionScript.custom(func():
+	sequence.add_cleanup(SequenceAction.custom(func():
 		var timer := get_tree().create_timer(0.01)
 		timer.timeout.connect(func():
 			cleanup_state["completed"] = true
@@ -207,19 +202,19 @@ func test_domain_specific_event_routing():
 	domain_events_received.clear()
 
 	# Subscribe to a domain-specific event type (e.g., BUTTON_CHECK_TV)
-	Services.event_bus.subscribe(GameEventTypesScript.BUTTON_CHECK_TV, _on_domain_event)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV, _on_domain_event)
 
 	# Emit the domain-specific event
-	Services.event_bus.emit(GameEventTypesScript.BUTTON_CHECK_TV, {
+	Services.event_bus.emit(GameEventTypes.BUTTON_CHECK_TV, {
 		"body": null,
 		"button": null
 	})
 
 	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
-	assert(domain_events_received[0].event_type == GameEventTypesScript.BUTTON_CHECK_TV, "Event type should be BUTTON_CHECK_TV")
+	assert(domain_events_received[0].event_type == GameEventTypes.BUTTON_CHECK_TV, "Event type should be BUTTON_CHECK_TV")
 
 	# Cleanup
-	Services.event_bus.unsubscribe(GameEventTypesScript.BUTTON_CHECK_TV, _on_domain_event)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV, _on_domain_event)
 
 	print("✓ Domain-specific event routing works correctly")
 
@@ -231,29 +226,29 @@ func test_generic_and_domain_events_both_fire():
 	generic_events_received.clear()
 
 	# Subscribe to both generic and domain-specific events
-	Services.event_bus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_generic_event)
-	Services.event_bus.subscribe(GameEventTypesScript.BUTTON_CHECK_MAP, _on_domain_event)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_PRESSED, _on_generic_event)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_domain_event)
 
 	# Simulate what Button.gd does: emit both domain-specific and generic events
 	# First, domain-specific
-	Services.event_bus.emit(GameEventTypesScript.BUTTON_CHECK_MAP, {
+	Services.event_bus.emit(GameEventTypes.BUTTON_CHECK_MAP, {
 		"body": null,
 		"button": null
 	})
 	# Then, generic
-	Services.event_bus.emit(GameEventTypesScript.BUTTON_PRESSED, {
+	Services.event_bus.emit(GameEventTypes.BUTTON_PRESSED, {
 		"body": null,
 		"button": null
 	})
 
 	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
 	assert(generic_events_received.size() == 1, "Should receive 1 generic event")
-	assert(domain_events_received[0].event_type == GameEventTypesScript.BUTTON_CHECK_MAP, "Domain event type should match")
-	assert(generic_events_received[0].event_type == GameEventTypesScript.BUTTON_PRESSED, "Generic event type should match")
+	assert(domain_events_received[0].event_type == GameEventTypes.BUTTON_CHECK_MAP, "Domain event type should match")
+	assert(generic_events_received[0].event_type == GameEventTypes.BUTTON_PRESSED, "Generic event type should match")
 
 	# Cleanup
-	Services.event_bus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_generic_event)
-	Services.event_bus.unsubscribe(GameEventTypesScript.BUTTON_CHECK_MAP, _on_domain_event)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PRESSED, _on_generic_event)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_domain_event)
 
 	print("✓ Generic + domain events both fire correctly")
 

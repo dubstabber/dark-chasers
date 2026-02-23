@@ -66,7 +66,7 @@ func _ready():
 func test_invulnerability_timer():
 	print("\n--- Testing Invulnerability Timer ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	health_comp.invulnerability_duration = 1.0
@@ -94,7 +94,7 @@ func test_invulnerability_timer():
 func test_kill_method():
 	print("\n--- Testing Kill Method ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	
@@ -121,7 +121,7 @@ func test_kill_method():
 func test_revive_method():
 	print("\n--- Testing Revive Method ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 0
@@ -155,7 +155,7 @@ func test_revive_method():
 func test_death_with_delay():
 	print("\n--- Testing Death with Delay ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 1
 	health_comp.destroy_on_death = true
@@ -179,7 +179,7 @@ func test_death_with_delay():
 func test_health_changed_signals():
 	print("\n--- Testing Health Changed Signals ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 100
@@ -215,7 +215,7 @@ func test_health_changed_signals():
 func test_damage_taken_signals():
 	print("\n--- Testing Damage Taken Signals ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 
@@ -242,7 +242,7 @@ func test_damage_taken_signals():
 func test_healing_signals():
 	print("\n--- Testing Healing Signals ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 50
 	health_comp.max_health = 100
@@ -276,7 +276,7 @@ func test_healing_signals():
 func test_death_signals():
 	print("\n--- Testing Death Signals ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 10
 
@@ -302,7 +302,7 @@ func test_death_signals():
 func test_zero_and_negative_damage():
 	print("\n--- Testing Zero and Negative Damage ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 
@@ -328,7 +328,7 @@ func test_zero_and_negative_damage():
 func test_zero_and_negative_healing():
 	print("\n--- Testing Zero and Negative Healing ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 50
 	health_comp.max_health = 100
@@ -355,7 +355,7 @@ func test_zero_and_negative_healing():
 func test_overheal_functionality():
 	print("\n--- Testing Overheal Functionality ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 100
@@ -389,7 +389,7 @@ func test_overheal_functionality():
 func test_multiple_death_calls():
 	print("\n--- Testing Multiple Death Calls ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 1
 
@@ -422,13 +422,13 @@ func test_armor_integration_basic():
 	add_child(parent_node)
 
 	# Create health component
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	parent_node.add_child(health_comp)
 	health_comp.current_health = 100
 	health_comp.max_health = 100
 
 	# Create armor component
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	parent_node.add_child(armor_comp)
 	armor_comp.current_armor = 50
 	armor_comp.max_armor = 50
@@ -452,7 +452,7 @@ func test_armor_integration_basic():
 func test_armor_integration_no_armor():
 	print("\n--- Testing Armor Integration Without Armor Component ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 
@@ -472,12 +472,12 @@ func test_armor_integration_full_absorption():
 	add_child(parent_node)
 
 	# Create health component
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	parent_node.add_child(health_comp)
 	health_comp.current_health = 100
 
 	# Create armor component with high armor
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	parent_node.add_child(armor_comp)
 	armor_comp.current_armor = 100
 	# Use the enum value directly - ABSORPTION = 2 based on the enum definition
@@ -500,7 +500,7 @@ func test_armor_integration_full_absorption():
 func test_utility_methods():
 	print("\n--- Testing Utility Methods ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 75

@@ -18,7 +18,7 @@ func test_armor_component():
 	print("\n--- Testing ArmorComponent Basic Functionality ---")
 	
 	# Create an ArmorComponent
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 	
 	# Test initial values
@@ -43,7 +43,7 @@ func test_doom_green_armor():
 	print("\n--- Testing DOOM Green Armor ---")
 
 	# Create components
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 
 	# Set up armor for DOOM_GREEN type
@@ -78,7 +78,7 @@ func test_doom_blue_armor():
 	print("\n--- Testing DOOM Blue Armor ---")
 
 	# Create components
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 
 	# Set up armor for DOOM_BLUE type
@@ -106,7 +106,7 @@ func test_doom_blue_armor():
 func test_armor_depletion():
 	print("\n--- Testing Armor Depletion ---")
 
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 
 	# Use a class variable to track signal emission
@@ -138,7 +138,7 @@ class SignalTracker:
 func test_overshield():
 	print("\n--- Testing Overshield ---")
 	
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 	
 	# Enable overshield
@@ -162,7 +162,7 @@ func test_overshield():
 func test_absorption_type():
 	print("\n--- Testing ABSORPTION Type (Classic Shield) ---")
 
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var armor_comp = ArmorComponent.new()
 	add_child(armor_comp)
 
 	# Set up armor for ABSORPTION type
@@ -189,7 +189,7 @@ func test_integration_with_health():
 
 	# This would require a more complex setup with a player node
 	# For now, we'll just verify the basic integration points exist
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 
 	# Verify the _get_armor_component method exists

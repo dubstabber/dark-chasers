@@ -15,7 +15,7 @@ func _ready():
 func test_room_pathing_component_empty_path():
 	print("\n--- Testing RoomPathingComponent Empty Path ---")
 	
-	var room_pathing = preload("res://scenes/components/enemy/room_pathing_component.gd").new()
+	var room_pathing = RoomPathingComponent.new()
 	add_child(room_pathing)
 	
 	# Test with non-existent rooms (should return empty array, not crash)

@@ -1,3 +1,4 @@
+class_name MockEntityWithStates
 extends Node
 
 ## Mock entity script for testing DirectionalSprite3D state detection

@@ -1,7 +1,5 @@
 extends SceneTree
 
-const GameEventBusScript = preload("res://scenes/services/game_event_bus.gd")
-
 var _failed := false
 
 
@@ -15,7 +13,7 @@ func _init() -> void:
 func _test_history_snapshot_sanitizes_node_references() -> void:
 	print("\n--- Testing history snapshot sanitization ---")
 
-	var bus := GameEventBusScript.new()
+	var bus := GameEventBus.new()
 	var marker_node := Node.new()
 	marker_node.name = "history_snapshot_marker"
 

@@ -1,7 +1,5 @@
 extends Node
 
-const VfxPoolServiceScript = preload("res://scenes/services/vfx_pool_service.gd")
-
 
 class TestPoolableVfx:
 	extends Node3D
@@ -24,7 +22,7 @@ func _ready() -> void:
 
 
 func test_pool_lifecycle_hooks_and_in_use_state() -> void:
-	var service: VfxPoolService = VfxPoolServiceScript.new()
+	var service: VfxPoolService = VfxPoolService.new()
 	service.default_pool_size = 1
 
 	var packed_scene := _make_poolable_scene()

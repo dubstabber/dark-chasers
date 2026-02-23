@@ -11,7 +11,7 @@ func _ready():
 
 	# Create a mock target node with moving_state property
 	var mock_target = Node.new()
-	mock_target.set_script(preload("res://tests/mock_entity_with_states.gd"))
+	mock_target.set_script(load("res://tests/mock_entity_with_states.gd"))
 
 	# Add the mock target as a child so DirectionalSprite3D can find it
 	add_child(mock_target)

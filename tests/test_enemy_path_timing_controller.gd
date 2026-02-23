@@ -1,7 +1,5 @@
 extends SceneTree
 
-const EnemyPathTimingControllerScript = preload("res://scenes/components/enemy/enemy_path_timing_controller.gd")
-
 var _failed := false
 
 
@@ -16,7 +14,7 @@ func _init() -> void:
 
 func _test_timing_thresholds() -> void:
 	print("\n--- Testing timing thresholds ---")
-	var controller = EnemyPathTimingControllerScript.new()
+	var controller = EnemyPathTimingController.new()
 	_assert(is_equal_approx(controller.compute_wait_time(10.0, false), 0.1), "<20 should map to 0.1s")
 	_assert(is_equal_approx(controller.compute_wait_time(25.0, false), 0.3), "20-35 should map to 0.3s")
 	_assert(is_equal_approx(controller.compute_wait_time(45.0, false), 0.5), "35-50 should map to 0.5s")
@@ -26,7 +24,7 @@ func _test_timing_thresholds() -> void:
 
 func _test_waypoint_priority() -> void:
 	print("\n--- Testing waypoint priority ---")
-	var controller = EnemyPathTimingControllerScript.new()
+	var controller = EnemyPathTimingController.new()
 	_assert(is_equal_approx(controller.compute_wait_time(90.0, true), 0.1), "waypoints should force 0.1s regardless of distance")
 	print("✓ waypoint priority is correct")
 

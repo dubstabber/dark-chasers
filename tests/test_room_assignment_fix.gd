@@ -18,13 +18,12 @@ func test_auto_room_assignment():
 	print("\n--- Testing Automatic Room Assignment ---")
 	
 	# Create a mock level with transitions
-	var level = preload("res://scenes/rooms/level.gd").new()
+	var level = Level.new()
 	add_child(level)
 	
 	# Create mock transitions node
-	var transitions = Node3D.new()
+	var transitions = load("res://scenes/rooms/mansion1_transitions.gd").new()
 	transitions.name = "Transitions"
-	transitions.set_script(preload("res://scenes/rooms/mansion1_transitions.gd"))
 	level.add_child(transitions)
 	level.transitions = transitions
 	
@@ -51,13 +50,12 @@ func test_transition_with_unassigned_room():
 	print("\n--- Testing Transition with Unassigned Room ---")
 	
 	# Create a mock level
-	var level = preload("res://scenes/rooms/level.gd").new()
+	var level = Level.new()
 	add_child(level)
 	
 	# Create mock transitions
-	var transitions = Node3D.new()
+	var transitions = load("res://scenes/rooms/mansion1_transitions.gd").new()
 	transitions.name = "Transitions"
-	transitions.set_script(preload("res://scenes/rooms/mansion1_transitions.gd"))
 	level.add_child(transitions)
 	level.transitions = transitions
 	
@@ -93,7 +91,7 @@ func test_enemy_pathfinding_with_room_assignment():
 	print("\n--- Testing Enemy Pathfinding with Room Assignment ---")
 	
 	# Create a mock enemy
-	var enemy = preload("res://scenes/enemies/enemy.gd").new()
+	var enemy = Enemy.new()
 	enemy.current_room = "FirstFloor"
 	enemy.debug_prints = true
 	add_child(enemy)
@@ -104,8 +102,7 @@ func test_enemy_pathfinding_with_room_assignment():
 	enemy.nav = nav_agent
 	
 	# Create mock transitions
-	var transitions = Node3D.new()
-	transitions.set_script(preload("res://scenes/rooms/mansion1_transitions.gd"))
+	var transitions = load("res://scenes/rooms/mansion1_transitions.gd").new()
 	enemy.add_child(transitions)
 	enemy.map_transitions = transitions
 	
@@ -150,13 +147,12 @@ func test_transition_safety_checks():
 	print("\n--- Testing Transition Safety Checks ---")
 	
 	# Create a mock level
-	var level = preload("res://scenes/rooms/level.gd").new()
+	var level = Level.new()
 	add_child(level)
 	
 	# Create mock transitions with limited map
-	var transitions = Node3D.new()
+	var transitions = load("res://scenes/rooms/mansion1_transitions.gd").new()
 	transitions.name = "Transitions"
-	transitions.set_script(preload("res://scenes/rooms/mansion1_transitions.gd"))
 	level.add_child(transitions)
 	level.transitions = transitions
 	

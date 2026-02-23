@@ -8,7 +8,7 @@ func _ready():
 	
 	# Test 1: Create ammo component
 	print("\n1. Creating PlayerAmmoComponent:")
-	var ammo_component = preload("res://scenes/components/ammo/player_ammo_component.gd").new()
+	var ammo_component = PlayerAmmoComponent.new()
 	add_child(ammo_component)
 	
 	# Wait a frame for _ready to be called

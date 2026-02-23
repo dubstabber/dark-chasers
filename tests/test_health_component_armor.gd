@@ -55,7 +55,7 @@ func _ready():
 func test_zero_and_negative_damage():
 	print("\n--- Testing Zero and Negative Damage ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	
@@ -75,7 +75,7 @@ func test_zero_and_negative_damage():
 func test_zero_and_negative_healing():
 	print("\n--- Testing Zero and Negative Healing ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 50
 	
@@ -95,7 +95,7 @@ func test_zero_and_negative_healing():
 func test_overheal_functionality():
 	print("\n--- Testing Overheal Functionality ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 100
@@ -126,7 +126,7 @@ func test_overheal_functionality():
 func test_multiple_death_calls():
 	print("\n--- Testing Multiple Death Calls ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 1
 	
@@ -163,8 +163,8 @@ func test_armor_integration_basic():
 	add_child(parent_node)
 	
 	# Create health and armor components
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var health_comp = HealthComponent.new()
+	var armor_comp = ArmorComponent.new()
 	
 	parent_node.add_child(health_comp)
 	parent_node.add_child(armor_comp)
@@ -186,7 +186,7 @@ func test_armor_integration_basic():
 func test_armor_integration_no_armor():
 	print("\n--- Testing Armor Integration with No Armor ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	
@@ -206,8 +206,8 @@ func test_armor_integration_full_absorption():
 	add_child(parent_node)
 	
 	# Create health and armor components
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var health_comp = HealthComponent.new()
+	var armor_comp = ArmorComponent.new()
 	
 	parent_node.add_child(health_comp)
 	parent_node.add_child(armor_comp)
@@ -240,8 +240,8 @@ func test_armor_integration_doom_green():
 	add_child(parent_node)
 	
 	# Create health and armor components
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var health_comp = HealthComponent.new()
+	var armor_comp = ArmorComponent.new()
 	
 	parent_node.add_child(health_comp)
 	parent_node.add_child(armor_comp)
@@ -273,8 +273,8 @@ func test_armor_integration_doom_blue():
 	add_child(parent_node)
 
 	# Create health and armor components
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
-	var armor_comp = preload("res://scenes/components/armor/armor_component.gd").new()
+	var health_comp = HealthComponent.new()
+	var armor_comp = ArmorComponent.new()
 
 	parent_node.add_child(health_comp)
 	parent_node.add_child(armor_comp)
@@ -301,7 +301,7 @@ func test_armor_integration_doom_blue():
 func test_utility_methods():
 	print("\n--- Testing Utility Methods ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 	health_comp.current_health = 75
@@ -336,7 +336,7 @@ func test_utility_methods():
 func test_convenience_methods():
 	print("\n--- Testing Convenience Methods ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	health_comp.max_health = 100

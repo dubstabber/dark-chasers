@@ -60,7 +60,7 @@ func _ready():
 func test_health_initialization_default():
 	print("\n--- Testing Health Initialization (Default Values) ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	
 	# Test default values
@@ -77,7 +77,7 @@ func test_health_initialization_default():
 func test_health_initialization_custom():
 	print("\n--- Testing Health Initialization (Custom Values) ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	
 	# Set custom values
@@ -97,7 +97,7 @@ func test_health_initialization_custom():
 func test_take_damage_basic():
 	print("\n--- Testing Basic Damage Taking ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	
@@ -120,7 +120,7 @@ func test_take_damage_basic():
 func test_take_damage_clamping():
 	print("\n--- Testing Damage Clamping ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 50
 	
@@ -134,7 +134,7 @@ func test_take_damage_clamping():
 func test_healing_basic():
 	print("\n--- Testing Basic Healing ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 50
 	health_comp.max_health = 100
@@ -156,7 +156,7 @@ func test_healing_basic():
 func test_healing_clamping():
 	print("\n--- Testing Healing Clamping ---")
 	
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 90
 	health_comp.max_health = 100
@@ -179,7 +179,7 @@ func test_healing_clamping():
 func test_health_percentage_calculation():
 	print("\n--- Testing Health Percentage Calculation ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 
@@ -202,7 +202,7 @@ func test_health_percentage_calculation():
 func test_death_detection():
 	print("\n--- Testing Death Detection ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 1
 
@@ -221,7 +221,7 @@ func test_death_detection():
 func test_max_health_setter():
 	print("\n--- Testing Max Health Setter ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 
 	# Connect signal to track emissions
@@ -254,7 +254,7 @@ func test_max_health_setter():
 func test_current_health_setter():
 	print("\n--- Testing Current Health Setter ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 
@@ -286,7 +286,7 @@ func test_current_health_setter():
 func test_set_health_direct():
 	print("\n--- Testing Direct Health Setting ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.max_health = 100
 
@@ -313,7 +313,7 @@ func test_set_health_direct():
 func test_invulnerability_flag():
 	print("\n--- Testing Invulnerability Flag ---")
 
-	var health_comp = preload("res://scenes/components/health/health_component.gd").new()
+	var health_comp = HealthComponent.new()
 	add_child(health_comp)
 	health_comp.current_health = 100
 	health_comp.invulnerable = true

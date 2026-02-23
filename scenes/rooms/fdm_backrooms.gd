@@ -1,7 +1,5 @@
 extends Level
 
-const EnemySpawnerControllerScript = preload("res://scenes/components/enemy/enemy_spawner_controller.gd")
-
 enum GAME_MODE {
 	NONE,
 	STANDARD
@@ -28,7 +26,7 @@ func _setup_spawner_controller() -> void:
 	if not enemy_spawners_container or enemy_spawners_container.get_child_count() == 0:
 		return
 	
-	_spawner_controller = EnemySpawnerControllerScript.new()
+	_spawner_controller = EnemySpawnerController.new()
 	_spawner_controller.enemy_scene = Services.get_scene_catalog().image_enemy_scene
 	_spawner_controller.min_respawn_time = 10.0
 	_spawner_controller.max_respawn_time = 30.0

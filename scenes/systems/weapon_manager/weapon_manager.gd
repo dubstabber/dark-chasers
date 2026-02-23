@@ -1,10 +1,5 @@
 class_name WeaponManager extends Node3D
 
-const WeaponAmmoControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ammo_controller.gd")
-const WeaponFireControllerScript = preload("res://scenes/systems/weapon_manager/weapon_fire_controller.gd")
-const WeaponUiEventControllerScript = preload("res://scenes/systems/weapon_manager/weapon_ui_event_controller.gd")
-const WeaponEquipControllerScript = preload("res://scenes/systems/weapon_manager/weapon_equip_controller.gd")
-
 signal lighter_on
 signal lighter_off
 signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
@@ -17,10 +12,10 @@ var _bob_controller := WeaponBobController.new()
 var _switch_controller := WeaponSwitchController.new()
 var _hit_executor := WeaponHitExecutor.new()
 var _sound_controller := WeaponSoundController.new()
-var _ammo_controller := WeaponAmmoControllerScript.new()
-var _fire_controller := WeaponFireControllerScript.new()
-var _ui_event_controller := WeaponUiEventControllerScript.new()
-var _equip_controller := WeaponEquipControllerScript.new()
+var _ammo_controller := WeaponAmmoController.new()
+var _fire_controller := WeaponFireController.new()
+var _ui_event_controller := WeaponUiEventController.new()
+var _equip_controller := WeaponEquipController.new()
 
 # --------------------------------------------------------------------------
 # Runtime state

@@ -1,8 +1,5 @@
 class_name Enemy extends CharacterBody3D
 
-const EnemyPathTimingControllerScript = preload("res://scenes/components/enemy/enemy_path_timing_controller.gd")
-const EnemyRuntimeCoordinatorScript = preload("res://scenes/components/enemy/enemy_runtime_coordinator.gd")
-
 @export var stats: EnemyStats ## Preferred: configure via resource for reusable enemy types
 @export var current_room: String
 @export var disappear_zones: Array[Area3D] ## Bridge: forwarded to EnemyDisappearZoneComponent at _ready()
@@ -29,8 +26,8 @@ var _door_opener_component: EnemyDoorOpenerComponent
 var _kill_zone_component: EnemyKillZoneComponent
 var _motor_component: EnemyMotorComponent
 var _brain_component: EnemyBrain
-var _runtime_coordinator
-var _path_timing_controller := EnemyPathTimingControllerScript.new()
+var _runtime_coordinator: EnemyRuntimeCoordinator = null
+var _path_timing_controller := EnemyPathTimingController.new()
 var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -112,9 +109,9 @@ func _setup_disappear_zone_component() -> void:
 
 
 func _setup_runtime_coordinator() -> void:
-	_runtime_coordinator = get_node_or_null("EnemyRuntimeCoordinator")
+	_runtime_coordinator = get_node_or_null("EnemyRuntimeCoordinator") as EnemyRuntimeCoordinator
 	if not _runtime_coordinator:
-		_runtime_coordinator = EnemyRuntimeCoordinatorScript.new()
+		_runtime_coordinator = EnemyRuntimeCoordinator.new()
 		_runtime_coordinator.name = "EnemyRuntimeCoordinator"
 		add_child(_runtime_coordinator)
 

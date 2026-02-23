@@ -1,8 +1,6 @@
 class_name InteractionComponent
 extends Node
 
-const DoorScript = preload("res://scenes/objects/door.gd")
-
 ## Handles player interaction with doors, buttons, and transit points
 
 signal interacted(collider: Node)
@@ -42,7 +40,7 @@ func try_interact() -> bool:
 
 		# Handle door interaction using Door class
 		var root_node = collider.get_parent()
-		if root_node is DoorScript:
+		if root_node is Door:
 			root_node.open_with_point(interaction_raycast.get_collision_point(), player)
 			door_opened.emit(root_node)
 			return true

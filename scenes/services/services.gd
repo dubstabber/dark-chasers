@@ -1,7 +1,5 @@
 extends Node
 
-const BitmapFontCatalogScript = preload("res://scenes/resources/bitmap_font_catalog.gd")
-
 
 ## Single entry-point for all game services.
 ## Replaces individual autoloads with a centralized service registry.
@@ -40,31 +38,29 @@ var _particle_catalog: ParticleCatalog
 var _button_images: ButtonImageLibrary
 var _sfx_catalog: SfxCatalog
 var _scene_catalog: SceneCatalog
-var _bitmap_font_catalog: BitmapFontCatalogScript
+var _bitmap_font_catalog: BitmapFontCatalog
 
 
 func _enter_tree() -> void:
-	enemy_db = _add_service("EnemyDb", preload("res://scenes/globals/enemy_db.gd"))
-	utils = _add_service("Utils", preload("res://scenes/globals/utils.gd"))
-	enemy_context = _add_service("EnemyContext", preload("res://scenes/services/enemy_context.gd"))
-	world_context = _add_service("WorldContext", preload("res://scenes/services/world_context.gd"))
-	camera_manager = _add_service("CameraManager", preload("res://scenes/services/camera_manager.gd"))
-	audio_pool = _add_service("AudioPoolService", preload("res://scenes/services/audio_pool_service.gd"))
-	vfx_pool = _add_service("VfxPoolService", preload("res://scenes/services/vfx_pool_service.gd"))
-	event_bus = _add_service("GameEventBus", preload("res://scenes/services/game_event_bus.gd"))
-	sequence_director = _add_service("SequenceDirector", preload("res://scenes/services/sequence_director.gd"))
-	input_router = _add_service("InputRouter", preload("res://scenes/services/input_router.gd"))
-	level_manager = _add_service("LevelManager", preload("res://scenes/services/level_manager.gd"))
-	ammo_config = _add_service("AmmoConfig", preload("res://scenes/systems/ammo_system/ammo_config.gd"))
+	enemy_db = _add_service("EnemyDb", EnemyDb.new()) as EnemyDb
+	utils = _add_service("Utils", Utils.new()) as Utils
+	enemy_context = _add_service("EnemyContext", EnemyContext.new()) as EnemyContext
+	world_context = _add_service("WorldContext", WorldContext.new()) as WorldContext
+	camera_manager = _add_service("CameraManager", CameraManager.new()) as CameraManager
+	audio_pool = _add_service("AudioPoolService", AudioPoolService.new()) as AudioPoolService
+	vfx_pool = _add_service("VfxPoolService", VfxPoolService.new()) as VfxPoolService
+	event_bus = _add_service("GameEventBus", GameEventBus.new()) as GameEventBus
+	sequence_director = _add_service("SequenceDirector", SequenceDirector.new()) as SequenceDirector
+	input_router = _add_service("InputRouter", InputRouter.new()) as InputRouter
+	level_manager = _add_service("LevelManager", LevelManager.new())
+	ammo_config = _add_service("AmmoConfig", AmmoConfig.new()) as AmmoConfig
 
 
-func _add_service(service_name: String, script: GDScript) -> Node:
-	var service_instance: Variant = script.new()
-	assert(service_instance is Node, "Services._add_service('%s') requires a script that extends Node" % service_name)
-	var node := service_instance as Node
-	node.name = service_name
-	add_child(node)
-	return node
+func _add_service(service_name: String, service_instance: Node) -> Node:
+	assert(service_instance != null, "Services._add_service('%s') requires a valid Node instance" % service_name)
+	service_instance.name = service_name
+	add_child(service_instance)
+	return service_instance
 
 
 func get_key_icons() -> KeyIconLibrary:
@@ -103,7 +99,7 @@ func get_scene_catalog() -> SceneCatalog:
 	return _scene_catalog
 
 
-func get_bitmap_font_catalog() -> BitmapFontCatalogScript:
+func get_bitmap_font_catalog() -> BitmapFontCatalog:
 	if not _bitmap_font_catalog:
 		_bitmap_font_catalog = load("res://scenes/resources/bitmap_font_catalog.tres")
 	return _bitmap_font_catalog

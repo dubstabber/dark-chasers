@@ -12,7 +12,7 @@ extends SceneTree
 ## 6. App-level input polling (menu/fullscreen) in room scripts (use InputRouter)
 ##
 ## Warnings (non-blocking):
-## - Scripts exceeding 500 LOC (SRP pressure)
+## - Scripts exceeding 300/400/500 LOC thresholds (SRP pressure tiers)
 
 const SCAN_DIRS := [
 	"res://scenes/",
@@ -30,9 +30,17 @@ const EXCLUDE_FILES := [
 	"res://scenes/services/camera_manager.gd", # CameraManager is allowed to call make_current
 ]
 
+const FILE_LENGTH_WARNING_TIERS := [
+	{"level": "T3", "threshold": 500, "label": "critical SRP pressure"},
+	{"level": "T2", "threshold": 400, "label": "high SRP pressure"},
+	{"level": "T1", "threshold": 300, "label": "watchlist"},
+]
+const WARNING_PRINT_LIMIT_PER_TIER := 5
+
 var violations := []
 var warnings := []
 var scanned_files := 0
+var _seen_files := {}
 
 func _init():
 	print("=".repeat(60))
@@ -86,6 +94,10 @@ func is_excluded_file(path: String) -> bool:
 
 
 func scan_file(path: String):
+	if _seen_files.has(path):
+		return
+	_seen_files[path] = true
+
 	var file := FileAccess.open(path, FileAccess.READ)
 	if not file:
 		push_warning("Could not open file: " + path)
@@ -238,13 +250,29 @@ func check_app_input_in_rooms(path: String, line: String, line_num: int):
 
 
 func check_file_length(path: String, line_count: int):
-	const MAX_LOC := 500
-	if line_count > MAX_LOC:
-		warnings.append({
-			"type": "FILE_TOO_LONG",
-			"path": path,
-			"message": "Script has %d lines (>%d). Consider splitting for SRP." % [line_count, MAX_LOC]
-		})
+	var tier := get_file_length_warning_tier(line_count)
+	if tier.is_empty():
+		return
+
+	warnings.append({
+		"type": "FILE_TOO_LONG",
+		"path": path,
+		"line_count": line_count,
+		"tier_level": tier["level"],
+		"threshold": tier["threshold"],
+		"message": "Script has %d lines (>%d, %s). Consider splitting for SRP." % [line_count, tier["threshold"], tier["label"]]
+	})
+
+
+func get_file_length_warning_tier(line_count: int) -> Dictionary:
+	for tier in FILE_LENGTH_WARNING_TIERS:
+		if line_count > int(tier["threshold"]):
+			return tier
+	return {}
+
+
+func _warning_sort_by_line_count_desc(a: Dictionary, b: Dictionary) -> bool:
+	return int(a.get("line_count", 0)) > int(b.get("line_count", 0))
 
 
 func add_violation(rule: String, path: String, line_num: int, message: String, code: String):
@@ -263,8 +291,43 @@ func print_results():
 	# Print warnings (non-blocking)
 	if not warnings.is_empty():
 		print("\n⚠️  %d warnings (non-blocking):" % warnings.size())
-		for w in warnings:
-			print("  %s: %s" % [w.path, w.message])
+
+		var warning_counts_by_tier := {}
+		for warning in warnings:
+			var level := String(warning.get("tier_level", "UNKNOWN"))
+			warning_counts_by_tier[level] = int(warning_counts_by_tier.get(level, 0)) + 1
+
+		for tier in FILE_LENGTH_WARNING_TIERS:
+			var level := String(tier["level"])
+			if warning_counts_by_tier.has(level):
+				print("  %s: %d file(s) above %d LOC (%s)" % [
+					level,
+					warning_counts_by_tier[level],
+					tier["threshold"],
+					tier["label"],
+				])
+
+		var sorted_warnings: Array = warnings.duplicate()
+		sorted_warnings.sort_custom(_warning_sort_by_line_count_desc)
+
+		for tier in FILE_LENGTH_WARNING_TIERS:
+			var tier_level := String(tier["level"])
+			var tier_warnings: Array = []
+			for warning in sorted_warnings:
+				if String(warning.get("tier_level", "")) == tier_level:
+					tier_warnings.append(warning)
+
+			if tier_warnings.is_empty():
+				continue
+
+			print("\n  %s examples:" % tier_level)
+			var count_to_print := mini(tier_warnings.size(), WARNING_PRINT_LIMIT_PER_TIER)
+			for i in range(count_to_print):
+				var warning: Dictionary = tier_warnings[i]
+				print("    - %s (%d LOC)" % [warning["path"], warning["line_count"]])
+
+			if tier_warnings.size() > count_to_print:
+				print("    ... +%d more file(s) in %s tier" % [tier_warnings.size() - count_to_print, tier_level])
 	
 	if violations.is_empty():
 		print("\n✅ No architecture violations found!")

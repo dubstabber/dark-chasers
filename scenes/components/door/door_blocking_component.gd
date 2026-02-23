@@ -1,8 +1,6 @@
 class_name DoorBlockingComponent
 extends Node
 
-const DoorAabbUtilsScript = preload("res://scenes/components/door/door_aabb_utils.gd")
-
 var _body: AnimatableBody3D
 var _meshes: Array[MeshInstance3D] = []
 var _allowed_sides_checker: Callable
@@ -54,7 +52,7 @@ func _is_blocking_body(body: Object) -> bool:
 
 
 func _get_door_aabb() -> AABB:
-	return DoorAabbUtilsScript.get_door_aabb(_meshes)
+	return DoorAabbUtils.get_door_aabb(_meshes)
 
 
 func _get_global_door_aabb() -> AABB:

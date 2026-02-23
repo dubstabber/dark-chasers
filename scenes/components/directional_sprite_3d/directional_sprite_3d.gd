@@ -2,8 +2,6 @@
 class_name DirectionalSprite3D
 extends Sprite3D
 
-const DirectionalAtlasGeneratorScript = preload("res://scenes/components/directional_sprite_3d/directional_atlas_generator.gd")
-
 enum DirectionMode {
 	THREE_DIRECTIONS, ## front, side, back
 	FOUR_DIRECTIONS, ## front, left, right, back
@@ -287,7 +285,7 @@ func _get_current_sprite_state(target_node: Node) -> int:
 
 func generate_atlas():
 	var directions = _get_current_directions()
-	var result = DirectionalAtlasGeneratorScript.generate(
+	var result = DirectionalAtlasGenerator.generate(
 		direction_mode,
 		directions,
 		idle_sprites,

@@ -1,25 +1,18 @@
 extends HBoxContainer
 
+@export var ui_bitmap_font_catalog: BitmapFontCatalog
 
-var white_font_images := {
-	"0": preload("uid://berleh354tn6p"),
-	"1": preload("uid://dic02hagqtsxl"),
-	"2": preload("uid://qv3ajcxgtbj2"),
-	"3": preload("uid://chm4dt1blag01"),
-	"4": preload("uid://brgb80snrygm3"),
-	"5": preload("uid://bosy875ua5cee"),
-	"6": preload("uid://bx6he2dphqw5n"),
-	"7": preload("uid://5uwvpnuah1j3"),
-	"8": preload("uid://dpw5o6jubi8su"),
-	"9": preload("uid://qlhm3njom5au")
-}
+var _font_catalog: BitmapFontCatalog
 
 var font_scale := 0.4
 
 
 func _ready() -> void:
-	# Health value will be set by the HUD when connected to player
-	pass
+	_font_catalog = ui_bitmap_font_catalog
+
+
+func set_font_catalog(catalog: BitmapFontCatalog) -> void:
+	_font_catalog = catalog
 
 
 func set_value_with_aooni_font(value: int) -> void:
@@ -30,11 +23,20 @@ func set_value_with_aooni_font(value: int) -> void:
 	# Hide value display when the value represents **infinite** (sentinel -1)
 	if value < 0:
 		return
+
+	if not _font_catalog:
+		_font_catalog = ui_bitmap_font_catalog
+	if not _font_catalog:
+		return
+
 	var value_text := str(value)
 	
 	for digit: String in value_text:
+		var texture := _font_catalog.get_texture(digit)
+		if not texture:
+			continue
 		var digit_texture = TextureRect.new()
-		digit_texture.texture = white_font_images[digit]
+		digit_texture.texture = texture
 		digit_texture.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 		digit_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		add_child(digit_texture)

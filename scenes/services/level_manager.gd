@@ -1,8 +1,6 @@
 class_name LevelManager
 extends Node
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## Centralized scene flow service.
 ## All cross-scene transitions should route through this service.
 
@@ -26,7 +24,7 @@ func request_level_transition(scene_path: String, context: Dictionary = {}) -> E
 
 	transition_requested.emit(scene_path, context_copy)
 	if Services and Services.event_bus:
-		Services.event_bus.emit(GameEventTypesScript.LEVEL_TRANSITION, {
+		Services.event_bus.emit(GameEventTypes.LEVEL_TRANSITION, {
 			"scene_path": scene_path,
 			"context": context_copy
 		}, self)

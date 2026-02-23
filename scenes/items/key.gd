@@ -1,8 +1,6 @@
 @tool
 extends Area3D
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.KEY_SPAWN_AO_ONI_LIBRARY).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"key_spawn_ao_oni_library").
@@ -35,7 +33,7 @@ func _on_body_entered(body):
 			}, self)
 
 		# Emit generic event for base Level class handling (key collection tracking)
-		Services.event_bus.emit(GameEventTypesScript.KEY_COLLECTED, {
+		Services.event_bus.emit(GameEventTypes.KEY_COLLECTED, {
 			"body": body,
 			"key_type": key_type,
 			"message": message_text

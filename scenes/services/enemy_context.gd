@@ -1,8 +1,6 @@
 class_name EnemyContext
 extends Node
 
-const TransitionsDataScript = preload("res://scenes/interfaces/transitions_data.gd")
-
 ## Provides centralized access to world references for enemy systems.
 ## This decouples enemies from direct group lookups and scene topology.
 ##
@@ -70,7 +68,7 @@ func get_transition_graph() -> Dictionary:
 	if not transitions:
 		return {}
 	# Use TransitionsData interface for typed access
-	return TransitionsDataScript.get_map_transitions(transitions)
+	return TransitionsData.get_map_transitions(transitions)
 
 
 func get_enemy_exceptions() -> Array:
@@ -78,7 +76,7 @@ func get_enemy_exceptions() -> Array:
 	if not transitions:
 		return []
 	# Use TransitionsData interface for typed access
-	return TransitionsDataScript.get_enemy_exceptions(transitions)
+	return TransitionsData.get_enemy_exceptions(transitions)
 
 
 func set_players_node(node: Node3D) -> void:

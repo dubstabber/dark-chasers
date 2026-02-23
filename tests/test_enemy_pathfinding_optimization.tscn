@@ -4,6 +4,3 @@
 
 [node name="TestEnemyPathfindingOptimization" type="Node3D"]
 script = ExtResource("1_8h4kv")
-num_test_enemies = 15
-test_duration = 30.0
-spawn_radius = 100.0

@@ -1,9 +1,5 @@
 extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
 
-const GE = preload("res://scenes/resources/game_event_types.gd")
-const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
-const DoorScript = preload("res://scenes/objects/door.gd")
-
 @export var library_camera_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/AoOniCrawler")
 @export var library_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/CrawlingAoOniArea")
 @export var library_waypoint_1: NodePath = NodePath("NavigationRegion3D/EventSpawners/AoOniCrawler2")
@@ -26,27 +22,27 @@ const DoorScript = preload("res://scenes/objects/door.gd")
 
 
 func _ready() -> void:
-	Services.event_bus.subscribe(GE.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
-	Services.event_bus.subscribe(GE.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
-	Services.event_bus.subscribe(GE.AREA_PIANO_ALARM, _on_area_piano_alarm)
-	Services.event_bus.subscribe(GE.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
-	Services.event_bus.subscribe(GE.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
-	Services.event_bus.subscribe(GE.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
-	Services.event_bus.subscribe(GE.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
-	Services.event_bus.subscribe(GE.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
-	Services.event_bus.subscribe(GE.AREA_KILL_PLAYER, _on_area_kill_player)
+	Services.event_bus.subscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
+	Services.event_bus.subscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
+	Services.event_bus.subscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
+	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
+	Services.event_bus.subscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
+	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
+	Services.event_bus.subscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
+	Services.event_bus.subscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
+	Services.event_bus.subscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
 
 
 func _exit_tree() -> void:
-	Services.event_bus.unsubscribe(GE.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
-	Services.event_bus.unsubscribe(GE.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
-	Services.event_bus.unsubscribe(GE.AREA_PIANO_ALARM, _on_area_piano_alarm)
-	Services.event_bus.unsubscribe(GE.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
-	Services.event_bus.unsubscribe(GE.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
-	Services.event_bus.unsubscribe(GE.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
-	Services.event_bus.unsubscribe(GE.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
-	Services.event_bus.unsubscribe(GE.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
-	Services.event_bus.unsubscribe(GE.AREA_KILL_PLAYER, _on_area_kill_player)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
 
 
 func _on_area_entered_mansion_text(_event: RefCounted) -> void:
@@ -56,7 +52,7 @@ func _on_area_entered_mansion_text(_event: RefCounted) -> void:
 
 
 func _on_area_monster_crawls_library(_event: RefCounted) -> void:
-	var seq = SequenceDataScript.create(&"monster_crawls_library")
+	var seq = SequenceData.create(&"monster_crawls_library")
 	seq.block_players()
 	seq.custom(_spawn_crawling_aooni)
 	seq.wait(4.5)
@@ -140,7 +136,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 		return
 
 	var wide_door_node = level.get_node_or_null(wide_door)
-	if wide_door_node and wide_door_node is DoorScript:
+	if wide_door_node and wide_door_node is Door:
 		wide_door_node.open()
 
 	var music := _music()
@@ -165,7 +161,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 
 func _on_area_spawn_ilopulu(event: RefCounted) -> void:
 	var body = event.get_body()
-	var seq = SequenceDataScript.create(&"spawn_ilopulu")
+	var seq = SequenceData.create(&"spawn_ilopulu")
 	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(1.0)
 	seq.custom(_spawn_ilopulu.bind(body))
@@ -199,7 +195,7 @@ func _on_area_open_ao_mika_wardrobe(_event: RefCounted) -> void:
 		return
 
 	var wardrobe_door_node = level.get_node_or_null(wardrobe_door)
-	if wardrobe_door_node and wardrobe_door_node is DoorScript:
+	if wardrobe_door_node and wardrobe_door_node is Door:
 		wardrobe_door_node.open()
 
 	var music := _music()

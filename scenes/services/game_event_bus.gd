@@ -1,8 +1,6 @@
 class_name GameEventBus
 extends Node
 
-const GameEventScript = preload("res://scenes/resources/game_event.gd")
-
 ## Central event bus for typed game events.
 ## Replaces string-based event routing with a publish/subscribe pattern.
 ##
@@ -39,7 +37,7 @@ func emit_event(event: RefCounted) -> void:
 
 
 func emit(event_type: StringName, payload: Dictionary = {}, source: Node = null) -> void:
-	var event := GameEventScript.new(event_type, payload, source)
+	var event := GameEvent.new(event_type, payload, source)
 	emit_event(event)
 
 
@@ -87,7 +85,7 @@ func _build_history_snapshot(event: RefCounted) -> RefCounted:
 	if payload_snapshot_variant is Dictionary:
 		payload_snapshot = payload_snapshot_variant
 
-	var snapshot := GameEventScript.new(event.event_type, payload_snapshot, null)
+	var snapshot := GameEvent.new(event.event_type, payload_snapshot, null)
 	snapshot.timestamp = event.timestamp
 	return snapshot
 

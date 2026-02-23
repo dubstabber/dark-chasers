@@ -139,6 +139,30 @@ func set_hud(new_hud: CanvasLayer):
 		hud.connect_to_player(self)
 
 
+func get_hud_health_component() -> HealthComponent:
+	return health_component
+
+
+func get_hud_armor_component() -> ArmorComponent:
+	return armor_component
+
+
+func get_hud_ammo_component() -> PlayerAmmoComponent:
+	return ammo_component
+
+
+func get_hud_weapon_manager() -> WeaponManager:
+	return weapon_manager
+
+
+func get_hud_damage_effects_component() -> DamageEffectsComponent:
+	return damage_effects_component
+
+
+func get_hud_camera() -> Camera3D:
+	return camera_3d
+
+
 func _auto_discover_hud() -> void:
 	"""Auto-discover HUD via group if not explicitly set
 	

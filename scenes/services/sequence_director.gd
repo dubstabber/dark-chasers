@@ -1,10 +1,6 @@
 class_name SequenceDirector
 extends Node
 
-const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
-const SequenceActionScript = preload("res://scenes/resources/sequence_action.gd")
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## Sequence Director for managing timed scripted sequences.
 ## Replaces hand-rolled await timer chains in room scripts.
 ##
@@ -45,7 +41,7 @@ func play_sequence(sequence: RefCounted) -> void:
 	_can_skip = sequence.skippable
 	
 	sequence_started.emit(sequence.id)
-	Services.event_bus.emit(GameEventTypesScript.SEQUENCE_STARTED, {"sequence_id": sequence.id})
+	Services.event_bus.emit(GameEventTypes.SEQUENCE_STARTED, {"sequence_id": sequence.id})
 	
 	await _execute_sequence()
 
@@ -88,7 +84,7 @@ func _end_current(start_next_queued: bool = true) -> void:
 	_current_step = 0
 	
 	sequence_ended.emit(ended_id)
-	Services.event_bus.emit(GameEventTypesScript.SEQUENCE_ENDED, {"sequence_id": ended_id})
+	Services.event_bus.emit(GameEventTypes.SEQUENCE_ENDED, {"sequence_id": ended_id})
 	
 	# Play next queued sequence
 	if start_next_queued and not _sequence_queue.is_empty():
@@ -109,7 +105,7 @@ func _execute_sequence() -> void:
 		await _execute_action(action)
 		
 		sequence_step_completed.emit(_current_sequence.id, i)
-		Services.event_bus.emit(GameEventTypesScript.SEQUENCE_STEP, {
+		Services.event_bus.emit(GameEventTypes.SEQUENCE_STEP, {
 			"sequence_id": _current_sequence.id,
 			"step_index": i
 		})
@@ -119,42 +115,42 @@ func _execute_sequence() -> void:
 
 func _execute_action(action: RefCounted) -> void:
 	match action.action_type:
-		SequenceActionScript.Type.WAIT:
+		SequenceAction.Type.WAIT:
 			await get_tree().create_timer(action.duration).timeout
 		
-		SequenceActionScript.Type.BLOCK_PLAYER:
+		SequenceAction.Type.BLOCK_PLAYER:
 			_block_players(action.target_players)
 		
-		SequenceActionScript.Type.UNBLOCK_PLAYER:
+		SequenceAction.Type.UNBLOCK_PLAYER:
 			_unblock_players(action.target_players)
 		
-		SequenceActionScript.Type.CAMERA_CUT:
+		SequenceAction.Type.CAMERA_CUT:
 			if action.camera:
 				Services.camera_manager.set_active_camera(action.camera)
 		
-		SequenceActionScript.Type.CAMERA_RESTORE:
+		SequenceAction.Type.CAMERA_RESTORE:
 			_restore_player_cameras()
 		
-		SequenceActionScript.Type.PLAY_SOUND:
+		SequenceAction.Type.PLAY_SOUND:
 			if action.sound:
 				Services.utils.play_sound(action.sound, action.sound_source, action.position, action.volume_db)
 		
-		SequenceActionScript.Type.SHOW_TEXT:
+		SequenceAction.Type.SHOW_TEXT:
 			_show_event_text(action.text, action.duration)
 		
-		SequenceActionScript.Type.HIDE_TEXT:
+		SequenceAction.Type.HIDE_TEXT:
 			_hide_event_text()
 		
-		SequenceActionScript.Type.SPAWN_ENEMY:
+		SequenceAction.Type.SPAWN_ENEMY:
 			_spawn_enemy(action)
 		
-		SequenceActionScript.Type.PLAY_MUSIC:
+		SequenceAction.Type.PLAY_MUSIC:
 			_play_music(action)
 		
-		SequenceActionScript.Type.STOP_MUSIC:
+		SequenceAction.Type.STOP_MUSIC:
 			_stop_music()
 		
-		SequenceActionScript.Type.CUSTOM:
+		SequenceAction.Type.CUSTOM:
 			if action.custom_callable.is_valid():
 				var result = action.custom_callable.call()
 				if result is Signal:
@@ -166,7 +162,7 @@ func _block_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = true
-	Services.event_bus.emit(GameEventTypesScript.PLAYER_BLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypes.PLAYER_BLOCKED, {"players": players})
 
 
 func _unblock_players(targets: Array[Node]) -> void:
@@ -174,7 +170,7 @@ func _unblock_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = false
-	Services.event_bus.emit(GameEventTypesScript.PLAYER_UNBLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypes.PLAYER_UNBLOCKED, {"players": players})
 
 
 func _get_players(targets: Array[Node]) -> Array[Node]:

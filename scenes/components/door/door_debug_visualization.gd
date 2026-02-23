@@ -2,8 +2,6 @@
 class_name DoorDebugVisualization
 extends Node
 
-const DoorAabbUtilsScript = preload("res://scenes/components/door/door_aabb_utils.gd")
-
 var _body: AnimatableBody3D
 var _meshes: Array[MeshInstance3D] = []
 var _debug_face_meshes: Array[MeshInstance3D] = []
@@ -100,7 +98,7 @@ func _ensure_debug_materials() -> void:
 
 
 func _get_door_aabb() -> AABB:
-	return DoorAabbUtilsScript.get_door_aabb(_meshes)
+	return DoorAabbUtils.get_door_aabb(_meshes)
 
 
 func _create_debug_face_for_side(side_name: String, aabb: AABB, is_allowed: bool) -> void:

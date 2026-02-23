@@ -1,7 +1,5 @@
 extends Area3D
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.AREA_PIANO_ALARM).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"area_piano_alarm").
@@ -37,7 +35,7 @@ func _body_entered(body):
 			}, self)
 
 		# Emit generic event for base Level class handling (door/camera from payload)
-		Services.event_bus.emit(GameEventTypesScript.AREA_ENTERED, {
+		Services.event_bus.emit(GameEventTypes.AREA_ENTERED, {
 			"body": body,
 			"area": self,
 			"door": door_to_open,

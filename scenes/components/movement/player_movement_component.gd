@@ -1,8 +1,6 @@
 class_name PlayerMovementComponent
 extends Node
 
-const PlayerSlideControllerScript = preload("res://scenes/components/movement/player_slide_controller.gd")
-
 ## Handles all player movement: walking, sprinting, crouching, sliding, jumping, climbing, clip mode
 
 signal movement_state_changed(state: MovementState)
@@ -46,7 +44,7 @@ var direction: Vector3 = Vector3.ZERO
 var current_state: MovementState = MovementState.IDLE
 var previous_state: MovementState = MovementState.IDLE
 
-var _slide_controller := PlayerSlideControllerScript.new()
+var _slide_controller := PlayerSlideController.new()
 
 var is_climbing: bool = false
 var clip_mode: bool = false

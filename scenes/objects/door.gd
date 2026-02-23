@@ -1,8 +1,6 @@
 @tool
 class_name Door extends Node3D
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 signal door_locked(text, triggering_player)
 
 @export var time_to_close := 1.2
@@ -94,7 +92,7 @@ func _toggle_door(force := false) -> void:
 	if not is_unlocked:
 		door_locked.emit(locked_message, _triggering_player)
 		if not Engine.is_editor_hint():
-			Services.event_bus.emit(GameEventTypesScript.DOOR_LOCKED, {
+			Services.event_bus.emit(GameEventTypes.DOOR_LOCKED, {
 				"text": locked_message,
 				"triggering_player": _triggering_player,
 				"door": self
@@ -197,7 +195,7 @@ func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null
 			_audio_component.play_locked_sound()
 		door_locked.emit(locked_message, _triggering_player)
 		if not Engine.is_editor_hint():
-			Services.event_bus.emit(GameEventTypesScript.DOOR_LOCKED, {
+			Services.event_bus.emit(GameEventTypes.DOOR_LOCKED, {
 				"text": locked_message,
 				"triggering_player": _triggering_player,
 				"door": self

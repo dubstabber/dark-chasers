@@ -1,7 +1,5 @@
 extends CanvasLayer
 
-const HudPlayerBindingControllerScript = preload("res://scenes/components/player/hud_player_binding_controller.gd")
-
 var tween: Tween
 var faded: bool
 
@@ -9,7 +7,7 @@ var faded: bool
 @onready var top_left_container = $TopLeft/VBoxContainer
 @onready var mode_label = $MiddleLeft/VBoxContainer/ModeText
 @onready var event_label = $Center/VBoxContainer/EventText
-@onready var log_label_scene = preload("res://scenes/ui/log_label.tscn")
+@export var log_label_scene: PackedScene
 @onready var timer = $Timer
 @onready var health_ui_value_container: HBoxContainer = %HealthUIValueContainer
 @onready var ammo_ui_value_container: HBoxContainer = %AmmoUIValueContainer
@@ -21,9 +19,9 @@ var faded: bool
 @onready var bottom_right_container: Control = $BottomRight
 
 
-var _connected_player: CharacterBody3D = null
+var _connected_provider: Node = null
 var _reserve_ammo_callback: Callable
-var _player_binding_controller := HudPlayerBindingControllerScript.new()
+var _player_binding_controller := HudPlayerBindingController.new()
 
 
 func _ready():
@@ -45,8 +43,8 @@ func _exit_tree() -> void:
 
 func _on_active_camera_changed(new_camera: Camera3D) -> void:
 	# Show player UI only when player camera is active
-	# Use CameraOwner interface for typed camera access
-	var player_camera = CameraOwner.get_camera(_connected_player)
+	# Use HUD provider adapter for typed camera access
+	var player_camera = HudDataProvider.get_camera(_connected_provider)
 	if player_camera:
 		var is_player_camera = new_camera == player_camera
 		_set_player_ui_visible(is_player_camera)
@@ -64,23 +62,23 @@ func _set_player_ui_visible(show_ui: bool) -> void:
 		damage_overlay.visible = show_ui
 
 
-func connect_to_player(player: CharacterBody3D) -> void:
-	"""Connect HUD directly to player components for automatic updates
+func connect_to_player(provider: Node) -> void:
+	"""Connect HUD to a HUD data provider for automatic updates
 	
 	This eliminates the need for player.gd to forward signals to the HUD.
-	The HUD connects directly to HealthComponent, ArmorComponent, and WeaponManager.
+	The HUD depends on the HudDataProvider contract instead of concrete player fields.
 	"""
-	if _connected_player == player:
+	if _connected_provider == provider:
 		return
 	
-	# Disconnect from previous player if any
-	if _connected_player:
+	# Disconnect from previous provider if any
+	if _connected_provider:
 		disconnect_from_player()
 	
-	_connected_player = player
-	_reserve_ammo_callback = Callable(self, "_on_player_reserve_ammo_changed").bind(player)
+	_connected_provider = provider
+	_reserve_ammo_callback = Callable(self, "_on_player_reserve_ammo_changed").bind(provider)
 	_player_binding_controller.connect_player_signals(
-		player,
+		provider,
 		Callable(self, "_on_player_health_changed"),
 		Callable(self, "_on_player_armor_changed"),
 		Callable(self, "_on_player_ammo_changed"),
@@ -89,23 +87,25 @@ func connect_to_player(player: CharacterBody3D) -> void:
 		damage_overlay
 	)
 	
-	if player.health_component:
-		update_health_display(player.health_component.current_health, player.health_component.max_health)
+	var health_component := HudDataProvider.get_health_component(provider)
+	if health_component:
+		update_health_display(health_component.current_health, health_component.max_health)
 	
-	if player.armor_component:
-		update_armor_display(player.armor_component.current_armor, player.armor_component.max_armor)
+	var armor_component := HudDataProvider.get_armor_component(provider)
+	if armor_component:
+		update_armor_display(armor_component.current_armor, armor_component.max_armor)
 	
-	if player.weapon_manager:
-		call_deferred("_initialize_ammo_from_player", player)
+	if HudDataProvider.get_weapon_manager(provider):
+		call_deferred("_initialize_ammo_from_provider", provider)
 
 
 func disconnect_from_player() -> void:
 	"""Disconnect HUD from the current player's components"""
-	if not _connected_player:
+	if not _connected_provider:
 		return
 
 	_player_binding_controller.disconnect_player_signals(
-		_connected_player,
+		_connected_provider,
 		Callable(self, "_on_player_health_changed"),
 		Callable(self, "_on_player_armor_changed"),
 		Callable(self, "_on_player_ammo_changed"),
@@ -114,7 +114,7 @@ func disconnect_from_player() -> void:
 	)
 
 	_reserve_ammo_callback = Callable()
-	_connected_player = null
+	_connected_provider = null
 
 
 func _on_player_health_changed(current_health: int, max_health: int) -> void:
@@ -133,16 +133,15 @@ func _on_player_weapon_switched(weapon: WeaponResource) -> void:
 	update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
 
 
-func _on_player_reserve_ammo_changed(ammo_type: String, current_amount: int, max_amount: int, player: CharacterBody3D) -> void:
-	if player.weapon_manager and player.weapon_manager.current_weapon:
-		var weapon = player.weapon_manager.current_weapon
-		if not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
-			update_ammo_display(current_amount, max_amount)
+func _on_player_reserve_ammo_changed(ammo_type: String, current_amount: int, max_amount: int, provider: Node) -> void:
+	var weapon := HudDataProvider.get_current_weapon(provider)
+	if weapon and not weapon.infinite_ammo and weapon.ammo_type == ammo_type:
+		update_ammo_display(current_amount, max_amount)
 
 
-func _initialize_ammo_from_player(player: CharacterBody3D) -> void:
-	if player.weapon_manager and player.weapon_manager.current_weapon:
-		var weapon = player.weapon_manager.current_weapon
+func _initialize_ammo_from_provider(provider: Node) -> void:
+	var weapon := HudDataProvider.get_current_weapon(provider)
+	if weapon:
 		update_ammo_display(weapon.get_current_ammo(), weapon.get_max_ammo_amount())
 
 
@@ -162,6 +161,9 @@ func fade_black_screen():
 
 
 func add_log(text: String):
+	if not log_label_scene:
+		push_warning("HUD: log_label_scene is not assigned")
+		return
 	var log_label = log_label_scene.instantiate()
 	top_left_container.add_child(log_label)
 	log_label.create(text, 5.0)
@@ -204,14 +206,14 @@ func show_event_text_for_player(player: CharacterBody3D, text: String, _faded: b
 		show_event_text(text, _faded, text_time)
 
 
-func _get_hud_owner() -> CharacterBody3D:
+func _get_hud_owner() -> Node:
 	"""Get the player that owns this HUD instance
 
 	Returns:
-		The player CharacterBody3D that this HUD belongs to, or null if not found
+		The provider node that this HUD belongs to, or null if not found
 	"""
-	# Use explicit connected player reference instead of scene-tree discovery
-	return _connected_player
+	# Use explicit connected provider reference instead of scene-tree discovery
+	return _connected_provider
 
 
 func hide_event_text():
@@ -228,7 +230,7 @@ func _on_player_mode_changed_event(event: RefCounted) -> void:
 	var event_player = event.payload.get("player", null)
 	
 	# Only respond if this HUD belongs to the player that triggered the event
-	if event_player and _connected_player and event_player != _connected_player:
+	if event_player and _connected_provider and event_player != _connected_provider:
 		return
 	
 	_apply_mode_change(mode, value)

@@ -1,7 +1,5 @@
 extends StaticBody3D
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## The domain-specific event type to emit (e.g., GameEventTypes.BUTTON_CHECK_TV).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"button_check_tv").
@@ -35,7 +33,7 @@ func press(body):
 			}, self)
 
 		# Emit generic event for base Level class handling (door/camera from payload)
-		Services.event_bus.emit(GameEventTypesScript.BUTTON_PRESSED, {
+		Services.event_bus.emit(GameEventTypes.BUTTON_PRESSED, {
 			"body": body,
 			"button": self,
 			"door": door_to_open,

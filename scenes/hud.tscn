@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cojpeusa1t4t6"]
+[gd_scene load_steps=9 format=3 uid="uid://cojpeusa1t4t6"]
 
 [ext_resource type="Script" uid="uid://b7jidh02jubbd" path="res://scenes/hud.gd" id="1_nn4nw"]
 [ext_resource type="Texture2D" uid="uid://bon0dd5vu1nko" path="res://images/fonts/STFSPRCT.png" id="2_5ysmq"]
@@ -7,9 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://dtwy61f4q0t4d" path="res://images/fonts/STFSAMMO.png" id="4_uo2fv"]
 [ext_resource type="PackedScene" uid="uid://c87u0y4d0ssix" path="res://scenes/ui/hud/components/key_ui_container.tscn" id="6_047uy"]
 [ext_resource type="Texture2D" uid="uid://cn214ygtvkh5f" path="res://images/crosshairs/crosshair001.png" id="7_5pdws"]
+[ext_resource type="PackedScene" uid="uid://dded6ol00i2pi" path="res://scenes/ui/log_label.tscn" id="8_r2s4x"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_nn4nw")
+log_label_scene = ExtResource("8_r2s4x")
 
 [node name="BlackScreen" type="ColorRect" parent="."]
 anchors_preset = 15

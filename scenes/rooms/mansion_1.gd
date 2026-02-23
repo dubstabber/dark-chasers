@@ -1,7 +1,5 @@
 extends Level
 
-const GE = preload("res://scenes/resources/game_event_types.gd")
-
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 
 
@@ -74,5 +72,5 @@ func open_all_doors():
 	var doors_node = get_node_or_null("Doors")
 	if doors_node:
 		for door in doors_node.get_children():
-			if door is DoorScript:
+			if door is Door:
 				door.open()

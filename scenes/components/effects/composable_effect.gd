@@ -1,8 +1,6 @@
 class_name ComposableEffect
 extends Node
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 ## Base composable effect that can auto-connect to a parent signal and trigger itself.
 
 @export var auto_connect_parent_signal: String = "button_pressed"
@@ -55,11 +53,11 @@ func _resolve_parent_event_type(parent_node: Node) -> StringName:
 
 	match parent_script.resource_path:
 		"res://scenes/objects/button.gd":
-			return GameEventTypesScript.BUTTON_PRESSED
+			return GameEventTypes.BUTTON_PRESSED
 		"res://scenes/objects/area_event.gd":
-			return GameEventTypesScript.AREA_ENTERED
+			return GameEventTypes.AREA_ENTERED
 		"res://scenes/items/key.gd":
-			return GameEventTypesScript.KEY_COLLECTED
+			return GameEventTypes.KEY_COLLECTED
 
 	return &""
 

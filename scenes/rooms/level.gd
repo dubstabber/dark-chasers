@@ -1,8 +1,5 @@
 class_name Level extends Node3D
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-const DoorScript = preload("res://scenes/objects/door.gd")
-
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
 
@@ -25,11 +22,11 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	# Subscribe to typed events from GameEventBus (replaces group-based signal wiring)
-	Services.event_bus.subscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
-	Services.event_bus.subscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
-	Services.event_bus.subscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
-	Services.event_bus.subscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
-	Services.event_bus.subscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
+	Services.event_bus.subscribe(GameEventTypes.KEY_COLLECTED, _on_key_event)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_PRESSED, _on_button_event)
+	Services.event_bus.subscribe(GameEventTypes.AREA_ENTERED, _on_area_event)
+	Services.event_bus.subscribe(GameEventTypes.DOOR_LOCKED, _on_door_locked_event)
+	Services.event_bus.subscribe(GameEventTypes.ITEM_PICKEDUP, _on_item_pickedup_event)
 	
 	if transitions:
 		for t in transitions.get_children():
@@ -43,11 +40,11 @@ func _ready():
 
 func _exit_tree():
 	# Unsubscribe from event bus when level is removed
-	Services.event_bus.unsubscribe(GameEventTypesScript.KEY_COLLECTED, _on_key_event)
-	Services.event_bus.unsubscribe(GameEventTypesScript.BUTTON_PRESSED, _on_button_event)
-	Services.event_bus.unsubscribe(GameEventTypesScript.AREA_ENTERED, _on_area_event)
-	Services.event_bus.unsubscribe(GameEventTypesScript.DOOR_LOCKED, _on_door_locked_event)
-	Services.event_bus.unsubscribe(GameEventTypesScript.ITEM_PICKEDUP, _on_item_pickedup_event)
+	Services.event_bus.unsubscribe(GameEventTypes.KEY_COLLECTED, _on_key_event)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PRESSED, _on_button_event)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_ENTERED, _on_area_event)
+	Services.event_bus.unsubscribe(GameEventTypes.DOOR_LOCKED, _on_door_locked_event)
+	Services.event_bus.unsubscribe(GameEventTypes.ITEM_PICKEDUP, _on_item_pickedup_event)
 
 
 # === GENERIC EVENT HANDLERS ===
@@ -78,7 +75,7 @@ func _handle_trigger_event(event: RefCounted) -> void:
 
 	# Handle door opening if event has a door configured
 	var door = event.get_node("door")
-	if door and door is DoorScript:
+	if door and door is Door:
 		door.open()
 
 

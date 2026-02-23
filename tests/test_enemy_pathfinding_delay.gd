@@ -1,188 +1,59 @@
-extends Node
+extends SceneTree
 
-## Test script to verify the enemy pathfinding delay fix
-## This test ensures enemies immediately start pathfinding when they detect a player
+const EnemyPathTimingControllerScript = preload("res://scenes/components/enemy/enemy_path_timing_controller.gd")
 
-var test_passed = 0
-var test_failed = 0
+var _failed := false
 
-func _ready():
-	print("=== ENEMY PATHFINDING DELAY FIX TEST ===")
-	test_immediate_pathfinding_on_detection()
-	test_timer_responsiveness()
-	test_target_reacquisition()
-	print_test_summary()
 
-func test_immediate_pathfinding_on_detection():
-	print("\n--- Testing Immediate Pathfinding on Target Detection ---")
-	
-	# Create a mock enemy
-	var enemy = preload("res://scenes/enemies/enemy.gd").new()
-	add_child(enemy)
-	
-	# Create mock navigation agent
-	var nav_agent = NavigationAgent3D.new()
-	enemy.add_child(nav_agent)
-	enemy.nav = nav_agent
-	
-	# Create mock timer
-	var timer = Timer.new()
-	enemy.add_child(timer)
-	enemy.find_path_timer = timer
-	
-	# Enable debug prints for this test
-	enemy.debug_prints = true
-	
-	# Create a mock player target
-	var mock_player = CharacterBody3D.new()
-	mock_player.add_to_group("player")
-	add_child(mock_player)
-	
-	# Create a mock camera for the player
-	var camera = Camera3D.new()
-	mock_player.add_child(camera)
-	mock_player.camera_3d = camera
-	
-	# Create a mock players container
-	var players_container = Node3D.new()
-	players_container.name = "Players"
-	players_container.add_child(mock_player)
-	add_child(players_container)
-	enemy.players = players_container
-	
-	# Test: Initially no target
-	test_assert(enemy.current_target == null, "Enemy should start with no target")
+func _init() -> void:
+	print("=== ENEMY PATHFINDING DELAY REGRESSION TESTS ===")
+	_test_path_timing_thresholds()
+	_test_runtime_target_reacquisition_policy()
+	_test_enemy_delegates_path_timeout_orchestration()
+	print("=== ENEMY PATHFINDING DELAY REGRESSION TESTS COMPLETED ===")
+	quit(1 if _failed else 0)
 
-	# Test: Simulate target detection (this should trigger immediate pathfinding)
-	var initial_target_position = nav_agent.target_position
-	enemy.current_target = mock_player
-	enemy.makepath() # This simulates what happens in the fixed check_targets()
 
-	# Verify that pathfinding was triggered immediately
-	var new_target_position = nav_agent.target_position
-	test_assert(new_target_position != initial_target_position, "Navigation target should be updated immediately")
-	test_assert(new_target_position == mock_player.global_position, "Navigation should target the player position")
-	
-	print("✓ Enemy immediately calculates path when target is detected")
-	test_passed += 1
-	
-	# Cleanup
-	enemy.queue_free()
-	mock_player.queue_free()
-	players_container.queue_free()
+func _test_path_timing_thresholds() -> void:
+	print("\n--- Testing path timing thresholds ---")
+	var controller = EnemyPathTimingControllerScript.new()
+	_assert(is_equal_approx(controller.compute_wait_time(10.0, false), 0.1), "<20 units should map to 0.1s")
+	_assert(is_equal_approx(controller.compute_wait_time(25.0, false), 0.3), "20-35 units should map to 0.3s")
+	_assert(is_equal_approx(controller.compute_wait_time(45.0, false), 0.5), "35-50 units should map to 0.5s")
+	_assert(is_equal_approx(controller.compute_wait_time(70.0, false), 0.8), ">=50 units should map to 0.8s")
+	_assert(is_equal_approx(controller.compute_wait_time(90.0, true), 0.1), "Waypoint pathing should force 0.1s")
+	print("✓ Path timing thresholds are correct")
 
-func test_timer_responsiveness():
-	print("\n--- Testing Timer Responsiveness Improvements ---")
-	
-	# Create a mock enemy
-	var enemy = preload("res://scenes/enemies/enemy.gd").new()
-	add_child(enemy)
-	
-	# Create mock navigation agent
-	var nav_agent = NavigationAgent3D.new()
-	enemy.add_child(nav_agent)
-	enemy.nav = nav_agent
-	
-	# Create mock timer
-	var timer = Timer.new()
-	enemy.add_child(timer)
-	enemy.find_path_timer = timer
-	
-	# Test improved timer intervals
-	# Simulate different distances and check timer wait times
-	
-	# Test distant target (>50 units) - should be 0.8s instead of old 1.7s
-	nav_agent.target_position = Vector3(100, 0, 0) # Far away
-	enemy._on_find_path_timer_timeout()
-	test_assert(timer.wait_time == 0.8, "Distant targets should have 0.8s timer (was 1.7s)")
 
-	# Test medium distance (35-50 units) - should be 0.5s instead of old 0.8s
-	nav_agent.target_position = Vector3(40, 0, 0)
-	enemy._on_find_path_timer_timeout()
-	test_assert(timer.wait_time == 0.5, "Medium distance should have 0.5s timer (was 0.8s)")
+func _test_runtime_target_reacquisition_policy() -> void:
+	print("\n--- Testing runtime coordinator target-loss responsiveness ---")
+	var runtime_source := FileAccess.get_file_as_string("res://scenes/components/enemy/enemy_runtime_coordinator.gd")
+	_assert("func on_target_died() -> void:" in runtime_source, "Runtime coordinator should expose on_target_died hook")
+	_assert("_find_path_timer.wait_time = 0.1" in runtime_source, "Runtime coordinator should reset timer to 0.1s on target death")
+	_assert("if _enemy.current_target and Mortal.is_dead(_enemy.current_target):" in runtime_source, "Runtime coordinator should detect dead target during chase")
+	print("✓ Runtime coordinator target-loss policy remains responsive")
 
-	# Test close-medium distance (20-35 units) - should be 0.3s instead of old 0.5s
-	nav_agent.target_position = Vector3(25, 0, 0)
-	enemy._on_find_path_timer_timeout()
-	test_assert(timer.wait_time == 0.3, "Close-medium distance should have 0.3s timer (was 0.5s)")
 
-	# Test close distance (<20 units) - should remain 0.1s
-	nav_agent.target_position = Vector3(10, 0, 0)
-	enemy._on_find_path_timer_timeout()
-	test_assert(timer.wait_time == 0.1, "Close distance should have 0.1s timer")
-	
-	print("✓ Timer intervals are more responsive")
-	test_passed += 1
-	
-	# Cleanup
-	enemy.queue_free()
+func _test_enemy_delegates_path_timeout_orchestration() -> void:
+	print("\n--- Testing Enemy delegates path timeout orchestration ---")
+	var enemy_source := FileAccess.get_file_as_string("res://scenes/enemies/enemy.gd")
+	var timeout_body := _get_function_body(enemy_source, "func _on_find_path_timer_timeout")
+	_assert("_runtime_coordinator.on_find_path_timer_timeout()" in timeout_body, "Enemy should delegate find-path timer timeout to runtime coordinator")
+	_assert("_path_timing_controller.compute_wait_time" not in timeout_body, "Enemy should not own timing policy directly")
+	_assert("makepath()" not in timeout_body, "Enemy timer timeout should not call makepath directly")
+	print("✓ Enemy delegates path timeout orchestration to runtime coordinator")
 
-func test_target_reacquisition():
-	print("\n--- Testing Target Reacquisition Responsiveness ---")
-	
-	# Create a mock enemy
-	var enemy = preload("res://scenes/enemies/enemy.gd").new()
-	add_child(enemy)
-	
-	# Create mock navigation agent
-	var nav_agent = NavigationAgent3D.new()
-	enemy.add_child(nav_agent)
-	enemy.nav = nav_agent
-	
-	# Create mock timer
-	var timer = Timer.new()
-	enemy.add_child(timer)
-	enemy.find_path_timer = timer
-	timer.wait_time = 1.0 # Start with a long timer
-	
-	# Create a mock dead player
-	var mock_dead_player = CharacterBody3D.new()
-	mock_dead_player.set_script(preload("res://tests/mock_dead_player.gd"))
-	add_child(mock_dead_player)
-	
-	# Set the dead player as current target
-	enemy.current_target = mock_dead_player
-	
-	# Simulate the dead player check in _physics_process
-	# This should reset the timer to be more responsive
-	if enemy.current_target and enemy.current_target.has_method("is_dead") and enemy.current_target.is_dead():
-		enemy.current_target = null
-		enemy.velocity = Vector3.ZERO
-		enemy.find_path_timer.wait_time = 0.1
-	
-	# Verify timer was reset to be responsive
-	test_assert(timer.wait_time == 0.1, "Timer should be reset to 0.1s when target dies")
-	test_assert(enemy.current_target == null, "Target should be cleared when player dies")
-	
-	print("✓ Enemy becomes responsive when target is lost")
-	test_passed += 1
-	
-	# Cleanup
-	enemy.queue_free()
-	mock_dead_player.queue_free()
 
-func print_test_summary():
-	print("\n" + "=".repeat(50))
-	print("ENEMY PATHFINDING DELAY FIX TEST SUMMARY")
-	print("=".repeat(50))
-	print("Tests Passed: ", test_passed)
-	print("Tests Failed: ", test_failed)
-	
-	if test_failed == 0:
-		print("🎉 ALL TESTS PASSED! Enemy pathfinding delay fix is working correctly.")
-		print("\nKey improvements verified:")
-		print("  ✓ Immediate pathfinding on target detection")
-		print("  ✓ More responsive timer intervals")
-		print("  ✓ Quick reacquisition after target loss")
-	else:
-		print("❌ Some tests failed. Please review the implementation.")
+func _get_function_body(source: String, signature: String) -> String:
+	var start := source.find(signature)
+	_assert(start != -1, "Expected function not found: %s" % signature)
+	var end := source.find("\nfunc ", start + 1)
+	if end == -1:
+		end = source.length()
+	return source.substr(start, end - start)
 
-	print("=".repeat(50))
 
-# Helper assertion function
-func test_assert(condition: bool, message: String):
+func _assert(condition: bool, message: String) -> void:
 	if not condition:
-		print("❌ ASSERTION FAILED: " + message)
-		test_failed += 1
-	else:
-		print("✓ " + message)
+		_failed = true
+		push_error("ASSERT FAILED: " + message)

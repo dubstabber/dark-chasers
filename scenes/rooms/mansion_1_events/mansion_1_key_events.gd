@@ -1,8 +1,5 @@
 extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
 
-const GE = preload("res://scenes/resources/game_event_types.gd")
-const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
-
 @export var aooni_chase_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/FirstAoOniChase")
 @export var aooni_chase_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/LibraryExitArea")
 
@@ -21,17 +18,17 @@ var _bars_aooni: CharacterBody3D = null
 
 
 func _ready() -> void:
-	Services.event_bus.subscribe(GE.KEY_SPAWN_AO_ONI_LIBRARY, _on_key_spawn_ao_oni_library)
-	Services.event_bus.subscribe(GE.KEY_AO_ONI_TRIES_BARS, _on_key_ao_oni_tries_bars)
-	Services.event_bus.subscribe(GE.KEY_TELEPORT_TO_VOID, _on_key_teleport_to_void)
-	Services.event_bus.subscribe(GE.KEY_SPAWN_WHITE_FACE, _on_key_spawn_white_face)
+	Services.event_bus.subscribe(GameEventTypes.KEY_SPAWN_AO_ONI_LIBRARY, _on_key_spawn_ao_oni_library)
+	Services.event_bus.subscribe(GameEventTypes.KEY_AO_ONI_TRIES_BARS, _on_key_ao_oni_tries_bars)
+	Services.event_bus.subscribe(GameEventTypes.KEY_TELEPORT_TO_VOID, _on_key_teleport_to_void)
+	Services.event_bus.subscribe(GameEventTypes.KEY_SPAWN_WHITE_FACE, _on_key_spawn_white_face)
 
 
 func _exit_tree() -> void:
-	Services.event_bus.unsubscribe(GE.KEY_SPAWN_AO_ONI_LIBRARY, _on_key_spawn_ao_oni_library)
-	Services.event_bus.unsubscribe(GE.KEY_AO_ONI_TRIES_BARS, _on_key_ao_oni_tries_bars)
-	Services.event_bus.unsubscribe(GE.KEY_TELEPORT_TO_VOID, _on_key_teleport_to_void)
-	Services.event_bus.unsubscribe(GE.KEY_SPAWN_WHITE_FACE, _on_key_spawn_white_face)
+	Services.event_bus.unsubscribe(GameEventTypes.KEY_SPAWN_AO_ONI_LIBRARY, _on_key_spawn_ao_oni_library)
+	Services.event_bus.unsubscribe(GameEventTypes.KEY_AO_ONI_TRIES_BARS, _on_key_ao_oni_tries_bars)
+	Services.event_bus.unsubscribe(GameEventTypes.KEY_TELEPORT_TO_VOID, _on_key_teleport_to_void)
+	Services.event_bus.unsubscribe(GameEventTypes.KEY_SPAWN_WHITE_FACE, _on_key_spawn_white_face)
 
 
 func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
@@ -74,7 +71,7 @@ func _on_key_ao_oni_tries_bars(_event: RefCounted) -> void:
 	if not level:
 		return
 
-	var seq = SequenceDataScript.create(&"ao_oni_tries_bars")
+	var seq = SequenceData.create(&"ao_oni_tries_bars")
 	seq.custom(_spawn_bars_aooni)
 	seq.block_players()
 

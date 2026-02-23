@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="BitmapFontCatalog" load_steps=23 format=3 uid="uid://deu6iyqx42g0b"]
+
+[ext_resource type="Script" uid="uid://c3yxd6ctx2u5y" path="res://scenes/resources/bitmap_font_glyph.gd" id="1_v1cdw"]
+[ext_resource type="Texture2D" uid="uid://berleh354tn6p" path="res://images/fonts/STFSNUM0.png" id="2_4sjts"]
+[ext_resource type="Texture2D" uid="uid://dic02hagqtsxl" path="res://images/fonts/STFSNUM1.png" id="3_rx8eh"]
+[ext_resource type="Texture2D" uid="uid://qv3ajcxgtbj2" path="res://images/fonts/STFSNUM2.png" id="4_rx8eh"]
+[ext_resource type="Texture2D" uid="uid://chm4dt1blag01" path="res://images/fonts/STFSNUM3.png" id="5_h21ch"]
+[ext_resource type="Texture2D" uid="uid://brgb80snrygm3" path="res://images/fonts/STFSNUM4.png" id="6_x1vhx"]
+[ext_resource type="Texture2D" uid="uid://bosy875ua5cee" path="res://images/fonts/STFSNUM5.png" id="7_6xrqo"]
+[ext_resource type="Texture2D" uid="uid://bx6he2dphqw5n" path="res://images/fonts/STFSNUM6.png" id="8_ekgjt"]
+[ext_resource type="Texture2D" uid="uid://5uwvpnuah1j3" path="res://images/fonts/STFSNUM7.png" id="9_4sxo8"]
+[ext_resource type="Texture2D" uid="uid://dpw5o6jubi8su" path="res://images/fonts/STFSNUM8.png" id="10_j0oh4"]
+[ext_resource type="Texture2D" uid="uid://qlhm3njom5au" path="res://images/fonts/STFSNUM9.png" id="11_4hbhn"]
+[ext_resource type="Script" uid="uid://d0vs0c5mj8d0s" path="res://scenes/resources/bitmap_font_catalog.gd" id="46_0ssmo"]
+
+[sub_resource type="Resource" id="Resource_h21ch"]
+script = ExtResource("1_v1cdw")
+key = "0"
+texture = ExtResource("2_4sjts")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_x1vhx"]
+script = ExtResource("1_v1cdw")
+key = "1"
+texture = ExtResource("3_rx8eh")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_6xrqo"]
+script = ExtResource("1_v1cdw")
+key = "2"
+texture = ExtResource("4_rx8eh")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_1ssly"]
+script = ExtResource("1_v1cdw")
+key = "3"
+texture = ExtResource("5_h21ch")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_ulxnx"]
+script = ExtResource("1_v1cdw")
+key = "4"
+texture = ExtResource("6_x1vhx")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_n1f7i"]
+script = ExtResource("1_v1cdw")
+key = "5"
+texture = ExtResource("7_6xrqo")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_hvg1s"]
+script = ExtResource("1_v1cdw")
+key = "6"
+texture = ExtResource("8_ekgjt")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_w71wd"]
+script = ExtResource("1_v1cdw")
+key = "7"
+texture = ExtResource("9_4sxo8")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_wn8v1"]
+script = ExtResource("1_v1cdw")
+key = "8"
+texture = ExtResource("10_j0oh4")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[sub_resource type="Resource" id="Resource_ycx5a"]
+script = ExtResource("1_v1cdw")
+key = "9"
+texture = ExtResource("11_4hbhn")
+metadata/_custom_type_script = "uid://c3yxd6ctx2u5y"
+
+[resource]
+script = ExtResource("46_0ssmo")
+glyphs = Array[ExtResource("1_v1cdw")]([SubResource("Resource_h21ch"), SubResource("Resource_x1vhx"), SubResource("Resource_6xrqo"), SubResource("Resource_1ssly"), SubResource("Resource_ulxnx"), SubResource("Resource_n1f7i"), SubResource("Resource_hvg1s"), SubResource("Resource_w71wd"), SubResource("Resource_wn8v1"), SubResource("Resource_ycx5a")])

@@ -7,8 +7,6 @@ extends Area3D
 ## Subclasses override _try_pickup() to implement specific pickup logic
 ## and call _complete_pickup() on success.
 
-const GameEventTypesScript = preload("res://scenes/resources/game_event_types.gd")
-
 @export var pickup_sound: AudioStream
 @export var pickup_message: String
 
@@ -26,7 +24,7 @@ func _complete_pickup(body: Node3D) -> void:
 	if pickup_sound:
 		Services.utils.play_sound(pickup_sound, get_parent(), position)
 	if pickup_message:
-		Services.event_bus.emit(GameEventTypesScript.ITEM_PICKEDUP, {
+		Services.event_bus.emit(GameEventTypes.ITEM_PICKEDUP, {
 			"message": pickup_message,
 			"item": self,
 			"body": body

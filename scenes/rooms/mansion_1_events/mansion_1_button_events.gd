@@ -1,30 +1,27 @@
 extends "res://scenes/rooms/mansion_1_events/mansion_1_event_base.gd"
 
-const GE = preload("res://scenes/resources/game_event_types.gd")
-const SequenceDataScript = preload("res://scenes/resources/sequence_data.gd")
-
 @export var piano_spawn: NodePath = NodePath("NavigationRegion3D/EventSpawners/AoOniPiano")
 @export var piano_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/PianoExitArea")
 
 
 func _ready() -> void:
-	Services.event_bus.subscribe(GE.BUTTON_CHECK_TV, _on_button_check_tv)
-	Services.event_bus.subscribe(GE.BUTTON_CHECK_MAP, _on_button_check_map)
-	Services.event_bus.subscribe(GE.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
-	Services.event_bus.subscribe(GE.BUTTON_PLAY_PIANO, _on_button_play_piano)
-	Services.event_bus.subscribe(GE.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
-	Services.event_bus.subscribe(GE.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
-	Services.event_bus.subscribe(GE.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
 
 
 func _exit_tree() -> void:
-	Services.event_bus.unsubscribe(GE.BUTTON_CHECK_TV, _on_button_check_tv)
-	Services.event_bus.unsubscribe(GE.BUTTON_CHECK_MAP, _on_button_check_map)
-	Services.event_bus.unsubscribe(GE.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
-	Services.event_bus.unsubscribe(GE.BUTTON_PLAY_PIANO, _on_button_play_piano)
-	Services.event_bus.unsubscribe(GE.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
-	Services.event_bus.unsubscribe(GE.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
-	Services.event_bus.unsubscribe(GE.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
 
 
 func _on_button_check_tv(_event: RefCounted) -> void:
@@ -81,7 +78,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 
 
 func _on_button_show_moving_bars(_event: RefCounted) -> void:
-	var seq = SequenceDataScript.create(&"show_moving_bars")
+	var seq = SequenceData.create(&"show_moving_bars")
 	seq.block_players()
 	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(3.4)
@@ -92,7 +89,7 @@ func _on_button_show_moving_bars(_event: RefCounted) -> void:
 
 
 func _on_button_show_secret_door(_event: RefCounted) -> void:
-	var seq = SequenceDataScript.create(&"show_secret_door")
+	var seq = SequenceData.create(&"show_secret_door")
 	seq.block_players()
 	seq.wait(1.0)
 	seq.camera_restore()
@@ -102,7 +99,7 @@ func _on_button_show_secret_door(_event: RefCounted) -> void:
 
 
 func _on_button_show_open_exit(_event: RefCounted) -> void:
-	var seq = SequenceDataScript.create(&"show_open_exit")
+	var seq = SequenceData.create(&"show_open_exit")
 	seq.block_players()
 	seq.play_music(Services.get_sfx_catalog().event_trigger)
 	seq.wait(3.4)

@@ -1,8 +1,6 @@
 class_name VfxPoolService
 extends Node
 
-const PoolableVfxScript = preload("res://scenes/interfaces/poolable_vfx.gd")
-
 ## VFX pooling service to reduce instancing spikes for bursty effects.
 ## Maintains pools of reusable scene instances (scrap, particles, decals).
 
@@ -76,7 +74,7 @@ func release_instance(instance: Node) -> void:
 	
 	# Handle overflow instances
 	if instance.get_meta("_pool_overflow", false):
-		PoolableVfxScript.on_returned(instance)
+		PoolableVfx.on_returned(instance)
 		if path in _active:
 			_active[path] = max(0, _active[path] - 1)
 		instance.queue_free()
@@ -111,7 +109,7 @@ func _is_in_use(instance: Node) -> bool:
 func _mark_borrowed(instance: Node) -> void:
 	instance.set_meta("_pool_in_use", true)
 	instance.visible = true
-	PoolableVfxScript.on_borrowed(instance)
+	PoolableVfx.on_borrowed(instance)
 
 
 func _return_to_pool(instance: Node) -> void:
@@ -125,6 +123,6 @@ func _return_to_pool(instance: Node) -> void:
 	if "position" in instance:
 		instance.position = Vector3.ZERO
 
-	PoolableVfxScript.on_returned(instance)
+	PoolableVfx.on_returned(instance)
 	instance.visible = false
 	instance.set_meta("_pool_in_use", false)

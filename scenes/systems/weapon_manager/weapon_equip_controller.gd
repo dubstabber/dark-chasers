@@ -8,11 +8,10 @@ var _ui_event_controller: WeaponUiEventController
 var _sound_controller: WeaponSoundController
 var _animation_player: AnimationPlayer
 var _bullet_raycast: RayCast3D
+var _player: Player
+var _slots: Array
 
 var _get_slot_array: Callable
-var _get_player_ammo_component: Callable
-var _setup_weapon_ammo_components: Callable
-var _are_ammo_components_initialized: Callable
 var _set_is_auto_hitting: Callable
 var _on_weapon_ammo_changed: Callable
 var _on_weapon_ammo_depleted: Callable
@@ -28,10 +27,9 @@ func setup(
 	sound_controller: WeaponSoundController,
 	animation_player: AnimationPlayer,
 	bullet_raycast: RayCast3D,
+	player: Player,
+	slots: Array,
 	get_slot_array: Callable,
-	get_player_ammo_component: Callable,
-	setup_weapon_ammo_components: Callable,
-	are_ammo_components_initialized: Callable,
 	set_is_auto_hitting: Callable,
 	on_weapon_ammo_changed: Callable,
 	on_weapon_ammo_depleted: Callable,
@@ -45,11 +43,10 @@ func setup(
 	_sound_controller = sound_controller
 	_animation_player = animation_player
 	_bullet_raycast = bullet_raycast
+	_player = player
+	_slots = slots
 
 	_get_slot_array = get_slot_array
-	_get_player_ammo_component = get_player_ammo_component
-	_setup_weapon_ammo_components = setup_weapon_ammo_components
-	_are_ammo_components_initialized = are_ammo_components_initialized
 	_set_is_auto_hitting = set_is_auto_hitting
 	_on_weapon_ammo_changed = on_weapon_ammo_changed
 	_on_weapon_ammo_depleted = on_weapon_ammo_depleted
@@ -126,18 +123,7 @@ func _equip_from_slot(slot: Array) -> void:
 		_bullet_raycast.target_position.z = -1.2 if current_weapon.melee_attack else -1000.0
 	_sound_controller.set_hit_sound_stream(current_weapon)
 
-	var player_ammo_component: PlayerAmmoComponent = _get_player_ammo_component.call()
-	if player_ammo_component:
-		_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, _weapon_manager)
-
-	if _are_ammo_components_initialized.is_valid() and not _are_ammo_components_initialized.call():
-		if _setup_weapon_ammo_components.is_valid():
-			_setup_weapon_ammo_components.call()
-
-	if not current_weapon.ammo_component:
-		player_ammo_component = _get_player_ammo_component.call()
-		if player_ammo_component:
-			_ammo_controller.wire_weapon_manager(current_weapon, player_ammo_component, _weapon_manager)
+	_ammo_controller.ensure_weapon_wired(current_weapon, _slots, _player, _weapon_manager)
 
 	_ui_event_controller.connect_weapon_signals(
 		current_weapon,

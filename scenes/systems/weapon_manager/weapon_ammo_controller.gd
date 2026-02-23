@@ -1,6 +1,50 @@
 class_name WeaponAmmoController
 extends RefCounted
 
+var _ammo_components_initialized := false
+
+
+func _get_player_ammo_component(player: Player) -> PlayerAmmoComponent:
+	if not player:
+		return null
+
+	if player.ammo_component:
+		return player.ammo_component
+
+	return player.get_node_or_null("PlayerAmmoComponent")
+
+
+func initialize_slot_wiring(slots: Array, player: Player, manager: Node) -> bool:
+	var player_ammo_component := _get_player_ammo_component(player)
+	if not player_ammo_component:
+		push_warning("WeaponAmmoController: PlayerAmmoComponent not ready yet, will retry when equipping weapons")
+		_ammo_components_initialized = false
+		return false
+
+	initialize_slot_weapons(slots, player_ammo_component, manager)
+	_ammo_components_initialized = true
+	return true
+
+
+func ensure_weapon_wired(weapon: WeaponResource, slots: Array, player: Player, manager: Node) -> bool:
+	if not weapon:
+		return false
+
+	var player_ammo_component := _get_player_ammo_component(player)
+	if not player_ammo_component:
+		push_warning("WeaponAmmoController: PlayerAmmoComponent not ready yet, will retry when equipping weapons")
+		_ammo_components_initialized = false
+		return false
+
+	if not _ammo_components_initialized:
+		initialize_slot_weapons(slots, player_ammo_component, manager)
+		_ammo_components_initialized = true
+
+	if not weapon.ammo_component:
+		wire_weapon_manager(weapon, player_ammo_component, manager)
+
+	return weapon.ammo_component != null
+
 
 func wire_weapon_manager(weapon: WeaponResource, player_ammo_component: PlayerAmmoComponent, manager: Node) -> void:
 	if not weapon or not player_ammo_component:
@@ -20,7 +64,8 @@ func initialize_slot_weapons(slots: Array, player_ammo_component: PlayerAmmoComp
 			wire_weapon_manager(weapon, player_ammo_component, manager)
 
 
-func add_ammo_to_weapons(slots: Array, current_weapon: WeaponResource, player_ammo_component: PlayerAmmoComponent, amount: int, all_weapons: bool = false) -> bool:
+func add_ammo_to_weapons(slots: Array, current_weapon: WeaponResource, player: Player, amount: int, all_weapons: bool = false) -> bool:
+	var player_ammo_component := _get_player_ammo_component(player)
 	if not player_ammo_component:
 		return false
 

@@ -34,7 +34,9 @@ func _test_waypoint_priority() -> void:
 func _test_enemy_delegates_timing_policy() -> void:
 	print("\n--- Testing Enemy delegates timing policy ---")
 	var source: String = FileAccess.get_file_as_string("res://scenes/enemies/enemy.gd")
-	_assert("_path_timing_controller.compute_wait_time" in source, "enemy.gd should delegate wait-time policy to EnemyPathTimingController")
+	var runtime_source: String = FileAccess.get_file_as_string("res://scenes/components/enemy/enemy_runtime_coordinator.gd")
+	_assert("_runtime_coordinator.on_find_path_timer_timeout" in source, "enemy.gd should delegate path-timer orchestration to EnemyRuntimeCoordinator")
+	_assert("_path_timing_controller.compute_wait_time" in runtime_source, "EnemyRuntimeCoordinator should delegate wait-time policy to EnemyPathTimingController")
 	print("✓ enemy delegates timing policy")
 
 

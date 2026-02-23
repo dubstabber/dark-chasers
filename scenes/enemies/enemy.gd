@@ -1,6 +1,7 @@
 class_name Enemy extends CharacterBody3D
 
 const EnemyPathTimingControllerScript = preload("res://scenes/components/enemy/enemy_path_timing_controller.gd")
+const EnemyRuntimeCoordinatorScript = preload("res://scenes/components/enemy/enemy_runtime_coordinator.gd")
 
 @export var stats: EnemyStats ## Preferred: configure via resource for reusable enemy types
 @export var current_room: String
@@ -28,6 +29,7 @@ var _door_opener_component: EnemyDoorOpenerComponent
 var _kill_zone_component: EnemyKillZoneComponent
 var _motor_component: EnemyMotorComponent
 var _brain_component: EnemyBrain
+var _runtime_coordinator
 var _path_timing_controller := EnemyPathTimingControllerScript.new()
 var _enemy_context: Node
 
@@ -94,6 +96,7 @@ func _setup_components() -> void:
 	_setup_wandering_component()
 	_setup_transition_component()
 	_setup_disappear_zone_component()
+	_setup_runtime_coordinator()
 
 
 func _setup_transition_component() -> void:
@@ -106,6 +109,28 @@ func _setup_disappear_zone_component() -> void:
 		_sanitize_disappear_zones_export()
 		# Keep designer-facing export list as configuration, but make the component authoritative at runtime.
 		_disappear_zone_component.sync_with_enemy_zones(disappear_zones)
+
+
+func _setup_runtime_coordinator() -> void:
+	_runtime_coordinator = get_node_or_null("EnemyRuntimeCoordinator")
+	if not _runtime_coordinator:
+		_runtime_coordinator = EnemyRuntimeCoordinatorScript.new()
+		_runtime_coordinator.name = "EnemyRuntimeCoordinator"
+		add_child(_runtime_coordinator)
+
+	_runtime_coordinator.setup(
+		self,
+		_ai_component,
+		_motor_component,
+		_nav_component,
+		_wandering_component,
+		_disappear_zone_component,
+		_transition_component,
+		_path_timing_controller,
+		find_path_timer,
+		is_flying,
+		debug_prints
+	)
 
 
 func _sanitize_disappear_zones_export() -> void:
@@ -187,119 +212,33 @@ func get_health_component() -> HealthComponent:
 func _physics_process(delta):
 	if _brain_component and _brain_component.is_ability_active():
 		return
-	
-	_apply_gravity(delta)
-	
-	if not is_killed:
-		if _ai_component:
-			_ai_component.update_scanning(delta)
-		if current_target or not waypoints.is_empty():
-			_process_chase_movement(delta)
-		elif is_wandering:
-			_process_wandering_movement(delta)
-		else:
-			_stop_movement()
-	
-	_do_move_and_slide()
-	
-	if _disappear_zone_component:
-		_disappear_zone_component.update(delta)
 
-
-func _apply_gravity(delta: float) -> void:
-	_motor_component.apply_gravity(delta)
-
-
-func _process_chase_movement(delta: float) -> void:
-	# Use Mortal interface to check if target is dead
-	if current_target and Mortal.is_dead(current_target):
-		current_target = null
-		if _ai_component:
-			_ai_component.clear_target()
-		_stop_movement()
-		find_path_timer.wait_time = 0.1
-		return
-	
-	var next_pos = _get_next_path_position()
-	
-	# When navigation is finished but we still have a target, move directly toward it
-	# This ensures the enemy closes the final gap instead of stopping at nav distance
-	if current_target and _nav_component and _nav_component.is_navigation_finished():
-		next_pos = current_target.global_position
-	
-	_motor_component.move_toward_position(next_pos, delta)
-	direction = _motor_component.direction
-	
-	if is_on_floor() or is_flying:
-		_do_look_forward()
-
-
-func _process_wandering_movement(delta: float) -> void:
-	if _wandering_component:
-		_wandering_component.update(delta)
-		direction = _wandering_component.direction
-	
-	_motor_component.move_in_direction(direction, delta)
-	
-	if is_on_floor() or is_flying:
-		_do_look_forward()
-
-
-func _stop_movement() -> void:
-	_motor_component.stop()
-
-
-func _do_move_and_slide() -> void:
-	_motor_component.move_and_slide()
-
-
-func _do_look_forward() -> void:
-	_motor_component.look_forward()
-
-
-func _check_for_targets() -> void:
-	if _ai_component:
-		_ai_component.update_scanning(0.0)
+	if _runtime_coordinator:
+		_runtime_coordinator.process_physics(delta)
 
 
 func _on_target_acquired(target: Node3D) -> void:
-	current_target = target
-	makepath()
-	if debug_prints:
-		Services.utils.debug_log("Enemy: detected new target, immediately calculating path")
+	if _runtime_coordinator:
+		_runtime_coordinator.on_target_acquired(target)
 
 
 func _on_target_died() -> void:
-	current_target = null
-	velocity = Vector3.ZERO
-	find_path_timer.wait_time = 0.1
-
-
-func _get_next_path_position() -> Vector3:
-	if _nav_component:
-		return _nav_component.get_next_path_position()
-	push_warning("Enemy: No navigation component found")
-	return global_position
-
-
-func _set_nav_target(pos: Vector3) -> void:
-	if _nav_component:
-		_nav_component.set_target(pos)
-
-
-func _get_distance_to_target() -> float:
-	if _nav_component:
-		return _nav_component.distance_to_target()
-	return 0.0
+	if _runtime_coordinator:
+		_runtime_coordinator.on_target_died()
 
 
 func makepath() -> void:
 	if _transition_component:
 		_transition_component.makepath()
-	elif current_target:
-		_set_nav_target(current_target.global_position)
+		return
+
+	if not _nav_component:
+		return
+
+	if current_target:
+		_nav_component.set_target(current_target.global_position)
 	elif not waypoints.is_empty():
-		_set_nav_target(waypoints[0])
+		_nav_component.set_target(waypoints[0])
 
 
 func add_disappear_zone(area: Area3D) -> void:
@@ -318,9 +257,8 @@ func restart_pathfinding(delay: float = 0.1) -> void:
 
 
 func _on_find_path_timer_timeout():
-	var distance_to_target = _get_distance_to_target()
-	find_path_timer.wait_time = _path_timing_controller.compute_wait_time(distance_to_target, not waypoints.is_empty())
-	makepath()
+	if _runtime_coordinator:
+		_runtime_coordinator.on_find_path_timer_timeout()
 
 
 func _on_interaction_timer_timeout():
@@ -331,14 +269,8 @@ func _on_interaction_timer_timeout():
 
 
 func _on_navigation_agent_3d_target_reached():
-	# Delegate transition handling to component
-	if _transition_component and _transition_component.handle_target_reached():
-		return
-
-	if not waypoints.is_empty():
-		waypoints.pop_front()
-		if waypoints.is_empty():
-			_stop_movement()
+	if _runtime_coordinator:
+		_runtime_coordinator.on_navigation_target_reached()
 
 
 func _on_navigation_agent_3d_link_reached(details):

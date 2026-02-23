@@ -18,7 +18,7 @@ static func build(enemy: CharacterBody3D, ai_component: EnemyAIComponent = null,
 		ctx.has_target = true
 		ctx.target_position = ai_component.get_target_position()
 		ctx.distance_to_target = ctx.enemy_position.distance_to(ctx.target_position)
-		ctx.is_target_visible = ai_component.check_line_of_sight
+		ctx.is_target_visible = ai_component.is_target_visible()
 	else:
 		ctx.has_target = false
 		ctx.target_position = Vector3.ZERO

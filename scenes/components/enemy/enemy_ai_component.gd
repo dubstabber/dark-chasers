@@ -139,3 +139,30 @@ func get_target_position() -> Vector3:
 
 func has_target() -> bool:
 	return current_target != null
+
+
+func is_target_visible() -> bool:
+	if not current_target or not is_instance_valid(current_target):
+		return false
+
+	if not check_line_of_sight:
+		return true
+
+	if not _owner_enemy:
+		return false
+
+	var space_state = _owner_enemy.get_world_3d().direct_space_state
+	var params = PhysicsRayQueryParameters3D.new()
+	params.from = _get_line_of_sight_origin()
+	params.to = _get_aim_point(current_target)
+	params.exclude = [_owner_enemy]
+	params.collision_mask = _owner_enemy.collision_mask
+
+	var result = space_state.intersect_ray(params)
+	if not result:
+		return false
+
+	if result.collider == current_target:
+		return true
+
+	return result.collider != null and result.collider.is_in_group("player")

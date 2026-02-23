@@ -131,13 +131,19 @@ func test_weapon_manager_owns_ammo_wiring():
 	var script = load("res://scenes/systems/weapon_manager/weapon_manager.gd") as GDScript
 	var source = script.source_code
 	
-	# WeaponManager must have _setup_weapon_ammo_components
-	assert("func _setup_weapon_ammo_components" in source, "WeaponManager should have _setup_weapon_ammo_components")
-	# WeaponManager must delegate ammo wiring through the ammo controller
-	assert("_ammo_controller.wire_weapon_manager" in source, "WeaponManager should delegate weapon ammo wiring to WeaponAmmoController")
-	assert("_ammo_controller.initialize_slot_weapons" in source, "WeaponManager should initialize slot weapon ammo wiring via WeaponAmmoController")
+	# WeaponManager must delegate ammo wiring/retry ownership through the ammo controller
+	assert("_ammo_controller.initialize_slot_wiring" in source, "WeaponManager should initialize ammo wiring via WeaponAmmoController")
+	assert("_ammo_controller.ensure_weapon_wired" in source, "WeaponManager should delegate late ammo wiring to WeaponAmmoController")
+	assert("func _setup_weapon_ammo_components" not in source, "WeaponManager should not own ammo wiring helper methods after A.2")
 	
-	print("✓ WeaponManager is sole owner of ammo wiring")
+	# WeaponAmmoController should own retry and player ammo resolution semantics
+	var ammo_script = load("res://scenes/systems/weapon_manager/weapon_ammo_controller.gd") as GDScript
+	var ammo_source = ammo_script.source_code
+	assert("func _get_player_ammo_component" in ammo_source, "WeaponAmmoController should resolve PlayerAmmoComponent")
+	assert("func initialize_slot_wiring" in ammo_source, "WeaponAmmoController should own bulk ammo wiring initialization")
+	assert("func ensure_weapon_wired" in ammo_source, "WeaponAmmoController should own late weapon wiring retry path")
+
+	print("✓ WeaponAmmoController owns ammo wiring and retry semantics")
 
 
 func test_player_no_ammo_wiring():
@@ -146,7 +152,7 @@ func test_player_no_ammo_wiring():
 	var script = load("res://scenes/player/player.gd") as GDScript
 	var source = script.source_code
 	
-	# Player must NOT have _setup_weapon_ammo_components (moved to WeaponManager)
+	# Player must NOT have _setup_weapon_ammo_components (moved out of WeaponManager ownership)
 	assert("func _setup_weapon_ammo_components" not in source, "Player should NOT have _setup_weapon_ammo_components (WeaponManager owns this)")
 	
 	print("✓ Player has no ammo wiring (WeaponManager owns it)")

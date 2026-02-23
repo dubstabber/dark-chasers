@@ -32,7 +32,6 @@ var base_gun_position: Vector3 = Vector3.ZERO
 
 var is_auto_hitting := false
 var is_shooting := false # Tracks if a shooting/hit animation is playing
-var _ammo_components_initialized := false # Track if ammo components have been set up
 
 const BOB_IDLE_EPSILON_SQUARED := 0.0001
 
@@ -82,7 +81,7 @@ func _ready() -> void:
 	_sound_controller.setup(hit_sound_player, weapon_sound_player)
 	
 	# Initialize ammo component references for all weapons
-	_setup_weapon_ammo_components()
+	_ammo_controller.initialize_slot_wiring(slots, player, self)
 	
 	# Connect to player's weapon pickup signal
 	if player and WeaponReceiver.check(player):
@@ -107,10 +106,9 @@ func _configure_equip_controller() -> void:
 		_sound_controller,
 		animation_player,
 		bullet_raycast,
+		player,
+		slots,
 		Callable(self, "_get_slot_array"),
-		Callable(self, "_get_player_ammo_component"),
-		Callable(self, "_setup_weapon_ammo_components"),
-		Callable(self, "_are_ammo_components_initialized"),
 		Callable(self, "_set_is_auto_hitting"),
 		Callable(self, "_on_weapon_ammo_changed"),
 		Callable(self, "_on_weapon_ammo_depleted"),
@@ -119,43 +117,8 @@ func _configure_equip_controller() -> void:
 	)
 
 
-func _are_ammo_components_initialized() -> bool:
-	return _ammo_components_initialized
-
-
 func _set_is_auto_hitting(value: bool) -> void:
 	is_auto_hitting = value
-
-
-func _setup_weapon_ammo_components() -> void:
-	"""Initialize ammo component references for all weapons in all slots"""
-	var player_ammo_component = _get_player_ammo_component()
-	if not player_ammo_component:
-		Services.utils.debug_warning("WeaponManager: PlayerAmmoComponent not ready yet, will retry when equipping weapons")
-		_ammo_components_initialized = false
-		return
-	
-	# Set up ammo component reference for all weapons in all slots
-	_ammo_controller.initialize_slot_weapons(slots, player_ammo_component, self)
-	
-	_ammo_components_initialized = true
-
-
-func _get_player_ammo_component() -> PlayerAmmoComponent:
-	"""Get the player's ammo component with robust detection
-	
-	Returns:
-		PlayerAmmoComponent: The player's ammo component, or null if not found
-	"""
-	if not player:
-		return null
-	
-	# Player class has typed ammo_component property
-	if player.ammo_component:
-		return player.ammo_component
-	
-	# Fallback: try to find ammo component as a child node
-	return player.get_node_or_null("PlayerAmmoComponent")
 
 
 func _process(delta: float) -> void:
@@ -241,9 +204,7 @@ func _on_weapon_added(new_weapon: WeaponResource) -> void:
 		return
 	
 	# Set up ammo component reference for the new weapon
-	var player_ammo_component = _get_player_ammo_component()
-	if player_ammo_component:
-		_ammo_controller.wire_weapon_manager(new_weapon, player_ammo_component, self)
+	_ammo_controller.ensure_weapon_wired(new_weapon, slots, player, self)
 	
 	var slot_index: int = clamp(new_weapon.slot, 1, 9)
 	var slot_array: Array = _get_slot_array(slot_index)
@@ -403,7 +364,7 @@ func add_ammo_to_weapons(amount: int, all_weapons: bool = false) -> bool:
 	return _ammo_controller.add_ammo_to_weapons(
 		slots,
 		current_weapon,
-		_get_player_ammo_component(),
+		player,
 		amount,
 		all_weapons
 	)

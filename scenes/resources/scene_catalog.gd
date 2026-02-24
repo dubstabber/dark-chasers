@@ -14,3 +14,10 @@ extends Resource
 @export var ilopulu_scene: PackedScene
 @export var whiteface_scene: PackedScene
 @export var image_enemy_scene: PackedScene
+
+@export_group("Map Scenes")
+@export var mansion_1_scene: PackedScene
+@export var room_1_scene: PackedScene
+
+@export_group("Menu Scenes")
+@export var main_menu_scene: PackedScene

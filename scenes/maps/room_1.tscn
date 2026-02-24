@@ -697,11 +697,11 @@ omni_range = 176.654
 
 [node name="Teleport" parent="." instance=ExtResource("3_6e2tk")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 39.661, 1.74775, 92.5288)
-level_name = "res://scenes/rooms/fdm_backrooms.tscn"
+level_name = "res://scenes/maps/fdm_backrooms.tscn"
 
 [node name="Teleport2" parent="." instance=ExtResource("3_6e2tk")]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -39.2033, 1.74775, 92.5288)
-level_name = "res://scenes/rooms/mansion_1.tscn"
+level_name = "res://scenes/maps/mansion_1/mansion_1.tscn"
 
 [node name="Players" type="Node3D" parent="."]
 unique_name_in_owner = true

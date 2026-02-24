@@ -19,7 +19,7 @@ func _on_body_entered(body: Node3D) -> void:
 			Services.level_manager.request_level_transition(level_name, {
 				"spawn_id": target_spawn_id,
 				"from_teleport": get_path(),
-				"body": body
+				"triggering_body_name": body.name
 			})
 		else:
 			push_warning("Teleport: Services.level_manager not available; cannot transition to %s" % level_name)

@@ -266,7 +266,24 @@ func _on_area_underground_secret_info(_event: RefCounted) -> void:
 
 
 func _on_area_change_to_next_map(_event: RefCounted) -> void:
-	Services.utils.debug_log("Mansion1: change to next map")
+	var catalog: SceneCatalog = null
+	if Services:
+		catalog = Services.get_scene_catalog()
+	if not (Services and Services.level_manager):
+		push_warning("Mansion1: Services.level_manager not available; cannot transition to next map")
+		return
+
+	var context := {
+		"from_map": "mansion_1",
+		"reason": "area_change_to_next_map"
+	}
+
+	if catalog and catalog.room_1_scene and Services.level_manager.has_method("request_level_transition_scene"):
+		Services.level_manager.request_level_transition_scene(catalog.room_1_scene, context)
+		return
+
+	# Fallback to raw path (legacy).
+	Services.level_manager.request_level_transition("res://scenes/maps/room_1.tscn", context)
 
 
 func _on_area_kill_player(event: RefCounted) -> void:

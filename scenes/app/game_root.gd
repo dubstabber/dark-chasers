@@ -28,16 +28,27 @@ func _ready() -> void:
 
 
 func _select_startup_scene() -> PackedScene:
+	var catalog: SceneCatalog = null
+	if Services:
+		catalog = Services.get_scene_catalog()
+
+	# Prefer catalog wiring when present.
+	if catalog:
+		if skip_main_menu_for_dev and catalog.mansion_1_scene:
+			return catalog.mansion_1_scene
+		if (not skip_main_menu_for_dev) and catalog.main_menu_scene:
+			return catalog.main_menu_scene
+		if catalog.mansion_1_scene:
+			return catalog.mansion_1_scene
+
+	# Fallback to explicit scene exports on GameRoot.
 	if skip_main_menu_for_dev:
 		return default_game_scene
-
 	if main_menu_scene:
 		return main_menu_scene
-
 	if default_game_scene:
 		push_warning("GameRoot: main_menu_scene is not set. Falling back to default_game_scene.")
 		return default_game_scene
-
 	return null
 
 
@@ -47,6 +58,7 @@ func _load_scene_into_level_host(scene: PackedScene) -> void:
 		return
 
 	for child in level_host.get_children():
+		level_host.remove_child(child)
 		child.queue_free()
 
 	var scene_instance := scene.instantiate()
@@ -68,6 +80,11 @@ func _register_level_host_with_level_manager() -> void:
 func _request_startup_transition(scene: PackedScene) -> Error:
 	if not (Services and Services.level_manager):
 		return ERR_UNAVAILABLE
+
+	if Services.level_manager.has_method("request_level_transition_scene"):
+		return Services.level_manager.request_level_transition_scene(scene, {
+			"startup": true
+		})
 
 	if not Services.level_manager.has_method("request_level_transition"):
 		return ERR_UNAVAILABLE

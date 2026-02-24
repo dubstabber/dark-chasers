@@ -3,6 +3,10 @@ class_name Level extends Node3D
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
 
+# Transition spawn handoff (used once on initial spawn after a level transition)
+var _initial_spawn_id: StringName = &""
+var _initial_spawn_consumed: bool = false
+
 @onready var hud = $HUD
 @onready var transitions = get_node_or_null("%Transitions")
 @onready var player_spawners = get_node_or_null("%PlayerSpawners")
@@ -36,6 +40,8 @@ func _ready():
 				if m.is_in_group("manual_spawn_point"):
 					t.connect("body_entered", _on_transition_entered.bind(m))
 					t.connect("body_exited", _on_transition_exited)
+
+	_capture_initial_transition_context()
 
 
 func _exit_tree():
@@ -193,4 +199,60 @@ func respawn(player: CharacterBody3D) -> void:
 	
 	Default implementation places the player at a random spawner position.
 	"""
-	player.position = player_spawners.get_children().pick_random().global_position
+	if not _initial_spawn_consumed:
+		_initial_spawn_consumed = true
+		if _initial_spawn_id != &"":
+			var marker := _find_player_spawn_marker(_initial_spawn_id)
+			if marker:
+				player.position = marker.global_position
+				return
+			push_warning("Level: spawn_id '%s' not found in PlayerSpawners for %s" % [String(_initial_spawn_id), scene_file_path])
+
+	if player_spawners:
+		player.position = player_spawners.get_children().pick_random().global_position
+		return
+
+	push_warning("Level: No %PlayerSpawners found; cannot respawn player")
+
+
+func _capture_initial_transition_context() -> void:
+	if not (Services and Services.level_manager):
+		return
+
+	var req: Dictionary = Services.level_manager.get_last_transition_request()
+	var req_scene_path: String = req.get("scene_path", "")
+	# Only accept spawn context that targets this level.
+	if req_scene_path != "" and req_scene_path != scene_file_path:
+		return
+
+	var ctx: Dictionary = req.get("context", {})
+	var spawn_var: Variant = ctx.get("spawn_id", null)
+	if spawn_var is StringName:
+		_initial_spawn_id = spawn_var
+	elif spawn_var is String and spawn_var != "":
+		_initial_spawn_id = StringName(spawn_var)
+
+
+func _find_player_spawn_marker(spawn_id: StringName) -> Node3D:
+	if not player_spawners:
+		return null
+
+	var wanted := String(spawn_id)
+	var queue: Array[Node] = [player_spawners]
+	while not queue.is_empty():
+		var node := queue.pop_front() as Node
+		for child in node.get_children():
+			queue.append(child)
+			if not (child is Node3D):
+				continue
+
+			# Prefer explicit metadata if present.
+			if child.has_meta("spawn_id"):
+				var meta_val: Variant = child.get_meta("spawn_id")
+				if String(meta_val) == wanted:
+					return child
+			# Fallback to node name match.
+			if String(child.name) == wanted:
+				return child
+
+	return null

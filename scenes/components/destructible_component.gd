@@ -38,7 +38,10 @@ func _destroy() -> void:
 			count = definition.count_variation.pick_random()
 
 		for i in count:
-			var scrap = catalog.scrap_scene.instantiate()
+			var scrap_scene := catalog.get_scrap_scene()
+			if scrap_scene == null:
+				continue
+			var scrap = scrap_scene.instantiate()
 			parent.get_parent().add_child(scrap)
 			scrap.set_scrap_type(definition.scrap_type)
 			scrap.position = parent.global_position + definition.position_offset

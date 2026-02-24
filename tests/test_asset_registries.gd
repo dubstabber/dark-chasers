@@ -22,11 +22,12 @@ func test_particle_catalog_exists():
 	assert(catalog != null, "ParticleCatalog should load")
 	
 	# Verify arrays are populated
-	assert(catalog.small_wood_images.size() > 0, "small_wood_images should have entries")
-	assert(catalog.big_wood_images.size() > 0, "big_wood_images should have entries")
-	assert(catalog.paper_scrap_images.size() > 0, "paper_scrap_images should have entries")
-	assert(catalog.glass_scrap_images.size() > 0, "glass_scrap_images should have entries")
-	assert(catalog.doom_decal_images.size() > 0, "doom_decal_images should have entries")
+	assert(catalog.get_textures(&"small_wood").size() > 0, "small_wood textures should have entries")
+	assert(catalog.get_textures(&"big_wood").size() > 0, "big_wood textures should have entries")
+	assert(catalog.get_textures(&"paper").size() > 0, "paper textures should have entries")
+	assert(catalog.get_textures(&"glass").size() > 0, "glass textures should have entries")
+	assert(catalog.get_textures(&"doom_decal").size() > 0, "doom_decal textures should have entries")
+	assert(catalog.get_scrap_scene() != null, "scrap scene should be present")
 	
 	print("✓ ParticleCatalog exists and has populated arrays")
 

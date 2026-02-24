@@ -3,7 +3,7 @@ extends Decal
 ## This decal is spawned when an enemy is shot and there's a wall behind them.
 ## The color can be customized per-enemy (e.g., blue for AoOni, red for normal enemies).
 
-const DEFAULT_BLOOD_SPLAT_WEIGHTS := [2, 1, 5, 5, 5, 5, 6]
+const DEFAULT_BLOOD_SPLAT_WEIGHTS: Array[int] = [2, 1, 5, 5, 5, 5, 6]
 
 var _selected_texture: Texture2D
 var _pending_color: Color = Color(-1, -1, -1, -1)
@@ -28,32 +28,9 @@ func _ready() -> void:
 
 func _get_weighted_random_splat() -> Texture2D:
 	## Select a blood splat image using weighted random selection.
-	if not _catalog or _catalog.blood_splat_images.is_empty():
+	if not _catalog:
 		return null
-
-	var splat_images := _catalog.blood_splat_images
-	var weights := _catalog.blood_splat_weights if _catalog.blood_splat_weights.size() == splat_images.size() else DEFAULT_BLOOD_SPLAT_WEIGHTS
-	if weights.size() != splat_images.size():
-		weights = []
-		for _i in range(splat_images.size()):
-			weights.append(1)
-
-	var total_weight := 0
-	for weight in weights:
-		total_weight += weight
-	
-	if total_weight <= 0:
-		return splat_images[0]
-
-	var random_value := randi() % total_weight
-	var cumulative := 0
-	
-	for i in range(weights.size()):
-		cumulative += weights[i]
-		if random_value < cumulative:
-			return splat_images[i]
-	
-	return splat_images[0]
+	return _catalog.get_weighted_random_texture(&"blood_splat", DEFAULT_BLOOD_SPLAT_WEIGHTS)
 
 
 func set_blood_color(color: Color) -> void:

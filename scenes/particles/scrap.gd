@@ -67,23 +67,23 @@ func _configure_process_behavior() -> void:
 
 	match scrap_type:
 		"small wood scrap":
-			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.small_wood_images)
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.get_textures(&"small_wood"))
 		"big wood scrap":
-			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.big_wood_images)
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.get_textures(&"big_wood"))
 		"white scrap":
-			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.white_scrap_images)
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.get_textures(&"white"))
 		"pot scrap":
-			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.pot_scrap_images)
+			_process_scrap_behavior = _process_animated_scrap.bind(_catalog.get_textures(&"pot"))
 		"circle ground scrap":
-			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.circle_ground_scrap_image, 0.01)
+			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.get_first_texture(&"circle_ground"), 0.01)
 		"small ground scrap":
-			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.small_ground_scrap_image, 0.01)
+			_process_scrap_behavior = _process_ground_scrap.bind(_catalog.get_first_texture(&"small_ground"), 0.01)
 		"grass scrap":
-			_process_scrap_behavior = _process_random_scrap.bind(_catalog.grass_scrap_images, 0.05, false)
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.get_textures(&"grass"), 0.05, false)
 		"paper scrap":
-			_process_scrap_behavior = _process_random_scrap.bind(_catalog.paper_scrap_images, 0.05, true)
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.get_textures(&"paper"), 0.05, true)
 		"glass scrap":
-			_process_scrap_behavior = _process_random_scrap.bind(_catalog.glass_scrap_images, 0.05, true)
+			_process_scrap_behavior = _process_random_scrap.bind(_catalog.get_textures(&"glass"), 0.05, true)
 		_:
 			_process_scrap_behavior = Callable()
 
@@ -129,30 +129,51 @@ func _initialize_texture():
 	if sprite_3d and scrap_type:
 		match scrap_type:
 			"small wood scrap":
-				current_texture_index = randi() % _catalog.small_wood_images.size()
-				sprite_3d.texture = _catalog.small_wood_images[current_texture_index]
+				var textures := _catalog.get_textures(&"small_wood")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"big wood scrap":
-				current_texture_index = randi() % _catalog.big_wood_images.size()
-				sprite_3d.texture = _catalog.big_wood_images[current_texture_index]
+				var textures := _catalog.get_textures(&"big_wood")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"white scrap":
-				current_texture_index = randi() % _catalog.white_scrap_images.size()
-				sprite_3d.texture = _catalog.white_scrap_images[current_texture_index]
+				var textures := _catalog.get_textures(&"white")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"pot scrap":
-				current_texture_index = randi() % _catalog.pot_scrap_images.size()
-				sprite_3d.texture = _catalog.pot_scrap_images[current_texture_index]
+				var textures := _catalog.get_textures(&"pot")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"circle ground scrap":
-				sprite_3d.texture = _catalog.circle_ground_scrap_image
+				sprite_3d.texture = _catalog.get_first_texture(&"circle_ground")
 			"small ground scrap":
-				sprite_3d.texture = _catalog.small_ground_scrap_image
+				sprite_3d.texture = _catalog.get_first_texture(&"small_ground")
 			"grass scrap":
-				current_texture_index = randi() % _catalog.grass_scrap_images.size()
-				sprite_3d.texture = _catalog.grass_scrap_images[current_texture_index]
+				var textures := _catalog.get_textures(&"grass")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"paper scrap":
-				current_texture_index = randi() % _catalog.paper_scrap_images.size()
-				sprite_3d.texture = _catalog.paper_scrap_images[current_texture_index]
+				var textures := _catalog.get_textures(&"paper")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 			"glass scrap":
-				current_texture_index = randi() % _catalog.glass_scrap_images.size()
-				sprite_3d.texture = _catalog.glass_scrap_images[current_texture_index]
+				var textures := _catalog.get_textures(&"glass")
+				if textures.is_empty():
+					return
+				current_texture_index = randi() % textures.size()
+				sprite_3d.texture = textures[current_texture_index]
 
 func _handle_scrap_animation(texture_array: Array):
 	var velocity_threshold = 0.06

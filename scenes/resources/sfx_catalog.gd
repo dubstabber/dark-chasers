@@ -5,20 +5,37 @@ extends Resource
 ## Resource-based catalog for game sound effects.
 ## Decouples sound playback from hardcoded res:// paths in Preloads.
 
-@export_group("Item Sounds")
-@export var key_collected: AudioStream
-@export var water_splash: AudioStream
+@export var sounds: Array[SfxEntry] = []
 
-@export_group("Combat Sounds")
-@export var kill_player: AudioStream
+var _sounds_by_id: Dictionary[StringName, AudioStream] = {}
+var _cache_valid := false
 
-@export_group("Event Sounds")
-@export var event_trigger: AudioStream
-@export var spawn: AudioStream
-@export var bar_shake: AudioStream
-@export var wall_cut: AudioStream
 
-@export_group("Music/Ambience")
-@export var creep_ambience: AudioStream
-@export var ao_see: AudioStream
-@export var d_running: AudioStream
+func _init() -> void:
+	changed.connect(_invalidate_cache)
+
+
+func _invalidate_cache() -> void:
+	_cache_valid = false
+
+
+func _ensure_cache() -> void:
+	if _cache_valid:
+		return
+
+	_sounds_by_id.clear()
+	for entry in sounds:
+		if entry == null:
+			continue
+		if entry.id == &"":
+			continue
+		if _sounds_by_id.has(entry.id):
+			push_warning("SfxCatalog: Duplicate sound id '%s'" % String(entry.id))
+		_sounds_by_id[entry.id] = entry.stream
+
+	_cache_valid = true
+
+
+func get_sound(id: StringName) -> AudioStream:
+	_ensure_cache()
+	return _sounds_by_id[id] if _sounds_by_id.has(id) else null

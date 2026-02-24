@@ -100,7 +100,7 @@ func _on_area_monster_crawls_library(_event: RefCounted) -> void:
 	seq.camera_restore()
 	seq.unblock_players()
 	seq.show_text("[color=#6c6c6c]You:[/color] What the eff was that!?", 3.0)
-	seq.play_music(Services.get_sfx_catalog().creep_ambience, -5.0)
+	seq.play_music(Services.get_sfx_catalog().get_sound(&"creep_ambience"), -5.0)
 	Services.sequence_director.play_sequence(seq)
 
 
@@ -163,7 +163,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
 		music.volume_db = -5
 		music.play()
 		aooni.tree_exited.connect(music.stop)
@@ -182,7 +182,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
 		music.volume_db = -5
 		music.play()
 
@@ -203,7 +203,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 func _on_area_spawn_ilopulu(event: RefCounted) -> void:
 	var body = event.get_body()
 	var seq = SequenceData.create(&"spawn_ilopulu")
-	seq.play_music(Services.get_sfx_catalog().event_trigger)
+	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger"))
 	seq.wait(1.0)
 	seq.custom(_spawn_ilopulu.bind(body))
 	Services.sequence_director.play_sequence(seq)
@@ -241,7 +241,7 @@ func _on_area_open_ao_mika_wardrobe(_event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
 		music.volume_db = -5
 		music.play()
 

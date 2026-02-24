@@ -39,7 +39,7 @@ func _ready():
 		_auto_discover_hud()
 
 	if health_component:
-		health_component.death_sound = Services.get_sfx_catalog().kill_player
+		health_component.death_sound = Services.get_sfx_catalog().get_sound(&"kill_player")
 
 	if armor_component:
 		armor_component.max_armor = 100

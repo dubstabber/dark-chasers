@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="SfxCatalog" load_steps=12 format=3 uid="uid://sfx_catalog"]
+[gd_resource type="Resource" script_class="SfxCatalog" load_steps=23 format=3 uid="uid://sfx_catalog"]
 
 [ext_resource type="Script" path="res://scenes/resources/sfx_catalog.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/resources/sfx_entry.gd" id="12_entry_script"]
 [ext_resource type="AudioStream" path="res://sounds/sfx/DSKEYPIC.wav" id="2_key_collected"]
 [ext_resource type="AudioStream" path="res://sounds/sfx/footsteps/water/DSSPLSML.wav" id="3_water_splash"]
 [ext_resource type="AudioStream" path="res://sounds/sfx/DSSLOP.wav" id="4_kill_player"]
@@ -12,15 +13,56 @@
 [ext_resource type="AudioStream" path="res://sounds/music/AOSEE.wav" id="10_ao_see"]
 [ext_resource type="AudioStream" path="res://sounds/music/D_RUNNIN.ogg" id="11_d_running"]
 
+[sub_resource type="Resource" id="Resource_key_collected"]
+script = ExtResource("12_entry_script")
+id = &"key_collected"
+stream = ExtResource("2_key_collected")
+
+[sub_resource type="Resource" id="Resource_water_splash"]
+script = ExtResource("12_entry_script")
+id = &"water_splash"
+stream = ExtResource("3_water_splash")
+
+[sub_resource type="Resource" id="Resource_kill_player"]
+script = ExtResource("12_entry_script")
+id = &"kill_player"
+stream = ExtResource("4_kill_player")
+
+[sub_resource type="Resource" id="Resource_event_trigger"]
+script = ExtResource("12_entry_script")
+id = &"event_trigger"
+stream = ExtResource("5_event_trigger")
+
+[sub_resource type="Resource" id="Resource_spawn"]
+script = ExtResource("12_entry_script")
+id = &"spawn"
+stream = ExtResource("6_spawn")
+
+[sub_resource type="Resource" id="Resource_bar_shake"]
+script = ExtResource("12_entry_script")
+id = &"bar_shake"
+stream = ExtResource("7_bar_shake")
+
+[sub_resource type="Resource" id="Resource_wall_cut"]
+script = ExtResource("12_entry_script")
+id = &"wall_cut"
+stream = ExtResource("8_wall_cut")
+
+[sub_resource type="Resource" id="Resource_creep_ambience"]
+script = ExtResource("12_entry_script")
+id = &"creep_ambience"
+stream = ExtResource("9_creep_ambience")
+
+[sub_resource type="Resource" id="Resource_ao_see"]
+script = ExtResource("12_entry_script")
+id = &"ao_see"
+stream = ExtResource("10_ao_see")
+
+[sub_resource type="Resource" id="Resource_d_running"]
+script = ExtResource("12_entry_script")
+id = &"d_running"
+stream = ExtResource("11_d_running")
+
 [resource]
 script = ExtResource("1_script")
-key_collected = ExtResource("2_key_collected")
-water_splash = ExtResource("3_water_splash")
-kill_player = ExtResource("4_kill_player")
-event_trigger = ExtResource("5_event_trigger")
-spawn = ExtResource("6_spawn")
-bar_shake = ExtResource("7_bar_shake")
-wall_cut = ExtResource("8_wall_cut")
-creep_ambience = ExtResource("9_creep_ambience")
-ao_see = ExtResource("10_ao_see")
-d_running = ExtResource("11_d_running")
+sounds = Array[ExtResource("12_entry_script")]([SubResource("Resource_key_collected"), SubResource("Resource_water_splash"), SubResource("Resource_kill_player"), SubResource("Resource_event_trigger"), SubResource("Resource_spawn"), SubResource("Resource_bar_shake"), SubResource("Resource_wall_cut"), SubResource("Resource_creep_ambience"), SubResource("Resource_ao_see"), SubResource("Resource_d_running")])

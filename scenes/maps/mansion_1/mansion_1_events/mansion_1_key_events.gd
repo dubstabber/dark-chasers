@@ -101,7 +101,7 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 
 	var music := _music()
 	if music:
-		music.stream = Services.get_sfx_catalog().ao_see
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
 		music.volume_db = -5
 		music.play()
 		aooni.tree_exited.connect(music.stop)
@@ -172,7 +172,7 @@ func _spawn_bars_aooni() -> void:
 
 func _play_bar_shake() -> void:
 	if is_instance_valid(_bars_aooni):
-		Services.utils.play_sound(Services.get_sfx_catalog().bar_shake, _bars_aooni)
+		Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"bar_shake"), _bars_aooni)
 
 
 func _bars_aooni_give_up() -> void:

@@ -39,5 +39,5 @@ func _on_body_entered(body):
 			"message": message_text
 		}, self)
 
-		Services.utils.play_sound(Services.get_sfx_catalog().key_collected, body)
+		Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"key_collected"), body)
 		queue_free()

@@ -6,6 +6,7 @@ var _failed := false
 func _ready() -> void:
 	print("=== LEVEL SWITCHING BOOTSTRAP TESTS ===")
 	_test_startup_scene_selection_uses_scene_catalog()
+	_test_teleport_resolves_destination_via_scene_catalog()
 	_test_transition_context_sanitization_strips_objects()
 	await _test_spawn_handoff_uses_spawn_id_once()
 	await _test_mansion_next_map_transitions_to_room_1()
@@ -29,6 +30,23 @@ func _test_startup_scene_selection_uses_scene_catalog() -> void:
 	else:
 		_assert(game_root._select_startup_scene() == catalog.mansion_1_scene, "Non-skip startup should fall back to mansion_1 when no menu scene is set")
 	print("✓ Startup scene selection uses SceneCatalog")
+
+
+func _test_teleport_resolves_destination_via_scene_catalog() -> void:
+	print("\n--- Testing teleport catalog destination resolution ---")
+	var catalog: SceneCatalog = Services.get_scene_catalog()
+	_assert(catalog != null, "Services.get_scene_catalog() should return a catalog")
+	_assert(catalog.fdm_backrooms_scene != null, "SceneCatalog.fdm_backrooms_scene should be assigned")
+
+	var tp_scene := load("res://scenes/objects/teleport.tscn") as PackedScene
+	_assert(tp_scene != null, "Teleport scene should load")
+	var tp := tp_scene.instantiate() as Area3D
+	_assert(tp != null, "Teleport scene should instantiate")
+	tp.set("destination_catalog_key", &"fdm_backrooms_scene")
+	var resolved := tp.call("_resolve_destination_scene") as PackedScene
+	_assert(resolved == catalog.fdm_backrooms_scene, "Teleport should resolve destination from SceneCatalog using destination_catalog_key")
+	tp.queue_free()
+	print("✓ Teleport resolves destination via SceneCatalog")
 
 
 func _test_transition_context_sanitization_strips_objects() -> void:

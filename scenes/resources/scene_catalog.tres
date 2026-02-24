@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SceneCatalog" load_steps=9 format=3 uid="uid://scene_catalog"]
+[gd_resource type="Resource" script_class="SceneCatalog" load_steps=10 format=3 uid="uid://scene_catalog"]
 
 [ext_resource type="Script" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/image_enemy.tscn" id="7_image_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/maps/mansion_1/mansion_1.tscn" id="8_mansion_1"]
 [ext_resource type="PackedScene" path="res://scenes/maps/room_1.tscn" id="9_room_1"]
+[ext_resource type="PackedScene" path="res://scenes/maps/fdm_backrooms.tscn" id="10_fdm_backrooms"]
 
 [resource]
 script = ExtResource("1_script")
@@ -20,3 +21,4 @@ whiteface_scene = ExtResource("6_whiteface")
 image_enemy_scene = ExtResource("7_image_enemy")
 mansion_1_scene = ExtResource("8_mansion_1")
 room_1_scene = ExtResource("9_room_1")
+fdm_backrooms_scene = ExtResource("10_fdm_backrooms")

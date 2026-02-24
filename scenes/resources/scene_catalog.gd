@@ -18,6 +18,7 @@ extends Resource
 @export_group("Map Scenes")
 @export var mansion_1_scene: PackedScene
 @export var room_1_scene: PackedScene
+@export var fdm_backrooms_scene: PackedScene
 
 @export_group("Menu Scenes")
 @export var main_menu_scene: PackedScene

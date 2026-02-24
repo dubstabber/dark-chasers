@@ -14,7 +14,7 @@ func _exit_tree():
 
 
 func spawn_player():
-	var player = Services.get_scene_catalog().player_scene.instantiate() as Player
+	var player = Services.get_scene_catalog().get_player_scene().instantiate() as Player
 	players.add_child(player)
 	# player.blocked_movement = true
 	setup_player(player) # Centralized HUD connection via Level base class

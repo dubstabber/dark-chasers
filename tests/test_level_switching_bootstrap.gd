@@ -18,17 +18,19 @@ func _test_startup_scene_selection_uses_scene_catalog() -> void:
 	print("\n--- Testing startup scene selection ---")
 	var catalog: SceneCatalog = Services.get_scene_catalog()
 	_assert(catalog != null, "Services.get_scene_catalog() should return a catalog")
-	_assert(catalog.mansion_1_scene != null, "SceneCatalog.mansion_1_scene should be assigned")
+	var mansion_1 := catalog.get_map_scene(&"mansion_1")
+	_assert(mansion_1 != null, "SceneCatalog should contain map id 'mansion_1'")
 
 	var game_root := GameRoot.new()
 	game_root.skip_main_menu_for_dev = true
-	_assert(game_root._select_startup_scene() == catalog.mansion_1_scene, "Skip-menu startup should select mansion_1 from catalog")
+	_assert(game_root._select_startup_scene() == mansion_1, "Skip-menu startup should select mansion_1 from catalog")
 
 	game_root.skip_main_menu_for_dev = false
-	if catalog.main_menu_scene:
-		_assert(game_root._select_startup_scene() == catalog.main_menu_scene, "Non-skip startup should select main_menu_scene when configured")
+	var main_menu := catalog.get_main_menu_scene()
+	if main_menu:
+		_assert(game_root._select_startup_scene() == main_menu, "Non-skip startup should select main_menu when configured")
 	else:
-		_assert(game_root._select_startup_scene() == catalog.mansion_1_scene, "Non-skip startup should fall back to mansion_1 when no menu scene is set")
+		_assert(game_root._select_startup_scene() == mansion_1, "Non-skip startup should fall back to mansion_1 when no menu scene is set")
 	print("✓ Startup scene selection uses SceneCatalog")
 
 
@@ -36,7 +38,8 @@ func _test_teleport_resolves_destination_via_scene_catalog() -> void:
 	print("\n--- Testing teleport catalog destination resolution ---")
 	var catalog: SceneCatalog = Services.get_scene_catalog()
 	_assert(catalog != null, "Services.get_scene_catalog() should return a catalog")
-	_assert(catalog.fdm_backrooms_scene != null, "SceneCatalog.fdm_backrooms_scene should be assigned")
+	var fdm_backrooms := catalog.get_map_scene(&"fdm_backrooms")
+	_assert(fdm_backrooms != null, "SceneCatalog should contain map id 'fdm_backrooms'")
 
 	var tp_scene := load("res://scenes/objects/teleport.tscn") as PackedScene
 	_assert(tp_scene != null, "Teleport scene should load")
@@ -44,7 +47,7 @@ func _test_teleport_resolves_destination_via_scene_catalog() -> void:
 	_assert(tp != null, "Teleport scene should instantiate")
 	tp.set("destination_catalog_key", &"fdm_backrooms_scene")
 	var resolved := tp.call("_resolve_destination_scene") as PackedScene
-	_assert(resolved == catalog.fdm_backrooms_scene, "Teleport should resolve destination from SceneCatalog using destination_catalog_key")
+	_assert(resolved == fdm_backrooms, "Teleport should resolve destination from SceneCatalog using destination_catalog_key")
 	tp.queue_free()
 	print("✓ Teleport resolves destination via SceneCatalog")
 

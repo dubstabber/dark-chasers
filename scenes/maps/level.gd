@@ -188,7 +188,7 @@ func spawn_player() -> void:
 	adds it to the players node, and respawns at a random spawner.
 	Subclasses like mansion_1 override this for custom intro sequences.
 	"""
-	var player = Services.get_scene_catalog().player_scene.instantiate() as Player
+	var player = Services.get_scene_catalog().get_player_scene().instantiate() as Player
 	players.add_child(player)
 	setup_player(player)
 	respawn(player)

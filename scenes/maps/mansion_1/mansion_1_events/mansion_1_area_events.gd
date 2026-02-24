@@ -110,7 +110,7 @@ func _spawn_crawling_aooni() -> void:
 	if not (level and enemies):
 		return
 
-	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().get_enemy_scene(&"aooni").instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(library_camera_spawn)
@@ -142,7 +142,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 	if piano_button_node and piano_button_node.is_pressed:
 		return
 
-	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().get_enemy_scene(&"aooni").instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(piano_spawn)
@@ -215,7 +215,7 @@ func _spawn_ilopulu(target: Node) -> void:
 	if not (level and enemies):
 		return
 
-	var ilopulu = Services.get_scene_catalog().ilopulu_scene.instantiate()
+	var ilopulu = Services.get_scene_catalog().get_enemy_scene(&"ilopulu").instantiate()
 	enemies.add_child(ilopulu)
 
 	var spawn_node = level.get_node_or_null(ilopulu_spawn)
@@ -272,18 +272,23 @@ func _on_area_change_to_next_map(_event: RefCounted) -> void:
 	if not (Services and Services.level_manager):
 		push_warning("Mansion1: Services.level_manager not available; cannot transition to next map")
 		return
+	var lm := Services.level_manager as LevelManager
+	if lm == null:
+		push_warning("Mansion1: Services.level_manager is not a LevelManager")
+		return
 
 	var context := {
 		"from_map": "mansion_1",
 		"reason": "area_change_to_next_map"
 	}
 
-	if catalog and catalog.room_1_scene and Services.level_manager.has_method("request_level_transition_scene"):
-		Services.level_manager.request_level_transition_scene(catalog.room_1_scene, context)
+	var room_1_scene := catalog.get_map_scene(&"room_1") if catalog else null
+	if room_1_scene:
+		lm.request_level_transition_scene(room_1_scene, context)
 		return
 
 	# Fallback to raw path (legacy).
-	Services.level_manager.request_level_transition("res://scenes/maps/room_1.tscn", context)
+	lm.request_level_transition("res://scenes/maps/room_1.tscn", context)
 
 
 func _on_area_kill_player(event: RefCounted) -> void:

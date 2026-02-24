@@ -2,7 +2,9 @@ extends Area3D
 
 ## Deprecated: raw res:// path. Prefer destination_catalog_key.
 @export var level_name: String
-## SceneCatalog property name to use as destination (e.g. &"room_1_scene", &"mansion_1_scene").
+## SceneCatalog key to use as destination.
+## Supports both ids (e.g. &"room_1") and legacy keys from the old export-var era
+## (e.g. &"room_1_scene").
 @export var destination_catalog_key: StringName = &""
 @export var target_spawn_id: StringName = &""
 
@@ -22,6 +24,10 @@ func _on_body_entered(body: Node3D) -> void:
 		if not (Services and Services.level_manager):
 			push_warning("Teleport: Services.level_manager not available; cannot transition")
 			return
+		var lm := Services.level_manager as LevelManager
+		if lm == null:
+			push_warning("Teleport: Services.level_manager is not a LevelManager")
+			return
 
 		var context := {
 			"spawn_id": target_spawn_id,
@@ -30,13 +36,13 @@ func _on_body_entered(body: Node3D) -> void:
 		}
 
 		var scene := _resolve_destination_scene()
-		if scene and Services.level_manager.has_method("request_level_transition_scene"):
-			Services.level_manager.request_level_transition_scene(scene, context)
+		if scene:
+			lm.request_level_transition_scene(scene, context)
 			return
 
 		# Legacy fallback (raw path). Prefer destination_catalog_key.
 		if level_name:
-			Services.level_manager.request_level_transition(level_name, context)
+			lm.request_level_transition(level_name, context)
 			return
 
 		push_warning("Teleport: Destination scene not configured (missing destination_catalog_key / level_name)")
@@ -57,9 +63,8 @@ func _resolve_destination_scene() -> PackedScene:
 	if not catalog:
 		return null
 
-	var key := String(destination_catalog_key)
-	var value: Variant = catalog.get(key)
-	if value is PackedScene:
-		return value
-	push_warning("Teleport: SceneCatalog key '%s' is missing or not a PackedScene" % key)
+	var scene := catalog.resolve_scene_key(destination_catalog_key)
+	if scene:
+		return scene
+	push_warning("Teleport: SceneCatalog key '%s' is missing or not a PackedScene" % String(destination_catalog_key))
 	return null

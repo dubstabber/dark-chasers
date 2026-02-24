@@ -1,24 +1,64 @@
-[gd_resource type="Resource" script_class="SceneCatalog" load_steps=10 format=3 uid="uid://scene_catalog"]
+[gd_resource type="Resource" script_class="SceneCatalog" load_steps=21 format=3 uid="uid://didlkgnkhva7r"]
 
-[ext_resource type="Script" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/ao_oni.tscn" id="4_aooni"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/ilopulu.tscn" id="5_ilopulu"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/white_face.tscn" id="6_whiteface"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/image_enemy.tscn" id="7_image_enemy"]
-[ext_resource type="PackedScene" path="res://scenes/maps/mansion_1/mansion_1.tscn" id="8_mansion_1"]
-[ext_resource type="PackedScene" path="res://scenes/maps/room_1.tscn" id="9_room_1"]
-[ext_resource type="PackedScene" path="res://scenes/maps/fdm_backrooms.tscn" id="10_fdm_backrooms"]
+[ext_resource type="Script" uid="uid://c7huvuf510c2t" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bcbcts05couuc" path="res://scenes/resources/scene_catalog_entry.gd" id="2_entry_script"]
+[ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="5_aooni"]
+[ext_resource type="PackedScene" uid="uid://curr1hvhg2u61" path="res://scenes/enemies/ilopulu.tscn" id="6_ilopulu"]
+[ext_resource type="PackedScene" uid="uid://duukdf1bft8vx" path="res://scenes/enemies/white_face.tscn" id="7_whiteface"]
+[ext_resource type="PackedScene" uid="uid://bb0ja5up2c6ny" path="res://scenes/enemies/image_enemy.tscn" id="8_image_enemy"]
+[ext_resource type="PackedScene" uid="uid://c2jqgo5cy7g7l" path="res://scenes/maps/mansion_1/mansion_1.tscn" id="9_mansion_1"]
+[ext_resource type="PackedScene" uid="uid://5q2aomrq4gjw" path="res://scenes/maps/room_1.tscn" id="10_room_1"]
+[ext_resource type="PackedScene" uid="uid://c8ofnx5cpjm60" path="res://scenes/maps/fdm_backrooms.tscn" id="11_fdm_backrooms"]
+
+[sub_resource type="Resource" id="Resource_player"]
+script = ExtResource("2_entry_script")
+id = &"player"
+scene = ExtResource("3_player")
+
+[sub_resource type="Resource" id="Resource_hud"]
+script = ExtResource("2_entry_script")
+id = &"hud"
+scene = ExtResource("4_hud")
+
+[sub_resource type="Resource" id="Resource_aooni"]
+script = ExtResource("2_entry_script")
+id = &"aooni"
+scene = ExtResource("5_aooni")
+
+[sub_resource type="Resource" id="Resource_ilopulu"]
+script = ExtResource("2_entry_script")
+id = &"ilopulu"
+scene = ExtResource("6_ilopulu")
+
+[sub_resource type="Resource" id="Resource_whiteface"]
+script = ExtResource("2_entry_script")
+id = &"whiteface"
+scene = ExtResource("7_whiteface")
+
+[sub_resource type="Resource" id="Resource_image_enemy"]
+script = ExtResource("2_entry_script")
+id = &"image_enemy"
+scene = ExtResource("8_image_enemy")
+
+[sub_resource type="Resource" id="Resource_mansion_1"]
+script = ExtResource("2_entry_script")
+id = &"mansion_1"
+scene = ExtResource("9_mansion_1")
+
+[sub_resource type="Resource" id="Resource_room_1"]
+script = ExtResource("2_entry_script")
+id = &"room_1"
+scene = ExtResource("10_room_1")
+
+[sub_resource type="Resource" id="Resource_fdm_backrooms"]
+script = ExtResource("2_entry_script")
+id = &"fdm_backrooms"
+scene = ExtResource("11_fdm_backrooms")
 
 [resource]
 script = ExtResource("1_script")
-player_scene = ExtResource("2_player")
-hud_scene = ExtResource("3_hud")
-aooni_scene = ExtResource("4_aooni")
-ilopulu_scene = ExtResource("5_ilopulu")
-whiteface_scene = ExtResource("6_whiteface")
-image_enemy_scene = ExtResource("7_image_enemy")
-mansion_1_scene = ExtResource("8_mansion_1")
-room_1_scene = ExtResource("9_room_1")
-fdm_backrooms_scene = ExtResource("10_fdm_backrooms")
+core_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_player"), SubResource("Resource_hud")])
+enemy_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_aooni"), SubResource("Resource_ilopulu"), SubResource("Resource_whiteface"), SubResource("Resource_image_enemy")])
+map_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_mansion_1"), SubResource("Resource_room_1"), SubResource("Resource_fdm_backrooms")])

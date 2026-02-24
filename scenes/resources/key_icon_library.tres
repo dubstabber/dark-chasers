@@ -1,27 +1,56 @@
-[gd_resource type="Resource" script_class="KeyIconLibrary" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="KeyIconLibrary" load_steps=16 format=3 uid="uid://b5jp4fdgvxyvc"]
 
-[ext_resource type="Script" path="res://scenes/resources/key_icon_library.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://images/items/REDKA0.png" id="2_ruby"]
-[ext_resource type="Texture2D" path="res://images/items/WEIRA0.png" id="3_weird"]
-[ext_resource type="Texture2D" path="res://images/items/BROWA0.png" id="4_brown"]
-[ext_resource type="Texture2D" path="res://images/items/YKGOA0.png" id="5_gold"]
-[ext_resource type="Texture2D" path="res://images/items/EMERA0.png" id="6_emerald"]
-[ext_resource type="Texture2D" path="res://images/items/SILVA0.png" id="7_silver"]
+[ext_resource type="Script" uid="uid://duq2rocl4gft7" path="res://scenes/resources/key_icon_library.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cbcppyp3ml5ln" path="res://scenes/resources/key_icon_entry.gd" id="2_entry_script"]
+[ext_resource type="Texture2D" uid="uid://dtjdc1cmmx18k" path="res://images/items/REDKA0.png" id="3_ruby"]
+[ext_resource type="Texture2D" uid="uid://b8yl6eq2ffr4v" path="res://images/items/WEIRA0.png" id="4_weird"]
+[ext_resource type="Texture2D" uid="uid://cyxvoj02nn0ux" path="res://images/items/BROWA0.png" id="5_brown"]
+[ext_resource type="Texture2D" uid="uid://dcsytnbath60f" path="res://images/items/YKGOA0.png" id="6_gold"]
+[ext_resource type="Texture2D" uid="uid://chstr5w8u501l" path="res://images/items/EMERA0.png" id="7_emerald"]
+[ext_resource type="Texture2D" uid="uid://vh1db8eek3bo" path="res://images/items/SILVA0.png" id="8_silver"]
+
+[sub_resource type="Resource" id="Resource_ruby"]
+script = ExtResource("2_entry_script")
+key_type = &"ruby"
+texture = ExtResource("3_ruby")
+pickup_message = "Picked up a ruby key."
+
+[sub_resource type="Resource" id="Resource_weird"]
+script = ExtResource("2_entry_script")
+key_type = &"weird"
+texture = ExtResource("4_weird")
+pickup_message = "Picked up some odd looking key."
+
+[sub_resource type="Resource" id="Resource_brown"]
+script = ExtResource("2_entry_script")
+key_type = &"brown"
+texture = ExtResource("5_brown")
+pickup_message = "Picked up a rusty brown key."
+
+[sub_resource type="Resource" id="Resource_gold"]
+script = ExtResource("2_entry_script")
+key_type = &"gold"
+texture = ExtResource("6_gold")
+pickup_message = "Picked up a fancy gold key."
+
+[sub_resource type="Resource" id="Resource_emerald"]
+script = ExtResource("2_entry_script")
+key_type = &"emerald"
+texture = ExtResource("7_emerald")
+pickup_message = "Picked up an emerald key."
+
+[sub_resource type="Resource" id="Resource_silver"]
+script = ExtResource("2_entry_script")
+key_type = &"silver"
+texture = ExtResource("8_silver")
+pickup_message = "Picked up a shiny silver key."
+
+[sub_resource type="Resource" id="Resource_useless"]
+script = ExtResource("2_entry_script")
+key_type = &"useless"
+texture = ExtResource("8_silver")
+pickup_message = "Congratulations! You just picked up the useless key!"
 
 [resource]
 script = ExtResource("1_script")
-ruby = ExtResource("2_ruby")
-weird = ExtResource("3_weird")
-brown = ExtResource("4_brown")
-gold = ExtResource("5_gold")
-emerald = ExtResource("6_emerald")
-silver = ExtResource("7_silver")
-pickup_messages = {
-"brown": "Picked up a rusty brown key.",
-"emerald": "Picked up an emerald key.",
-"gold": "Picked up a fancy gold key.",
-"ruby": "Picked up a ruby key.",
-"silver": "Picked up a shiny silver key.",
-"useless": "Congratulations! You just picked up the useless key!",
-"weird": "Picked up some odd looking key."
-}
+keys = Array[ExtResource("2_entry_script")]([SubResource("Resource_ruby"), SubResource("Resource_weird"), SubResource("Resource_brown"), SubResource("Resource_gold"), SubResource("Resource_emerald"), SubResource("Resource_silver"), SubResource("Resource_useless")])

@@ -34,12 +34,14 @@ func _select_startup_scene() -> PackedScene:
 
 	# Prefer catalog wiring when present.
 	if catalog:
-		if skip_main_menu_for_dev and catalog.mansion_1_scene:
-			return catalog.mansion_1_scene
-		if (not skip_main_menu_for_dev) and catalog.main_menu_scene:
-			return catalog.main_menu_scene
-		if catalog.mansion_1_scene:
-			return catalog.mansion_1_scene
+		var mansion_1 := catalog.get_map_scene(&"mansion_1")
+		var main_menu := catalog.get_main_menu_scene()
+		if skip_main_menu_for_dev and mansion_1:
+			return mansion_1
+		if (not skip_main_menu_for_dev) and main_menu:
+			return main_menu
+		if mansion_1:
+			return mansion_1
 
 	# Fallback to explicit scene exports on GameRoot.
 	if skip_main_menu_for_dev:
@@ -69,30 +71,23 @@ func _register_level_host_with_level_manager() -> void:
 	if not (Services and Services.level_manager):
 		push_warning("GameRoot: Services.level_manager is unavailable; startup will use direct LevelHost loading.")
 		return
-
-	if not Services.level_manager.has_method("register_level_host"):
-		push_warning("GameRoot: Services.level_manager does not support register_level_host.")
+	var lm := Services.level_manager as LevelManager
+	if lm == null:
+		push_warning("GameRoot: Services.level_manager is not a LevelManager")
 		return
-
-	Services.level_manager.register_level_host(level_host)
+	lm.register_level_host(level_host)
 
 
 func _request_startup_transition(scene: PackedScene) -> Error:
 	if not (Services and Services.level_manager):
 		return ERR_UNAVAILABLE
-
-	if Services.level_manager.has_method("request_level_transition_scene"):
-		return Services.level_manager.request_level_transition_scene(scene, {
-			"startup": true
-		})
-
-	if not Services.level_manager.has_method("request_level_transition"):
+	var lm := Services.level_manager as LevelManager
+	if lm == null:
 		return ERR_UNAVAILABLE
 
 	if scene.resource_path == "":
 		push_warning("GameRoot: Startup scene has no resource_path. Falling back to direct instantiation.")
 		return ERR_UNAVAILABLE
-
-	return Services.level_manager.request_level_transition(scene.resource_path, {
+	return lm.request_level_transition_scene(scene, {
 		"startup": true
 	})

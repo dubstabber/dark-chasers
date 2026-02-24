@@ -90,7 +90,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 		return
 
 	var body = event.get_body()
-	var aooni = Services.get_scene_catalog().aooni_scene.instantiate() as CharacterBody3D
+	var aooni = Services.get_scene_catalog().get_enemy_scene(&"aooni").instantiate() as CharacterBody3D
 	enemies.add_child(aooni)
 
 	var spawn_node = level.get_node_or_null(piano_spawn)

@@ -1,14 +1,32 @@
-[gd_resource type="Resource" script_class="VfxCatalog" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="VfxCatalog" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scenes/resources/vfx_catalog.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/resources/vfx_entry.gd" id="6_entry_script"]
 [ext_resource type="PackedScene" path="res://scenes/particles/scrap.tscn" id="2_scrap"]
 [ext_resource type="PackedScene" path="res://scenes/particles/ao_red_blood_particle.tscn" id="3_red_blood"]
 [ext_resource type="PackedScene" path="res://scenes/particles/ao_blue_blood_particle.tscn" id="4_blue_blood"]
 [ext_resource type="PackedScene" path="res://scenes/particles/blood_splat_decal.tscn" id="5_blood_decal"]
 
+[sub_resource type="Resource" id="Resource_scrap"]
+script = ExtResource("6_entry_script")
+id = &"scrap"
+scene = ExtResource("2_scrap")
+
+[sub_resource type="Resource" id="Resource_red_blood"]
+script = ExtResource("6_entry_script")
+id = &"red_blood_particle"
+scene = ExtResource("3_red_blood")
+
+[sub_resource type="Resource" id="Resource_blue_blood"]
+script = ExtResource("6_entry_script")
+id = &"blue_blood_particle"
+scene = ExtResource("4_blue_blood")
+
+[sub_resource type="Resource" id="Resource_blood_splat_decal"]
+script = ExtResource("6_entry_script")
+id = &"blood_splat_decal"
+scene = ExtResource("5_blood_decal")
+
 [resource]
 script = ExtResource("1_script")
-red_blood_particle = ExtResource("3_red_blood")
-blue_blood_particle = ExtResource("4_blue_blood")
-blood_splat_decal = ExtResource("5_blood_decal")
-scrap_scene = ExtResource("2_scrap")
+scenes = Array[ExtResource("6_entry_script")]([SubResource("Resource_red_blood"), SubResource("Resource_blue_blood"), SubResource("Resource_blood_splat_decal"), SubResource("Resource_scrap")])

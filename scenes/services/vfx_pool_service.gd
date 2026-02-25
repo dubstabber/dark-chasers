@@ -19,8 +19,12 @@ func _ready() -> void:
 
 func _prewarm_pools() -> void:
 	var vfx_catalog = Services.get_vfx_catalog()
-	if vfx_catalog and vfx_catalog.scrap_scene:
-		_ensure_pool(vfx_catalog.scrap_scene.resource_path, vfx_catalog.scrap_scene)
+	if not vfx_catalog:
+		return
+
+	var scrap_scene := vfx_catalog.get_scrap_scene()
+	if scrap_scene:
+		_ensure_pool(scrap_scene.resource_path, scrap_scene)
 
 
 func _ensure_pool(path: String, scene: PackedScene) -> void:

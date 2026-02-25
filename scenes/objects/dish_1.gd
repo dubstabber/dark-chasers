@@ -17,10 +17,14 @@ func take_damage_at_position(dmg: int, hit_pos: Vector3) -> void:
 
 func take_damage_with_direction(dmg: int, hit_pos: Vector3, shot_direction: Vector3) -> void:
 	var vfx_catalog := Services.get_vfx_catalog()
-	if not vfx_catalog or not vfx_catalog.red_blood_particle:
+	if not vfx_catalog:
 		return
 
-	var particle := vfx_catalog.red_blood_particle.instantiate() as RigidBody3D
+	var red_blood_particle := vfx_catalog.get_scene(&"red_blood_particle")
+	if red_blood_particle == null:
+		return
+
+	var particle := red_blood_particle.instantiate() as RigidBody3D
 	if not particle:
 		return
 
@@ -32,8 +36,9 @@ func take_damage_with_direction(dmg: int, hit_pos: Vector3, shot_direction: Vect
 	particle.global_position = hit_pos
 	particle.linear_velocity = Vector3(0, 2.5, 0)
 
-	if shot_direction.length_squared() > 0.01 and vfx_catalog.blood_splat_decal:
-		_trace_blood_to_walls(dmg, hit_pos, shot_direction, vfx_catalog.blood_splat_decal)
+	var blood_splat_decal := vfx_catalog.get_scene(&"blood_splat_decal")
+	if shot_direction.length_squared() > 0.01 and blood_splat_decal:
+		_trace_blood_to_walls(dmg, hit_pos, shot_direction, blood_splat_decal)
 
 
 func _trace_blood_to_walls(dmg: int, hit_pos: Vector3, shot_direction: Vector3, decal_scene: PackedScene) -> void:

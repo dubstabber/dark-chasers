@@ -259,10 +259,22 @@ func _on_find_path_timer_timeout():
 
 
 func _on_interaction_timer_timeout():
-	if _door_opener_component:
-		if not _door_opener_component.check_and_open_door() and is_wandering:
-			if _door_opener_component.is_facing_door():
-				direction = Vector3(-direction.x, 0, -direction.z)
+	if not _door_opener_component or not _should_attempt_door_interaction():
+		return
+
+	if not _door_opener_component.check_and_open_door() and is_wandering:
+		if _door_opener_component.is_facing_door():
+			direction = Vector3(-direction.x, 0, -direction.z)
+
+
+func _should_attempt_door_interaction() -> bool:
+	if current_target != null:
+		return true
+	if not waypoints.is_empty():
+		return true
+	if _wandering_component and _wandering_component.is_wandering():
+		return true
+	return false
 
 
 func _on_navigation_agent_3d_target_reached():

@@ -72,8 +72,13 @@ func _execute_hitscan(weapon: WeaponResource) -> void:
 	
 	var hit_pos = _bullet_raycast.get_collision_point()
 	var hit_normal = _bullet_raycast.get_collision_normal()
+	var is_enemy_hit := _is_enemy_hit(collider)
+	var water_splash := _find_water_splash_node(collider)
+	if water_splash:
+		water_splash.play_splash_sound(collider, hit_pos)
 	
-	_spawn_hit_particle(weapon, hit_pos, hit_normal)
+	if not is_enemy_hit:
+		_spawn_hit_particle(weapon, hit_pos, hit_normal)
 	_spawn_hit_decal(weapon, collider, hit_pos, hit_normal)
 	_play_hit_sound(weapon, collider, hit_pos)
 	_apply_damage(weapon, collider, hit_pos)
@@ -148,6 +153,29 @@ func _apply_damage(weapon: WeaponResource, collider: Node, hit_pos: Vector3) -> 
 
 	if collider.is_in_group("destroyable"):
 		collider.queue_free()
+
+
+func _is_enemy_hit(collider: Node) -> bool:
+	if collider == null:
+		return false
+	if collider.is_in_group("enemy"):
+		return true
+	var parent := collider.get_parent()
+	return parent != null and parent.is_in_group("enemy")
+
+
+func _find_water_splash_node(collider: Node) -> Node:
+	if collider == null:
+		return null
+
+	for node in [collider, collider.get_parent()]:
+		if node == null:
+			continue
+		for child in node.get_children():
+			if child != null and child.has_method("play_splash_sound"):
+				return child
+
+	return null
 
 
 func _is_wall_surface(normal: Vector3) -> bool:

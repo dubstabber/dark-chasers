@@ -523,6 +523,7 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_m6jr1"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
+chase_player = false
 death_message = "lolz"
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
@@ -1485,7 +1486,7 @@ stats = SubResource("Resource_xenhl")
 current_room = "BigHall"
 
 [node name="Ao oni Test" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
-transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -47.6345, 202.197, -26.7313)
+transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -47.6345, 202.216, -26.7313)
 stats = SubResource("Resource_m6jr1")
 current_room = "FirstFloor"
 

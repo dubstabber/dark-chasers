@@ -10,8 +10,16 @@ func _ready():
 
 
 func _on_body_entered(body):
+	play_splash_sound(body, body.global_position)
+
+
+func play_splash_sound(sound_parent: Node, sound_position: Vector3) -> void:
+	if sound_parent == null:
+		sound_parent = self
+		sound_position = global_position
+
 	var pitch = base_pitch + randf_range(-pitch_variation, pitch_variation)
 	var sfx: SfxCatalog = Services.get_sfx_catalog()
-	var player = Services.utils.play_sound(sfx.get_sound(&"water_splash"), body, body.global_position, volume_db)
+	var player = Services.utils.play_sound(sfx.get_sound(&"water_splash"), sound_parent, sound_position, volume_db)
 	if player:
 		player.pitch_scale = pitch

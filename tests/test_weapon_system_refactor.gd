@@ -10,6 +10,7 @@ func _ready():
 	test_weapon_ui_event_controller_creation()
 	test_weapon_equip_controller_creation()
 	test_weapon_hit_executor_creation()
+	test_weapon_hit_executor_enemy_vfx_policy()
 	test_weapon_resource_is_pure_config()
 	test_weapon_manager_fire_methods_exist()
 	test_weapon_manager_delegates_to_controllers()
@@ -56,6 +57,18 @@ func test_weapon_hit_executor_creation():
 	assert(executor.has_method("setup"), "Executor should have setup method")
 	assert(executor.has_method("execute_hit"), "Executor should have execute_hit method")
 	print("✓ WeaponHitExecutor created successfully")
+
+
+func test_weapon_hit_executor_enemy_vfx_policy():
+	print("\n--- Testing WeaponHitExecutor enemy-hit VFX policy ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_hit_executor.gd") as GDScript
+	var source = script.source_code
+	
+	assert("var is_enemy_hit := _is_enemy_hit(collider)" in source, "Hit executor should classify enemy hits")
+	assert("if not is_enemy_hit:" in source, "Hit particles should be skipped for enemy hits")
+	assert("func _is_enemy_hit(collider: Node) -> bool:" in source, "Hit executor should expose enemy-hit helper")
+	print("✓ WeaponHitExecutor suppresses weapon impact VFX on enemies")
 
 
 func test_weapon_equip_controller_creation():

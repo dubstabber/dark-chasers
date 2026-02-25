@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=14 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://dc5sm8mi6vrt6" path="res://scenes/components/enemy/enemy_brain.gd" id="10_y5th1"]
 [ext_resource type="Script" uid="uid://drjhbqeko807o" path="res://scenes/components/enemy/enemy_disappear_zone_component.gd" id="11_tihwb"]
 [ext_resource type="Script" uid="uid://47csay82d1kd" path="res://scenes/components/enemy/enemy_transition_component.gd" id="12_p7w77"]
+[ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="13_k4gvh"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -54,6 +55,10 @@ autostart = true
 
 [node name="WanderingTimer" type="Timer" parent="Timers"]
 one_shot = true
+
+[node name="EnemyAnimationComponent" type="Node" parent="."]
+script = ExtResource("13_k4gvh")
+metadata/_custom_type_script = "uid://oth317tmbcww"
 
 [node name="BloodEffectComponent" type="Node" parent="."]
 script = ExtResource("2_blood")

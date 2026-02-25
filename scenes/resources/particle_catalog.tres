@@ -1,9 +1,6 @@
 [gd_resource type="Resource" script_class="ParticleCatalog" load_steps=84 format=3 uid="uid://bar2ewhhc72jv"]
 
 [ext_resource type="Script" uid="uid://3txjhthiy0lw" path="res://scenes/resources/particle_catalog.gd" id="1"]
-[ext_resource type="Script" path="res://scenes/resources/particle_texture_set_entry.gd" id="65"]
-[ext_resource type="Script" path="res://scenes/resources/particle_sound_entry.gd" id="66"]
-[ext_resource type="Script" path="res://scenes/resources/particle_scene_entry.gd" id="67"]
 [ext_resource type="Texture2D" uid="uid://i0t3gd02elu1" path="res://images/particles/1045A0.png" id="2"]
 [ext_resource type="Texture2D" uid="uid://engac11n56jb" path="res://images/particles/1045B0.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://umcd3k872ca8" path="res://images/particles/1045C0.png" id="4"]
@@ -60,13 +57,41 @@
 [ext_resource type="AudioStream" uid="uid://2u5xhqhrtksv" path="res://sounds/sfx/GLASSBRK.wav" id="55"]
 [ext_resource type="AudioStream" uid="uid://58pj3hxfrieb" path="res://sounds/sfx/SND1048.wav" id="56"]
 [ext_resource type="PackedScene" uid="uid://diiuvppg4ykmv" path="res://scenes/particles/scrap.tscn" id="57"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat1.png" id="58"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat2.png" id="59"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat3.png" id="60"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat4.png" id="61"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat5.png" id="62"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat6.png" id="63"]
-[ext_resource type="Texture2D" path="res://images/particles/bsplat7.png" id="64"]
+[ext_resource type="Texture2D" uid="uid://b6g6ui5hu8h22" path="res://images/particles/bsplat1.png" id="58"]
+[ext_resource type="Texture2D" uid="uid://biko5whs1fsyb" path="res://images/particles/bsplat2.png" id="59"]
+[ext_resource type="Texture2D" uid="uid://bh8ewkrtxjp7e" path="res://images/particles/bsplat3.png" id="60"]
+[ext_resource type="Texture2D" uid="uid://b0p7hc40htyw" path="res://images/particles/bsplat4.png" id="61"]
+[ext_resource type="Texture2D" uid="uid://cm476nb14cv5y" path="res://images/particles/bsplat5.png" id="62"]
+[ext_resource type="Texture2D" uid="uid://byprm02ij2nfr" path="res://images/particles/bsplat6.png" id="63"]
+[ext_resource type="Texture2D" uid="uid://3vk8fklsf80o" path="res://images/particles/bsplat7.png" id="64"]
+[ext_resource type="Script" uid="uid://b63c86ow6d03a" path="res://scenes/resources/particle_texture_set_entry.gd" id="65"]
+[ext_resource type="Script" uid="uid://djd2favd2bsmb" path="res://scenes/resources/particle_sound_entry.gd" id="66"]
+[ext_resource type="Script" uid="uid://cb5sxc5ktax71" path="res://scenes/resources/particle_scene_entry.gd" id="67"]
+
+[sub_resource type="Resource" id="Resource_scrap_scene"]
+script = ExtResource("67")
+id = &"scrap"
+scene = ExtResource("57")
+
+[sub_resource type="Resource" id="Resource_wood_break"]
+script = ExtResource("66")
+id = &"wood_break"
+sound = ExtResource("53")
+
+[sub_resource type="Resource" id="Resource_paper_break"]
+script = ExtResource("66")
+id = &"paper_break"
+sound = ExtResource("54")
+
+[sub_resource type="Resource" id="Resource_glass_break"]
+script = ExtResource("66")
+id = &"glass_break"
+sound = ExtResource("55")
+
+[sub_resource type="Resource" id="Resource_pot_break"]
+script = ExtResource("66")
+id = &"pot_break"
+sound = ExtResource("56")
 
 [sub_resource type="Resource" id="Resource_small_wood"]
 script = ExtResource("65")
@@ -123,31 +148,6 @@ script = ExtResource("65")
 id = &"blood_splat"
 textures = Array[Texture2D]([ExtResource("58"), ExtResource("59"), ExtResource("60"), ExtResource("61"), ExtResource("62"), ExtResource("63"), ExtResource("64")])
 weights = Array[int]([2, 1, 5, 5, 5, 5, 6])
-
-[sub_resource type="Resource" id="Resource_wood_break"]
-script = ExtResource("66")
-id = &"wood_break"
-sound = ExtResource("53")
-
-[sub_resource type="Resource" id="Resource_paper_break"]
-script = ExtResource("66")
-id = &"paper_break"
-sound = ExtResource("54")
-
-[sub_resource type="Resource" id="Resource_glass_break"]
-script = ExtResource("66")
-id = &"glass_break"
-sound = ExtResource("55")
-
-[sub_resource type="Resource" id="Resource_pot_break"]
-script = ExtResource("66")
-id = &"pot_break"
-sound = ExtResource("56")
-
-[sub_resource type="Resource" id="Resource_scrap_scene"]
-script = ExtResource("67")
-id = &"scrap"
-scene = ExtResource("57")
 
 [resource]
 script = ExtResource("1")

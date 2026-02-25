@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://jgmxt13pm14c"]
+[gd_scene load_steps=51 format=3 uid="uid://jgmxt13pm14c"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_7e6im"]
 [ext_resource type="Texture2D" uid="uid://1n6cqvqjy2y3" path="res://images/enemies/rat/1177A5.png" id="2_aas3s"]
@@ -35,7 +35,6 @@
 [ext_resource type="Texture2D" uid="uid://lapw7lk35orx" path="res://images/enemies/rat/1177J0.png" id="34_htnwb"]
 [ext_resource type="Shader" uid="uid://c3p87imp1aoah" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader" id="34_q8b4v"]
 [ext_resource type="Script" uid="uid://ccvuru3xjtx3k" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gd" id="35_qyplo"]
-[ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="35_s3mqe"]
 [ext_resource type="Script" uid="uid://b52p00nh72vus" path="res://scenes/components/health/health_component.gd" id="37_health"]
 
 [sub_resource type="Resource" id="Resource_cy5rw"]
@@ -282,12 +281,7 @@ libraries = {
 &"": SubResource("AnimationLibrary_6swn3")
 }
 
-[node name="EnemyAnimationComponent" type="Node" parent="." index="9" node_paths=PackedStringArray("animation_player")]
-script = ExtResource("35_s3mqe")
-animation_player = NodePath("../SpriteAnimationPlayer")
-speed_scale_factor = 2.0
-
-[node name="HealthComponent" type="Node" parent="." index="10"]
+[node name="HealthComponent" type="Node" parent="." index="9"]
 script = ExtResource("37_health")
 max_health = 20
 current_health = 20
@@ -295,6 +289,10 @@ current_health = 20
 [node name="SoundInterval" type="Timer" parent="Timers" index="3"]
 wait_time = 4.0
 autostart = true
+
+[node name="EnemyAnimationComponent" parent="." index="11" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("../SpriteAnimationPlayer")
+speed_scale_factor = 2.0
 
 [node name="BloodEffectComponent" parent="." index="12"]
 enabled = false

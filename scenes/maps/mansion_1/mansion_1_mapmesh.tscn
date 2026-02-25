@@ -1,4 +1,4 @@
-[gd_scene load_steps=933 format=4 uid="uid://dbcrjnt84rjb5"]
+[gd_scene load_steps=930 format=4 uid="uid://dbcrjnt84rjb5"]
 
 [ext_resource type="Texture2D" uid="uid://crhm0o5njpyqs" path="res://models/mansion1/mansion1_HRLAMP.png" id="1_og3yr"]
 [ext_resource type="Texture2D" uid="uid://ebgur1uk7u0t" path="res://models/mansion1/mansion1_HRBBR.png" id="2_ygl8i"]
@@ -7914,44 +7914,6 @@ shadow_mesh = SubResource("ArrayMesh_hpl77")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h030i"]
 data = PackedVector3Array(-5.2799997, 205.2455, 115.17, -4.64, 205.5584, 115.17, -5.2799997, 205.5584, 115.17, -5.2799997, 205.2455, 115.17, -4.64, 205.2455, 115.17, -4.64, 205.5584, 115.17)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iuwgx"]
-resource_name = "HRBBR.002"
-albedo_texture = ExtResource("2_ygl8i")
-uv1_scale = Vector3(0.6, 0.5, 1)
-uv1_offset = Vector3(0.39999998, 0.5, 0)
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_5q38m"]
-_surfaces = [{
-"aabb": AABB(0, -1.2799988, -0.6399994, 1e-05, 2.5599976, 1.2799988),
-"format": 34359742465,
-"index_count": 6,
-"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
-"name": "HRBBR.002",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 4,
-"vertex_data": PackedByteArray("AAAAAADXo78A1yM/AAAAAADXoz8A1yO/AAAAAADXoz8A1yM/AAAAAADXo78A1yO/")
-}]
-blend_shape_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_b6fp5"]
-resource_name = "mansion1_MAP01_205"
-_surfaces = [{
-"aabb": AABB(0, -1.2799988, -0.6399994, 1e-05, 2.5599976, 1.2799988),
-"attribute_data": PackedByteArray("AAAgQAAAQEAAAGBAAACAPwAAIEAAAIA/AQBgQAEAQEA="),
-"format": 34359742487,
-"index_count": 6,
-"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
-"material": SubResource("StandardMaterial3D_iuwgx"),
-"name": "HRBBR.002",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 4,
-"vertex_data": PackedByteArray("AAAAAADXo78A1yM/AAAAAADXoz8A1yO/AAAAAADXoz8A1yM/AAAAAADXo78A1yO/AAD/f/7/AAAAAP9///8AAAAA/3///wAAAAD/f/7/AAA=")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_5q38m")
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_u118l"]
 _surfaces = [{
 "aabb": AABB(-32.32, 202.20003, 111.74997, 1e-05, 2.5599976, 13.360001),
@@ -10795,11 +10757,6 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MAP01_202/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_h030i")
-
-[node name="MAP01_203" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.04, 206.04002, 111.98997)
-mesh = SubResource("ArrayMesh_b6fp5")
-skeleton = NodePath("")
 
 [node name="MAP01_204" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_mbg8s")

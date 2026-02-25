@@ -70,7 +70,9 @@ func get_hud() -> CanvasLayer:
 	"""
 	var level = get_level_node()
 	if level and level is Level:
-		return level.hud
+		var hud = level.hud
+		if hud is CanvasLayer:
+			return hud
 	return null
 
 

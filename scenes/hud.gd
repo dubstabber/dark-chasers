@@ -149,6 +149,14 @@ func show_black_screen():
 	black_screen.color.a = 1.0
 
 
+func fade_to_black(duration: float = 0.25):
+	_restart_tween().tween_property(black_screen, "color:a", 1.0, duration)
+
+
+func fade_from_black(duration: float = 2.0):
+	_restart_tween().tween_property(black_screen, "color:a", 0.0, duration)
+
+
 func _restart_tween() -> Tween:
 	if tween:
 		tween.kill()
@@ -157,7 +165,7 @@ func _restart_tween() -> Tween:
 
 
 func fade_black_screen():
-	_restart_tween().tween_property(black_screen, "color:a", 0, 2.0)
+	fade_from_black(2.0)
 
 
 func add_log(text: String):

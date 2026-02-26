@@ -1,7 +1,8 @@
-[gd_scene load_steps=245 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=247 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/maps/mansion_1/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="PackedScene" uid="uid://dbcrjnt84rjb5" path="res://scenes/maps/mansion_1/mansion_1_mapmesh.tscn" id="5_6uabt"]
+[ext_resource type="PackedScene" uid="uid://d3gwecawhtco5" path="res://scenes/enemies/fuwatty.tscn" id="13_f3rg6"]
 [ext_resource type="Texture2D" uid="uid://cche7hts27gxi" path="res://images/textures/BSW01A.png" id="56_lu5ku"]
 [ext_resource type="Texture2D" uid="uid://dgun863x5u6v5" path="res://images/textures/BSW05A.png" id="62_t8gua"]
 [ext_resource type="Texture2D" uid="uid://ebgur1uk7u0t" path="res://models/mansion1/mansion1_HRBBR.png" id="69_pankb"]
@@ -518,6 +519,11 @@ speed = 3.0
 chase_player = false
 can_open_door = false
 is_wandering = true
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_f3rg6"]
+script = ExtResource("148_b5j3m")
+speed = 7.4
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_m6jr1"]
@@ -1528,6 +1534,11 @@ current_room = "BigHall"
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 21.4969, 202.197, 79.9931)
 stats = SubResource("Resource_xenhl")
 current_room = "BigHall"
+
+[node name="Fuwatty" parent="NavigationRegion3D/Enemies" instance=ExtResource("13_f3rg6")]
+transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -46.64094, 202.18578, -25.523413)
+stats = SubResource("Resource_f3rg6")
+current_room = "FirstFloor"
 
 [node name="Ao oni Test" parent="NavigationRegion3D/Enemies" instance=ExtResource("141_yrprg")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -47.6345, 202.216, -26.7313)

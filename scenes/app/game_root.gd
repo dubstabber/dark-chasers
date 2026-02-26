@@ -32,25 +32,24 @@ func _select_startup_scene() -> PackedScene:
 	if Services:
 		catalog = Services.get_scene_catalog()
 
-	# Prefer catalog wiring when present.
-	if catalog:
-		var mansion_1 := catalog.get_map_scene(&"mansion_1")
-		var main_menu := catalog.get_main_menu_scene()
-		if skip_main_menu_for_dev and mansion_1:
-			return mansion_1
-		if (not skip_main_menu_for_dev) and main_menu:
-			return main_menu
-		if mansion_1:
-			return mansion_1
+	# Inspector wiring on GameRoot should always win.
+	var selected_default := default_game_scene
+	var selected_main_menu := main_menu_scene
 
-	# Fallback to explicit scene exports on GameRoot.
+	# Catalog provides fallback defaults when inspector exports are not set.
+	if catalog:
+		if selected_default == null:
+			selected_default = catalog.get_map_scene(&"mansion_1")
+		if selected_main_menu == null:
+			selected_main_menu = catalog.get_main_menu_scene()
+
 	if skip_main_menu_for_dev:
-		return default_game_scene
-	if main_menu_scene:
-		return main_menu_scene
-	if default_game_scene:
+		return selected_default
+	if selected_main_menu:
+		return selected_main_menu
+	if selected_default:
 		push_warning("GameRoot: main_menu_scene is not set. Falling back to default_game_scene.")
-		return default_game_scene
+		return selected_default
 	return null
 
 

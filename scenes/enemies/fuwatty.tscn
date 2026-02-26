@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://d3gwecawhtco5"]
+[gd_scene load_steps=33 format=3 uid="uid://d3gwecawhtco5"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_pomni"]
 [ext_resource type="Script" uid="uid://c4k3et87pyblk" path="res://scenes/enemies/fuwatty.gd" id="2_f5pr7"]
@@ -18,6 +18,8 @@
 [ext_resource type="Script" uid="uid://b5x4ehxe1tlru" path="res://scenes/systems/dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="15_who51"]
 [ext_resource type="Resource" uid="uid://dvab7my8m4tta" path="res://scenes/systems/dynamic_footstep_system/dark_chasers_material_library.tres" id="16_a4kxv"]
 [ext_resource type="PackedScene" uid="uid://bv7k2m8qx5npl" path="res://scenes/particles/blood_splat_decal.tscn" id="16_vvabd"]
+[ext_resource type="Script" uid="uid://u1jq1wg8m52f" path="res://scenes/components/enemy/enemy_ability.gd" id="19_ymrq6"]
+[ext_resource type="Script" uid="uid://dls6hnmlfcoft" path="res://scenes/components/enemy/fuwatty_dash_ability.gd" id="20_a5csw"]
 
 [sub_resource type="Resource" id="Resource_6e5ko"]
 script = ExtResource("3_2v037")
@@ -126,6 +128,13 @@ height = 1.409373
 radius = 0.7246094
 height = 1.7566185
 
+[sub_resource type="Resource" id="Resource_01et1"]
+script = ExtResource("20_a5csw")
+dash_tiles = 18.0
+dash_speed_multiplier = 5.0
+cooldown = 7.0
+metadata/_custom_type_script = "uid://dls6hnmlfcoft"
+
 [node name="Fuwatty" instance=ExtResource("1_pomni")]
 script = ExtResource("2_f5pr7")
 stats = SubResource("Resource_6e5ko")
@@ -185,3 +194,6 @@ decal_scene = ExtResource("16_vvabd")
 
 [node name="EnemyMotorComponent" parent="." index="15"]
 speed = 7.8
+
+[node name="EnemyBrain" parent="." index="16"]
+abilities = Array[ExtResource("19_ymrq6")]([SubResource("Resource_01et1")])

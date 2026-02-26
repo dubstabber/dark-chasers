@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FuwattyDashAbility" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/components/enemy/fuwatty_dash_ability.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+ability_name = "fuwatty_dash"
+cooldown = 0.0
+step_interval = 8.0
+pre_dash_halt_seconds = 1.0
+dash_tiles = 6.0
+tile_size_meters = 1.0
+dash_speed_multiplier = 2.5
+min_dash_target_distance_m = 0.0
+max_dash_target_distance_m = 12.0
+require_clear_dash_path = true
+obstacle_clearance_margin = 0.05
+enable_dash_indicator = false
+debug_logs = false

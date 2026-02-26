@@ -1,4 +1,4 @@
-[gd_scene load_steps=247 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=248 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/maps/mansion_1/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="PackedScene" uid="uid://dbcrjnt84rjb5" path="res://scenes/maps/mansion_1/mansion_1_mapmesh.tscn" id="5_6uabt"]
@@ -557,6 +557,9 @@ size = Vector3(1.9478455, 2.4389038, 0.36107445)
 
 [sub_resource type="BoxMesh" id="BoxMesh_6uabt"]
 size = Vector3(1.6, 2.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_f3rg6"]
+size = Vector3(0.4, 2, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0sqt4"]
 size = Vector3(0.61, 0.594, 0.01)
@@ -1649,6 +1652,12 @@ shape = SubResource("BoxShape3D_6uabt")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33748627, 0, 0)
 visible = false
 mesh = SubResource("BoxMesh_6uabt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Blockers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.479156, 203.2, -39.59644)
+visible = false
+mesh = SubResource("BoxMesh_f3rg6")
+skeleton = NodePath("../../../Doors/HingeAoDoor")
 
 [node name="Lights" type="Node3D" parent="NavigationRegion3D"]
 

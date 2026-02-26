@@ -20,12 +20,22 @@ func _test_startup_scene_selection_uses_scene_catalog() -> void:
 	_assert(catalog != null, "Services.get_scene_catalog() should return a catalog")
 	var mansion_1 := catalog.get_map_scene(&"mansion_1")
 	_assert(mansion_1 != null, "SceneCatalog should contain map id 'mansion_1'")
+	var room_1 := catalog.get_map_scene(&"room_1")
+	_assert(room_1 != null, "SceneCatalog should contain map id 'room_1'")
 
 	var game_root := GameRoot.new()
 	game_root.skip_main_menu_for_dev = true
+	game_root.default_game_scene = room_1
+	_assert(game_root._select_startup_scene() == room_1, "Skip-menu startup should prefer GameRoot.default_game_scene when assigned")
+
+	game_root.default_game_scene = null
 	_assert(game_root._select_startup_scene() == mansion_1, "Skip-menu startup should select mansion_1 from catalog")
 
 	game_root.skip_main_menu_for_dev = false
+	game_root.main_menu_scene = room_1
+	_assert(game_root._select_startup_scene() == room_1, "Non-skip startup should prefer GameRoot.main_menu_scene when assigned")
+
+	game_root.main_menu_scene = null
 	var main_menu := catalog.get_main_menu_scene()
 	if main_menu:
 		_assert(game_root._select_startup_scene() == main_menu, "Non-skip startup should select main_menu when configured")

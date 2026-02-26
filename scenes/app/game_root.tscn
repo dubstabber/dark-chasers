@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://drhdp3p7teh6t"]
 
-[ext_resource type="Script" path="res://scenes/app/game_root.gd" id="1_game_root_script"]
+[ext_resource type="Script" uid="uid://df7mdu0jg6t6i" path="res://scenes/app/game_root.gd" id="1_game_root_script"]
+[ext_resource type="PackedScene" uid="uid://5q2aomrq4gjw" path="res://scenes/maps/room_1.tscn" id="2_8g2cb"]
 
 [node name="GameRoot" type="Node"]
 script = ExtResource("1_game_root_script")
+default_game_scene = ExtResource("2_8g2cb")
 
 [node name="LevelHost" type="Node" parent="."]

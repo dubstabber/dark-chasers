@@ -19,6 +19,7 @@ func _run_tests() -> void:
 	_test_distance_window_gating()
 	_test_out_of_range_movement_does_not_backlog_steps()
 	_test_single_activation_consumes_step_progress()
+	_test_failed_precheck_does_not_consume_steps()
 	_test_distance_cadence_activation()
 	_test_chase_loss_resets_step_progress()
 	_test_direction_locks_at_dash_start()
@@ -105,6 +106,41 @@ func _test_single_activation_consumes_step_progress() -> void:
 	var ctx_same := _build_context(Vector3(40.0, 0, 0), true, Vector3(46.0, 0, 0), 6.0)
 	_assert(not ability.can_activate(ctx_same), "Ability should not immediately re-activate without new movement")
 	print("✓ One activation consumes queued step progress")
+
+	harness.free()
+
+
+func _test_failed_precheck_does_not_consume_steps() -> void:
+	print("\n--- Testing failed precheck does not consume step progress ---")
+	var ability = load(FUWATTY_DASH_ABILITY_SCRIPT).new()
+	ability.pre_dash_halt_seconds = 0.0
+	ability.require_clear_dash_path = false
+	ability.max_dash_target_distance_m = 40.0
+
+	var ctx_a := _build_context(Vector3(0.0, 0, 0), true, Vector3(8.0, 0, 0), 8.0)
+	var ctx_b := _build_context(Vector3(8.0, 0, 0), true, Vector3(16.0, 0, 0), 8.0)
+	_assert(not ability.can_activate(ctx_a), "Should not activate on first sample")
+	_assert(ability.can_activate(ctx_b), "Should be ready to dash after reaching cadence")
+
+	var harness := Node3D.new()
+	add_child(harness)
+	var enemy := _spawn_test_enemy(harness, Vector3(8, 0, 0))
+	var target := _spawn_target(harness, Vector3(16, 0, 0))
+	enemy.current_target = target
+
+	ability.max_dash_target_distance_m = 4.0
+	ability.activate(enemy)
+	var blocked_status = ability.process(enemy, 0.016)
+	_assert(blocked_status == EnemyAbility.AbilityStatus.COMPLETED, "Blocked precheck should cancel this activation")
+
+	ability.max_dash_target_distance_m = 40.0
+	var ctx_same := _build_context(Vector3(8.0, 0, 0), true, Vector3(16.0, 0, 0), 8.0)
+	_assert(ability.can_activate(ctx_same), "Failed precheck must not consume accumulated cadence")
+
+	ability.activate(enemy)
+	var clear_status = ability.process(enemy, 0.016)
+	_assert(clear_status == EnemyAbility.AbilityStatus.RUNNING, "Dash should start immediately once path clears")
+	print("✓ Failed precheck keeps step progress for next valid dash")
 
 	harness.free()
 

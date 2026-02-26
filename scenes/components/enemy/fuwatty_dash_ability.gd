@@ -16,6 +16,7 @@ enum DashState {
 @export var dash_speed_multiplier: float = 2.5
 @export var min_dash_target_distance_m: float = 0.0
 @export var max_dash_target_distance_m: float = 12.0
+@export var dash_hop_vertical_speed: float = 2.2
 @export var require_clear_dash_path: bool = true
 @export var obstacle_clearance_margin: float = 0.05
 @export var enable_dash_indicator: bool = false
@@ -60,11 +61,11 @@ func activate(enemy: CharacterBody3D) -> void:
 	_dash_distance_remaining = _dash_distance_m()
 	_dash_direction = Vector3.ZERO
 	_dash_stuck_time = 0.0
-	_consume_step_interval()
 
 	if not _can_commit_to_dash(enemy):
 		return
 
+	_consume_step_interval()
 	_state = DashState.PRE_DASH_HALT
 	_halt_remaining = maxf(0.0, pre_dash_halt_seconds)
 
@@ -83,6 +84,7 @@ func process(enemy: CharacterBody3D, delta: float) -> AbilityStatus:
 			_state = DashState.IDLE_COUNTING
 			return AbilityStatus.COMPLETED
 
+		_apply_dash_hop(enemy)
 		_state = DashState.DASHING
 		_dash_stuck_time = 0.0
 		return AbilityStatus.RUNNING
@@ -258,6 +260,21 @@ func _process_pre_dash_halt(enemy: CharacterBody3D, delta: float) -> void:
 	enemy.velocity.x = 0.0
 	enemy.velocity.z = 0.0
 	enemy.move_and_slide()
+
+
+func _apply_dash_hop(enemy: CharacterBody3D) -> void:
+	if enemy == null:
+		return
+
+	var hop_speed := maxf(0.0, dash_hop_vertical_speed)
+	if hop_speed <= 0.0:
+		return
+
+	var is_flying_value: Variant = enemy.get("is_flying")
+	if is_flying_value is bool and is_flying_value:
+		return
+
+	enemy.velocity.y = maxf(enemy.velocity.y, hop_speed)
 
 
 func _process_dash(enemy: CharacterBody3D, delta: float) -> AbilityStatus:

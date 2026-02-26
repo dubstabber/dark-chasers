@@ -132,6 +132,7 @@ height = 1.7566185
 script = ExtResource("20_a5csw")
 dash_tiles = 18.0
 dash_speed_multiplier = 5.0
+dash_hop_vertical_speed = 4.0
 cooldown = 7.0
 metadata/_custom_type_script = "uid://dls6hnmlfcoft"
 

@@ -13,6 +13,7 @@ tile_size_meters = 1.0
 dash_speed_multiplier = 2.5
 min_dash_target_distance_m = 0.0
 max_dash_target_distance_m = 12.0
+dash_hop_vertical_speed = 2.2
 require_clear_dash_path = true
 obstacle_clearance_margin = 0.05
 enable_dash_indicator = false

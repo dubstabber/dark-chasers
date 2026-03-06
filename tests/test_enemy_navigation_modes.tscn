@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_enemy_navigation_modes"]
+
+[ext_resource type="Script" path="res://tests/test_enemy_navigation_modes.gd" id="1_test_runner"]
+
+[node name="EnemyNavigationModeTests" type="Node"]
+script = ExtResource("1_test_runner")

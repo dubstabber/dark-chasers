@@ -182,13 +182,20 @@ func open():
 	_toggle_door(true)
 
 
+func can_open_from_point(hit_pos: Vector3) -> bool:
+	if key_needed and not Services.world_context.has_key(key_needed):
+		return false
+	if not _body:
+		return false
+
+	var local_p: Vector3 = _body.to_local(hit_pos)
+	var side: String = _blocking_component._get_side_from_local_point(local_p) if _blocking_component else ""
+	return is_side_allowed(side)
+
+
 func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null) -> void:
 	_triggering_player = triggering_player
-	var local_p: Vector3 = _body.to_local(hit_pos)
-
-	var side: String = _blocking_component._get_side_from_local_point(local_p) if _blocking_component else ""
-
-	if is_side_allowed(side):
+	if can_open_from_point(hit_pos):
 		_toggle_door()
 	else:
 		if _audio_component:

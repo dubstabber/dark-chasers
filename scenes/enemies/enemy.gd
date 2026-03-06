@@ -1,6 +1,13 @@
 class_name Enemy extends CharacterBody3D
 
+enum NavigationMode {
+	GODOT,
+	DOOM,
+}
+
 @export var stats: EnemyStats ## Preferred: configure via resource for reusable enemy types
+@export var navigation_mode: NavigationMode = NavigationMode.GODOT: set = set_navigation_mode
+@export var requires_vertical_navigation := false
 @export var current_room: String
 @export var disappear_zones: Array[Area3D] ## Bridge: forwarded to EnemyDisappearZoneComponent at _ready()
 @export var debug_prints := false
@@ -39,7 +46,7 @@ var direction: Vector3
 var map_transitions: Node3D
 var ground_type: String
 var moving_state := "idle"
-var is_flying := false
+@export var is_flying := false
 var is_killed := false
 
 # Stats accessors - prefer EnemyStats resource, fall back to inline overrides
@@ -130,6 +137,25 @@ func _setup_runtime_coordinator() -> void:
 	)
 
 
+func set_navigation_mode(value: NavigationMode) -> void:
+	if navigation_mode == value:
+		return
+	navigation_mode = value
+	_refresh_navigation_mode_runtime()
+
+
+func _refresh_navigation_mode_runtime() -> void:
+	if not is_node_ready():
+		return
+
+	_setup_navigation_component()
+	_setup_transition_component()
+	_setup_runtime_coordinator()
+
+	if current_target or not waypoints.is_empty():
+		makepath()
+
+
 func _sanitize_disappear_zones_export() -> void:
 	var unique: Array[Area3D] = []
 	for z in disappear_zones:
@@ -159,11 +185,96 @@ func _on_kill_zone_player_killed(_player: Node3D) -> void:
 
 
 func _setup_navigation_component() -> void:
-	_nav_component = get_node_or_null("GodotNavigationComponent")
-	if _nav_component:
-		_nav_component.target_reached.connect(_on_navigation_agent_3d_target_reached)
-		_nav_component.link_reached.connect(_on_navigation_agent_3d_link_reached)
-		_nav_component.waypoint_reached.connect(_on_navigation_agent_3d_waypoint_reached)
+	_disconnect_navigation_component_signals(_nav_component)
+	_nav_component = null
+
+	var available_components := _get_navigation_components()
+	if available_components.is_empty():
+		return
+
+	var desired_mode := _get_effective_navigation_mode_id()
+	_nav_component = _find_navigation_component_for_mode(desired_mode, available_components)
+	if not _nav_component and desired_mode != &"godot":
+		push_warning("Enemy '%s': navigation mode '%s' is not available; falling back to Godot navigation." % [name, String(desired_mode)])
+		_nav_component = _find_navigation_component_for_mode(&"godot", available_components)
+	if not _nav_component:
+		_nav_component = available_components[0]
+
+	for component in available_components:
+		component.set_navigation_active(component == _nav_component)
+
+	_connect_navigation_component_signals(_nav_component)
+
+
+func _get_navigation_components() -> Array[EnemyNavigationComponent]:
+	var components: Array[EnemyNavigationComponent] = []
+	for child in get_children():
+		if child is EnemyNavigationComponent:
+			components.append(child as EnemyNavigationComponent)
+	return components
+
+
+func _find_navigation_component_for_mode(mode_id: StringName, components: Array[EnemyNavigationComponent]) -> EnemyNavigationComponent:
+	for component in components:
+		if component.get_navigation_mode_id() == mode_id:
+			return component
+	return null
+
+
+func _get_navigation_mode_id() -> StringName:
+	match navigation_mode:
+		NavigationMode.DOOM:
+			return &"doom"
+		_:
+			return &"godot"
+
+
+func _get_effective_navigation_mode_id() -> StringName:
+	var requested_mode := _get_navigation_mode_id()
+	if requested_mode != &"doom":
+		return requested_mode
+
+	var unsupported_reason := _get_doom_mode_unsupported_reason()
+	if unsupported_reason.is_empty():
+		return requested_mode
+
+	push_warning(
+		"Enemy '%s': Doom navigation is not supported for %s; falling back to Godot navigation." % [
+			name,
+			unsupported_reason,
+		]
+	)
+	return &"godot"
+
+
+func _get_doom_mode_unsupported_reason() -> String:
+	if is_flying:
+		return "flying enemies"
+	if requires_vertical_navigation:
+		return "enemies that require vertical navigation"
+	return ""
+
+
+func _connect_navigation_component_signals(component: EnemyNavigationComponent) -> void:
+	if not component:
+		return
+	if not component.target_reached.is_connected(_on_navigation_target_reached):
+		component.target_reached.connect(_on_navigation_target_reached)
+	if not component.link_reached.is_connected(_on_navigation_link_reached):
+		component.link_reached.connect(_on_navigation_link_reached)
+	if not component.waypoint_reached.is_connected(_on_navigation_waypoint_reached):
+		component.waypoint_reached.connect(_on_navigation_waypoint_reached)
+
+
+func _disconnect_navigation_component_signals(component: EnemyNavigationComponent) -> void:
+	if not component:
+		return
+	if component.target_reached.is_connected(_on_navigation_target_reached):
+		component.target_reached.disconnect(_on_navigation_target_reached)
+	if component.link_reached.is_connected(_on_navigation_link_reached):
+		component.link_reached.disconnect(_on_navigation_link_reached)
+	if component.waypoint_reached.is_connected(_on_navigation_waypoint_reached):
+		component.waypoint_reached.disconnect(_on_navigation_waypoint_reached)
 
 
 func _setup_ai_component() -> void:
@@ -277,21 +388,19 @@ func _should_attempt_door_interaction() -> bool:
 	return false
 
 
-func _on_navigation_agent_3d_target_reached():
+func _on_navigation_target_reached() -> void:
 	if _runtime_coordinator:
 		_runtime_coordinator.on_navigation_target_reached()
 
 
-func _on_navigation_agent_3d_link_reached(details):
-	if details.owner.is_in_group("jump-up"):
-		_motor_component.apply_jump(jump_velocity)
-		_motor_component.jump_speed = gravity
-	if details.owner.is_in_group("jump-down"):
-		_motor_component.jump_speed = gravity
+func _on_navigation_link_reached(details: Dictionary) -> void:
+	if _nav_component:
+		_nav_component.handle_link_reached(details, _motor_component, gravity, jump_velocity)
 
 
-func _on_navigation_agent_3d_waypoint_reached(_details):
-	_motor_component.jump_speed = 0
+func _on_navigation_waypoint_reached(details: Dictionary) -> void:
+	if _nav_component:
+		_nav_component.handle_waypoint_reached(details, _motor_component)
 
 
 func take_damage(amount: int) -> void:
@@ -321,10 +430,10 @@ func get_target_position() -> Vector3:
 
 func set_navigation_enabled(enabled: bool) -> void:
 	if _nav_component:
-		_nav_component.set_process(enabled)
+		_nav_component.set_navigation_active(enabled)
 
 
 func get_navigation_enabled() -> bool:
 	if _nav_component:
-		return _nav_component.is_processing()
+		return _nav_component.is_navigation_active()
 	return false

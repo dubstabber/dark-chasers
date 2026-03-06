@@ -121,11 +121,11 @@ func _process_chase_movement(delta: float) -> void:
 			_find_path_timer.wait_time = 0.1
 		return
 
-	var next_pos := _get_next_path_position()
+	var move_direction := _get_navigation_direction()
 	if _enemy.current_target and _nav_component and _nav_component.is_navigation_finished():
-		next_pos = _enemy.current_target.global_position
+		move_direction = _get_horizontal_direction_to(_enemy.current_target.global_position)
 
-	_motor_component.move_toward_position(next_pos, delta)
+	_motor_component.move_in_direction(move_direction, delta)
 	_enemy.direction = _motor_component.direction
 
 	if _enemy.is_on_floor() or _is_flying:
@@ -156,3 +156,18 @@ func _get_next_path_position() -> Vector3:
 		return _nav_component.get_next_path_position()
 	push_warning("EnemyRuntimeCoordinator: No navigation component found")
 	return _enemy.global_position if _enemy else Vector3.ZERO
+
+
+func _get_navigation_direction() -> Vector3:
+	if _nav_component:
+		return _nav_component.get_horizontal_direction()
+	push_warning("EnemyRuntimeCoordinator: No navigation component found")
+	return Vector3.ZERO
+
+
+func _get_horizontal_direction_to(target_pos: Vector3) -> Vector3:
+	if not _enemy:
+		return Vector3.ZERO
+	var delta: Vector3 = target_pos - _enemy.global_position
+	delta.y = 0.0
+	return delta.normalized()

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_doom_navigation_local_chase"]
+
+[ext_resource type="Script" path="res://tests/test_doom_navigation_local_chase.gd" id="1_test_runner"]
+
+[node name="DoomNavigationLocalChaseTests" type="Node"]
+script = ExtResource("1_test_runner")

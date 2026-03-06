@@ -60,12 +60,14 @@ func handle_target_reached() -> bool:
 	if pending_transition_name == "" or not map_transitions:
 		return false
 
-	var transition_node = map_transitions.get_node_or_null(pending_transition_name)
+	var transition_name := pending_transition_name
+	pending_transition_name = ""
+
+	var transition_node = map_transitions.get_node_or_null(transition_name)
 	if transition_node:
 		_execute_transition(transition_node)
 	else:
-		Services.utils.debug_warning("Enemy: transition_node not found: %s" % pending_transition_name)
-	pending_transition_name = ""
+		Services.utils.debug_warning("Enemy: transition_node not found: %s" % transition_name)
 	return true
 
 
@@ -116,6 +118,7 @@ func _execute_transition(transition_node: Node3D) -> void:
 	var to_room = transition_graph[_owner_enemy.current_room][transition_name]
 	_owner_enemy.current_room = to_room
 	_owner_enemy.global_position = marker.global_position
+	_owner_enemy.makepath()
 
 	# Restart pathfinding with short delay
 	_owner_enemy.restart_pathfinding(0.1)

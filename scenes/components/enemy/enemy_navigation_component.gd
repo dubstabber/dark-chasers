@@ -12,15 +12,36 @@ signal waypoint_reached(details: Dictionary)
 var target_position: Vector3 = Vector3.ZERO
 
 var _owner_enemy: CharacterBody3D = null
+var _navigation_active: bool = true
 
 
 func _ready() -> void:
 	_owner_enemy = owner as CharacterBody3D
+	_navigation_active = enabled
+
+
+@abstract
+func get_navigation_mode_id() -> StringName
 
 
 func set_target(pos: Vector3) -> void:
 	target_position = pos
 	_on_target_set(pos)
+
+
+func set_navigation_active(active: bool) -> void:
+	_navigation_active = active
+	enabled = active
+	process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
+	_on_navigation_active_changed(active)
+
+
+func is_navigation_active() -> bool:
+	return _navigation_active
+
+
+func _on_navigation_active_changed(_active: bool) -> void:
+	pass
 
 
 @abstract
@@ -59,3 +80,11 @@ func distance_to_target() -> float
 
 func is_navigation_finished() -> bool:
 	return is_target_reached()
+
+
+func handle_link_reached(_details: Dictionary, _motor_component: EnemyMotorComponent, _gravity: float, _jump_velocity: float) -> void:
+	pass
+
+
+func handle_waypoint_reached(_details: Dictionary, _motor_component: EnemyMotorComponent) -> void:
+	pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=15 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://drjhbqeko807o" path="res://scenes/components/enemy/enemy_disappear_zone_component.gd" id="11_tihwb"]
 [ext_resource type="Script" uid="uid://47csay82d1kd" path="res://scenes/components/enemy/enemy_transition_component.gd" id="12_p7w77"]
 [ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="13_k4gvh"]
+[ext_resource type="Script" path="res://scenes/components/enemy/doom_navigation_component.gd" id="14_doom"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -66,6 +67,9 @@ script = ExtResource("2_blood")
 [node name="GodotNavigationComponent" type="Node" parent="." node_paths=PackedStringArray("navigation_agent")]
 script = ExtResource("3_nav")
 navigation_agent = NodePath("../NavigationAgent3D")
+
+[node name="DoomNavigationComponent" type="Node" parent="."]
+script = ExtResource("14_doom")
 
 [node name="EnemyAIComponent" type="Node" parent="." node_paths=PackedStringArray("line_of_sight_origin")]
 script = ExtResource("4_ai")

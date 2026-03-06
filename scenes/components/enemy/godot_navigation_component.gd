@@ -1,6 +1,8 @@
 class_name GodotNavigationComponent
 extends EnemyNavigationComponent
 
+const MODE_ID := &"godot"
+
 @export var navigation_agent: NavigationAgent3D
 
 
@@ -10,11 +12,26 @@ func _ready() -> void:
 		navigation_agent.target_reached.connect(_on_nav_target_reached)
 		navigation_agent.link_reached.connect(_on_nav_link_reached)
 		navigation_agent.waypoint_reached.connect(_on_nav_waypoint_reached)
+	_apply_navigation_agent_active_state(is_navigation_active())
+
+
+func get_navigation_mode_id() -> StringName:
+	return MODE_ID
+
+
+func _on_navigation_active_changed(active: bool) -> void:
+	_apply_navigation_agent_active_state(active)
 
 
 func _on_target_set(pos: Vector3) -> void:
 	if navigation_agent:
 		navigation_agent.target_position = pos
+
+
+func _apply_navigation_agent_active_state(active: bool) -> void:
+	if not navigation_agent:
+		return
+	navigation_agent.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
 
 
 func get_next_path_position() -> Vector3:
@@ -67,3 +84,23 @@ func _on_nav_link_reached(details: Dictionary) -> void:
 
 func _on_nav_waypoint_reached(details: Dictionary) -> void:
 	waypoint_reached.emit(details)
+
+
+func handle_link_reached(details: Dictionary, motor_component: EnemyMotorComponent, gravity: float, jump_velocity: float) -> void:
+	if not motor_component:
+		return
+
+	var link_owner := details.get("owner") as Node
+	if not link_owner:
+		return
+
+	if link_owner.is_in_group("jump-up"):
+		motor_component.apply_jump(jump_velocity)
+		motor_component.jump_speed = gravity
+	if link_owner.is_in_group("jump-down"):
+		motor_component.jump_speed = gravity
+
+
+func handle_waypoint_reached(_details: Dictionary, motor_component: EnemyMotorComponent) -> void:
+	if motor_component:
+		motor_component.jump_speed = 0.0

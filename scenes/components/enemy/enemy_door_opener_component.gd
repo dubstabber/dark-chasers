@@ -31,7 +31,7 @@ func check_and_open_door() -> bool:
 	if not collider:
 		return false
 	
-	var root_node = collider.get_parent()
+	var root_node := _get_door_root(collider)
 	if root_node is Door:
 		root_node.open_with_point(_interaction_ray.get_collision_point())
 		door_opened.emit(root_node)
@@ -49,5 +49,21 @@ func is_facing_door() -> bool:
 	if not collider:
 		return false
 	
-	var root_node = collider.get_parent()
+	var root_node := _get_door_root(collider)
 	return root_node is Door
+
+
+func can_open_door_for_collision(collider: Node, hit_pos: Vector3) -> bool:
+	if not enabled:
+		return false
+
+	var root_node := _get_door_root(collider)
+	if root_node is Door:
+		return root_node.can_open_from_point(hit_pos)
+	return false
+
+
+func _get_door_root(collider: Node) -> Node:
+	if collider == null:
+		return null
+	return collider.get_parent()

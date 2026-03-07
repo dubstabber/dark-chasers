@@ -200,6 +200,9 @@ blood_color = Color(0, 0, 1, 1)
 particle_scene = ExtResource("15_6e5ko")
 decal_scene = ExtResource("16_vvabd")
 
+[node name="DoomNavigationComponent" parent="." index="11"]
+obstacle_clearance_margin = 0.5
+
 [node name="EnemyMotorComponent" parent="." index="16"]
 speed = 7.8
 

@@ -185,6 +185,3 @@ speed_scale_factor = 7.0
 blood_color = Color(0, 0, 1, 1)
 particle_scene = ExtResource("17_blood_particle")
 decal_scene = ExtResource("18_blood_decal")
-
-[node name="DoomNavigationComponent" parent="." index="11"]
-obstacle_clearance_margin = 0.6

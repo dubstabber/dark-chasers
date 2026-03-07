@@ -6,7 +6,12 @@ const TARGET_REACHED_DISTANCE := 0.25
 const TARGET_AXIS_EPSILON := 0.15
 const MIN_PROBE_DISTANCE := 0.35
 const MAX_PROBE_DISTANCE := 0.9
-const DEFAULT_MOVE_COUNT := 6
+const DEFAULT_MOVE_COUNT := 12
+const DEFAULT_MOVE_COUNT_JITTER := 4
+const DEFAULT_FALLBACK_MOVE_COUNT := 180
+const DEFAULT_FALLBACK_MOVE_COUNT_JITTER := 300
+const DEFAULT_BLOCKED_RETHINK_TICKS := 4
+const DEFAULT_STUCK_RETRY_DELAY_TICKS := 6
 const BASE_COLLISION_RADIUS := 0.2
 const MIN_TARGET_REACHED_DISTANCE := 0.12
 
@@ -63,6 +68,11 @@ const SEARCH_ORDER := [
 @export var movement_probe_distance: float = 0.65
 @export var obstacle_clearance_margin: float = 0.05
 @export var move_count_ticks: int = DEFAULT_MOVE_COUNT
+@export var move_count_jitter_ticks: int = DEFAULT_MOVE_COUNT_JITTER
+@export var fallback_move_count_ticks: int = DEFAULT_FALLBACK_MOVE_COUNT
+@export var fallback_move_count_jitter_ticks: int = DEFAULT_FALLBACK_MOVE_COUNT_JITTER
+@export var blocked_rethink_ticks: int = DEFAULT_BLOCKED_RETHINK_TICKS
+@export var stuck_retry_delay_ticks: int = DEFAULT_STUCK_RETRY_DELAY_TICKS
 @export var fallback_random_seed: int = -1
 
 var _rng := RandomNumberGenerator.new()
@@ -70,10 +80,14 @@ var _has_target := false
 var _current_move_dir: ChaseDir = ChaseDir.NODIR
 var _last_successful_dir: ChaseDir = ChaseDir.NODIR
 var _move_count := 0
+var _current_move_is_fallback := false
+var _blocked_move_count := 0
 var _blocked_retry_count := 0
 var _last_failed_dir: ChaseDir = ChaseDir.NODIR
 var _rethink_count := 0
+var _stuck_retry_delay := 0
 var _target_reached_emitted := false
+var _tracked_target_node: Node3D = null
 
 
 func _ready() -> void:
@@ -89,10 +103,15 @@ func get_navigation_mode_id() -> StringName:
 
 
 func _on_target_set(_pos: Vector3) -> void:
+	var had_target := _has_target
+	var target_node := _get_current_target_node()
+	var target_changed := target_node != _tracked_target_node
 	_has_target = true
-	_target_reached_emitted = false
-	_move_count = 0
-	_current_move_dir = ChaseDir.NODIR
+	_tracked_target_node = target_node
+	if not had_target or target_changed:
+		_reset_move_commitment()
+	elif not is_target_reached():
+		_target_reached_emitted = false
 
 
 func _on_navigation_active_changed(active: bool) -> void:
@@ -108,14 +127,23 @@ func get_horizontal_direction() -> Vector3:
 		_emit_target_reached_once()
 		return Vector3.ZERO
 
-	var needs_new_dir := _current_move_dir == ChaseDir.NODIR or _move_count <= 0
-	if not needs_new_dir and _is_direction_blocked(_current_move_dir):
-		needs_new_dir = true
+	if _stuck_retry_delay > 0:
+		_stuck_retry_delay -= 1
+		return Vector3.ZERO
+
+	var needs_new_dir := _current_move_dir == ChaseDir.NODIR
+	if not needs_new_dir:
+		if _is_direction_blocked(_current_move_dir):
+			_blocked_move_count += 1
+			needs_new_dir = _blocked_move_count > max(0, blocked_rethink_ticks)
+		else:
+			_blocked_move_count = 0
+			needs_new_dir = _move_count <= 0
 
 	if needs_new_dir:
 		_choose_new_chase_dir()
 	else:
-		_move_count -= 1
+		_move_count = max(0, _move_count - 1)
 
 	if _current_move_dir == ChaseDir.NODIR:
 		return Vector3.ZERO
@@ -154,6 +182,8 @@ func _choose_new_chase_dir() -> void:
 	if not _owner_enemy:
 		_current_move_dir = ChaseDir.NODIR
 		_move_count = 0
+		_current_move_is_fallback = false
+		_blocked_move_count = 0
 		return
 
 	var target_reached_distance := _get_target_reached_distance()
@@ -162,16 +192,20 @@ func _choose_new_chase_dir() -> void:
 	if delta.length_squared() <= target_reached_distance * target_reached_distance:
 		_current_move_dir = ChaseDir.NODIR
 		_move_count = 0
+		_current_move_is_fallback = false
+		_blocked_move_count = 0
 		_emit_target_reached_once()
 		return
 
 	var old_dir := _current_move_dir
+	var old_dir_is_fallback := _current_move_is_fallback
 	var turnaround := _get_opposite_dir(old_dir)
 	var dir_x := _get_x_dir(delta.x)
 	var dir_z := _get_z_dir(delta.z)
+	var diag_dir := ChaseDir.NODIR
 
 	if dir_x != ChaseDir.NODIR and dir_z != ChaseDir.NODIR:
-		var diag_dir := _compose_diagonal(dir_x, dir_z)
+		diag_dir = _compose_diagonal(dir_x, dir_z)
 		if diag_dir != turnaround and _try_set_move_dir(diag_dir):
 			return
 
@@ -187,31 +221,50 @@ func _choose_new_chase_dir() -> void:
 		if _try_set_move_dir(candidate):
 			return
 
-	if old_dir != ChaseDir.NODIR and _try_set_move_dir(old_dir):
+	var reuse_fallback_commitment := old_dir_is_fallback or not _is_target_aligned_dir(old_dir, diag_dir, dir_x, dir_z)
+	if old_dir != ChaseDir.NODIR and _try_set_move_dir(old_dir, reuse_fallback_commitment):
 		return
 
-	var search_order := _build_fallback_search_order()
+	var search_order := _build_fallback_search_order(dir_x, dir_z)
 
 	for candidate in search_order:
 		if candidate == turnaround:
 			continue
-		if _try_set_move_dir(candidate):
+		if _try_set_move_dir(candidate, true):
 			return
 
-	if turnaround != ChaseDir.NODIR and _try_set_move_dir(turnaround):
+	if turnaround != ChaseDir.NODIR and _try_set_move_dir(turnaround, true):
 		return
 
 	_current_move_dir = ChaseDir.NODIR
 	_move_count = 0
+	_current_move_is_fallback = false
+	_blocked_move_count = 0
 	_blocked_retry_count += 1
+	_stuck_retry_delay = max(0, stuck_retry_delay_ticks)
 	_rethink_count += 1
 
 
-func _build_fallback_search_order() -> Array:
+func _build_fallback_search_order(dir_x: ChaseDir = ChaseDir.NODIR, dir_z: ChaseDir = ChaseDir.NODIR) -> Array:
+	var preferred_dirs: Array[ChaseDir] = []
+	if dir_x != ChaseDir.NODIR and dir_z == ChaseDir.NODIR:
+		preferred_dirs = [ChaseDir.NORTH, ChaseDir.SOUTH]
+	elif dir_z != ChaseDir.NODIR and dir_x == ChaseDir.NODIR:
+		preferred_dirs = [ChaseDir.EAST, ChaseDir.WEST]
+
+	if preferred_dirs.size() > 1:
+		if _rethink_count % 2 == 1:
+			preferred_dirs.reverse()
+		if _rng.randf() < 0.5:
+			preferred_dirs.reverse()
+
 	var search_order := SEARCH_ORDER.duplicate()
+	for preferred_dir in preferred_dirs:
+		search_order.erase(preferred_dir)
 	if _rethink_count % 2 == 1:
 		search_order.reverse()
-	return _apply_seeded_fallback_jitter(search_order)
+	search_order = _apply_seeded_fallback_jitter(search_order)
+	return preferred_dirs + search_order
 
 
 func _apply_seeded_fallback_jitter(search_order: Array) -> Array:
@@ -229,15 +282,18 @@ func _apply_seeded_fallback_jitter(search_order: Array) -> Array:
 	return rotated_order
 
 
-func _try_set_move_dir(candidate: ChaseDir) -> bool:
+func _try_set_move_dir(candidate: ChaseDir, use_fallback_commitment: bool = false) -> bool:
 	if candidate == ChaseDir.NODIR or _is_direction_blocked(candidate):
 		_last_failed_dir = candidate
 		return false
 
 	_current_move_dir = candidate
 	_last_successful_dir = candidate
-	_move_count = max(1, move_count_ticks)
+	_current_move_is_fallback = use_fallback_commitment
+	_move_count = _get_new_move_count(use_fallback_commitment)
+	_blocked_move_count = 0
 	_blocked_retry_count = 0
+	_stuck_retry_delay = 0
 	_rethink_count += 1
 	return true
 
@@ -276,7 +332,7 @@ func _is_allowed_target_hit(collider_node: Node) -> bool:
 	if collider_node == null or not _owner_enemy:
 		return false
 
-	var target := _owner_enemy.get("current_target") as Node3D
+	var target := _get_current_target_node()
 	if target == null:
 		return false
 
@@ -346,6 +402,18 @@ func _get_probe_distance() -> float:
 			base_distance = maxf(base_distance, owner_speed / maxf(10.0, float(Engine.physics_ticks_per_second)))
 	base_distance = maxf(base_distance, _get_collision_radius() * 2.0)
 	return clampf(base_distance, MIN_PROBE_DISTANCE, MAX_PROBE_DISTANCE)
+
+
+func _get_new_move_count(use_fallback_commitment: bool = false) -> int:
+	var base_move_count: int = max(1, fallback_move_count_ticks if use_fallback_commitment else move_count_ticks)
+	var jitter: int = max(0, fallback_move_count_jitter_ticks if use_fallback_commitment else move_count_jitter_ticks)
+	if jitter <= 0:
+		return base_move_count
+	return base_move_count + _rng.randi_range(0, jitter)
+
+
+func _is_target_aligned_dir(candidate: ChaseDir, diag_dir: ChaseDir, dir_x: ChaseDir, dir_z: ChaseDir) -> bool:
+	return candidate == diag_dir or candidate == dir_x or candidate == dir_z
 
 
 func _get_target_reached_distance() -> float:
@@ -427,6 +495,25 @@ func _reset_chase_state() -> void:
 	_last_successful_dir = ChaseDir.NODIR
 	_last_failed_dir = ChaseDir.NODIR
 	_move_count = 0
+	_current_move_is_fallback = false
+	_blocked_move_count = 0
 	_blocked_retry_count = 0
 	_rethink_count = 0
+	_stuck_retry_delay = 0
 	_target_reached_emitted = false
+	_tracked_target_node = null
+
+
+func _reset_move_commitment() -> void:
+	_target_reached_emitted = false
+	_move_count = 0
+	_current_move_is_fallback = false
+	_blocked_move_count = 0
+	_stuck_retry_delay = 0
+	_current_move_dir = ChaseDir.NODIR
+
+
+func _get_current_target_node() -> Node3D:
+	if not _owner_enemy:
+		return null
+	return _owner_enemy.get("current_target") as Node3D

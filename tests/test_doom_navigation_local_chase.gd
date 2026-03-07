@@ -12,8 +12,14 @@ func _ready() -> void:
 
 	await _test_open_space_prefers_direct_chase_direction()
 	await _test_blocked_direct_path_falls_back_without_navigation_agent()
+	await _test_blocked_direction_persists_before_rethink()
+	await _test_unreachable_fallback_direction_stays_committed()
+	await _test_unreachable_fallback_rethinks_are_rare()
+	await _test_target_refresh_preserves_wall_follow_commitment()
+	await _test_new_target_resets_committed_wall_follow()
 	await _test_no_target_returns_zero_direction()
 	await _test_fully_blocked_enemy_can_get_stuck()
+	await _test_fully_blocked_enemy_pauses_before_retrying()
 	await _test_seeded_fallback_jitter_is_reproducible()
 	await _test_collision_size_scales_probe_and_reached_thresholds()
 
@@ -59,6 +65,163 @@ func _test_blocked_direct_path_falls_back_without_navigation_agent() -> void:
 	await _cleanup_nodes([obstacle, enemy])
 
 
+func _test_blocked_direction_persists_before_rethink() -> void:
+	print("\n--- blocked direction persists before rethink ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.blocked_rethink_ticks = 3
+	doom_nav.move_count_ticks = 8
+	doom_nav.set_target(Vector3(8.0, 0.0, 0.0))
+
+	var initial_direction := doom_nav.get_horizontal_direction()
+	_assert(initial_direction.x > 0.9 and absf(initial_direction.z) < 0.1, "Doom chase should initially commit to the direct axis before a new obstacle appears")
+	var rethink_count_before_block := doom_nav._rethink_count
+
+	var obstacle := _create_wall(Vector3(0.55, 0.0, 0.0), Vector3(0.15, 0.6, 0.18))
+	add_child(obstacle)
+	await get_tree().physics_frame
+
+	var persisted_dirs: Array[int] = []
+	for _i in range(doom_nav.blocked_rethink_ticks):
+		var blocked_direction := doom_nav.get_horizontal_direction()
+		persisted_dirs.append(doom_nav._current_move_dir)
+		_assert(blocked_direction.x > 0.9 and absf(blocked_direction.z) < 0.1, "Blocked Doom chase should keep pressing its chosen direction for a few ticks")
+
+	_assert(_count_unique_values(persisted_dirs) == 1, "Blocked Doom chase should not jitter through multiple directions every query")
+	_assert(doom_nav._rethink_count == rethink_count_before_block, "Blocked Doom chase should defer rethinking until its blocked commitment window expires")
+
+	var fallback_direction := doom_nav.get_horizontal_direction()
+	_assert(fallback_direction.length_squared() > 0.0, "After the commitment window, Doom chase should still find a fallback if one exists")
+	_assert(absf(fallback_direction.z) > 0.1, "After the commitment window, Doom chase should step off the blocked axis")
+	_assert(doom_nav._current_move_dir != DoomNavigationComponent.DIR_EAST, "After the commitment window, Doom chase should finally abandon the blocked direct direction")
+	print("✓ blocked-direction persistence without rapid jitter")
+
+	await _cleanup_nodes([obstacle, enemy])
+
+
+func _test_unreachable_fallback_direction_stays_committed() -> void:
+	print("\n--- unreachable fallback stays committed ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var obstacle := _create_wall(Vector3(0.55, 0.0, 0.0), Vector3(0.15, 0.6, 5.0))
+	add_child(obstacle)
+	await get_tree().physics_frame
+
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.move_count_ticks = 4
+	doom_nav.fallback_move_count_ticks = 24
+	doom_nav.fallback_move_count_jitter_ticks = 0
+	doom_nav.set_target(Vector3(8.0, 0.0, 0.0))
+
+	var initial_direction := doom_nav.get_horizontal_direction()
+	var committed_dir := doom_nav._current_move_dir
+	var rethink_count_at_commit := doom_nav._rethink_count
+	_assert(absf(initial_direction.z) > 0.1, "Blocked unreachable chase should begin with a sidestep fallback")
+
+	var committed_dirs: Array[int] = [committed_dir]
+	for _i in range(20):
+		var repeated_direction := doom_nav.get_horizontal_direction()
+		committed_dirs.append(doom_nav._current_move_dir)
+		enemy.global_position += repeated_direction * 0.05
+		_assert(repeated_direction.length_squared() > 0.0, "Committed fallback movement should keep producing a non-zero sidestep while the route stays locally blocked")
+
+	_assert(_count_unique_values(committed_dirs) == 1, "Unreachable fallback should keep the same sidestep direction for a sustained interval")
+	_assert(doom_nav._rethink_count == rethink_count_at_commit, "Committed fallback should not trigger rapid full direction reselection while its long move-count budget remains")
+	print("✓ unreachable fallback commits for a sustained interval")
+
+	await _cleanup_nodes([obstacle, enemy])
+
+
+func _test_unreachable_fallback_rethinks_are_rare() -> void:
+	print("\n--- unreachable fallback rethinks are rare ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var obstacle := _create_wall(Vector3(0.55, 0.0, 0.0), Vector3(0.15, 0.6, 5.0))
+	add_child(obstacle)
+	await get_tree().physics_frame
+
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.move_count_ticks = 4
+	doom_nav.fallback_move_count_ticks = 18
+	doom_nav.fallback_move_count_jitter_ticks = 0
+	doom_nav.set_target(Vector3(8.0, 0.0, 0.0))
+
+	var directions: Array[int] = []
+	for _i in range(54):
+		var move_direction := doom_nav.get_horizontal_direction()
+		directions.append(doom_nav._current_move_dir)
+		enemy.global_position += move_direction * 0.05
+		_assert(move_direction.length_squared() > 0.0, "Unreachable fallback should keep moving stubbornly instead of collapsing into zero-motion jitter when a sidestep exists")
+
+	_assert(_count_direction_changes(directions) <= 1, "Unreachable fallback should not rapidly ping-pong between sidestep directions")
+	_assert(doom_nav._rethink_count <= 3, "Long fallback commitment should keep full rethink frequency meaningfully lower than the old short jittery behavior")
+	print("✓ unreachable fallback avoids rapid left-right churn")
+
+	await _cleanup_nodes([obstacle, enemy])
+
+
+func _test_target_refresh_preserves_wall_follow_commitment() -> void:
+	print("\n--- target refresh preserves wall-follow commitment ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var obstacle := _create_wall(Vector3(0.55, 0.0, 0.0), Vector3(0.15, 0.6, 5.0))
+	var target := _create_mock_target(Vector3(8.0, 0.0, 0.0))
+	add_child(obstacle)
+	add_child(target)
+	enemy.current_target = target
+	await get_tree().physics_frame
+
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.fallback_move_count_ticks = 12
+	doom_nav.fallback_move_count_jitter_ticks = 0
+	doom_nav.set_target(target.global_position)
+
+	var initial_direction := doom_nav.get_horizontal_direction()
+	var committed_dir := doom_nav._current_move_dir
+	var remaining_budget := doom_nav._move_count
+	_assert(absf(initial_direction.z) > 0.1, "Blocked target refresh regression should begin with a sidestep fallback")
+
+	for _i in range(5):
+		target.global_position += Vector3(0.15, 0.0, 0.05)
+		doom_nav.set_target(target.global_position)
+		var repeated_direction := doom_nav.get_horizontal_direction()
+		remaining_budget -= 1
+		enemy.global_position += repeated_direction * 0.05
+		_assert(doom_nav._current_move_dir == committed_dir, "Routine target refreshes should keep the same committed wall-follow direction")
+		_assert(doom_nav._move_count == remaining_budget, "Routine target refreshes should preserve the fallback move budget instead of restarting it")
+
+	print("✓ routine target refreshes no longer break wall-follow commitment")
+
+	await _cleanup_nodes([target, obstacle, enemy])
+
+
+func _test_new_target_resets_committed_wall_follow() -> void:
+	print("\n--- new target resets committed wall-follow ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var obstacle := _create_wall(Vector3(0.55, 0.0, 0.0), Vector3(0.15, 0.6, 5.0))
+	var target_a := _create_mock_target(Vector3(8.0, 0.0, 0.0))
+	var target_b := _create_mock_target(Vector3(-8.0, 0.0, 0.0))
+	add_child(obstacle)
+	add_child(target_a)
+	add_child(target_b)
+	enemy.current_target = target_a
+	await get_tree().physics_frame
+
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.fallback_move_count_ticks = 12
+	doom_nav.fallback_move_count_jitter_ticks = 0
+	doom_nav.set_target(target_a.global_position)
+	var fallback_direction := doom_nav.get_horizontal_direction()
+	var committed_dir := doom_nav._current_move_dir
+	_assert(absf(fallback_direction.z) > 0.1, "First target should force a wall-follow sidestep")
+
+	enemy.current_target = target_b
+	doom_nav.set_target(target_b.global_position)
+	var retargeted_direction := doom_nav.get_horizontal_direction()
+	_assert(retargeted_direction.x < -0.9 and absf(retargeted_direction.z) < 0.1, "Switching to a different target should reset the old sidestep commitment and chase the new target directly when possible")
+	_assert(doom_nav._current_move_dir != committed_dir, "A genuine target change should be allowed to discard the previous wall-follow commitment")
+	print("✓ genuine retargets still reset Doom chase commitment")
+
+	await _cleanup_nodes([target_b, target_a, obstacle, enemy])
+
+
 func _test_no_target_returns_zero_direction() -> void:
 	print("\n--- no target returns zero direction ---")
 	var enemy := await _create_doom_enemy(Vector3(2.0, 0.0, 3.0))
@@ -76,12 +239,7 @@ func _test_no_target_returns_zero_direction() -> void:
 func _test_fully_blocked_enemy_can_get_stuck() -> void:
 	print("\n--- fully blocked enemy can get stuck ---")
 	var enemy := await _create_doom_enemy(Vector3.ZERO)
-	var walls := [
-		_create_wall(Vector3(0.48, 0.0, 0.0), Vector3(0.12, 0.6, 0.9)),
-		_create_wall(Vector3(-0.48, 0.0, 0.0), Vector3(0.12, 0.6, 0.9)),
-		_create_wall(Vector3(0.0, 0.0, 0.48), Vector3(0.9, 0.6, 0.12)),
-		_create_wall(Vector3(0.0, 0.0, -0.48), Vector3(0.9, 0.6, 0.12)),
-	]
+	var walls := _create_surrounding_walls()
 	for wall in walls:
 		add_child(wall)
 	await get_tree().physics_frame
@@ -95,6 +253,40 @@ func _test_fully_blocked_enemy_can_get_stuck() -> void:
 	_assert(doom_nav._blocked_retry_count > 0, "Fully blocked Doom chase should record blocked-retry state")
 	_assert(doom_nav._last_failed_dir != DoomNavigationComponent.DIR_NODIR, "Fully blocked Doom chase should remember the last failed direction attempt")
 	print("✓ authentic stuck behavior")
+
+	var cleanup_nodes: Array[Node] = []
+	for wall in walls:
+		cleanup_nodes.append(wall)
+	cleanup_nodes.append(enemy)
+	await _cleanup_nodes(cleanup_nodes)
+
+
+func _test_fully_blocked_enemy_pauses_before_retrying() -> void:
+	print("\n--- fully blocked enemy pauses before retrying ---")
+	var enemy := await _create_doom_enemy(Vector3.ZERO)
+	var walls := _create_surrounding_walls()
+	for wall in walls:
+		add_child(wall)
+	await get_tree().physics_frame
+
+	var doom_nav := enemy._nav_component as DoomNavigationComponent
+	doom_nav.stuck_retry_delay_ticks = 3
+	doom_nav.set_target(Vector3(6.0, 0.0, 0.0))
+
+	var first_direction := doom_nav.get_horizontal_direction()
+	var initial_retry_count := doom_nav._blocked_retry_count
+	_assert(first_direction == Vector3.ZERO, "Fully blocked Doom chase should still return zero movement when no route exists")
+	_assert(initial_retry_count == 1, "Fully blocked Doom chase should count the initial failed rethink attempt")
+
+	for _i in range(doom_nav.stuck_retry_delay_ticks):
+		var paused_direction := doom_nav.get_horizontal_direction()
+		_assert(paused_direction == Vector3.ZERO, "Fully blocked Doom chase should remain paused during its stuck retry delay")
+		_assert(doom_nav._blocked_retry_count == initial_retry_count, "Stuck retry delay should prevent frantic full rethinks every query")
+
+	var retried_direction := doom_nav.get_horizontal_direction()
+	_assert(retried_direction == Vector3.ZERO, "Retrying after the pause should still report stuck when the enemy remains boxed in")
+	_assert(doom_nav._blocked_retry_count > initial_retry_count, "Once the stuck retry delay expires, Doom chase should be allowed to retry")
+	print("✓ unreachable-target pause reduces tight looping")
 
 	var cleanup_nodes: Array[Node] = []
 	for wall in walls:
@@ -167,8 +359,19 @@ func _create_doom_enemy(start_pos: Vector3, radius: float = 0.2, seed_value: int
 
 	var doom_nav := enemy._nav_component as DoomNavigationComponent
 	doom_nav.movement_probe_distance = 0.75
+	doom_nav.move_count_jitter_ticks = 0
+	doom_nav.fallback_move_count_jitter_ticks = 0
 	doom_nav.set_fallback_random_seed(seed_value)
 	return enemy
+
+
+func _create_surrounding_walls() -> Array[StaticBody3D]:
+	return [
+		_create_wall(Vector3(0.48, 0.0, 0.0), Vector3(0.12, 0.6, 0.9)),
+		_create_wall(Vector3(-0.48, 0.0, 0.0), Vector3(0.12, 0.6, 0.9)),
+		_create_wall(Vector3(0.0, 0.0, 0.48), Vector3(0.9, 0.6, 0.12)),
+		_create_wall(Vector3(0.0, 0.0, -0.48), Vector3(0.9, 0.6, 0.12)),
+	]
 
 
 func _create_wall(position: Vector3, half_extents: Vector3) -> StaticBody3D:
@@ -184,11 +387,37 @@ func _create_wall(position: Vector3, half_extents: Vector3) -> StaticBody3D:
 	return body
 
 
+func _create_mock_target(position: Vector3) -> CharacterBody3D:
+	var target := CharacterBody3D.new()
+	target.position = position
+	return target
+
+
 func _cleanup_nodes(nodes: Array) -> void:
 	for node in nodes:
 		if is_instance_valid(node):
 			node.queue_free()
 	await get_tree().process_frame
+
+
+func _count_unique_values(values: Array) -> int:
+	var unique_values := {}
+	for value in values:
+		unique_values[value] = true
+	return unique_values.size()
+
+
+func _count_direction_changes(values: Array) -> int:
+	if values.is_empty():
+		return 0
+	var last_value = values[0]
+	var change_count := 0
+	for i in range(1, values.size()):
+		if values[i] == last_value:
+			continue
+		change_count += 1
+		last_value = values[i]
+	return change_count
 
 
 func _assert(condition: bool, message: String) -> void:

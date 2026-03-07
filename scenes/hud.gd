@@ -235,7 +235,7 @@ func hide_event_text():
 func _on_player_mode_changed_event(event: RefCounted) -> void:
 	var mode = event.payload.get("mode", "")
 	var value = event.payload.get("value", false)
-	var event_player = event.payload.get("player", null)
+	var event_player: Node = event.source
 	
 	# Only respond if this HUD belongs to the player that triggered the event
 	if event_player and _connected_provider and event_player != _connected_provider:

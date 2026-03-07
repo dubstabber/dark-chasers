@@ -8,8 +8,6 @@ signal trigger_entered(body: Node)
 @export var event_type_id: StringName = &""
 
 @export var one_trigger_only := true
-@export var door_to_open: Node3D
-@export var temporary_camera: Camera3D
 
 var triggered := false
 
@@ -28,12 +26,11 @@ func _body_entered(body: Node) -> void:
 		# - Event subscribers (level scripts, SequenceDirector)
 		#
 		# The event_type_id is the SOLE stable identity - no event_name string dispatch.
+		# Keep only the triggering body in payload when subscribers need it; the
+		# trigger identity is already available through event.source.
 		if event_type_id != &"":
 			Services.event_bus.emit(event_type_id, {
-				"body": body,
-				"area": self,
-				"door": door_to_open,
-				"camera": temporary_camera
+				"body": body
 			}, self)
 
 		trigger_entered.emit(body)

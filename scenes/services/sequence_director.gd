@@ -162,7 +162,7 @@ func _block_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = true
-	Services.event_bus.emit(GameEventTypes.PLAYER_BLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypes.PLAYER_BLOCKED, {"player_count": players.size()}, self)
 
 
 func _unblock_players(targets: Array[Node]) -> void:
@@ -170,7 +170,7 @@ func _unblock_players(targets: Array[Node]) -> void:
 	for player in players:
 		if player is Player:
 			player.blocked_movement = false
-	Services.event_bus.emit(GameEventTypes.PLAYER_UNBLOCKED, {"players": players})
+	Services.event_bus.emit(GameEventTypes.PLAYER_UNBLOCKED, {"player_count": players.size()}, self)
 
 
 func _get_players(targets: Array[Node]) -> Array[Node]:

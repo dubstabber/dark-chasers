@@ -1922,15 +1922,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.7303, 202.2, 110.171)
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="Button1" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open", "temporary_camera") groups=["button"]]
+[node name="Button1" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87.3652, 202.961, 124.448)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 event_type_id = &"button_show_moving_bars"
 button_type = "lever"
-door_to_open = NodePath("../../../Doors/MovingBars1")
-temporary_camera = NodePath("../../Cameras/BarsCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button1"]
 shape = SubResource("BoxShape3D_0sqt4")
@@ -1948,13 +1946,12 @@ target_door = NodePath("../../../../Doors/MovingBars1")
 script = ExtResource("1160_cameff")
 target_camera = NodePath("../../../Cameras/BarsCamera")
 
-[node name="Button2" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button2" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.24268, 205.662, 109.729)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "circle"
-door_to_open = NodePath("../../../Doors/AoMovingWall1")
 press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button2"]
@@ -1969,13 +1966,12 @@ texture = ExtResource("56_lu5ku")
 script = ExtResource("1159_dooreff")
 target_door = NodePath("../../../../Doors/AoMovingWall1")
 
-[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open") groups=["button"]]
+[node name="Button3" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.0137, 203.037, 93.7284)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 button_type = "lever"
-door_to_open = NodePath("../../../Doors/AoDoor18")
 press_sound = ExtResource("151_l53tj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button3"]
@@ -1990,15 +1986,13 @@ texture = ExtResource("62_t8gua")
 script = ExtResource("1159_dooreff")
 target_door = NodePath("../../../../Doors/AoDoor18")
 
-[node name="Button4" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open", "temporary_camera") groups=["button"]]
+[node name="Button4" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5204, 199.958, 114.228)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 event_type_id = &"button_show_open_exit"
 button_type = "circle"
-door_to_open = NodePath("../../../Doors/AoMovingWall7")
-temporary_camera = NodePath("../../Cameras/ExitCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/Button4"]
 shape = SubResource("BoxShape3D_ftyfu")
@@ -2027,14 +2021,12 @@ event_type_id = &"button_play_piano"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.053894, 0, 0)
 shape = SubResource("BoxShape3D_rflx5")
 
-[node name="ToiletFlush" type="StaticBody3D" parent="NavigationRegion3D/Buttons" node_paths=PackedStringArray("door_to_open", "temporary_camera") groups=["button"]]
+[node name="ToiletFlush" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.1124, 202.965, -34.7491)
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("144_26gxq")
 event_type_id = &"button_show_secret_door"
-door_to_open = NodePath("../../../Doors/AoMovingWall8")
-temporary_camera = NodePath("../../Cameras/SecretDoorCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/ToiletFlush"]
 shape = SubResource("BoxShape3D_cx7hf")
@@ -2115,11 +2107,10 @@ cull_mask = 1048571
 
 [node name="AreaEvents" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/AreaEvents" node_paths=PackedStringArray("temporary_camera") groups=["area_event"]]
+[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.957, 203.464, -26.0587)
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_monster_crawls_library"
-temporary_camera = NodePath("../../Cameras/LibraryCamera")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent"]
 shape = SubResource("BoxShape3D_lougt")

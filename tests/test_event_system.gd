@@ -21,6 +21,7 @@ func _ready():
 	test_composable_effect_prefers_typed_events_and_local_parent_signals()
 	test_mansion_scene_wires_explicit_trigger_effect_components()
 	test_level_keeps_only_shared_generic_routes()
+	test_shared_events_trim_redundant_live_node_payloads()
 
 	print("=== ALL EVENT SYSTEM TESTS COMPLETED ===")
 	get_tree().quit()
@@ -207,8 +208,7 @@ func test_domain_specific_event_routing():
 
 	# Emit the domain-specific event
 	Services.event_bus.emit(GameEventTypes.BUTTON_CHECK_TV, {
-		"body": null,
-		"button": null
+		"body": null
 	})
 
 	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
@@ -234,10 +234,16 @@ func test_trigger_emitters_avoid_legacy_generic_button_area_bus_events():
 	assert("signal button_pressed" in button_content, "button.gd should expose a local button_pressed signal")
 	assert("button_pressed.emit(body)" in button_content, "button.gd should emit its local button_pressed signal")
 	assert("GameEventTypes.BUTTON_PRESSED" not in button_content, "button.gd should not emit legacy BUTTON_PRESSED")
+	assert('"button": self' not in button_content, "button.gd should not include the button node in typed event payloads")
+	assert('"door": door_to_open' not in button_content, "button.gd should not include legacy door node payloads")
+	assert('"camera": temporary_camera' not in button_content, "button.gd should not include legacy camera node payloads")
 
 	assert("signal trigger_entered" in area_content, "area_event.gd should expose a local trigger_entered signal")
 	assert("trigger_entered.emit(body)" in area_content, "area_event.gd should emit its local trigger_entered signal")
 	assert("GameEventTypes.AREA_ENTERED" not in area_content, "area_event.gd should not emit legacy AREA_ENTERED")
+	assert('"area": self' not in area_content, "area_event.gd should not include the area node in typed event payloads")
+	assert('"door": door_to_open' not in area_content, "area_event.gd should not include legacy door node payloads")
+	assert('"camera": temporary_camera' not in area_content, "area_event.gd should not include legacy camera node payloads")
 
 	print("✓ Trigger emitters now use typed events and/or local effect signals")
 
@@ -291,6 +297,8 @@ func test_mansion_scene_wires_explicit_trigger_effect_components():
 	assert("parent=\"NavigationRegion3D/Buttons/Button4\"" in content and "CameraSwitchEffect" in content, "Button4 should have a CameraSwitchEffect")
 	assert("parent=\"NavigationRegion3D/Buttons/ToiletFlush\"" in content and "CameraSwitchEffect" in content, "ToiletFlush should have a CameraSwitchEffect")
 	assert("parent=\"NavigationRegion3D/AreaEvents/AreaEvent\"" in content and "CameraSwitchEffect" in content, "AreaEvent should have a CameraSwitchEffect")
+	assert("door_to_open = NodePath(" not in content, "Mansion scene should no longer serialize legacy button door references")
+	assert("temporary_camera = NodePath(" not in content, "Mansion scene should no longer serialize legacy trigger camera references")
 
 	print("✓ Mansion trigger instances now own explicit door/camera effects")
 
@@ -310,3 +318,39 @@ func test_level_keeps_only_shared_generic_routes():
 	assert('event.get_node("door")' not in content, "Level should not read trigger doors from generic payloads")
 
 	print("✓ Level now keeps only shared generic routes such as key collection")
+
+
+func test_shared_events_trim_redundant_live_node_payloads():
+	print("\n--- Testing Shared Events Trim Redundant Live-Node Payloads ---")
+
+	var door_file := FileAccess.open("res://scenes/objects/door.gd", FileAccess.READ)
+	assert(door_file != null, "Should be able to open door.gd")
+	var door_content := door_file.get_as_text()
+
+	var input_file := FileAccess.open("res://scenes/components/input/player_input_component.gd", FileAccess.READ)
+	assert(input_file != null, "Should be able to open player_input_component.gd")
+	var input_content := input_file.get_as_text()
+
+	var hud_file := FileAccess.open("res://scenes/hud.gd", FileAccess.READ)
+	assert(hud_file != null, "Should be able to open hud.gd")
+	var hud_content := hud_file.get_as_text()
+
+	var sequence_file := FileAccess.open("res://scenes/services/sequence_director.gd", FileAccess.READ)
+	assert(sequence_file != null, "Should be able to open sequence_director.gd")
+	var sequence_content := sequence_file.get_as_text()
+
+	var pickup_file := FileAccess.open("res://scenes/items/pickup_item.gd", FileAccess.READ)
+	assert(pickup_file != null, "Should be able to open pickup_item.gd")
+	var pickup_content := pickup_file.get_as_text()
+
+	assert('"door": self' not in door_content, "DOOR_LOCKED should not include the door node in payload")
+	assert('"player": player' not in input_content, "PLAYER_MODE_CHANGED should not include the player node in payload")
+	assert('}, player)' in input_content, "PLAYER_MODE_CHANGED should identify the player via event.source")
+	assert('payload.get("player", null)' not in hud_content, "HUD should not read player identity from payload")
+	assert('event.source' in hud_content, "HUD should use event.source for player identity")
+	assert('{"players": players}' not in sequence_content, "PLAYER_BLOCKED/UNBLOCKED should not include player node arrays in payload")
+	assert('"player_count": players.size()' in sequence_content, "PLAYER_BLOCKED/UNBLOCKED should emit scalar metadata instead of node arrays")
+	assert('"item": self' not in pickup_content, "ITEM_PICKEDUP should not include the item node in payload")
+	assert('"body": body' not in pickup_content, "ITEM_PICKEDUP should not include the player node in payload")
+
+	print("✓ Shared event payloads now avoid redundant live node references where consumers do not need them")

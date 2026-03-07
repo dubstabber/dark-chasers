@@ -20,13 +20,11 @@ func _try_pickup(_body: Node3D) -> void:
 	pass
 
 
-func _complete_pickup(body: Node3D) -> void:
+func _complete_pickup(_body: Node3D) -> void:
 	if pickup_sound:
 		Services.utils.play_sound(pickup_sound, get_parent(), position)
 	if pickup_message:
 		Services.event_bus.emit(GameEventTypes.ITEM_PICKEDUP, {
-			"message": pickup_message,
-			"item": self,
-			"body": body
+			"message": pickup_message
 		}, self)
 	queue_free()

@@ -94,8 +94,7 @@ func _toggle_door(force := false) -> void:
 		if not Engine.is_editor_hint():
 			Services.event_bus.emit(GameEventTypes.DOOR_LOCKED, {
 				"text": locked_message,
-				"triggering_player": _triggering_player,
-				"door": self
+				"triggering_player": _triggering_player
 			}, self)
 		if _audio_component:
 			_audio_component.play_locked_sound()
@@ -204,8 +203,7 @@ func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null
 		if not Engine.is_editor_hint():
 			Services.event_bus.emit(GameEventTypes.DOOR_LOCKED, {
 				"text": locked_message,
-				"triggering_player": _triggering_player,
-				"door": self
+				"triggering_player": _triggering_player
 			}, self)
 
 

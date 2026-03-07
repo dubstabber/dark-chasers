@@ -100,9 +100,8 @@ func _process_action_input() -> void:
 		clip_mode_toggled.emit(new_clip_mode)
 		Services.event_bus.emit(GameEventTypes.PLAYER_MODE_CHANGED, {
 			"mode": "clip_mode",
-			"value": new_clip_mode,
-			"player": player
-		}, self)
+			"value": new_clip_mode
+		}, player)
 	
 	if Input.is_action_just_pressed("use"):
 		if interaction_component:

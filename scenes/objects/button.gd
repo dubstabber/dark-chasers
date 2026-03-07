@@ -1,5 +1,7 @@
 extends StaticBody3D
 
+signal button_pressed(body: Node)
+
 ## The domain-specific event type to emit (e.g., GameEventTypes.BUTTON_CHECK_TV).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"button_check_tv").
@@ -16,7 +18,7 @@ var is_pressed := false
 @onready var sprite_3d = get_node_or_null("Sprite3D")
 
 
-func press(body):
+func press(body: Node) -> void:
 	if not is_pressed:
 		# Emit domain-specific typed event via GameEventBus (pure emitter - no direct effects)
 		# Effects (door opening, camera switching) are handled by:
@@ -32,13 +34,7 @@ func press(body):
 				"camera": temporary_camera
 			}, self)
 
-		# Emit generic event for base Level class handling (door/camera from payload)
-		Services.event_bus.emit(GameEventTypes.BUTTON_PRESSED, {
-			"body": body,
-			"button": self,
-			"door": door_to_open,
-			"camera": temporary_camera
-		}, self)
+		button_pressed.emit(body)
 
 		is_pressed = true
 		change_sprite()

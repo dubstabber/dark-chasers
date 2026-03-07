@@ -10,12 +10,12 @@ extends RefCounted
 ## Emitters should emit domain-specific event types (e.g., BUTTON_CHECK_TV)
 ## rather than generic types (e.g., BUTTON_PRESSED) with string payloads.
 ##
-## For backward compatibility during migration, generic types like BUTTON_PRESSED
-## and AREA_ENTERED are kept but should be phased out in favor of specific types.
+## BUTTON_PRESSED and AREA_ENTERED are legacy compatibility constants.
+## New trigger flows should prefer typed event IDs and/or local effect signals.
 
-# === GENERIC EVENT TYPES (for base Level class and non-specific handlers) ===
-# These are used by the base Level class for common handling patterns.
-# Specific maps should subscribe to domain-specific events instead.
+# === GENERIC EVENT TYPES ===
+# Keep these only for shared systems or temporary compatibility.
+# Base Level ownership should stay limited to shared concerns such as key tracking.
 
 # Key pickup events (generic - used by base Level for key collection tracking)
 const KEY_COLLECTED := &"key_collected"
@@ -29,11 +29,11 @@ const PLAYER_BLOCKED := &"player_blocked"
 const PLAYER_UNBLOCKED := &"player_unblocked"
 const PLAYER_MODE_CHANGED := &"player_mode_changed"
 
-# Area trigger events
+# Legacy area trigger events
 const AREA_ENTERED := &"area_entered"
 const AREA_EXITED := &"area_exited"
 
-# Button/interaction events
+# Legacy button trigger events
 const BUTTON_PRESSED := &"button_pressed"
 const INTERACTION_TRIGGERED := &"interaction_triggered"
 

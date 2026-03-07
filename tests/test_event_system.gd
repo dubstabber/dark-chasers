@@ -17,9 +17,10 @@ func _ready():
 	await test_sequence_director_cancel_runs_async_cleanup()
 	await test_sequence_director_skip_runs_async_cleanup()
 	test_domain_specific_event_routing()
-	test_generic_and_domain_events_both_fire()
-	test_payload_policy_event_scripts_no_double_camera_handling()
-	test_payload_policy_level_handles_generic_payloads()
+	test_trigger_emitters_avoid_legacy_generic_button_area_bus_events()
+	test_composable_effect_prefers_typed_events_and_local_parent_signals()
+	test_mansion_scene_wires_explicit_trigger_effect_components()
+	test_level_keeps_only_shared_generic_routes()
 
 	print("=== ALL EVENT SYSTEM TESTS COMPLETED ===")
 	get_tree().quit()
@@ -219,38 +220,26 @@ func test_domain_specific_event_routing():
 	print("✓ Domain-specific event routing works correctly")
 
 
-func test_generic_and_domain_events_both_fire():
-	print("\n--- Testing Generic + Domain Events Both Fire ---")
+func test_trigger_emitters_avoid_legacy_generic_button_area_bus_events():
+	print("\n--- Testing Trigger Emitters Avoid Legacy Generic Button/Area Bus Events ---")
 
-	domain_events_received.clear()
-	generic_events_received.clear()
+	var button_file := FileAccess.open("res://scenes/objects/button.gd", FileAccess.READ)
+	assert(button_file != null, "Should be able to open button.gd")
+	var button_content := button_file.get_as_text()
 
-	# Subscribe to both generic and domain-specific events
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_PRESSED, _on_generic_event)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_domain_event)
+	var area_file := FileAccess.open("res://scenes/objects/area_event.gd", FileAccess.READ)
+	assert(area_file != null, "Should be able to open area_event.gd")
+	var area_content := area_file.get_as_text()
 
-	# Simulate what Button.gd does: emit both domain-specific and generic events
-	# First, domain-specific
-	Services.event_bus.emit(GameEventTypes.BUTTON_CHECK_MAP, {
-		"body": null,
-		"button": null
-	})
-	# Then, generic
-	Services.event_bus.emit(GameEventTypes.BUTTON_PRESSED, {
-		"body": null,
-		"button": null
-	})
+	assert("signal button_pressed" in button_content, "button.gd should expose a local button_pressed signal")
+	assert("button_pressed.emit(body)" in button_content, "button.gd should emit its local button_pressed signal")
+	assert("GameEventTypes.BUTTON_PRESSED" not in button_content, "button.gd should not emit legacy BUTTON_PRESSED")
 
-	assert(domain_events_received.size() == 1, "Should receive 1 domain-specific event")
-	assert(generic_events_received.size() == 1, "Should receive 1 generic event")
-	assert(domain_events_received[0].event_type == GameEventTypes.BUTTON_CHECK_MAP, "Domain event type should match")
-	assert(generic_events_received[0].event_type == GameEventTypes.BUTTON_PRESSED, "Generic event type should match")
+	assert("signal trigger_entered" in area_content, "area_event.gd should expose a local trigger_entered signal")
+	assert("trigger_entered.emit(body)" in area_content, "area_event.gd should emit its local trigger_entered signal")
+	assert("GameEventTypes.AREA_ENTERED" not in area_content, "area_event.gd should not emit legacy AREA_ENTERED")
 
-	# Cleanup
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PRESSED, _on_generic_event)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_domain_event)
-
-	print("✓ Generic + domain events both fire correctly")
+	print("✓ Trigger emitters now use typed events and/or local effect signals")
 
 
 func _on_domain_event(event: RefCounted) -> void:
@@ -261,71 +250,63 @@ func _on_generic_event(event: RefCounted) -> void:
 	generic_events_received.append(event)
 
 
-# === Payload Policy Tests ===
-# Verifies that emitters follow the camera/door payload policy documented in PLANNING.md
+func test_composable_effect_prefers_typed_events_and_local_parent_signals():
+	print("\n--- Testing ComposableEffect Prefers Typed Events + Local Parent Signals ---")
 
-func test_payload_policy_event_scripts_no_double_camera_handling():
-	print("\n--- Testing Payload Policy: No Double Camera Handling ---")
-	
-	# Policy: Event scripts should NOT manually switch cameras that are already
-	# configured as payloads on the emitter (avoids double-handling).
-	# 
-	# This test documents the expected pattern:
-	# - Payload with temporary_camera → Level handles immediate switch
-	# - Event script with sequence → should only use camera_restore(), not camera_cut()
-	#   for the same camera that's in the payload
-	
-	# Scan mansion_1 event scripts to verify they follow the payload policy
-	var event_scripts := [
-		"res://scenes/rooms/mansion_1_events/mansion_1_button_events.gd",
-		"res://scenes/rooms/mansion_1_events/mansion_1_area_events.gd",
-		"res://scenes/rooms/mansion_1_events/mansion_1_key_events.gd",
-	]
-	
-	var scripts_checked := 0
-	for script_path in event_scripts:
-		var file := FileAccess.open(script_path, FileAccess.READ)
-		if not file:
-			continue
-		var content := file.get_as_text()
-		scripts_checked += 1
-		
-		# Check if script uses both camera_cut() and references a payload camera
-		# Note: camera_cut in sequences is allowed when the emitter has NO temporary_camera
-		# This is a documentation test, not a hard enforcement
-		var has_camera_cut := "camera_cut(" in content
-		var has_camera_restore := "camera_restore()" in content
-		
-		# Pattern 2 (payload + domain): should have camera_restore but camera_cut is optional
-		# Pattern 3 (domain only): can use camera_cut freely
-		# The key is: if emitter has temporary_camera, don't also camera_cut to same camera in script
-		
-		if has_camera_cut and has_camera_restore:
-			# This is fine - script uses both (pattern 3 with explicit control)
-			pass
-	
-	assert(scripts_checked == event_scripts.size(), "All event scripts should be readable")
-	
-	print("✓ Payload policy documentation test passed")
-	print("  Note: Manual review recommended - see PLANNING.md 'Camera/door payload policy'")
-
-
-func test_payload_policy_level_handles_generic_payloads():
-	print("\n--- Testing Payload Policy: Level Handles Generic Payloads ---")
-	
-	# Verify that Level._on_button_event and Level._on_area_event check for payloads
-	var level_script_path := "res://scenes/rooms/level.gd"
-	var file := FileAccess.open(level_script_path, FileAccess.READ)
-	assert(file != null, "Should be able to open level.gd")
-	
+	var file := FileAccess.open("res://scenes/components/effects/composable_effect.gd", FileAccess.READ)
+	assert(file != null, "Should be able to open composable_effect.gd")
 	var content := file.get_as_text()
-	
-	# Check that Level handles camera from payload
-	assert('event.get_node("camera")' in content, "Level should extract camera from event payload")
-	assert("set_active_camera" in content, "Level should use CameraManager.set_active_camera")
-	
-	# Check that Level handles door from payload
-	assert('event.get_node("door")' in content, "Level should extract door from event payload")
-	assert("door.open()" in content, "Level should call door.open() for payload doors")
-	
-	print("✓ Level correctly handles generic payloads")
+
+	assert("return GameEventTypes.KEY_COLLECTED" in content, "ComposableEffect should retain KEY_COLLECTED fallback")
+	assert("return \"button_pressed\"" in content, "ComposableEffect should infer button_pressed local signal")
+	assert("return \"trigger_entered\"" in content, "ComposableEffect should infer trigger_entered local signal")
+	assert("return GameEventTypes.BUTTON_PRESSED" not in content, "ComposableEffect should not fall back to BUTTON_PRESSED")
+	assert("return GameEventTypes.AREA_ENTERED" not in content, "ComposableEffect should not fall back to AREA_ENTERED")
+
+	print("✓ ComposableEffect now routes button/area effects without legacy generic bus events")
+
+
+func test_mansion_scene_wires_explicit_trigger_effect_components():
+	print("\n--- Testing Mansion Scene Wires Explicit Trigger Effect Components ---")
+
+	var file := FileAccess.open("res://scenes/maps/mansion_1/mansion_1.tscn", FileAccess.READ)
+	assert(file != null, "Should be able to open mansion_1.tscn")
+	var content := file.get_as_text()
+
+	var required_effect_nodes := [
+		"NavigationRegion3D/Buttons/Button1",
+		"NavigationRegion3D/Buttons/Button2",
+		"NavigationRegion3D/Buttons/Button3",
+		"NavigationRegion3D/Buttons/Button4",
+		"NavigationRegion3D/Buttons/ToiletFlush",
+		"NavigationRegion3D/AreaEvents/AreaEvent",
+	]
+	for trigger_path in required_effect_nodes:
+		assert(trigger_path in content, "Scene should still include trigger %s" % trigger_path)
+
+	assert("parent=\"NavigationRegion3D/Buttons/Button1\"" in content and "DoorOpenerEffect" in content, "Button1 should have a DoorOpenerEffect")
+	assert("parent=\"NavigationRegion3D/Buttons/Button1\"" in content and "CameraSwitchEffect" in content, "Button1 should have a CameraSwitchEffect")
+	assert("parent=\"NavigationRegion3D/Buttons/Button2\"" in content and "DoorOpenerEffect" in content, "Button2 should have a DoorOpenerEffect")
+	assert("parent=\"NavigationRegion3D/Buttons/Button3\"" in content and "DoorOpenerEffect" in content, "Button3 should have a DoorOpenerEffect")
+	assert("parent=\"NavigationRegion3D/Buttons/Button4\"" in content and "CameraSwitchEffect" in content, "Button4 should have a CameraSwitchEffect")
+	assert("parent=\"NavigationRegion3D/Buttons/ToiletFlush\"" in content and "CameraSwitchEffect" in content, "ToiletFlush should have a CameraSwitchEffect")
+	assert("parent=\"NavigationRegion3D/AreaEvents/AreaEvent\"" in content and "CameraSwitchEffect" in content, "AreaEvent should have a CameraSwitchEffect")
+
+	print("✓ Mansion trigger instances now own explicit door/camera effects")
+
+
+func test_level_keeps_only_shared_generic_routes():
+	print("\n--- Testing Level Keeps Only Shared Generic Routes ---")
+
+	var file := FileAccess.open("res://scenes/maps/level.gd", FileAccess.READ)
+	assert(file != null, "Should be able to open level.gd")
+	var content := file.get_as_text()
+
+	assert("GameEventTypes.KEY_COLLECTED" in content, "Level should still subscribe to KEY_COLLECTED")
+	assert("GameEventTypes.BUTTON_PRESSED" not in content, "Level should not subscribe to BUTTON_PRESSED anymore")
+	assert("GameEventTypes.AREA_ENTERED" not in content, "Level should not subscribe to AREA_ENTERED anymore")
+	assert('_handle_trigger_event' not in content, "Level should not keep generic trigger side-effect handling")
+	assert('event.get_node("camera")' not in content, "Level should not read trigger cameras from generic payloads")
+	assert('event.get_node("door")' not in content, "Level should not read trigger doors from generic payloads")
+
+	print("✓ Level now keeps only shared generic routes such as key collection")

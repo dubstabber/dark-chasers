@@ -1,5 +1,7 @@
 extends Area3D
 
+signal trigger_entered(body: Node)
+
 ## The domain-specific event type to emit (e.g., GameEventTypes.AREA_PIANO_ALARM).
 ## This is the SOLE stable identity for the event - no string dispatch needed.
 ## Set this in the editor by typing the StringName value (e.g., &"area_piano_alarm").
@@ -16,7 +18,7 @@ func _ready():
 	connect("body_entered", _body_entered)
 
 
-func _body_entered(body):
+func _body_entered(body: Node) -> void:
 	if body.is_in_group('player') and not triggered:
 		if one_trigger_only: triggered = true
 
@@ -34,10 +36,4 @@ func _body_entered(body):
 				"camera": temporary_camera
 			}, self)
 
-		# Emit generic event for base Level class handling (door/camera from payload)
-		Services.event_bus.emit(GameEventTypes.AREA_ENTERED, {
-			"body": body,
-			"area": self,
-			"door": door_to_open,
-			"camera": temporary_camera
-		}, self)
+		trigger_entered.emit(body)

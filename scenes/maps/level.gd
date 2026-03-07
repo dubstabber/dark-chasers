@@ -25,10 +25,8 @@ func _ready():
 
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	# Subscribe to typed events from GameEventBus (replaces group-based signal wiring)
+	# Subscribe to shared cross-level events from GameEventBus.
 	Services.event_bus.subscribe(GameEventTypes.KEY_COLLECTED, _on_key_event)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_PRESSED, _on_button_event)
-	Services.event_bus.subscribe(GameEventTypes.AREA_ENTERED, _on_area_event)
 	Services.event_bus.subscribe(GameEventTypes.DOOR_LOCKED, _on_door_locked_event)
 	Services.event_bus.subscribe(GameEventTypes.ITEM_PICKEDUP, _on_item_pickedup_event)
 	
@@ -47,42 +45,20 @@ func _ready():
 func _exit_tree():
 	# Unsubscribe from event bus when level is removed
 	Services.event_bus.unsubscribe(GameEventTypes.KEY_COLLECTED, _on_key_event)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PRESSED, _on_button_event)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_ENTERED, _on_area_event)
 	Services.event_bus.unsubscribe(GameEventTypes.DOOR_LOCKED, _on_door_locked_event)
 	Services.event_bus.unsubscribe(GameEventTypes.ITEM_PICKEDUP, _on_item_pickedup_event)
 
 
-# === GENERIC EVENT HANDLERS ===
-# These handle common patterns from generic events (KEY_COLLECTED, BUTTON_PRESSED, AREA_ENTERED).
-# Child classes should subscribe to domain-specific events (e.g., BUTTON_CHECK_TV) directly
-# instead of overriding _handle_*_event methods.
+# === SHARED EVENT HANDLERS ===
+# These handle truly shared cross-level concerns (keys, locks, item pickups).
+# Button/area trigger side effects should be owned by typed subscribers and/or
+# explicit effect components attached to the trigger instances.
 
 func _on_key_event(event: RefCounted) -> void:
 	var body = event.get_body()
 	var key_type = event.get_string("key_type")
 	var message = event.get_string("message")
 	_key_body_entered(body, key_type, message)
-
-
-func _on_button_event(event: RefCounted) -> void:
-	_handle_trigger_event(event)
-
-
-func _on_area_event(event: RefCounted) -> void:
-	_handle_trigger_event(event)
-
-
-func _handle_trigger_event(event: RefCounted) -> void:
-	# Handle camera switching if event has a camera configured
-	var camera = event.get_node("camera")
-	if camera:
-		Services.camera_manager.set_active_camera(camera)
-
-	# Handle door opening if event has a door configured
-	var door = event.get_node("door")
-	if door and door is Door:
-		door.open()
 
 
 func _on_door_locked_event(event: RefCounted) -> void:

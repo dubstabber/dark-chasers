@@ -23,14 +23,21 @@ enum DashState {
 @export var debug_logs: bool = false
 @export var stuck_timeout_seconds: float = 0.08
 
+const DASH_PATH_CLEARANCE_HEIGHT_OFFSETS := [0.45]
+const DASH_MAX_DURATION_MULTIPLIER := 2.75
+const FAILED_COMMIT_RETRY_DISTANCE_TILES := 0.5
+
 var _state: DashState = DashState.IDLE_COUNTING
 var _accumulated_distance_m: float = 0.0
 var _has_last_position := false
 var _last_position := Vector3.ZERO
 var _halt_remaining: float = 0.0
 var _dash_distance_remaining: float = 0.0
+var _dash_time_remaining: float = 0.0
 var _dash_direction := Vector3.ZERO
 var _dash_stuck_time: float = 0.0
+var _has_failed_commit_retry := false
+var _failed_commit_retry_position := Vector3.ZERO
 
 
 func _init() -> void:
@@ -44,27 +51,42 @@ func can_activate(context: EnemyAbilityContext) -> bool:
 		return false
 
 	if not _is_target_in_context_dash_range(context):
+		_clear_failed_commit_retry()
 		_sync_last_position(context.enemy_position)
 		return false
 
 	_accumulate_distance(context.enemy_position)
+	if _is_waiting_to_retry_failed_commit(context.enemy_position):
+		return false
 
 	if not super.can_activate(context):
 		return false
 
-	return _accumulated_distance_m >= _step_interval_distance_m()
+	if _accumulated_distance_m < _step_interval_distance_m():
+		return false
+
+	var enemy := _get_context_enemy(context)
+	if enemy != null and not _can_commit_to_dash(enemy):
+		_arm_failed_commit_retry(enemy)
+		return false
+
+	_clear_failed_commit_retry()
+	return true
 
 
 func activate(enemy: CharacterBody3D) -> void:
 	_state = DashState.IDLE_COUNTING
 	_halt_remaining = 0.0
 	_dash_distance_remaining = _dash_distance_m()
+	_dash_time_remaining = 0.0
 	_dash_direction = Vector3.ZERO
 	_dash_stuck_time = 0.0
 
 	if not _can_commit_to_dash(enemy):
+		_arm_failed_commit_retry(enemy)
 		return
 
+	_clear_failed_commit_retry()
 	_consume_step_interval()
 	_state = DashState.PRE_DASH_HALT
 	_halt_remaining = maxf(0.0, pre_dash_halt_seconds)
@@ -81,7 +103,9 @@ func process(enemy: CharacterBody3D, delta: float) -> AbilityStatus:
 			return AbilityStatus.RUNNING
 
 		if not _begin_dash(enemy):
+			_request_chase_path_refresh(enemy)
 			_state = DashState.IDLE_COUNTING
+			_dash_direction = Vector3.ZERO
 			return AbilityStatus.COMPLETED
 
 		_apply_dash_hop(enemy)
@@ -101,6 +125,7 @@ func deactivate(enemy: CharacterBody3D) -> void:
 	_state = DashState.IDLE_COUNTING
 	_halt_remaining = 0.0
 	_dash_distance_remaining = 0.0
+	_dash_time_remaining = 0.0
 	_dash_direction = Vector3.ZERO
 	_dash_stuck_time = 0.0
 	if enemy:
@@ -174,12 +199,50 @@ func _reset_step_tracking() -> void:
 	_accumulated_distance_m = 0.0
 	_has_last_position = false
 	_last_position = Vector3.ZERO
+	_clear_failed_commit_retry()
+
+
+func _arm_failed_commit_retry(enemy: CharacterBody3D) -> void:
+	if enemy == null:
+		return
+
+	_failed_commit_retry_position = enemy.global_position
+	_has_failed_commit_retry = true
+
+
+func _clear_failed_commit_retry() -> void:
+	_has_failed_commit_retry = false
+	_failed_commit_retry_position = Vector3.ZERO
+
+
+func _is_waiting_to_retry_failed_commit(current_position: Vector3) -> bool:
+	if not _has_failed_commit_retry:
+		return false
+
+	var retry_delta := current_position - _failed_commit_retry_position
+	retry_delta.y = 0.0
+	if retry_delta.length() < _failed_commit_retry_distance_m():
+		return true
+
+	_clear_failed_commit_retry()
+	return false
+
+
+func _failed_commit_retry_distance_m() -> float:
+	return maxf(0.25, _tile_size_meters() * FAILED_COMMIT_RETRY_DISTANCE_TILES)
 
 
 func _enemy_has_target(enemy: CharacterBody3D) -> bool:
 	if enemy == null:
 		return false
 	return enemy.get("current_target") is Node3D
+
+
+func _get_context_enemy(context: EnemyAbilityContext) -> CharacterBody3D:
+	if context == null:
+		return null
+
+	return context.enemy_body
 
 
 func _is_target_in_context_dash_range(context: EnemyAbilityContext) -> bool:
@@ -206,25 +269,73 @@ func _resolve_target_direction(enemy: CharacterBody3D) -> Vector3:
 	return dash_direction.normalized()
 
 
-func _can_commit_to_dash(enemy: CharacterBody3D) -> bool:
+func _is_target_in_enemy_room(enemy: CharacterBody3D) -> bool:
+	if enemy == null:
+		return false
+
+	var target: Node3D = enemy.get("current_target") as Node3D
+	if target == null:
+		return false
+
+	var enemy_room := _get_room_name(enemy)
+	if enemy_room == "":
+		return true
+
+	var target_room := _get_room_name(target)
+	if target_room == "":
+		return true
+
+	return target_room == enemy_room
+
+
+func _can_commit_to_dash(enemy: CharacterBody3D, require_path_clearance: bool = true) -> bool:
 	if not _enemy_has_target(enemy):
+		return false
+
+	if not _is_target_in_enemy_room(enemy):
 		return false
 
 	if not _is_target_in_enemy_dash_range(enemy):
 		return false
 
-	if require_clear_dash_path and not _is_dash_path_clear_to_target(enemy):
+	if require_path_clearance and require_clear_dash_path and not _is_dash_path_clear_to_target(enemy):
 		return false
 
 	return true
 
 
 func _begin_dash(enemy: CharacterBody3D) -> bool:
+	if not _enemy_has_target(enemy):
+		return false
+
+	if not _is_target_in_enemy_room(enemy):
+		return false
+
 	_dash_direction = _resolve_target_direction(enemy)
 	if _dash_direction == Vector3.ZERO:
 		return false
 
+	_dash_time_remaining = _resolve_dash_phase_timeout(enemy)
 	return true
+
+
+func _request_chase_path_refresh(enemy: CharacterBody3D) -> void:
+	if enemy == null:
+		return
+
+	enemy.call("makepath")
+
+
+func _get_room_name(node: Object) -> String:
+	if node == null:
+		return ""
+
+	for property in node.get_property_list():
+		if String(property.get("name", "")) == "current_room":
+			var room_value = node.get("current_room")
+			return "" if room_value == null else String(room_value)
+
+	return ""
 
 
 func _is_target_in_enemy_dash_range(enemy: CharacterBody3D) -> bool:
@@ -282,7 +393,7 @@ func _process_dash(enemy: CharacterBody3D, delta: float) -> AbilityStatus:
 		return AbilityStatus.CANCELLED
 
 	if _dash_distance_remaining <= 0.0:
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	var start_position := enemy.global_position
 	_apply_gravity(enemy, delta)
@@ -291,7 +402,7 @@ func _process_dash(enemy: CharacterBody3D, delta: float) -> AbilityStatus:
 	var expected_forward := maxf(0.0, dash_speed * delta)
 	var probe_distance := maxf(expected_forward, maxf(0.05, obstacle_clearance_margin))
 	if _is_dash_motion_blocked(enemy, _dash_direction * probe_distance):
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	enemy.velocity.x = _dash_direction.x * dash_speed
 	enemy.velocity.z = _dash_direction.z * dash_speed
@@ -309,22 +420,34 @@ func _process_dash(enemy: CharacterBody3D, delta: float) -> AbilityStatus:
 	else:
 		_dash_stuck_time = 0.0
 
+	_dash_time_remaining = maxf(0.0, _dash_time_remaining - delta)
+
 	if _is_hitting_front_wall(enemy):
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	if enemy.is_on_wall():
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	if enemy.get_slide_collision_count() > 0 and expected_forward > 0.0 and moved_forward < expected_forward * 0.35:
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	if _dash_stuck_time >= maxf(0.01, stuck_timeout_seconds):
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
+
+	if _dash_time_remaining <= 0.0:
+		return _complete_dash(enemy)
 
 	if _dash_distance_remaining <= 0.0:
-		return AbilityStatus.COMPLETED
+		return _complete_dash(enemy)
 
 	return AbilityStatus.RUNNING
+
+
+func _complete_dash(enemy: CharacterBody3D) -> AbilityStatus:
+	if enemy:
+		enemy.velocity.x = 0.0
+		enemy.velocity.z = 0.0
+	return AbilityStatus.COMPLETED
 
 
 func _is_dash_motion_blocked(enemy: CharacterBody3D, motion: Vector3) -> bool:
@@ -350,7 +473,7 @@ func _is_dash_motion_blocked(enemy: CharacterBody3D, motion: Vector3) -> bool:
 	if collider_node == null:
 		if target == null:
 			return true
-		return not _raycast_path_hits_only_target(enemy, target)
+		return not _raycast_path_hits_only_target(enemy, target, motion)
 
 	if target == null:
 		return true
@@ -385,10 +508,13 @@ func _is_dash_path_clear_to_target(enemy: CharacterBody3D) -> bool:
 	if target == null:
 		return false
 
-	var motion := target.global_position - enemy.global_position
-	motion.y = 0.0
-	if motion.length_squared() <= 0.000001:
+	var to_target := target.global_position - enemy.global_position
+	to_target.y = 0.0
+	var target_distance := to_target.length()
+	if target_distance <= 0.000001:
 		return true
+
+	var motion := to_target.normalized() * minf(target_distance, _dash_distance_m())
 
 	var collision := KinematicCollision3D.new()
 	var collides := enemy.test_move(
@@ -402,23 +528,68 @@ func _is_dash_path_clear_to_target(enemy: CharacterBody3D) -> bool:
 		return true
 
 	var collider_node: Node = collision.get_collider() as Node
+	if collider_node != null and _is_allowed_target_hit(collider_node, target):
+		return true
+
+	if _has_elevated_dash_path_clearance(enemy, target, motion):
+		return true
+
 	if collider_node == null:
-		return _raycast_path_hits_only_target(enemy, target)
+		return _raycast_path_hits_only_target(enemy, target, motion)
 
-	return _is_allowed_target_hit(collider_node, target)
+	return false
 
 
-func _raycast_path_hits_only_target(enemy: CharacterBody3D, target: Node3D) -> bool:
+func _has_elevated_dash_path_clearance(enemy: CharacterBody3D, target: Node3D, motion: Vector3) -> bool:
 	if enemy == null or target == null:
 		return false
+
+	for height_offset in DASH_PATH_CLEARANCE_HEIGHT_OFFSETS:
+		var probe_transform := enemy.global_transform
+		probe_transform.origin += Vector3.UP * height_offset
+
+		var probe_collision := KinematicCollision3D.new()
+		var probe_collides := enemy.test_move(
+			probe_transform,
+			motion,
+			probe_collision,
+			maxf(0.001, obstacle_clearance_margin),
+			false
+		)
+		if not probe_collides:
+			return true
+
+		var probe_collider: Node = probe_collision.get_collider() as Node
+		if probe_collider != null and _is_allowed_target_hit(probe_collider, target):
+			return true
+
+	return false
+
+
+func _raycast_path_hits_only_target(enemy: CharacterBody3D, target: Node3D, motion: Vector3) -> bool:
+	if enemy == null or target == null:
+		return false
+	if motion.length_squared() <= 0.000001:
+		return true
 
 	var space_state := enemy.get_world_3d().direct_space_state
 	if space_state == null:
 		return false
 
+	for height_offset in DASH_PATH_CLEARANCE_HEIGHT_OFFSETS:
+		if _raycast_path_hits_only_target_at_height(space_state, enemy, target, motion, height_offset):
+			return true
+
+	return false
+
+
+func _raycast_path_hits_only_target_at_height(space_state: PhysicsDirectSpaceState3D, enemy: CharacterBody3D, target: Node3D, motion: Vector3, height_offset: float) -> bool:
+	if space_state == null or enemy == null or target == null:
+		return false
+
 	var params := PhysicsRayQueryParameters3D.new()
-	params.from = enemy.global_position
-	params.to = target.global_position
+	params.from = enemy.global_position + Vector3.UP * height_offset
+	params.to = params.from + motion
 	params.exclude = [enemy]
 	params.collision_mask = enemy.collision_mask
 
@@ -456,6 +627,15 @@ func _resolve_dash_speed(enemy: CharacterBody3D) -> float:
 		base_speed = float(speed_value)
 
 	return maxf(0.0, base_speed * maxf(0.0, dash_speed_multiplier))
+
+
+func _resolve_dash_phase_timeout(enemy: CharacterBody3D) -> float:
+	var dash_speed := _resolve_dash_speed(enemy)
+	if dash_speed <= 0.0:
+		return 0.0
+
+	var expected_duration := _dash_distance_remaining / dash_speed
+	return (expected_duration * DASH_MAX_DURATION_MULTIPLIER) + maxf(0.01, stuck_timeout_seconds)
 
 
 func _apply_gravity(enemy: CharacterBody3D, delta: float) -> void:

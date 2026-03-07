@@ -104,3 +104,11 @@ func handle_link_reached(details: Dictionary, motor_component: EnemyMotorCompone
 func handle_waypoint_reached(_details: Dictionary, motor_component: EnemyMotorComponent) -> void:
 	if motor_component:
 		motor_component.jump_speed = 0.0
+
+
+func handle_owner_teleported() -> void:
+	if not navigation_agent:
+		return
+
+	navigation_agent.velocity = Vector3.ZERO
+	navigation_agent.set_velocity_forced(Vector3.ZERO)

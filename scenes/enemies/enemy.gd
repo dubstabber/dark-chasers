@@ -105,7 +105,7 @@ func _setup_components() -> void:
 
 func _setup_transition_component() -> void:
 	if _transition_component:
-		_transition_component.setup(_nav_component, _disappear_zone_component, _room_pathing_component)
+			_transition_component.setup(_nav_component, _motor_component, _disappear_zone_component, _room_pathing_component)
 
 
 func _setup_disappear_zone_component() -> void:

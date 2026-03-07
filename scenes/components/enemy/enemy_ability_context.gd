@@ -1,6 +1,7 @@
 class_name EnemyAbilityContext
 extends RefCounted
 
+var enemy_body: CharacterBody3D
 var enemy_position: Vector3
 var target_position: Vector3
 var distance_to_target: float
@@ -12,6 +13,7 @@ var has_target: bool
 
 static func build(enemy: CharacterBody3D, ai_component: EnemyAIComponent = null, health_component: HealthComponent = null) -> EnemyAbilityContext:
 	var ctx := EnemyAbilityContext.new()
+	ctx.enemy_body = enemy
 	ctx.enemy_position = enemy.global_position
 	
 	if ai_component and ai_component.has_target():

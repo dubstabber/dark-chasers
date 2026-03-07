@@ -7,6 +7,7 @@ extends Node
 var _owner_enemy: Enemy = null
 var _enemy_context: Node = null
 var _nav_component: EnemyNavigationComponent = null
+var _motor_component: EnemyMotorComponent = null
 var _disappear_zone_component: EnemyDisappearZoneComponent = null
 var _room_pathing_component: RoomPathingComponent = null
 
@@ -21,8 +22,10 @@ func _ready() -> void:
 		map_transitions = _enemy_context.get_transitions_node()
 
 
-func setup(nav_component: EnemyNavigationComponent, disappear_zone_component: EnemyDisappearZoneComponent, room_pathing_component: RoomPathingComponent = null) -> void:
+
+func setup(nav_component: EnemyNavigationComponent, motor_component: EnemyMotorComponent, disappear_zone_component: EnemyDisappearZoneComponent, room_pathing_component: RoomPathingComponent = null) -> void:
 	_nav_component = nav_component
+	_motor_component = motor_component
 	_disappear_zone_component = disappear_zone_component
 	_room_pathing_component = room_pathing_component
 
@@ -34,7 +37,7 @@ func makepath() -> void:
 
 	var target = _owner_enemy.current_target
 	if target:
-		if target.current_room == _owner_enemy.current_room or not _owner_enemy.current_room:
+		if is_target_in_same_room(target):
 			pending_transition_name = ""
 			_set_nav_target(target.global_position)
 		elif map_transitions:
@@ -53,6 +56,30 @@ func makepath() -> void:
 	elif not _owner_enemy.waypoints.is_empty():
 		pending_transition_name = ""
 		_set_nav_target(_owner_enemy.waypoints[0])
+
+
+func has_pending_transition() -> bool:
+	return pending_transition_name != ""
+
+
+func is_target_in_same_room(target: Node3D = null) -> bool:
+	if not _owner_enemy:
+		return true
+
+	if target == null:
+		target = _owner_enemy.current_target
+	if target == null:
+		return false
+
+	var enemy_room := _get_room_name(_owner_enemy)
+	if enemy_room == "":
+		return true
+
+	var target_room := _get_room_name(target)
+	if target_room == "":
+		return true
+
+	return target_room == enemy_room
 
 
 func handle_target_reached() -> bool:
@@ -77,7 +104,10 @@ func _find_path_to_player() -> Array:
 		return []
 
 	if _room_pathing_component:
-		return _room_pathing_component.find_path_to_room(_owner_enemy.current_room, target.current_room)
+		var target_room := _get_room_name(target)
+		if target_room == "":
+			return []
+		return _room_pathing_component.find_path_to_room(_owner_enemy.current_room, target_room)
 
 	push_warning("EnemyTransitionComponent: No room pathing component found")
 	return []
@@ -118,12 +148,43 @@ func _execute_transition(transition_node: Node3D) -> void:
 	var to_room = transition_graph[_owner_enemy.current_room][transition_name]
 	_owner_enemy.current_room = to_room
 	_owner_enemy.global_position = marker.global_position
+	_reset_post_transition_motion_state()
 	_owner_enemy.makepath()
 
 	# Restart pathfinding with short delay
 	_owner_enemy.restart_pathfinding(0.1)
 
 
+
+func _reset_post_transition_motion_state() -> void:
+	if not _owner_enemy:
+		return
+
+	_owner_enemy.velocity = Vector3.ZERO
+	_owner_enemy.direction = Vector3.ZERO
+	if _motor_component:
+		_motor_component.direction = Vector3.ZERO
+		_motor_component.jump_speed = 0.0
+
+	if _nav_component:
+		_nav_component.handle_owner_teleported()
+
+	if not _owner_enemy.is_flying:
+		_owner_enemy.apply_floor_snap()
+
+
 func _set_nav_target(pos: Vector3) -> void:
 	if _nav_component:
 		_nav_component.set_target(pos)
+
+
+func _get_room_name(node: Object) -> String:
+	if node == null:
+		return ""
+
+	for property in node.get_property_list():
+		if String(property.get("name", "")) == "current_room":
+			var room_value = node.get("current_room")
+			return "" if room_value == null else String(room_value)
+
+	return ""

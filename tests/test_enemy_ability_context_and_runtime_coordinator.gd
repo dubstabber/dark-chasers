@@ -17,6 +17,7 @@ func _init() -> void:
 func _test_ability_context_uses_runtime_visibility() -> void:
 	print("\n--- Testing EnemyAbilityContext visibility semantics ---")
 	var source := FileAccess.get_file_as_string("res://scenes/components/enemy/enemy_ability_context.gd")
+	_assert("ctx.enemy_body = enemy" in source, "EnemyAbilityContext should retain the enemy body for pre-activation commit checks")
 	_assert("ctx.is_target_visible = ai_component.is_target_visible()" in source, "EnemyAbilityContext should use runtime target visibility")
 	_assert("ctx.is_target_visible = ai_component.check_line_of_sight" not in source, "EnemyAbilityContext should not use LOS config as visibility")
 	print("✓ EnemyAbilityContext uses runtime visibility")

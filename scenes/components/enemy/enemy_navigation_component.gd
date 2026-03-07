@@ -2,6 +2,8 @@
 class_name EnemyNavigationComponent
 extends Node
 
+const VERTICAL_DIRECTION_FALLBACK_MIN_DELTA := 0.35
+
 ## Signals emitted by concrete subclasses (e.g., GodotNavigationComponent)
 signal target_reached()
 signal link_reached(details: Dictionary)
@@ -62,12 +64,43 @@ func get_next_movement_direction() -> Vector3:
 func get_horizontal_direction() -> Vector3:
 	if not _owner_enemy:
 		return Vector3.ZERO
-	var next_pos = get_next_path_position()
+	var next_pos := get_next_path_position()
+	var horizontal_delta := _get_horizontal_delta_to(next_pos)
+	if horizontal_delta != Vector3.ZERO:
+		return horizontal_delta.normalized()
+	if not is_vertical_horizontal_direction_fallback_active():
+		return Vector3.ZERO
+	return _get_horizontal_delta_to(target_position).normalized()
+
+
+func is_vertical_horizontal_direction_fallback_active() -> bool:
+	if not _owner_enemy or is_navigation_finished():
+		return false
+	if _get_horizontal_delta_to(get_next_path_position()) != Vector3.ZERO:
+		return false
+	var target_delta := _get_horizontal_delta_to(target_position)
+	if target_delta == Vector3.ZERO:
+		return false
+	return (
+		_has_meaningful_vertical_delta(get_next_path_position())
+		or _has_meaningful_vertical_delta(target_position)
+	)
+
+
+func _get_horizontal_delta_to(position: Vector3) -> Vector3:
+	if not _owner_enemy:
+		return Vector3.ZERO
 	return Vector3(
-		next_pos.x - _owner_enemy.global_position.x,
-		0,
-		next_pos.z - _owner_enemy.global_position.z
-	).normalized()
+		position.x - _owner_enemy.global_position.x,
+		0.0,
+		position.z - _owner_enemy.global_position.z
+	)
+
+
+func _has_meaningful_vertical_delta(position: Vector3) -> bool:
+	if not _owner_enemy:
+		return false
+	return absf(position.y - _owner_enemy.global_position.y) > VERTICAL_DIRECTION_FALLBACK_MIN_DELTA
 
 
 @abstract
@@ -87,4 +120,8 @@ func handle_link_reached(_details: Dictionary, _motor_component: EnemyMotorCompo
 
 
 func handle_waypoint_reached(_details: Dictionary, _motor_component: EnemyMotorComponent) -> void:
+	pass
+
+
+func handle_owner_teleported() -> void:
 	pass

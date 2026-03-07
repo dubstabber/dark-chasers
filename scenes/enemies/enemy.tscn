@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://drjhbqeko807o" path="res://scenes/components/enemy/enemy_disappear_zone_component.gd" id="11_tihwb"]
 [ext_resource type="Script" uid="uid://47csay82d1kd" path="res://scenes/components/enemy/enemy_transition_component.gd" id="12_p7w77"]
 [ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="13_k4gvh"]
-[ext_resource type="Script" path="res://scenes/components/enemy/doom_navigation_component.gd" id="14_doom"]
+[ext_resource type="Script" uid="uid://cyfvaetxivb88" path="res://scenes/components/enemy/doom_navigation_component.gd" id="14_doom"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -70,6 +70,7 @@ navigation_agent = NodePath("../NavigationAgent3D")
 
 [node name="DoomNavigationComponent" type="Node" parent="."]
 script = ExtResource("14_doom")
+obstacle_clearance_margin = 0.6
 
 [node name="EnemyAIComponent" type="Node" parent="." node_paths=PackedStringArray("line_of_sight_origin")]
 script = ExtResource("4_ai")

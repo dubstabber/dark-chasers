@@ -56,7 +56,8 @@ func move_in_direction(move_direction: Vector3, delta: float) -> void:
 func stop() -> void:
 	if not _owner_enemy:
 		return
-	_owner_enemy.velocity = Vector3.ZERO
+	_owner_enemy.velocity.x = 0.0
+	_owner_enemy.velocity.z = 0.0
 
 
 func apply_jump(velocity_y: float) -> void:

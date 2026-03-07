@@ -72,6 +72,7 @@ func _ready() -> void:
 	print("=".repeat(60))
 
 	await _test_default_navigation_mode_selects_godot_component()
+	await _test_idle_enemy_gravity_continues_while_stopped()
 	await _test_doom_mode_disables_inactive_godot_navigation_agent()
 	await _test_runtime_navigation_mode_swap_godot_to_doom()
 	await _test_runtime_navigation_mode_swap_doom_to_godot()
@@ -115,6 +116,28 @@ func _test_default_navigation_mode_selects_godot_component() -> void:
 	_assert(nav_agent.process_mode != Node.PROCESS_MODE_DISABLED, "Default Godot mode should keep the NavigationAgent3D enabled")
 	_assert(not doom_nav.is_navigation_active(), "Doom navigation scaffold should start inactive by default")
 	print("✓ default mode selection")
+
+	enemy.free()
+	await get_tree().process_frame
+
+
+func _test_idle_enemy_gravity_continues_while_stopped() -> void:
+	print("\n--- idle enemies keep falling under gravity while stopped ---")
+	var enemy := EnemyScene.instantiate() as Enemy
+	add_child(enemy)
+	await get_tree().process_frame
+
+	enemy.current_target = null
+	enemy.velocity = Vector3(1.25, 0.0, -0.75)
+	enemy.global_position = Vector3(0.0, 3.0, 0.0)
+
+	await _wait_physics_frames(2)
+
+	_assert(is_zero_approx(enemy.velocity.x), "Idle stop should clear horizontal X velocity")
+	_assert(is_zero_approx(enemy.velocity.z), "Idle stop should clear horizontal Z velocity")
+	_assert(enemy.velocity.y < 0.0, "Idle enemies should retain gravity-driven vertical velocity while stopped")
+	_assert(enemy.global_position.y < 3.0, "Idle enemies should continue falling when no floor is present")
+	print("✓ idle gravity while stopped")
 
 	enemy.free()
 	await get_tree().process_frame

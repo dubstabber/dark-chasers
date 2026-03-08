@@ -279,6 +279,12 @@ func _begin_dash(enemy: CharacterBody3D) -> bool:
 	if not _is_target_in_enemy_room(enemy):
 		return false
 
+	if not _is_target_in_enemy_dash_range(enemy):
+		return false
+
+	if not _is_target_height_reachable_for_dash(enemy):
+		return false
+
 	_dash_direction = _resolve_target_direction(enemy)
 	if _dash_direction == Vector3.ZERO:
 		return false
@@ -300,6 +306,10 @@ func _get_room_name(node: Object) -> String:
 
 func _is_target_in_enemy_dash_range(enemy: CharacterBody3D) -> bool:
 	return _dash_policy.is_target_in_enemy_dash_range(enemy, min_dash_target_distance_m, max_dash_target_distance_m)
+
+
+func _is_target_height_reachable_for_dash(enemy: CharacterBody3D) -> bool:
+	return _dash_policy.is_target_height_reachable_for_dash(enemy, _dash_distance_m(), DASH_PATH_CLEARANCE_HEIGHT_OFFSETS)
 
 
 func _is_distance_in_dash_range(distance: float) -> bool:

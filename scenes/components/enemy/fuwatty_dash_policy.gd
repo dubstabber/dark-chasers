@@ -1,6 +1,8 @@
 class_name FuwattyDashPolicy
 extends RefCounted
 
+const DASH_VERTICAL_REACH_PER_METER := 0.2
+
 
 func enemy_has_target(enemy: CharacterBody3D) -> bool:
 	if enemy == null:
@@ -41,6 +43,8 @@ func can_commit_to_dash(
 		return false
 	if not is_target_in_enemy_dash_range(enemy, min_dash_target_distance_m, max_dash_target_distance_m):
 		return false
+	if not is_target_height_reachable_for_dash(enemy, dash_distance_m, height_offsets):
+		return false
 	if require_path_clearance and require_clear_dash_path and not is_dash_path_clear_to_target(enemy, obstacle_clearance_margin, dash_distance_m, height_offsets):
 		return false
 	return true
@@ -78,6 +82,18 @@ func is_target_in_enemy_dash_range(enemy: CharacterBody3D, min_dash_target_dista
 	if target == null:
 		return false
 	return is_distance_in_dash_range(_horizontal_distance(enemy.global_position, target.global_position), min_dash_target_distance_m, max_dash_target_distance_m)
+
+
+func is_target_height_reachable_for_dash(enemy: CharacterBody3D, _dash_distance_m: float, height_offsets: Array) -> bool:
+	if enemy == null:
+		return false
+	var target := resolve_target(enemy)
+	if target == null:
+		return false
+	var horizontal_distance := _horizontal_distance(enemy.global_position, target.global_position)
+	var clearance_height := _max_height_offset(height_offsets)
+	var max_vertical_delta := clearance_height + (horizontal_distance * DASH_VERTICAL_REACH_PER_METER)
+	return absf(target.global_position.y - enemy.global_position.y) <= max_vertical_delta
 
 
 func is_distance_in_dash_range(distance: float, min_dash_target_distance_m: float, max_dash_target_distance_m: float) -> bool:
@@ -194,6 +210,13 @@ func is_allowed_target_hit(collider_node: Node, target: Node3D) -> bool:
 	if target.is_ancestor_of(collider_node):
 		return true
 	return collider_node.is_ancestor_of(target)
+
+
+func _max_height_offset(height_offsets: Array) -> float:
+	var max_height_offset := 0.0
+	for height_offset in height_offsets:
+		max_height_offset = maxf(max_height_offset, float(height_offset))
+	return max_height_offset
 
 
 func _horizontal_distance(from_pos: Vector3, to_pos: Vector3) -> float:

@@ -38,6 +38,8 @@ func _run_tests() -> void:
 	_test_clear_path_gate_ignores_obstacles_beyond_dash_distance()
 	_test_uphill_terrain_does_not_false_block_dash_start()
 	_test_late_retargeted_dash_completes_on_higher_terrain()
+	_test_too_high_target_during_halt_cancels_dash()
+	_test_too_low_target_during_halt_cancels_dash()
 	_test_room_transition_during_halt_cancels_dash_and_repaths()
 	_test_dash_travels_fixed_distance_when_clear()
 	print("=== FUWATTY DASH ABILITY PHASE 1/2 TESTS COMPLETED ===")
@@ -371,6 +373,66 @@ func _test_late_retargeted_dash_completes_on_higher_terrain() -> void:
 	_assert(enemy.global_position.z > 0.1, "Retargeted dash should still make forward progress toward the higher target")
 	_assert(absf(enemy.global_position.x) < 0.35, "Retargeted dash should no longer keep the original pre-telegraph direction")
 	print("✓ Late retargeted higher-terrain dash completes cleanly")
+
+	harness.free()
+
+
+func _test_too_high_target_during_halt_cancels_dash() -> void:
+	print("\n--- Testing too-high target during pre-dash halt cancels dash ---")
+	var ability = load(FUWATTY_DASH_ABILITY_SCRIPT).new()
+	ability.pre_dash_halt_seconds = 1.0
+	ability.require_clear_dash_path = false
+	ability.max_dash_target_distance_m = 40.0
+
+	var harness := Node3D.new()
+	add_child(harness)
+
+	var enemy := _spawn_test_enemy(harness, Vector3.ZERO)
+	enemy.is_flying = true
+	var target := _spawn_target(harness, Vector3(8, 0, 0))
+	enemy.current_target = target
+
+	ability.activate(enemy)
+	_assert(ability.get_state_name() == &"pre_dash_halt", "Ability should enter pre-dash halt before validating the final dash start")
+
+	target.position = Vector3(1.0, 3.0, 0.0)
+	var status: int = ability.process(enemy, 1.01)
+
+	_assert(status == EnemyAbility.AbilityStatus.COMPLETED, "Dash should fail gracefully if the target becomes too high during the halt")
+	_assert(ability.get_state_name() == &"idle_counting", "State should return to idle when the target becomes vertically unreachable")
+	_assert(enemy.makepath_call_count == 1, "Vertical reach cancellation should request an immediate path refresh")
+	_assert(ability.get_dash_direction() == Vector3.ZERO, "Cancelled vertically unreachable dash should not lock a dash direction")
+	print("✓ Too-high target cancels dash during halt")
+
+	harness.free()
+
+
+func _test_too_low_target_during_halt_cancels_dash() -> void:
+	print("\n--- Testing too-low target during pre-dash halt cancels dash ---")
+	var ability = load(FUWATTY_DASH_ABILITY_SCRIPT).new()
+	ability.pre_dash_halt_seconds = 1.0
+	ability.require_clear_dash_path = false
+	ability.max_dash_target_distance_m = 40.0
+
+	var harness := Node3D.new()
+	add_child(harness)
+
+	var enemy := _spawn_test_enemy(harness, Vector3(0.0, 3.0, 0.0))
+	enemy.is_flying = true
+	var target := _spawn_target(harness, Vector3(8.0, 3.0, 0.0))
+	enemy.current_target = target
+
+	ability.activate(enemy)
+	_assert(ability.get_state_name() == &"pre_dash_halt", "Ability should enter pre-dash halt before validating a lower target at dash start")
+
+	target.position = Vector3(1.0, 0.0, 0.0)
+	var status: int = ability.process(enemy, 1.01)
+
+	_assert(status == EnemyAbility.AbilityStatus.COMPLETED, "Dash should fail gracefully if the target becomes too low during the halt")
+	_assert(ability.get_state_name() == &"idle_counting", "State should return to idle when the target drops outside the vertical dash window")
+	_assert(enemy.makepath_call_count == 1, "Lower unreachable target cancellation should request a path refresh")
+	_assert(ability.get_dash_direction() == Vector3.ZERO, "Cancelled low-target dash should not lock a dash direction")
+	print("✓ Too-low target cancels dash during halt")
 
 	harness.free()
 

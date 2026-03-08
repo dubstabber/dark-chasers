@@ -16,6 +16,9 @@ class TestTarget extends CharacterBody3D:
 func _ready() -> void:
 	print("=== FUWATTY DASH POLICY TESTS ===")
 	await _test_same_room_clear_path_can_commit()
+	await _test_reachable_higher_target_still_commits()
+	await _test_too_high_target_fails_vertical_reach_check()
+	await _test_too_low_target_fails_vertical_reach_check()
 	await _test_blank_room_names_do_not_block_commit()
 	await _test_blocker_prevents_commit_when_clear_path_required()
 	print("=== FUWATTY DASH POLICY TESTS COMPLETED ===")
@@ -46,6 +49,45 @@ func _test_blank_room_names_do_not_block_commit() -> void:
 	_assert(policy.is_target_in_enemy_room(enemy), "Empty room metadata should not block same-room dash checks")
 	harness.free()
 	print("✓ blank room names stay permissive")
+
+
+func _test_reachable_higher_target_still_commits() -> void:
+	var harness := Node3D.new()
+	add_child(harness)
+	var enemy := _spawn_enemy(harness, Vector3.ZERO, "A")
+	var target := _spawn_target(harness, Vector3(0.0, 1.9, 8.0), "A")
+	enemy.current_target = target
+	await get_tree().physics_frame
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
+	_assert(policy.can_commit_to_dash(enemy, 0.0, 12.0, false, 0.05, 6.0, [0.45]), "Reachable uphill targets should remain dash-committable")
+	harness.free()
+	print("✓ reachable uphill targets stay committable")
+
+
+func _test_too_high_target_fails_vertical_reach_check() -> void:
+	var harness := Node3D.new()
+	add_child(harness)
+	var enemy := _spawn_enemy(harness, Vector3.ZERO, "A")
+	var target := _spawn_target(harness, Vector3(1.0, 3.0, 0.0), "A")
+	enemy.current_target = target
+	await get_tree().physics_frame
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
+	_assert(not policy.can_commit_to_dash(enemy, 0.0, 12.0, false, 0.05, 6.0, [0.45]), "Targets too high above the dash lane should fail dash commit")
+	harness.free()
+	print("✓ too-high targets fail vertical reach check")
+
+
+func _test_too_low_target_fails_vertical_reach_check() -> void:
+	var harness := Node3D.new()
+	add_child(harness)
+	var enemy := _spawn_enemy(harness, Vector3(0.0, 3.0, 0.0), "A")
+	var target := _spawn_target(harness, Vector3(1.0, 0.0, 0.0), "A")
+	enemy.current_target = target
+	await get_tree().physics_frame
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
+	_assert(not policy.can_commit_to_dash(enemy, 0.0, 12.0, false, 0.05, 6.0, [0.45]), "Targets too low below the dash lane should fail dash commit")
+	harness.free()
+	print("✓ too-low targets fail vertical reach check")
 
 
 func _test_blocker_prevents_commit_when_clear_path_required() -> void:

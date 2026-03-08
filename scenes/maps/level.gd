@@ -156,7 +156,7 @@ func refresh_key_display():
 func _door_locked(_text, _triggering_player): pass
 
 
-func spawn_player() -> void:
+func spawn_player() -> Player:
 	"""Virtual: Override in subclass for custom spawn behavior.
 	
 	Default implementation instantiates a player from the scene catalog,
@@ -167,6 +167,7 @@ func spawn_player() -> void:
 	players.add_child(player)
 	setup_player(player)
 	respawn(player)
+	return player
 
 
 func respawn(player: CharacterBody3D) -> void:

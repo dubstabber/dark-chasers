@@ -2,8 +2,6 @@
 class_name DirectionalSprite3D
 extends Sprite3D
 
-const DirectionalSpritePropertyControllerScript = preload("res://scenes/components/directional_sprite_3d/directional_sprite_property_controller.gd")
-
 enum DirectionMode {
 	THREE_DIRECTIONS, ## front, side, back
 	FOUR_DIRECTIONS, ## front, left, right, back
@@ -33,7 +31,7 @@ var movement_sprites := {}
 var shooting_sprites := {}
 var atlas_texture: Texture2D
 var _atlas_generation_pending := false
-var _property_controller = DirectionalSpritePropertyControllerScript.new()
+var _property_controller: DirectionalSpritePropertyController = DirectionalSpritePropertyController.new()
 
 # Shader material for directional rendering
 var directional_material: ShaderMaterial

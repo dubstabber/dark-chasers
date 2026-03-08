@@ -1,7 +1,5 @@
 extends CanvasLayer
 
-const HudEventTextControllerScript = preload("res://scenes/components/player/hud_event_text_controller.gd")
-
 var tween: Tween
 var faded: bool
 
@@ -24,7 +22,7 @@ var faded: bool
 var _connected_provider: Node = null
 var _reserve_ammo_callback: Callable
 var _player_binding_controller := HudPlayerBindingController.new()
-var _event_text_controller = HudEventTextControllerScript.new()
+var _event_text_controller: HudEventTextController = HudEventTextController.new()
 
 
 func _ready():

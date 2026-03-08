@@ -1,6 +1,5 @@
 extends SceneTree
 
-const DoomNavigationDirectionPolicyScript = preload("res://scenes/components/enemy/doom_navigation_direction_policy.gd")
 const BASE_SEARCH_ORDER := [0, 4, 2, 6, 1, 3, 5, 7]
 
 var _failed := false
@@ -17,7 +16,7 @@ func _init() -> void:
 
 
 func _test_axis_direction_resolution() -> void:
-	var policy = DoomNavigationDirectionPolicyScript.new()
+	var policy: DoomNavigationDirectionPolicy = DoomNavigationDirectionPolicy.new()
 	_assert(policy.get_x_dir(1.0, 0.15) == policy.DIR_EAST, "Positive X delta should resolve east")
 	_assert(policy.get_x_dir(-1.0, 0.15) == policy.DIR_WEST, "Negative X delta should resolve west")
 	_assert(policy.get_z_dir(-1.0, 0.15) == policy.DIR_NORTH, "Negative Z delta should resolve north")
@@ -26,7 +25,7 @@ func _test_axis_direction_resolution() -> void:
 
 
 func _test_diagonal_resolution() -> void:
-	var policy = DoomNavigationDirectionPolicyScript.new()
+	var policy: DoomNavigationDirectionPolicy = DoomNavigationDirectionPolicy.new()
 	_assert(policy.compose_diagonal(policy.DIR_EAST, policy.DIR_NORTH) == policy.DIR_NORTHEAST, "East + north should compose northeast")
 	_assert(policy.compose_diagonal(policy.DIR_WEST, policy.DIR_SOUTH) == policy.DIR_SOUTHWEST, "West + south should compose southwest")
 	_assert(policy.compose_diagonal(policy.DIR_EAST, policy.DIR_NODIR) == policy.DIR_NODIR, "Incomplete axis pair should stay NODIR")
@@ -34,7 +33,7 @@ func _test_diagonal_resolution() -> void:
 
 
 func _test_search_order_prefers_perpendicular_dirs_for_axis_chase() -> void:
-	var policy = DoomNavigationDirectionPolicyScript.new()
+	var policy: DoomNavigationDirectionPolicy = DoomNavigationDirectionPolicy.new()
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 13
 	var order: Array = policy.build_search_order(policy.DIR_EAST, policy.DIR_NODIR, 0, rng, BASE_SEARCH_ORDER)
@@ -45,7 +44,7 @@ func _test_search_order_prefers_perpendicular_dirs_for_axis_chase() -> void:
 
 
 func _test_seeded_jitter_is_reproducible() -> void:
-	var policy = DoomNavigationDirectionPolicyScript.new()
+	var policy: DoomNavigationDirectionPolicy = DoomNavigationDirectionPolicy.new()
 	var rng_a := RandomNumberGenerator.new()
 	rng_a.seed = 41
 	var rng_b := RandomNumberGenerator.new()

@@ -1,7 +1,5 @@
 class_name Enemy extends CharacterBody3D
 
-const EnemyNavigationHostControllerScript = preload("res://scenes/components/enemy/enemy_navigation_host_controller.gd")
-
 enum NavigationMode {
 	GODOT,
 	DOOM,
@@ -37,7 +35,7 @@ var _motor_component: EnemyMotorComponent
 var _brain_component: EnemyBrain
 var _runtime_coordinator: EnemyRuntimeCoordinator = null
 var _path_timing_controller := EnemyPathTimingController.new()
-var _navigation_host_controller = EnemyNavigationHostControllerScript.new()
+var _navigation_host_controller: EnemyNavigationHostController = EnemyNavigationHostController.new()
 var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")

@@ -1,8 +1,6 @@
 class_name DoomNavigationComponent
 extends EnemyNavigationComponent
 
-const DoomNavigationDirectionPolicyScript = preload("res://scenes/components/enemy/doom_navigation_direction_policy.gd")
-
 const MODE_ID := &"doom"
 const TARGET_REACHED_DISTANCE := 0.25
 const TARGET_AXIS_EPSILON := 0.15
@@ -78,7 +76,7 @@ const SEARCH_ORDER := [
 @export var fallback_random_seed: int = -1
 
 var _rng := RandomNumberGenerator.new()
-var _direction_policy = DoomNavigationDirectionPolicyScript.new()
+var _direction_policy: DoomNavigationDirectionPolicy = DoomNavigationDirectionPolicy.new()
 var _has_target := false
 var _current_move_dir: ChaseDir = ChaseDir.NODIR
 var _last_successful_dir: ChaseDir = ChaseDir.NODIR

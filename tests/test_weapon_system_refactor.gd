@@ -132,6 +132,8 @@ func test_weapon_manager_delegates_to_controllers():
 	assert("_fire_controller.consume_and_execute_hit" in source, "WeaponManager should delegate hit execution to WeaponFireController")
 	assert("_equip_controller.switch_weapon" in source, "WeaponManager should delegate switch flow to WeaponEquipController")
 	assert("_equip_controller.equip_selected_slot" in source, "WeaponManager should delegate equip flow to WeaponEquipController")
+	assert("WeaponAnimationStateController.new()" in source, "WeaponManager should instantiate WeaponAnimationStateController via class_name")
+	assert("WeaponAnimationStateControllerScript" not in source, "WeaponManager should not rely on a script-path preload alias for animation state controller")
 	assert("_equip_controller.setup" in source, "WeaponManager should configure WeaponEquipController dependencies")
 	assert("_ui_event_controller.forward_ammo_change" in source, "WeaponManager should delegate ammo UI forwarding to WeaponUiEventController")
 	

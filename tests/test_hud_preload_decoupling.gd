@@ -16,7 +16,7 @@ class MockBitmapFontCatalog:
 
 func _ready() -> void:
 	print("=== HUD PRELOAD/PATH DECOUPLING TESTS ===")
-	_test_hud_uses_class_name_binding_controller()
+	_test_hud_uses_class_name_helper_controllers()
 	_test_hud_log_label_scene_is_exported_reference()
 	_test_ui_bitmap_text_uses_catalog_backed_glyph_lookup()
 	_test_ui_bitmap_text_sentinel_hide_behavior()
@@ -24,12 +24,14 @@ func _ready() -> void:
 	get_tree().quit(1 if _failed else 0)
 
 
-func _test_hud_uses_class_name_binding_controller() -> void:
-	print("\n--- Testing HUD binding controller class_name usage ---")
+func _test_hud_uses_class_name_helper_controllers() -> void:
+	print("\n--- Testing HUD helper controller class_name usage ---")
 	var source := FileAccess.get_file_as_string("res://scenes/hud.gd")
 	_assert("HudPlayerBindingController.new()" in source, "HUD should instantiate HudPlayerBindingController via class_name")
 	_assert("HudPlayerBindingControllerScript" not in source, "HUD should not use script-path preload alias for binding controller")
-	print("✓ HUD uses class_name binding controller")
+	_assert("HudEventTextController.new()" in source, "HUD should instantiate HudEventTextController via class_name")
+	_assert("HudEventTextControllerScript" not in source, "HUD should not use script-path preload alias for event-text controller")
+	print("✓ HUD uses class_name helper controllers")
 
 
 func _test_hud_log_label_scene_is_exported_reference() -> void:

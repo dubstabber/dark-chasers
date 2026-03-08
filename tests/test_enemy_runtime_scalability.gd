@@ -1,8 +1,5 @@
 extends SceneTree
 
-const EnemySpawnOwnerServiceScript = preload("res://scenes/services/enemy_spawn_owner_service.gd")
-const RoomPathingComponentScript = preload("res://scenes/components/enemy/room_pathing_component.gd")
-
 var _failed := false
 
 
@@ -37,7 +34,7 @@ func _test_room_pathing_cache_invalidation() -> void:
 	var context := MockEnemyContext.new()
 	root.add_child(context)
 
-	var room_pathing: RoomPathingComponentScript = RoomPathingComponentScript.new()
+	var room_pathing: RoomPathingComponent = RoomPathingComponent.new()
 	room_pathing.set_enemy_context(context)
 	root.add_child(room_pathing)
 
@@ -65,7 +62,7 @@ func _test_room_pathing_cache_invalidation() -> void:
 
 func _test_spawn_owner_caps_and_telemetry() -> void:
 	print("\n--- Testing spawn owner caps and telemetry ---")
-	var service: EnemySpawnOwnerServiceScript = EnemySpawnOwnerServiceScript.new()
+	var service: EnemySpawnOwnerService = EnemySpawnOwnerService.new()
 	root.add_child(service)
 
 	var parent := Node3D.new()

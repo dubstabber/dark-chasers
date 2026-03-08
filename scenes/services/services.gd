@@ -1,7 +1,5 @@
 extends Node
 
-const EnemySpawnOwnerServiceScript = preload("res://scenes/services/enemy_spawn_owner_service.gd")
-
 
 ## Single entry-point for all game services.
 ## Replaces individual autoloads with a centralized service registry.
@@ -31,7 +29,7 @@ var audio_pool: AudioPoolService
 var vfx_pool: VfxPoolService
 var event_bus: GameEventBus
 var sequence_director: SequenceDirector
-var enemy_spawn_owner: EnemySpawnOwnerServiceScript
+var enemy_spawn_owner: EnemySpawnOwnerService
 var input_router: InputRouter
 var level_manager: Node
 var ammo_config: AmmoConfig
@@ -55,7 +53,7 @@ func _enter_tree() -> void:
 	vfx_pool = _add_service("VfxPoolService", VfxPoolService.new()) as VfxPoolService
 	event_bus = _add_service("GameEventBus", GameEventBus.new()) as GameEventBus
 	sequence_director = _add_service("SequenceDirector", SequenceDirector.new()) as SequenceDirector
-	enemy_spawn_owner = _add_service("EnemySpawnOwnerService", EnemySpawnOwnerServiceScript.new()) as EnemySpawnOwnerServiceScript
+	enemy_spawn_owner = _add_service("EnemySpawnOwnerService", EnemySpawnOwnerService.new()) as EnemySpawnOwnerService
 	input_router = _add_service("InputRouter", InputRouter.new()) as InputRouter
 	level_manager = _add_service("LevelManager", LevelManager.new())
 	ammo_config = _add_service("AmmoConfig", AmmoConfig.new()) as AmmoConfig

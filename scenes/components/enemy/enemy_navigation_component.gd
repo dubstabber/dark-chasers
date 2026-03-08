@@ -5,9 +5,9 @@ extends Node
 const VERTICAL_DIRECTION_FALLBACK_MIN_DELTA := 0.35
 
 ## Signals emitted by concrete subclasses (e.g., GodotNavigationComponent)
-signal target_reached()
-signal link_reached(details: Dictionary)
-signal waypoint_reached(details: Dictionary)
+@warning_ignore("unused_signal") signal target_reached()
+@warning_ignore("unused_signal") signal link_reached(details: Dictionary)
+@warning_ignore("unused_signal") signal waypoint_reached(details: Dictionary)
 
 @export var enabled: bool = true
 

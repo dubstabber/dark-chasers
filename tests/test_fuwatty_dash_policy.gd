@@ -1,7 +1,5 @@
 extends Node3D
 
-const FuwattyDashPolicyScript = preload("res://scenes/components/enemy/fuwatty_dash_policy.gd")
-
 var _failed := false
 
 
@@ -31,7 +29,7 @@ func _test_same_room_clear_path_can_commit() -> void:
 	var target := _spawn_target(harness, Vector3(6.0, 0.0, 0.0), "A")
 	enemy.current_target = target
 	await get_tree().physics_frame
-	var policy = FuwattyDashPolicyScript.new()
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
 	_assert(policy.can_commit_to_dash(enemy, 0.0, 12.0, true, 0.05, 6.0, [0.45]), "Clear same-room path should be dash-committable")
 	harness.free()
 	print("✓ same-room clear path commit")
@@ -44,7 +42,7 @@ func _test_blank_room_names_do_not_block_commit() -> void:
 	var target := _spawn_target(harness, Vector3(5.0, 0.0, 0.0), "")
 	enemy.current_target = target
 	await get_tree().physics_frame
-	var policy = FuwattyDashPolicyScript.new()
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
 	_assert(policy.is_target_in_enemy_room(enemy), "Empty room metadata should not block same-room dash checks")
 	harness.free()
 	print("✓ blank room names stay permissive")
@@ -58,7 +56,7 @@ func _test_blocker_prevents_commit_when_clear_path_required() -> void:
 	_spawn_blocker(harness, Vector3(4.0, 0.0, 0.0), Vector3(1.0, 2.0, 2.0))
 	enemy.current_target = target
 	await get_tree().physics_frame
-	var policy = FuwattyDashPolicyScript.new()
+	var policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
 	_assert(not policy.can_commit_to_dash(enemy, 0.0, 12.0, true, 0.05, 8.0, [0.45]), "Blocking geometry should prevent dash commit when clear path is required")
 	harness.free()
 	print("✓ blocker prevents clear-path commit")

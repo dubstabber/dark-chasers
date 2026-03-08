@@ -1,8 +1,6 @@
 class_name FuwattyDashAbility
 extends EnemyAbility
 
-const FuwattyDashPolicyScript = preload("res://scenes/components/enemy/fuwatty_dash_policy.gd")
-
 ## Phase 1/2: dash cadence, pre-dash halt, and dash execution.
 
 enum DashState {
@@ -29,7 +27,7 @@ const DASH_PATH_CLEARANCE_HEIGHT_OFFSETS := [0.45]
 const DASH_MAX_DURATION_MULTIPLIER := 2.75
 const FAILED_COMMIT_RETRY_DISTANCE_TILES := 0.5
 
-var _dash_policy = FuwattyDashPolicyScript.new()
+var _dash_policy: FuwattyDashPolicy = FuwattyDashPolicy.new()
 var _state: DashState = DashState.IDLE_COUNTING
 var _accumulated_distance_m: float = 0.0
 var _has_last_position := false

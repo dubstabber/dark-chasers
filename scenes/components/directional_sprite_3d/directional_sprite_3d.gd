@@ -2,6 +2,8 @@
 class_name DirectionalSprite3D
 extends Sprite3D
 
+const DirectionalSpritePropertyControllerScript = preload("res://scenes/components/directional_sprite_3d/directional_sprite_property_controller.gd")
+
 enum DirectionMode {
 	THREE_DIRECTIONS, ## front, side, back
 	FOUR_DIRECTIONS, ## front, left, right, back
@@ -31,6 +33,7 @@ var movement_sprites := {}
 var shooting_sprites := {}
 var atlas_texture: Texture2D
 var _atlas_generation_pending := false
+var _property_controller = DirectionalSpritePropertyControllerScript.new()
 
 # Shader material for directional rendering
 var directional_material: ShaderMaterial
@@ -136,25 +139,15 @@ func _process(_delta: float) -> void:
 
 
 func _get(property: StringName):
-	var prop_name = str(property)
-	
-	if prop_name.ends_with(IDLE_SUFFIX):
-		var direction = prop_name.replace(IDLE_SUFFIX, "")
-		return idle_sprites.get(direction)
-	
-	if prop_name.ends_with(MOVEMENT_SUFFIX):
-		var direction = prop_name.replace(MOVEMENT_SUFFIX, "")
-		if not movement_sprites.has(direction):
-			movement_sprites[direction] = []
-		return movement_sprites[direction]
-	
-	if prop_name.ends_with(SHOOTING_SUFFIX):
-		var direction = prop_name.replace(SHOOTING_SUFFIX, "")
-		if not shooting_sprites.has(direction):
-			shooting_sprites[direction] = []
-		return shooting_sprites[direction]
-	
-	return null
+	return _property_controller.get_dynamic_property(
+		property,
+		idle_sprites,
+		movement_sprites,
+		shooting_sprites,
+		IDLE_SUFFIX,
+		MOVEMENT_SUFFIX,
+		SHOOTING_SUFFIX
+	)
 
 
 func _set(property: StringName, value) -> bool:
@@ -167,27 +160,19 @@ func _set(property: StringName, value) -> bool:
 	if prop_name == "render_priority":
 		_mark_shader_sync_dirty()
 
-
-	if prop_name.ends_with(IDLE_SUFFIX):
-		var direction = prop_name.replace(IDLE_SUFFIX, "")
-		if direction in _get_current_directions():
-			idle_sprites[direction] = value
-			_request_atlas_generation()
-			return true
-	
-	if prop_name.ends_with(MOVEMENT_SUFFIX):
-		var direction = prop_name.replace(MOVEMENT_SUFFIX, "")
-		if direction in _get_current_directions():
-			movement_sprites[direction] = value
-			_request_atlas_generation()
-			return true
-	
-	if prop_name.ends_with(SHOOTING_SUFFIX):
-		var direction = prop_name.replace(SHOOTING_SUFFIX, "")
-		if direction in _get_current_directions():
-			shooting_sprites[direction] = value
-			_request_atlas_generation()
-			return true
+	if _property_controller.set_dynamic_property(
+		property,
+		value,
+		_get_current_directions(),
+		idle_sprites,
+		movement_sprites,
+		shooting_sprites,
+		IDLE_SUFFIX,
+		MOVEMENT_SUFFIX,
+		SHOOTING_SUFFIX
+	):
+		_request_atlas_generation()
+		return true
 	
 	return false
 
@@ -206,18 +191,14 @@ func _do_deferred_atlas_generation() -> void:
 
 
 func _get_property_list():
-	var properties: Array[Dictionary] = []
-	var directions = _get_current_directions()
-	
-	_add_sprite_group_properties(properties, "Idle sprites", directions, IDLE_SUFFIX, TYPE_OBJECT, "Texture2D")
-	
-	if has_moving_state:
-		_add_sprite_group_properties(properties, "Movement sprites", directions, MOVEMENT_SUFFIX, TYPE_ARRAY, "%d/%d:Texture2D" % [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE])
-	
-	if has_shooting_state:
-		_add_sprite_group_properties(properties, "Shooting sprites", directions, SHOOTING_SUFFIX, TYPE_ARRAY, "%d/%d:Texture2D" % [TYPE_OBJECT, PROPERTY_HINT_RESOURCE_TYPE])
-	
-	return properties
+	return _property_controller.build_property_list(
+		_get_current_directions(),
+		has_moving_state,
+		has_shooting_state,
+		IDLE_SUFFIX,
+		MOVEMENT_SUFFIX,
+		SHOOTING_SUFFIX
+	)
 
 
 func _get_current_directions() -> Array:
@@ -225,22 +206,7 @@ func _get_current_directions() -> Array:
 
 
 func _add_sprite_group_properties(properties: Array[Dictionary], group_name: String, directions: Array, suffix: String, property_type: int, hint_string: String) -> void:
-	properties.append({
-		"name": group_name,
-		"type": TYPE_NIL,
-		"usage": PROPERTY_USAGE_GROUP,
-	})
-
-	var hint_type = PROPERTY_HINT_RESOURCE_TYPE if property_type == TYPE_OBJECT else PROPERTY_HINT_ARRAY_TYPE
-
-	for direction in directions:
-		properties.append({
-			"name": direction + suffix,
-			"type": property_type,
-			"hint": hint_type,
-			"hint_string": hint_string,
-			"usage": PROPERTY_USAGE_DEFAULT
-		})
+	_property_controller._add_sprite_group_properties(properties, group_name, directions, suffix, property_type, hint_string)
 
 
 func _update_node_references() -> void:

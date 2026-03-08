@@ -1,5 +1,7 @@
 class_name WeaponManager extends Node3D
 
+const WeaponAnimationStateControllerScript = preload("res://scenes/systems/weapon_manager/weapon_animation_state_controller.gd")
+
 signal lighter_on
 signal lighter_off
 signal weapon_ammo_changed(current_ammo: int, max_ammo: int)
@@ -16,6 +18,7 @@ var _ammo_controller := WeaponAmmoController.new()
 var _fire_controller := WeaponFireController.new()
 var _ui_event_controller := WeaponUiEventController.new()
 var _equip_controller := WeaponEquipController.new()
+var _animation_state_controller = WeaponAnimationStateControllerScript.new()
 
 # --------------------------------------------------------------------------
 # Runtime state
@@ -26,7 +29,6 @@ var right_hand: Node
 var base_gun_position: Vector3 = Vector3.ZERO
 
 var is_auto_hitting := false
-var is_shooting := false # Tracks if a shooting/hit animation is playing
 
 const BOB_IDLE_EPSILON_SQUARED := 0.0001
 
@@ -124,7 +126,7 @@ func _process(delta: float) -> void:
 	var player_is_moving := player.velocity.length_squared() > BOB_IDLE_EPSILON_SQUARED
 	var bob_offset := _bob_controller.get_offset()
 	var has_significant_bob := bob_offset.length_squared() > BOB_IDLE_EPSILON_SQUARED
-	var should_update_bob := player_is_moving or is_shooting or is_auto_hitting or has_significant_bob
+	var should_update_bob: bool = player_is_moving or _animation_state_controller.is_shooting() or is_auto_hitting or has_significant_bob
 
 	if not should_update_bob:
 		if gun_base.position != base_gun_position:
@@ -148,7 +150,7 @@ func _update_speed(delta: float) -> void:
 
 
 func _update_bob(delta: float) -> void:
-	_bob_controller.update_bob(delta, is_shooting, is_auto_hitting)
+	_bob_controller.update_bob(delta, _animation_state_controller.is_shooting(), is_auto_hitting)
 
 
 func _apply_offsets() -> void:
@@ -293,7 +295,7 @@ func reset_weapon_on_revival() -> void:
 	"""Reset weapon state when player is revived or respawns"""
 	enable_weapon_bobbing()
 	is_auto_hitting = false
-	is_shooting = false
+	_animation_state_controller.reset()
 
 	# If there's a current weapon, play its pullout animation to "re-equip" it
 	if current_weapon and current_weapon.pullout_anim_name and animation_player:
@@ -310,12 +312,7 @@ func _on_animation_started(anim_name: String) -> void:
 	Disables weapon bobbing during shooting/hit animations to keep
 	the weapon in its initial position during the attack.
 	"""
-	if not current_weapon:
-		return
-	
-	# Check if this is a shooting animation
-	if _fire_controller.is_shooting_animation(anim_name, current_weapon):
-		is_shooting = true
+	_animation_state_controller.on_animation_started(anim_name, current_weapon, _fire_controller)
 
 
 func _on_animation_finished(anim_name: String) -> void:
@@ -323,12 +320,7 @@ func _on_animation_finished(anim_name: String) -> void:
 	
 	Re-enables weapon bobbing after shooting/hit animations complete.
 	"""
-	if not current_weapon:
-		return
-	
-	# Check if this was a shooting animation
-	if _fire_controller.is_shooting_animation(anim_name, current_weapon):
-		is_shooting = false
+	_animation_state_controller.on_animation_finished(anim_name, current_weapon, _fire_controller)
 
 
 # ========================================================================== #

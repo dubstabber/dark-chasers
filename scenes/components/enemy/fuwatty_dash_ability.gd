@@ -1,6 +1,8 @@
 class_name FuwattyDashAbility
 extends EnemyAbility
 
+const FuwattyDashPolicyScript = preload("res://scenes/components/enemy/fuwatty_dash_policy.gd")
+
 ## Phase 1/2: dash cadence, pre-dash halt, and dash execution.
 
 enum DashState {
@@ -27,6 +29,7 @@ const DASH_PATH_CLEARANCE_HEIGHT_OFFSETS := [0.45]
 const DASH_MAX_DURATION_MULTIPLIER := 2.75
 const FAILED_COMMIT_RETRY_DISTANCE_TILES := 0.5
 
+var _dash_policy = FuwattyDashPolicyScript.new()
 var _state: DashState = DashState.IDLE_COUNTING
 var _accumulated_distance_m: float = 0.0
 var _has_last_position := false
@@ -233,9 +236,7 @@ func _failed_commit_retry_distance_m() -> float:
 
 
 func _enemy_has_target(enemy: CharacterBody3D) -> bool:
-	if enemy == null:
-		return false
-	return enemy.get("current_target") is Node3D
+	return _dash_policy.enemy_has_target(enemy)
 
 
 func _get_context_enemy(context: EnemyAbilityContext) -> CharacterBody3D:
@@ -253,55 +254,24 @@ func _is_target_in_context_dash_range(context: EnemyAbilityContext) -> bool:
 
 
 func _resolve_target_direction(enemy: CharacterBody3D) -> Vector3:
-	if enemy == null:
-		return Vector3.ZERO
-
-	var target: Node3D = enemy.get("current_target") as Node3D
-	if target == null:
-		return Vector3.ZERO
-
-	var target_position := target.global_position
-	var dash_direction := target_position - enemy.global_position
-	dash_direction.y = 0.0
-	if dash_direction.length_squared() <= 0.000001:
-		return Vector3.ZERO
-
-	return dash_direction.normalized()
+	return _dash_policy.resolve_target_direction(enemy)
 
 
 func _is_target_in_enemy_room(enemy: CharacterBody3D) -> bool:
-	if enemy == null:
-		return false
-
-	var target: Node3D = enemy.get("current_target") as Node3D
-	if target == null:
-		return false
-
-	var enemy_room := _get_room_name(enemy)
-	if enemy_room == "":
-		return true
-
-	var target_room := _get_room_name(target)
-	if target_room == "":
-		return true
-
-	return target_room == enemy_room
+	return _dash_policy.is_target_in_enemy_room(enemy)
 
 
 func _can_commit_to_dash(enemy: CharacterBody3D, require_path_clearance: bool = true) -> bool:
-	if not _enemy_has_target(enemy):
-		return false
-
-	if not _is_target_in_enemy_room(enemy):
-		return false
-
-	if not _is_target_in_enemy_dash_range(enemy):
-		return false
-
-	if require_path_clearance and require_clear_dash_path and not _is_dash_path_clear_to_target(enemy):
-		return false
-
-	return true
+	return _dash_policy.can_commit_to_dash(
+		enemy,
+		min_dash_target_distance_m,
+		max_dash_target_distance_m,
+		require_clear_dash_path,
+		obstacle_clearance_margin,
+		_dash_distance_m(),
+		DASH_PATH_CLEARANCE_HEIGHT_OFFSETS,
+		require_path_clearance
+	)
 
 
 func _begin_dash(enemy: CharacterBody3D) -> bool:
@@ -327,36 +297,15 @@ func _request_chase_path_refresh(enemy: CharacterBody3D) -> void:
 
 
 func _get_room_name(node: Object) -> String:
-	if node == null:
-		return ""
-
-	for property in node.get_property_list():
-		if String(property.get("name", "")) == "current_room":
-			var room_value = node.get("current_room")
-			return "" if room_value == null else String(room_value)
-
-	return ""
+	return _dash_policy.get_room_name(node)
 
 
 func _is_target_in_enemy_dash_range(enemy: CharacterBody3D) -> bool:
-	if enemy == null:
-		return false
-
-	var target: Node3D = enemy.get("current_target") as Node3D
-	if target == null:
-		return false
-
-	return _is_distance_in_dash_range(_horizontal_distance(enemy.global_position, target.global_position))
+	return _dash_policy.is_target_in_enemy_dash_range(enemy, min_dash_target_distance_m, max_dash_target_distance_m)
 
 
 func _is_distance_in_dash_range(distance: float) -> bool:
-	if distance < maxf(0.0, min_dash_target_distance_m):
-		return false
-
-	if max_dash_target_distance_m > 0.0 and distance > max_dash_target_distance_m:
-		return false
-
-	return true
+	return _dash_policy.is_distance_in_dash_range(distance, min_dash_target_distance_m, max_dash_target_distance_m)
 
 
 func _process_pre_dash_halt(enemy: CharacterBody3D, delta: float) -> void:
@@ -451,34 +400,7 @@ func _complete_dash(enemy: CharacterBody3D) -> AbilityStatus:
 
 
 func _is_dash_motion_blocked(enemy: CharacterBody3D, motion: Vector3) -> bool:
-	if enemy == null:
-		return true
-
-	if motion.length_squared() <= 0.000001:
-		return false
-
-	var target: Node3D = enemy.get("current_target") as Node3D
-	var collision := KinematicCollision3D.new()
-	var collides := enemy.test_move(
-		enemy.global_transform,
-		motion,
-		collision,
-		maxf(0.001, obstacle_clearance_margin),
-		false
-	)
-	if not collides:
-		return false
-
-	var collider_node: Node = collision.get_collider() as Node
-	if collider_node == null:
-		if target == null:
-			return true
-		return not _raycast_path_hits_only_target(enemy, target, motion)
-
-	if target == null:
-		return true
-
-	return not _is_allowed_target_hit(collider_node, target)
+	return _dash_policy.is_dash_motion_blocked(enemy, motion, obstacle_clearance_margin, DASH_PATH_CLEARANCE_HEIGHT_OFFSETS)
 
 
 func _is_hitting_front_wall(enemy: CharacterBody3D) -> bool:
@@ -501,123 +423,23 @@ func _is_hitting_front_wall(enemy: CharacterBody3D) -> bool:
 
 
 func _is_dash_path_clear_to_target(enemy: CharacterBody3D) -> bool:
-	if enemy == null:
-		return false
-
-	var target: Node3D = enemy.get("current_target") as Node3D
-	if target == null:
-		return false
-
-	var to_target := target.global_position - enemy.global_position
-	to_target.y = 0.0
-	var target_distance := to_target.length()
-	if target_distance <= 0.000001:
-		return true
-
-	var motion := to_target.normalized() * minf(target_distance, _dash_distance_m())
-
-	var collision := KinematicCollision3D.new()
-	var collides := enemy.test_move(
-		enemy.global_transform,
-		motion,
-		collision,
-		maxf(0.001, obstacle_clearance_margin),
-		false
-	)
-	if not collides:
-		return true
-
-	var collider_node: Node = collision.get_collider() as Node
-	if collider_node != null and _is_allowed_target_hit(collider_node, target):
-		return true
-
-	if _has_elevated_dash_path_clearance(enemy, target, motion):
-		return true
-
-	if collider_node == null:
-		return _raycast_path_hits_only_target(enemy, target, motion)
-
-	return false
+	return _dash_policy.is_dash_path_clear_to_target(enemy, obstacle_clearance_margin, _dash_distance_m(), DASH_PATH_CLEARANCE_HEIGHT_OFFSETS)
 
 
 func _has_elevated_dash_path_clearance(enemy: CharacterBody3D, target: Node3D, motion: Vector3) -> bool:
-	if enemy == null or target == null:
-		return false
-
-	for height_offset in DASH_PATH_CLEARANCE_HEIGHT_OFFSETS:
-		var probe_transform := enemy.global_transform
-		probe_transform.origin += Vector3.UP * height_offset
-
-		var probe_collision := KinematicCollision3D.new()
-		var probe_collides := enemy.test_move(
-			probe_transform,
-			motion,
-			probe_collision,
-			maxf(0.001, obstacle_clearance_margin),
-			false
-		)
-		if not probe_collides:
-			return true
-
-		var probe_collider: Node = probe_collision.get_collider() as Node
-		if probe_collider != null and _is_allowed_target_hit(probe_collider, target):
-			return true
-
-	return false
+	return _dash_policy.has_elevated_dash_path_clearance(enemy, target, motion, obstacle_clearance_margin, DASH_PATH_CLEARANCE_HEIGHT_OFFSETS)
 
 
 func _raycast_path_hits_only_target(enemy: CharacterBody3D, target: Node3D, motion: Vector3) -> bool:
-	if enemy == null or target == null:
-		return false
-	if motion.length_squared() <= 0.000001:
-		return true
-
-	var space_state := enemy.get_world_3d().direct_space_state
-	if space_state == null:
-		return false
-
-	for height_offset in DASH_PATH_CLEARANCE_HEIGHT_OFFSETS:
-		if _raycast_path_hits_only_target_at_height(space_state, enemy, target, motion, height_offset):
-			return true
-
-	return false
+	return _dash_policy.raycast_path_hits_only_target(enemy, target, motion, DASH_PATH_CLEARANCE_HEIGHT_OFFSETS)
 
 
 func _raycast_path_hits_only_target_at_height(space_state: PhysicsDirectSpaceState3D, enemy: CharacterBody3D, target: Node3D, motion: Vector3, height_offset: float) -> bool:
-	if space_state == null or enemy == null or target == null:
-		return false
-
-	var params := PhysicsRayQueryParameters3D.new()
-	params.from = enemy.global_position + Vector3.UP * height_offset
-	params.to = params.from + motion
-	params.exclude = [enemy]
-	params.collision_mask = enemy.collision_mask
-
-	var result := space_state.intersect_ray(params)
-	if result.is_empty():
-		return true
-
-	var hit_node: Node = result.get("collider") as Node
-	if hit_node == null:
-		return false
-
-	return _is_allowed_target_hit(hit_node, target)
+	return _dash_policy.raycast_path_hits_only_target_at_height(space_state, enemy, target, motion, height_offset)
 
 
 func _is_allowed_target_hit(collider_node: Node, target: Node3D) -> bool:
-	if collider_node == null or target == null:
-		return false
-
-	if collider_node == target:
-		return true
-
-	if collider_node.is_in_group("player"):
-		return true
-
-	if target.is_ancestor_of(collider_node):
-		return true
-
-	return collider_node.is_ancestor_of(target)
+	return _dash_policy.is_allowed_target_hit(collider_node, target)
 
 
 func _resolve_dash_speed(enemy: CharacterBody3D) -> float:
@@ -655,6 +477,4 @@ func _apply_gravity(enemy: CharacterBody3D, delta: float) -> void:
 
 
 func _horizontal_distance(from_pos: Vector3, to_pos: Vector3) -> float:
-	var delta := to_pos - from_pos
-	delta.y = 0.0
-	return delta.length()
+	return _dash_policy._horizontal_distance(from_pos, to_pos)

@@ -1,6 +1,8 @@
 class_name DoomNavigationComponent
 extends EnemyNavigationComponent
 
+const DoomNavigationDirectionPolicyScript = preload("res://scenes/components/enemy/doom_navigation_direction_policy.gd")
+
 const MODE_ID := &"doom"
 const TARGET_REACHED_DISTANCE := 0.25
 const TARGET_AXIS_EPSILON := 0.15
@@ -76,6 +78,7 @@ const SEARCH_ORDER := [
 @export var fallback_random_seed: int = -1
 
 var _rng := RandomNumberGenerator.new()
+var _direction_policy = DoomNavigationDirectionPolicyScript.new()
 var _has_target := false
 var _current_move_dir: ChaseDir = ChaseDir.NODIR
 var _last_successful_dir: ChaseDir = ChaseDir.NODIR
@@ -246,40 +249,11 @@ func _choose_new_chase_dir() -> void:
 
 
 func _build_fallback_search_order(dir_x: ChaseDir = ChaseDir.NODIR, dir_z: ChaseDir = ChaseDir.NODIR) -> Array:
-	var preferred_dirs: Array[ChaseDir] = []
-	if dir_x != ChaseDir.NODIR and dir_z == ChaseDir.NODIR:
-		preferred_dirs = [ChaseDir.NORTH, ChaseDir.SOUTH]
-	elif dir_z != ChaseDir.NODIR and dir_x == ChaseDir.NODIR:
-		preferred_dirs = [ChaseDir.EAST, ChaseDir.WEST]
-
-	if preferred_dirs.size() > 1:
-		if _rethink_count % 2 == 1:
-			preferred_dirs.reverse()
-		if _rng.randf() < 0.5:
-			preferred_dirs.reverse()
-
-	var search_order := SEARCH_ORDER.duplicate()
-	for preferred_dir in preferred_dirs:
-		search_order.erase(preferred_dir)
-	if _rethink_count % 2 == 1:
-		search_order.reverse()
-	search_order = _apply_seeded_fallback_jitter(search_order)
-	return preferred_dirs + search_order
+	return _direction_policy.build_search_order(dir_x, dir_z, _rethink_count, _rng, SEARCH_ORDER)
 
 
 func _apply_seeded_fallback_jitter(search_order: Array) -> Array:
-	if search_order.size() <= 1:
-		return search_order
-	var rotated_order := search_order.duplicate()
-	var rotation := _rng.randi_range(0, rotated_order.size() - 1)
-	if rotation > 0:
-		rotated_order = rotated_order.slice(rotation) + rotated_order.slice(0, rotation)
-	if rotated_order.size() > 2 and _rng.randf() < 0.5:
-		var swap_index := _rng.randi_range(1, rotated_order.size() - 1)
-		var tmp = rotated_order[0]
-		rotated_order[0] = rotated_order[swap_index]
-		rotated_order[swap_index] = tmp
-	return rotated_order
+	return _direction_policy.apply_seeded_fallback_jitter(search_order, _rng)
 
 
 func _try_set_move_dir(candidate: ChaseDir, use_fallback_commitment: bool = false) -> bool:
@@ -413,7 +387,7 @@ func _get_new_move_count(use_fallback_commitment: bool = false) -> int:
 
 
 func _is_target_aligned_dir(candidate: ChaseDir, diag_dir: ChaseDir, dir_x: ChaseDir, dir_z: ChaseDir) -> bool:
-	return candidate == diag_dir or candidate == dir_x or candidate == dir_z
+	return _direction_policy.is_target_aligned_dir(candidate, diag_dir, dir_x, dir_z)
 
 
 func _get_target_reached_distance() -> float:
@@ -450,37 +424,19 @@ func _get_dir_vector(move_dir: ChaseDir) -> Vector3:
 
 
 func _get_opposite_dir(move_dir: ChaseDir) -> ChaseDir:
-	return OPPOSITE_DIRS[move_dir]
+	return _direction_policy.get_opposite_dir(move_dir) as ChaseDir
 
 
 func _get_x_dir(delta_x: float) -> ChaseDir:
-	if delta_x > TARGET_AXIS_EPSILON:
-		return ChaseDir.EAST
-	if delta_x < -TARGET_AXIS_EPSILON:
-		return ChaseDir.WEST
-	return ChaseDir.NODIR
+	return _direction_policy.get_x_dir(delta_x, TARGET_AXIS_EPSILON) as ChaseDir
 
 
 func _get_z_dir(delta_z: float) -> ChaseDir:
-	if delta_z < -TARGET_AXIS_EPSILON:
-		return ChaseDir.NORTH
-	if delta_z > TARGET_AXIS_EPSILON:
-		return ChaseDir.SOUTH
-	return ChaseDir.NODIR
+	return _direction_policy.get_z_dir(delta_z, TARGET_AXIS_EPSILON) as ChaseDir
 
 
 func _compose_diagonal(dir_x: ChaseDir, dir_z: ChaseDir) -> ChaseDir:
-	match [dir_x, dir_z]:
-		[ChaseDir.EAST, ChaseDir.NORTH]:
-			return ChaseDir.NORTHEAST
-		[ChaseDir.EAST, ChaseDir.SOUTH]:
-			return ChaseDir.SOUTHEAST
-		[ChaseDir.WEST, ChaseDir.NORTH]:
-			return ChaseDir.NORTHWEST
-		[ChaseDir.WEST, ChaseDir.SOUTH]:
-			return ChaseDir.SOUTHWEST
-		_:
-			return ChaseDir.NODIR
+	return _direction_policy.compose_diagonal(dir_x, dir_z) as ChaseDir
 
 
 func _emit_target_reached_once() -> void:

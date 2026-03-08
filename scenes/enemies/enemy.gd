@@ -1,5 +1,7 @@
 class_name Enemy extends CharacterBody3D
 
+const EnemyNavigationHostControllerScript = preload("res://scenes/components/enemy/enemy_navigation_host_controller.gd")
+
 enum NavigationMode {
 	GODOT,
 	DOOM,
@@ -35,6 +37,7 @@ var _motor_component: EnemyMotorComponent
 var _brain_component: EnemyBrain
 var _runtime_coordinator: EnemyRuntimeCoordinator = null
 var _path_timing_controller := EnemyPathTimingController.new()
+var _navigation_host_controller = EnemyNavigationHostControllerScript.new()
 var _enemy_context: Node
 
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -185,40 +188,18 @@ func _on_kill_zone_player_killed(_player: Node3D) -> void:
 
 
 func _setup_navigation_component() -> void:
-	_disconnect_navigation_component_signals(_nav_component)
-	_nav_component = null
-
-	var available_components := _get_navigation_components()
-	if available_components.is_empty():
-		return
-
-	var desired_mode := _get_effective_navigation_mode_id()
-	_nav_component = _find_navigation_component_for_mode(desired_mode, available_components)
-	if not _nav_component and desired_mode != &"godot":
-		push_warning("Enemy '%s': navigation mode '%s' is not available; falling back to Godot navigation." % [name, String(desired_mode)])
-		_nav_component = _find_navigation_component_for_mode(&"godot", available_components)
-	if not _nav_component:
-		_nav_component = available_components[0]
-
-	for component in available_components:
-		component.set_navigation_active(component == _nav_component)
-
-	_connect_navigation_component_signals(_nav_component)
-
-
-func _get_navigation_components() -> Array[EnemyNavigationComponent]:
-	var components: Array[EnemyNavigationComponent] = []
-	for child in get_children():
-		if child is EnemyNavigationComponent:
-			components.append(child as EnemyNavigationComponent)
-	return components
-
-
-func _find_navigation_component_for_mode(mode_id: StringName, components: Array[EnemyNavigationComponent]) -> EnemyNavigationComponent:
-	for component in components:
-		if component.get_navigation_mode_id() == mode_id:
-			return component
-	return null
+	_nav_component = _navigation_host_controller.refresh_navigation_component(
+		name,
+		_nav_component,
+		_navigation_host_controller.get_navigation_components(self),
+		_get_navigation_mode_id(),
+		is_flying,
+		requires_vertical_navigation,
+		Callable(self, "_on_navigation_target_reached"),
+		Callable(self, "_on_navigation_link_reached"),
+		Callable(self, "_on_navigation_waypoint_reached"),
+		Callable(self, "_push_navigation_warning")
+	)
 
 
 func _get_navigation_mode_id() -> StringName:
@@ -229,52 +210,8 @@ func _get_navigation_mode_id() -> StringName:
 			return &"godot"
 
 
-func _get_effective_navigation_mode_id() -> StringName:
-	var requested_mode := _get_navigation_mode_id()
-	if requested_mode != &"doom":
-		return requested_mode
-
-	var unsupported_reason := _get_doom_mode_unsupported_reason()
-	if unsupported_reason.is_empty():
-		return requested_mode
-
-	push_warning(
-		"Enemy '%s': Doom navigation is not supported for %s; falling back to Godot navigation." % [
-			name,
-			unsupported_reason,
-		]
-	)
-	return &"godot"
-
-
-func _get_doom_mode_unsupported_reason() -> String:
-	if is_flying:
-		return "flying enemies"
-	if requires_vertical_navigation:
-		return "enemies that require vertical navigation"
-	return ""
-
-
-func _connect_navigation_component_signals(component: EnemyNavigationComponent) -> void:
-	if not component:
-		return
-	if not component.target_reached.is_connected(_on_navigation_target_reached):
-		component.target_reached.connect(_on_navigation_target_reached)
-	if not component.link_reached.is_connected(_on_navigation_link_reached):
-		component.link_reached.connect(_on_navigation_link_reached)
-	if not component.waypoint_reached.is_connected(_on_navigation_waypoint_reached):
-		component.waypoint_reached.connect(_on_navigation_waypoint_reached)
-
-
-func _disconnect_navigation_component_signals(component: EnemyNavigationComponent) -> void:
-	if not component:
-		return
-	if component.target_reached.is_connected(_on_navigation_target_reached):
-		component.target_reached.disconnect(_on_navigation_target_reached)
-	if component.link_reached.is_connected(_on_navigation_link_reached):
-		component.link_reached.disconnect(_on_navigation_link_reached)
-	if component.waypoint_reached.is_connected(_on_navigation_waypoint_reached):
-		component.waypoint_reached.disconnect(_on_navigation_waypoint_reached)
+func _push_navigation_warning(message: String) -> void:
+	push_warning(message)
 
 
 func _setup_ai_component() -> void:

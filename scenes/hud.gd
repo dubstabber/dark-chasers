@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const HudEventTextControllerScript = preload("res://scenes/components/player/hud_event_text_controller.gd")
+
 var tween: Tween
 var faded: bool
 
@@ -22,6 +24,7 @@ var faded: bool
 var _connected_provider: Node = null
 var _reserve_ammo_callback: Callable
 var _player_binding_controller := HudPlayerBindingController.new()
+var _event_text_controller = HudEventTextControllerScript.new()
 
 
 func _ready():
@@ -179,19 +182,7 @@ func add_log(text: String):
 
 func show_event_text(text: String, _faded: bool = true, text_time: float = 0.0):
 	faded = _faded
-	if faded:
-		if event_label.get_child_count():
-			await _restart_tween().tween_property(event_label, "modulate:a", 0, 1.0).finished
-		event_label.set_text_with_aooni_font(text)
-		_restart_tween().tween_property(event_label, "modulate:a", 1, 0.4)
-	else:
-		event_label.set_text_with_aooni_font(text)
-		event_label.modulate.a = 1
-	if text_time:
-		if not timer.is_stopped():
-			timer.stop()
-		timer.wait_time = text_time
-		timer.start()
+	await _event_text_controller.show_text(event_label, timer, Callable(self, "_restart_tween"), text, _faded, text_time)
 
 
 func show_event_text_for_player(player: CharacterBody3D, text: String, _faded: bool = true, text_time: float = 0.0):
@@ -225,11 +216,7 @@ func _get_hud_owner() -> Node:
 
 
 func hide_event_text():
-	if faded:
-		await _restart_tween().tween_property(event_label, "modulate:a", 0, 1.0).finished
-	else:
-		event_label.modulate.a = 0
-	event_label.set_text_with_aooni_font("")
+	await _event_text_controller.hide_text(event_label, Callable(self, "_restart_tween"))
 
 
 func _on_player_mode_changed_event(event: RefCounted) -> void:

@@ -2,7 +2,6 @@ class_name EnemyRuntimeCoordinator
 extends Node
 
 const DIRECT_TARGET_FALLBACK_MAX_VERTICAL_DELTA := 0.35
-const FINISHED_NAVIGATION_REPATH_DELAY := 0.1
 
 var _enemy
 var _ai_component: EnemyAIComponent
@@ -15,6 +14,7 @@ var _path_timing_controller: EnemyPathTimingController
 var _find_path_timer: Timer
 var _is_flying := false
 var _debug_prints := false
+var _timing_stagger_factor := 0.5
 
 
 func setup(
@@ -41,6 +41,8 @@ func setup(
 	_find_path_timer = find_path_timer
 	_is_flying = is_flying
 	_debug_prints = debug_prints
+	if _enemy and _path_timing_controller:
+		_timing_stagger_factor = _path_timing_controller.compute_stagger_factor(_enemy.get_instance_id())
 
 
 func process_physics(delta: float) -> void:
@@ -104,9 +106,10 @@ func on_find_path_timer_timeout() -> void:
 	if _nav_component:
 		distance_to_target = _nav_component.distance_to_target()
 
-	_find_path_timer.wait_time = _path_timing_controller.compute_wait_time(
+	_find_path_timer.wait_time = _path_timing_controller.compute_staggered_wait_time(
 		distance_to_target,
-		not _enemy.waypoints.is_empty()
+		not _enemy.waypoints.is_empty(),
+		_timing_stagger_factor
 	)
 	_enemy.makepath()
 
@@ -234,10 +237,13 @@ func _has_significant_vertical_gap_to_position(position: Vector3) -> bool:
 func _schedule_finished_navigation_repath() -> void:
 	if not _find_path_timer:
 		return
-	if not _find_path_timer.is_stopped() and _find_path_timer.time_left <= FINISHED_NAVIGATION_REPATH_DELAY:
+	var finished_navigation_repath_delay := 0.1
+	if _path_timing_controller:
+		finished_navigation_repath_delay = _path_timing_controller.compute_finished_navigation_repath_delay(_timing_stagger_factor)
+	if not _find_path_timer.is_stopped() and _find_path_timer.time_left <= finished_navigation_repath_delay:
 		return
 	_find_path_timer.stop()
-	_find_path_timer.wait_time = FINISHED_NAVIGATION_REPATH_DELAY
+	_find_path_timer.wait_time = finished_navigation_repath_delay
 	_find_path_timer.start()
 
 

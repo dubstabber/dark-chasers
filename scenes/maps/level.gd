@@ -55,10 +55,9 @@ func _exit_tree():
 # explicit effect components attached to the trigger instances.
 
 func _on_key_event(event: RefCounted) -> void:
-	var body = event.get_body()
 	var key_type = event.get_string("key_type")
 	var message = event.get_string("message")
-	_key_body_entered(body, key_type, message)
+	_key_collected(key_type, message)
 
 
 func _on_door_locked_event(event: RefCounted) -> void:
@@ -116,7 +115,7 @@ func _on_transition_exited(body):
 			body.interaction_component.clear_transit_point()
 
 
-func _key_body_entered(_body, key_type, message_text):
+func _key_collected(key_type, message_text):
 	# Add log message to HUD
 	if hud:
 		hud.add_log(message_text)

@@ -33,6 +33,8 @@ var enemy_scene: PackedScene = null
 var spawn_position: Vector3 = Vector3.ZERO
 var spawn_room: String = ""
 var target_player: Node = null
+var spawn_owner_id: StringName = &""
+var spawn_max_active: int = 0
 var custom_callable: Callable = Callable()
 
 
@@ -94,13 +96,22 @@ static func hide_text() -> RefCounted:
 	return action
 
 
-static func spawn_enemy(scene: PackedScene, pos: Vector3, room: String = "", target: Node = null) -> RefCounted:
+static func spawn_enemy(
+	scene: PackedScene,
+	pos: Vector3,
+	room: String = "",
+	target: Node = null,
+	owner_id: StringName = &"",
+	max_active: int = 0
+) -> RefCounted:
 	var action = SequenceAction.new()
 	action.action_type = Type.SPAWN_ENEMY
 	action.enemy_scene = scene
 	action.spawn_position = pos
 	action.spawn_room = room
 	action.target_player = target
+	action.spawn_owner_id = owner_id
+	action.spawn_max_active = max_active
 	return action
 
 

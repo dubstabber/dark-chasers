@@ -20,6 +20,7 @@ func _test_path_timing_thresholds() -> void:
 	_assert(is_equal_approx(controller.compute_wait_time(45.0, false), 0.5), "35-50 units should map to 0.5s")
 	_assert(is_equal_approx(controller.compute_wait_time(70.0, false), 0.8), ">=50 units should map to 0.8s")
 	_assert(is_equal_approx(controller.compute_wait_time(90.0, true), 0.1), "Waypoint pathing should force 0.1s")
+	_assert(controller.compute_finished_navigation_repath_delay(1.0) > 0.1, "Finished-navigation repath delay should support positive staggering")
 	print("✓ Path timing thresholds are correct")
 
 
@@ -29,6 +30,7 @@ func _test_runtime_target_reacquisition_policy() -> void:
 	_assert("func on_target_died() -> void:" in runtime_source, "Runtime coordinator should expose on_target_died hook")
 	_assert("_find_path_timer.wait_time = 0.1" in runtime_source, "Runtime coordinator should reset timer to 0.1s on target death")
 	_assert("if _enemy.current_target and Mortal.is_dead(_enemy.current_target):" in runtime_source, "Runtime coordinator should detect dead target during chase")
+	_assert("_timing_stagger_factor" in runtime_source, "Runtime coordinator should keep a deterministic per-enemy stagger factor")
 	print("✓ Runtime coordinator target-loss policy remains responsive")
 
 

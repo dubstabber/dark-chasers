@@ -204,18 +204,23 @@ func _spawn_enemy(action: RefCounted) -> void:
 		return
 	
 	var enemies_node = Services.world_context.get_enemies_node()
-	if not enemies_node:
+	if not enemies_node or not Services.enemy_spawn_owner:
 		return
-	
-	var enemy = action.enemy_scene.instantiate()
-	enemies_node.add_child(enemy)
-	
-	if action.spawn_position != Vector3.ZERO:
-		enemy.position = action.spawn_position
-	if not action.spawn_room.is_empty():
-		enemy.current_room = action.spawn_room
-	if action.target_player:
-		enemy.current_target = action.target_player
+
+	var owner_id: StringName = action.spawn_owner_id
+	if owner_id == &"":
+		owner_id = StringName("sequence:%s" % String(get_current_sequence_id()))
+
+	Services.enemy_spawn_owner.spawn_enemy(
+		action.enemy_scene,
+		enemies_node,
+		action.spawn_position,
+		action.spawn_room,
+		action.target_player,
+		owner_id,
+		action.spawn_max_active,
+		action.spawn_position != Vector3.ZERO
+	)
 
 
 func _play_music(action: RefCounted) -> void:

@@ -1,5 +1,7 @@
 extends Node
 
+const EnemySpawnOwnerServiceScript = preload("res://scenes/services/enemy_spawn_owner_service.gd")
+
 
 ## Single entry-point for all game services.
 ## Replaces individual autoloads with a centralized service registry.
@@ -16,6 +18,7 @@ extends Node
 ##   vfx_pool        — read by: weapon hit executor, VFX spawners
 ##   event_bus       — read/write by: emitters + subscribers (Level, interactables, sequences)
 ##   sequence_director — read by: level scripts (play sequences)
+##   enemy_spawn_owner — read by: reusable encounter/enemy spawn flows
 ##   input_router    — standalone (app-level input); no external callers expected
 ##   level_manager   — read by: scene transition initiators (teleports, map events)
 
@@ -28,6 +31,7 @@ var audio_pool: AudioPoolService
 var vfx_pool: VfxPoolService
 var event_bus: GameEventBus
 var sequence_director: SequenceDirector
+var enemy_spawn_owner: EnemySpawnOwnerServiceScript
 var input_router: InputRouter
 var level_manager: Node
 var ammo_config: AmmoConfig
@@ -51,6 +55,7 @@ func _enter_tree() -> void:
 	vfx_pool = _add_service("VfxPoolService", VfxPoolService.new()) as VfxPoolService
 	event_bus = _add_service("GameEventBus", GameEventBus.new()) as GameEventBus
 	sequence_director = _add_service("SequenceDirector", SequenceDirector.new()) as SequenceDirector
+	enemy_spawn_owner = _add_service("EnemySpawnOwnerService", EnemySpawnOwnerServiceScript.new()) as EnemySpawnOwnerServiceScript
 	input_router = _add_service("InputRouter", InputRouter.new()) as InputRouter
 	level_manager = _add_service("LevelManager", LevelManager.new())
 	ammo_config = _add_service("AmmoConfig", AmmoConfig.new()) as AmmoConfig

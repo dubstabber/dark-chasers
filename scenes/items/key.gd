@@ -34,7 +34,6 @@ func _on_body_entered(body):
 
 		# Emit generic event for base Level class handling (key collection tracking)
 		Services.event_bus.emit(GameEventTypes.KEY_COLLECTED, {
-			"body": body,
 			"key_type": key_type,
 			"message": message_text
 		}, self)

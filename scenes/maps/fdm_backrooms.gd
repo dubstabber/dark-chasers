@@ -33,6 +33,8 @@ func _setup_spawner_controller() -> void:
 	_spawner_controller.delay_between_spawners = 1.0
 	_spawner_controller.is_wandering = true
 	_spawner_controller.auto_start = true
+	_spawner_controller.max_active_enemies = enemy_spawners_container.get_child_count()
+	_spawner_controller.spawn_owner_id = &"fdm_backrooms_standard"
 	add_child(_spawner_controller)
 	_spawner_controller.initialize(enemy_spawners_container, enemies)
 

@@ -63,8 +63,15 @@ func hide_text() -> RefCounted:
 	return add_action(SequenceAction.hide_text())
 
 
-func spawn_enemy(scene: PackedScene, pos: Vector3, room: String = "", target: Node = null) -> RefCounted:
-	return add_action(SequenceAction.spawn_enemy(scene, pos, room, target))
+func spawn_enemy(
+	scene: PackedScene,
+	pos: Vector3,
+	room: String = "",
+	target: Node = null,
+	owner_id: StringName = &"",
+	max_active: int = 0
+) -> RefCounted:
+	return add_action(SequenceAction.spawn_enemy(scene, pos, room, target, owner_id, max_active))
 
 
 func play_music(stream: AudioStream, volume: float = -5.0) -> RefCounted:

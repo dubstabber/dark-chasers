@@ -13,6 +13,8 @@ signal all_spawners_active()
 @export var delay_between_spawners: float = 1.0
 @export var auto_start: bool = true
 @export var is_wandering: bool = true
+@export var max_active_enemies: int = 0
+@export var spawn_owner_id: StringName = &""
 
 var _spawners_container: Node = null
 var _enemies_container: Node = null
@@ -50,16 +52,11 @@ func spawn_enemy_at_index(index: int) -> Node:
 		return null
 	
 	var spawner = spawners[index]
-	var enemy = enemy_scene.instantiate()
-	_enemies_container.add_child(enemy)
-	enemy.position = spawner.position
-	
-	if is_wandering and enemy is Enemy:
-		enemy.is_wandering = true
-	
 	_setup_respawn_timer(index, spawner)
+	var enemy = _spawn_from_spawner(spawner)
 	
-	enemy_spawned.emit(enemy, index)
+	if enemy:
+		enemy_spawned.emit(enemy, index)
 	
 	_current_spawner_index += 1
 	
@@ -72,6 +69,8 @@ func spawn_enemy_at_index(index: int) -> Node:
 
 
 func _setup_respawn_timer(index: int, spawner: Node) -> void:
+	if index < _spawner_timers.size() and _spawner_timers[index] != null:
+		return
 	var respawn_timer = Timer.new()
 	spawner.add_child(respawn_timer)
 	respawn_timer.timeout.connect(_on_respawn_timer_timeout.bind(index, respawn_timer))
@@ -92,17 +91,13 @@ func _on_respawn_timer_timeout(index: int, timer: Timer) -> void:
 	if index >= spawners.size():
 		return
 	
-	var enemy = enemy_scene.instantiate()
-	_enemies_container.add_child(enemy)
-	enemy.position = spawners[index].position
-	
-	if is_wandering and enemy is Enemy:
-		enemy.is_wandering = true
+	var enemy = _spawn_from_spawner(spawners[index])
 	
 	timer.wait_time = randf_range(min_respawn_time, max_respawn_time)
 	timer.start()
 	
-	enemy_spawned.emit(enemy, index)
+	if enemy:
+		enemy_spawned.emit(enemy, index)
 
 
 func _on_delay_timer_timeout() -> void:
@@ -121,3 +116,39 @@ func get_spawner_count() -> int:
 
 func get_active_spawner_count() -> int:
 	return _current_spawner_index
+
+
+func _spawn_from_spawner(spawner: Node) -> Node:
+	if enemy_scene == null or _enemies_container == null:
+		return null
+
+	var setup_enemy := func(spawned_enemy: Node) -> void:
+		if is_wandering and spawned_enemy is Enemy:
+			spawned_enemy.is_wandering = true
+
+	if Services.enemy_spawn_owner:
+		var spawn_position := (spawner as Node3D).position if spawner is Node3D else Vector3.ZERO
+		return Services.enemy_spawn_owner.spawn_enemy(
+			enemy_scene,
+			_enemies_container,
+			spawn_position,
+			"",
+			null,
+			_get_spawn_owner_id(),
+			max_active_enemies,
+			true,
+			setup_enemy
+		)
+
+	var enemy = enemy_scene.instantiate()
+	_enemies_container.add_child(enemy)
+	if enemy is Node3D and spawner is Node3D:
+		(enemy as Node3D).position = (spawner as Node3D).position
+	setup_enemy.call(enemy)
+	return enemy
+
+
+func _get_spawn_owner_id() -> StringName:
+	if spawn_owner_id != &"":
+		return spawn_owner_id
+	return StringName("spawner:%s" % String(get_path()))

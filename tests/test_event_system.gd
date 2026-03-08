@@ -22,6 +22,7 @@ func _ready():
 	test_mansion_scene_wires_explicit_trigger_effect_components()
 	test_level_keeps_only_shared_generic_routes()
 	test_shared_events_trim_redundant_live_node_payloads()
+	test_generic_key_collection_route_avoids_unused_body_payload()
 
 	print("=== ALL EVENT SYSTEM TESTS COMPLETED ===")
 	get_tree().quit()
@@ -354,3 +355,22 @@ func test_shared_events_trim_redundant_live_node_payloads():
 	assert('"body": body' not in pickup_content, "ITEM_PICKEDUP should not include the player node in payload")
 
 	print("✓ Shared event payloads now avoid redundant live node references where consumers do not need them")
+
+
+func test_generic_key_collection_route_avoids_unused_body_payload():
+	print("\n--- Testing Generic Key Collection Route Avoids Unused Body Payload ---")
+
+	var key_file := FileAccess.open("res://scenes/items/key.gd", FileAccess.READ)
+	assert(key_file != null, "Should be able to open key.gd")
+	var key_content := key_file.get_as_text()
+
+	var level_file := FileAccess.open("res://scenes/maps/level.gd", FileAccess.READ)
+	assert(level_file != null, "Should be able to open level.gd")
+	var level_content := level_file.get_as_text()
+
+	assert('Services.event_bus.emit(GameEventTypes.KEY_COLLECTED, {\n\t\t\t"body": body,' not in key_content,
+		"Generic KEY_COLLECTED should not include the triggering player body in payload")
+	assert('var body = event.get_body()' not in level_content, "Level generic key handler should not read an unused body from KEY_COLLECTED")
+	assert('func _key_collected(key_type, message_text):' in level_content, "Level should use a key-specific shared handler without a body parameter")
+
+	print("✓ Generic KEY_COLLECTED now carries only the shared data Level actually uses")

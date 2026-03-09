@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://5q2aomrq4gjw"]
+[gd_scene load_steps=24 format=4 uid="uid://5q2aomrq4gjw"]
 
 [ext_resource type="Script" uid="uid://c765qag2pbwqq" path="res://scenes/maps/room_1.gd" id="1_3lwtk"]
 [ext_resource type="Texture2D" uid="uid://co5uy0k6hjm4t" path="res://images/skyboxes/space1.png" id="1_26bms"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_vk5nm"]
 [ext_resource type="PackedScene" uid="uid://dtnl3ap2wwpc5" path="res://scenes/enemies/giant_scorpion.tscn" id="5_p8nu4"]
 [ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="7_hjews"]
+[ext_resource type="Script" uid="uid://frgl0w6dnh16" path="res://scenes/components/transition/transition_arrival_marker.gd" id="8_arrival"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_r5ja7"]
 panorama = ExtResource("1_26bms")
@@ -574,6 +575,7 @@ shape = SubResource("BoxShape3D_bgx1e")
 
 [node name="Marker3D" type="Marker3D" parent="Transitions/HiddenPassage" groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.23276, 3.5762787e-07, 19.773418)
+script = ExtResource("8_arrival")
 
 [node name="PlayerSpawners" type="Node3D" parent="."]
 unique_name_in_owner = true

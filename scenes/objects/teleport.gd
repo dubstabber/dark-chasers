@@ -1,5 +1,7 @@
 extends Area3D
 
+const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
+
 ## Deprecated: raw res:// path. Prefer destination_catalog_key.
 @export var level_name: String
 ## SceneCatalog key to use as destination.
@@ -47,7 +49,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 		push_warning("Teleport: Destination scene not configured (missing destination_catalog_key / level_name)")
 	elif spawn_marker:
-		body.global_position = spawn_marker.global_position
+		TransitionArrival.apply(body, spawn_marker)
 
 
 func _has_level_destination() -> bool:

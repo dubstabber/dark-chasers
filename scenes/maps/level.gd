@@ -1,5 +1,7 @@
 class_name Level extends Node3D
 
+const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
+
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
 
@@ -77,6 +79,10 @@ func _on_item_pickedup_event(event: RefCounted) -> void:
 
 func handle_transition(body, area3dname, marker):
 	# Use RoomAware interface for room-based transitions
+	if not (body is Node3D):
+		push_warning("handle_transition: body is not Node3D for transition '%s'" % String(area3dname))
+		return
+
 	if not RoomAware.check(body):
 		push_warning("handle_transition: body is not RoomAware: %s" % body.name)
 		return
@@ -96,8 +102,11 @@ func handle_transition(body, area3dname, marker):
 		return
 
 	var to_room = map_transitions[from_room][area3dname]
+	if not TransitionArrival.apply(body as Node3D, marker):
+		push_warning("handle_transition: failed to apply arrival for transition '%s'" % String(area3dname))
+		return
+
 	RoomAware.set_current_room(body, to_room)
-	body.global_position = marker.global_position
 
 	# Use PathfindingEntity interface to make pathfinding responsive after transition
 	PathfindingEntity.make_responsive(body)
@@ -180,13 +189,17 @@ func respawn(player: CharacterBody3D) -> void:
 		if _initial_spawn_id != &"":
 			var marker := _find_player_spawn_marker(_initial_spawn_id)
 			if marker:
-				player.position = marker.global_position
-				return
-			push_warning("Level: spawn_id '%s' not found in PlayerSpawners for %s" % [String(_initial_spawn_id), scene_file_path])
+				if TransitionArrival.apply(player, marker):
+					return
+				push_warning("Level: failed to apply spawn_id arrival for '%s'" % String(_initial_spawn_id))
+			else:
+				push_warning("Level: spawn_id '%s' not found in PlayerSpawners for %s" % [String(_initial_spawn_id), scene_file_path])
 
 	if player_spawners:
-		player.position = player_spawners.get_children().pick_random().global_position
-		return
+		var random_spawner := player_spawners.get_children().pick_random() as Node3D
+		if random_spawner and TransitionArrival.apply(player, random_spawner):
+			return
+		push_warning("Level: random player spawner is missing or invalid")
 
 	push_warning("Level: No %PlayerSpawners found; cannot respawn player")
 

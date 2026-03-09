@@ -4,6 +4,8 @@ extends Node
 ## Manages room-to-room transitions for an enemy. Handles pathfinding across
 ## rooms via transition points, and executing the actual teleport when reached.
 
+const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
+
 var _owner_enemy: Enemy = null
 var _enemy_context: Node = null
 var _nav_component: EnemyNavigationComponent = null
@@ -146,8 +148,11 @@ func _execute_transition(transition_node: Node3D) -> void:
 
 	# Execute the transition
 	var to_room = transition_graph[_owner_enemy.current_room][transition_name]
+	if not TransitionArrival.apply(_owner_enemy, marker):
+		push_warning("Enemy._execute_transition: Failed to apply arrival for %s" % transition_name)
+		return
+
 	_owner_enemy.current_room = to_room
-	_owner_enemy.global_position = marker.global_position
 	_reset_post_transition_motion_state()
 	_owner_enemy.makepath()
 

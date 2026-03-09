@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/test_transition_arrival_rotation.gd" id="1"]
+
+[node name="TestTransitionArrivalRotation" type="Node"]
+script = ExtResource("1")

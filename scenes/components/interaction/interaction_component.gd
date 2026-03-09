@@ -3,6 +3,8 @@ extends Node
 
 ## Handles player interaction with doors, buttons, and transit points
 
+const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
+
 signal interacted(collider: Node)
 signal door_opened(door: Node)
 signal button_pressed(button: Node)
@@ -67,7 +69,7 @@ func try_interact() -> bool:
 
 func _use_transit() -> void:
 	if pending_transit and player:
-		player.position = pending_transit.global_position
+		TransitionArrival.apply(player, pending_transit)
 		transit_used.emit(pending_transit)
 		pending_transit = null
 

@@ -8,6 +8,7 @@ func _ready() -> void:
 	_test_startup_scene_selection_uses_scene_catalog()
 	_test_teleport_resolves_destination_via_scene_catalog()
 	_test_transition_context_sanitization_strips_objects()
+	_test_mansion_spawn_uses_level_base_flow()
 	await _test_spawn_handoff_uses_spawn_id_once()
 	await _test_mansion_next_map_transitions_to_room_1()
 	print("=== LEVEL SWITCHING BOOTSTRAP TESTS COMPLETED ===")
@@ -86,6 +87,20 @@ func _test_transition_context_sanitization_strips_objects() -> void:
 	print("✓ Transition context sanitization strips Objects")
 
 
+func _test_mansion_spawn_uses_level_base_flow() -> void:
+	print("\n--- Testing mansion spawn uses Level base flow ---")
+	var source := FileAccess.get_file_as_string("res://scenes/maps/mansion_1/mansion_1.gd")
+	_assert("var player: Player = super.spawn_player()" in source, "Mansion spawn should delegate player creation/respawn to Level.spawn_player")
+	_assert("super.respawn(player)" in source, "Mansion respawn should delegate marker placement to Level.respawn")
+	_assert("const USE_TEST_SPAWN := false" in source, "Mansion should keep test spawn support disabled by default")
+	_assert("func test_respawn(player: CharacterBody3D) -> void:" in source, "Mansion should keep the quick-test test_respawn helper")
+	_assert("if USE_TEST_SPAWN:" in source, "Mansion spawn should keep a dedicated quick-test branch")
+	_assert("player.blocked_movement = false" in source, "Mansion quick-test spawn should allow immediate movement")
+	_assert("await hud.hide_event_text()" in source, "Mansion intro should await caption hide before fading the black screen")
+	_assert("Services.get_scene_catalog().get_player_scene().instantiate()" not in source, "Mansion spawn should not manually instantiate the player anymore")
+	print("✓ Mansion spawn delegates to the current Level architecture")
+
+
 func _test_spawn_handoff_uses_spawn_id_once() -> void:
 	print("\n--- Testing spawn handoff ---")
 	var lm := Services.level_manager as LevelManager
@@ -132,18 +147,23 @@ func _test_spawn_handoff_uses_spawn_id_once() -> void:
 	lm._last_transition_request = prev_req
 
 	var player := CharacterBody3D.new()
+	level.add_child(player)
+	await get_tree().process_frame
+	var marker_a_position := marker_a.global_position
+	var marker_b_position := marker_b.global_position
 	level.respawn(player)
-	_assert(player.position == marker_a.global_position, "Player should respawn at SpawnA marker when spawn_id is provided")
+	_assert(player.global_position == marker_a_position, "Player should respawn at SpawnA marker when spawn_id is provided")
 
 	# Ensure spawn_id is used only once.
 	spawners.remove_child(marker_a)
 	marker_a.queue_free()
 	await get_tree().process_frame
 	level.respawn(player)
-	_assert(player.position == marker_b.global_position, "Second respawn should use fallback spawner once spawn_id is consumed")
+	_assert(player.global_position == marker_b_position, "Second respawn should use fallback spawner once spawn_id is consumed")
 	print("✓ Spawn handoff resolves spawn_id and falls back after first use")
 
 	level.queue_free()
+	await get_tree().process_frame
 
 
 func _test_mansion_next_map_transitions_to_room_1() -> void:
@@ -169,6 +189,8 @@ func _test_mansion_next_map_transitions_to_room_1() -> void:
 	_assert(active_level is Node, "Active level should be a Node")
 	_assert((active_level as Node).scene_file_path == "res://scenes/maps/room_1.tscn", "LevelHost child should be room_1 scene")
 	print("✓ Mansion next-map event triggers transition to room_1")
+	host.queue_free()
+	await get_tree().process_frame
 
 
 func _assert(condition: bool, message: String) -> void:

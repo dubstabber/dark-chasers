@@ -1,5 +1,9 @@
 extends Level
 
+const STARTING_ROOM := "FirstFloor"
+const STARTING_YAW := PI
+const USE_TEST_SPAWN := false
+
 @onready var global_music: AudioStreamPlayer = $GlobalMusic
 
 
@@ -13,37 +17,63 @@ func _exit_tree():
 	super._exit_tree()
 
 
-func spawn_player():
-	var player = Services.get_scene_catalog().get_player_scene().instantiate() as Player
-	players.add_child(player)
-	# player.blocked_movement = true
-	setup_player(player) # Centralized HUD connection via Level base class
-	#hud.show_black_screen()
-	
-	#respawn(player)
-	test_respawn(player)
+func spawn_player() -> Player:
+	var player: Player = super.spawn_player()
 	Services.camera_manager.set_debug_camera(%DebugCamera3D)
 	Services.camera_manager.set_player_camera(player.camera_3d)
-	#hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
-	#await get_tree().create_timer(6.0).timeout
-	#hud.show_event_text("They say there is a monster that lives there_")
-	#await get_tree().create_timer(4.5).timeout
-	#hud.hide_event_text()
-	#player.blocked_movement = false
-	#hud.fade_black_screen()
+
+	if USE_TEST_SPAWN:
+		player.blocked_movement = false
+		return player
+
+	player.blocked_movement = true
+	if hud:
+		hud.show_black_screen()
+	_run_intro_sequence(player)
+	return player
 
 
-func respawn(p):
-	p.position = player_spawners.get_children().pick_random().global_position
-	p.current_room = "FirstFloor"
-	p.rotate_y(3.15)
-	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), p)
+func _run_intro_sequence(player: Player) -> void:
+	if not hud:
+		player.blocked_movement = false
+		return
+
+	await get_tree().process_frame
+	await hud.show_event_text("We heard a rumor about a mansion on the outskirts of town.")
+	await get_tree().create_timer(6.0).timeout
+	await hud.show_event_text("They say there is a monster that lives there_")
+	await get_tree().create_timer(4.5).timeout
+	await hud.hide_event_text()
+	if not is_instance_valid(player):
+		return
+	player.blocked_movement = false
+	hud.fade_black_screen()
 
 
-func test_respawn(p):
-	p.position = $NavigationRegion3D/TestSpawn.position
-	p.current_room = "FirstFloor"
-	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), p)
+func respawn(player: CharacterBody3D) -> void:
+	if USE_TEST_SPAWN:
+		test_respawn(player)
+		return
+
+	super.respawn(player)
+	RoomAware.set_current_room(player, STARTING_ROOM)
+
+	var player_rotation := player.global_rotation
+	player_rotation.y = STARTING_YAW
+	player.global_rotation = player_rotation
+
+	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), player)
+
+
+func test_respawn(player: CharacterBody3D) -> void:
+	var test_spawn := get_node_or_null("NavigationRegion3D/TestSpawn") as Node3D
+	if test_spawn == null:
+		push_warning("mansion_1: TestSpawn node is missing")
+		return
+
+	TransitionArrival.apply(player, test_spawn)
+	RoomAware.set_current_room(player, STARTING_ROOM)
+	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), player)
 
 
 func _on_ladder_body_entered(body):

@@ -7,6 +7,13 @@ extends Node
 @export var speed: float = 7.0
 @export var accel: float = 10.0
 @export var is_flying: bool = false
+@export_group("Stair Step")
+@export var stair_step_enabled := true
+@export var stair_step_max_height: float = 0.32
+@export var stair_step_min_horizontal_speed: float = 0.1
+@export var stair_step_down_probe_distance: float = 0.4
+@export var stair_step_debug := false
+@export var stair_step_helper: StairStepHelper
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var jump_speed: float = 0.0
@@ -72,9 +79,28 @@ func look_forward() -> void:
 	_owner_enemy.rotation.y = atan2(_owner_enemy.velocity.x, _owner_enemy.velocity.z) + PI
 
 
-func move_and_slide() -> void:
-	if _owner_enemy:
-		_owner_enemy.move_and_slide()
+func move_and_slide(delta: float) -> void:
+	if not _owner_enemy:
+		return
+	var up_direction := _owner_enemy.up_direction.normalized()
+	var intended_horizontal_velocity := _owner_enemy.velocity.slide(up_direction)
+	var stepped_up := false
+	if stair_step_enabled and stair_step_helper and not is_flying:
+		stepped_up = stair_step_helper.try_step_up(
+			_owner_enemy,
+			delta,
+			stair_step_max_height,
+			stair_step_min_horizontal_speed,
+			stair_step_down_probe_distance,
+			stair_step_debug
+		)
+	_owner_enemy.move_and_slide()
+	if stepped_up:
+		_owner_enemy.apply_floor_snap()
+		var current_vertical_velocity := _owner_enemy.velocity.dot(up_direction)
+		var current_horizontal_velocity := _owner_enemy.velocity.slide(up_direction)
+		if intended_horizontal_velocity.length_squared() > 0.0 and current_horizontal_velocity.length_squared() + 0.0001 < intended_horizontal_velocity.length_squared():
+			_owner_enemy.velocity = intended_horizontal_velocity + (up_direction * current_vertical_velocity)
 
 
 func is_on_floor() -> bool:

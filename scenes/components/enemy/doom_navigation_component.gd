@@ -296,8 +296,30 @@ func _is_direction_blocked(move_dir: ChaseDir) -> bool:
 		return false
 	if _can_attempt_door_open(collider_node, collision.get_position()):
 		return false
+	if _can_step_over_collision(direction):
+		return false
 
 	return true
+
+
+func _can_step_over_collision(direction: Vector3) -> bool:
+	if not _owner_enemy:
+		return false
+	var motor_component := _owner_enemy.get_node_or_null("EnemyMotorComponent") as EnemyMotorComponent
+	if motor_component == null:
+		return false
+	if not motor_component.stair_step_enabled or motor_component.is_flying:
+		return false
+	if motor_component.stair_step_helper == null:
+		return false
+	return motor_component.stair_step_helper.can_step_up_for_motion(
+		_owner_enemy,
+		direction * _get_probe_distance(),
+		motor_component.stair_step_max_height,
+		motor_component.stair_step_down_probe_distance,
+		0.0,
+		motor_component.stair_step_debug
+	)
 
 
 func _is_allowed_target_hit(collider_node: Node) -> bool:

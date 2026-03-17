@@ -521,12 +521,12 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_f3rg6"]
 script = ExtResource("148_b5j3m")
 speed = 7.4
+chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_m6jr1"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
-chase_player = false
 death_message = "lolz"
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 

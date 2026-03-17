@@ -61,7 +61,7 @@ func process_physics(delta: float) -> void:
 		else:
 			_stop_movement()
 
-	_motor_component.move_and_slide()
+	_motor_component.move_and_slide(delta)
 
 	if _disappear_zone_component:
 		_disappear_zone_component.update(delta)
@@ -253,5 +253,3 @@ func _get_horizontal_direction_to(target_pos: Vector3) -> Vector3:
 	var delta: Vector3 = target_pos - _enemy.global_position
 	delta.y = 0.0
 	return delta.normalized()
-
-

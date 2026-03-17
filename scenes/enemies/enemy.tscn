@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=16 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://47csay82d1kd" path="res://scenes/components/enemy/enemy_transition_component.gd" id="12_p7w77"]
 [ext_resource type="Script" uid="uid://oth317tmbcww" path="res://scenes/components/enemy/enemy_animation_component.gd" id="13_k4gvh"]
 [ext_resource type="Script" uid="uid://cyfvaetxivb88" path="res://scenes/components/enemy/doom_navigation_component.gd" id="14_doom"]
+[ext_resource type="Script" path="res://scenes/components/movement/stair_step_helper.gd" id="15_stair"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["enemy", "entity"]]
 collision_layer = 2
@@ -86,8 +87,9 @@ script = ExtResource("6_pathing")
 [node name="EnemyDoorOpenerComponent" type="Node" parent="."]
 script = ExtResource("7_door")
 
-[node name="EnemyMotorComponent" type="Node" parent="."]
+[node name="EnemyMotorComponent" type="Node" parent="." node_paths=PackedStringArray("stair_step_helper")]
 script = ExtResource("9_motor")
+stair_step_helper = NodePath("../StairStepHelper")
 
 [node name="EnemyBrain" type="Node" parent="."]
 script = ExtResource("10_y5th1")
@@ -100,6 +102,9 @@ metadata/_custom_type_script = "uid://drjhbqeko807o"
 [node name="EnemyTransitionComponent" type="Node" parent="."]
 script = ExtResource("12_p7w77")
 metadata/_custom_type_script = "uid://47csay82d1kd"
+
+[node name="StairStepHelper" type="Node" parent="."]
+script = ExtResource("15_stair")
 
 [connection signal="timeout" from="Timers/InteractionTimer" to="." method="_on_interaction_timer_timeout"]
 [connection signal="timeout" from="Timers/FindPathTimer" to="." method="_on_find_path_timer_timeout"]

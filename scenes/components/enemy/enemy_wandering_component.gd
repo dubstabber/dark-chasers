@@ -69,9 +69,33 @@ func _check_wall_collision() -> bool:
 	
 	if _interaction_ray.is_colliding():
 		var collider = _interaction_ray.get_collider()
-		if collider != null and not collider.is_in_group("player"):
+		if collider != null and not collider.is_in_group("player") and not _can_step_over_current_obstacle():
 			return true
 	return false
+
+
+func _can_step_over_current_obstacle() -> bool:
+	var owner_enemy := owner as CharacterBody3D
+	if owner_enemy == null:
+		return false
+	var motor_component := owner_enemy.get_node_or_null("EnemyMotorComponent") as EnemyMotorComponent
+	if motor_component == null:
+		return false
+	if not motor_component.stair_step_enabled or motor_component.is_flying:
+		return false
+	if motor_component.stair_step_helper == null:
+		return false
+	var probe_motion := direction.normalized() * maxf(0.05, _interaction_ray.target_position.length())
+	if probe_motion.length_squared() <= 0.000001:
+		return false
+	return motor_component.stair_step_helper.can_step_up_for_motion(
+		owner_enemy,
+		probe_motion,
+		motor_component.stair_step_max_height,
+		motor_component.stair_step_down_probe_distance,
+		0.0,
+		motor_component.stair_step_debug
+	)
 
 
 func _turn_around() -> void:

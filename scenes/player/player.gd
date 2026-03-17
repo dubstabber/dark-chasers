@@ -9,6 +9,12 @@ var gravity: int = ProjectSettings.get_setting("physics/3d/default_gravity")
 var last_velocity: Vector3 = Vector3.ZERO
 
 var blocked_movement := false
+@export_group("Stair Step")
+@export var stair_step_enabled := true
+@export var stair_step_max_height: float = 0.35
+@export var stair_step_min_horizontal_speed: float = 0.1
+@export var stair_step_down_probe_distance: float = 0.45
+@export var stair_step_debug := false
 
 # Death message tracking (used by death component for HUD)
 var _died_from_fall_damage := false
@@ -32,6 +38,7 @@ var hud: CanvasLayer: set = set_hud
 @onready var sprite_animation_component: SpriteAnimationComponent = $SpriteAnimationComponent
 @onready var input_component: PlayerInputComponent = $PlayerInputComponent
 @onready var damage_effects_component: DamageEffectsComponent = $DamageEffectsComponent
+@onready var _stair_step_helper = $StairStepHelper
 
 
 func _ready():
@@ -66,7 +73,19 @@ func _physics_process(delta: float) -> void:
 	last_velocity = velocity
 
 	# Execute the actual physics move
+	var stepped_up := false
+	if stair_step_enabled and _stair_step_helper != null and not movement_component.clip_mode:
+		stepped_up = _stair_step_helper.try_step_up(
+			self,
+			delta,
+			stair_step_max_height,
+			stair_step_min_horizontal_speed,
+			stair_step_down_probe_distance,
+			stair_step_debug
+		)
 	move_and_slide()
+	if stepped_up:
+		apply_floor_snap()
 
 
 func _setup_modular_components() -> void:

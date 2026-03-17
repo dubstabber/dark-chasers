@@ -9014,12 +9014,16 @@ shape = SubResource("ConcavePolygonShape3D_snfea")
 mesh = SubResource("ArrayMesh_iow6u")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MAP01_043"]
+[node name="StaticBody3D" type="StaticBody3D" parent="MAP01_043" groups=["manual_transition"]]
 collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MAP01_043/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_c0di4")
+
+[node name="Marker3D" type="Marker3D" parent="MAP01_043/StaticBody3D" groups=["manual_spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.976414, 202.2, 87.784065)
+script = ExtResource("44_ygl8i")
 
 [node name="MAP01_044" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_jqp3p")
@@ -9032,9 +9036,10 @@ collision_mask = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MAP01_044/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_gpc12")
 
-[node name="Marker3D" type="Marker3D" parent="MAP01_044/StaticBody3D" groups=["manual_spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.976414, 202.2, 87.784065)
+[node name="TransitionArrivalMarker" type="Marker3D" parent="MAP01_044/StaticBody3D" groups=["manual_spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.92069, 202.2, 86.584206)
 script = ExtResource("44_ygl8i")
+metadata/_custom_type_script = "uid://frgl0w6dnh16"
 
 [node name="MAP01_045" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_7kk32")

@@ -3,8 +3,6 @@ extends Node
 
 ## Handles player interaction with doors, buttons, and transit points
 
-const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
-
 signal interacted(collider: Node)
 signal door_opened(door: Node)
 signal button_pressed(button: Node)
@@ -36,7 +34,9 @@ func try_interact() -> bool:
 	if not interaction_raycast:
 		return false
 	
-	var collider = interaction_raycast.get_collider()
+	var collider := interaction_raycast.get_collider() as Node
+	var manual_transition_marker := _find_manual_transition_marker(collider)
+	pending_transit = manual_transition_marker
 	if collider:
 		interacted.emit(collider)
 
@@ -55,13 +55,13 @@ func try_interact() -> bool:
 			return true
 
 		# If we hit a non-interactable collider (wall/prop/etc), still allow transit usage.
-		if pending_transit:
+		if pending_transit and manual_transition_marker:
 			_use_transit()
 			return true
 		return false
 
 	# No collider hit: check for pending transit
-	if pending_transit:
+	if pending_transit and manual_transition_marker:
 		_use_transit()
 		return true
 	return false
@@ -89,4 +89,30 @@ func has_pending_transit() -> bool:
 func get_current_target() -> Node:
 	if interaction_raycast:
 		return interaction_raycast.get_collider()
+	return null
+
+
+func _find_manual_transition_marker(collider: Node) -> Marker3D:
+	var manual_transition_root := _find_manual_transition_root(collider)
+	if manual_transition_root == null:
+		return null
+
+	var queue: Array[Node] = [manual_transition_root]
+	while not queue.is_empty():
+		var current := queue.pop_front() as Node
+		if current is TransitionArrivalMarker:
+			return current
+
+		for child in current.get_children():
+			queue.append(child)
+
+	return null
+
+
+func _find_manual_transition_root(collider: Node) -> Node:
+	var current := collider
+	while current != null:
+		if current.is_in_group("manual_transition"):
+			return current
+		current = current.get_parent()
 	return null

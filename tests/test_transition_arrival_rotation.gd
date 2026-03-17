@@ -2,7 +2,6 @@ extends Node
 
 const EnemyScene := preload("res://scenes/enemies/enemy.tscn")
 const TeleportScene := preload("res://scenes/objects/teleport.tscn")
-const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
 const TransitionArrivalMarkerScript := preload("res://scenes/components/transition/transition_arrival_marker.gd")
 
 var _failed := false
@@ -85,17 +84,58 @@ func _test_manual_transit_keep_current_preserves_yaw() -> void:
 	var component := InteractionComponent.new()
 	var player := CharacterBody3D.new()
 	space.add_child(player)
-	player.global_rotation = Vector3(0.1, 0.75, -0.2)
+	var interaction_ray := RayCast3D.new()
+	player.add_child(interaction_ray)
+	interaction_ray.enabled = true
+	interaction_ray.target_position = Vector3(0.0, 0.0, -4.0)
+	interaction_ray.collision_mask = 1
+	player.global_rotation = Vector3(0.0, 0.75, 0.0)
 	component.player = player
+	component.interaction_raycast = interaction_ray
+	space.add_child(component)
+	var forward := -player.global_basis.z
+	var target_position := player.global_position + forward * 2.0
+
+	var blocker := StaticBody3D.new()
+	space.add_child(blocker)
+	blocker.global_position = target_position
+	blocker.collision_layer = 1
+	var blocker_shape := CollisionShape3D.new()
+	blocker.add_child(blocker_shape)
+	blocker_shape.shape = BoxShape3D.new()
+
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	interaction_ray.force_raycast_update()
+
+	_assert_true(not component.try_interact(), "Manual transit should not trigger when raycast does not hit a manual_transition node")
+	_assert_true(player.global_position.is_equal_approx(Vector3.ZERO), "Manual transit should not move player without a manual_transition hit")
+	_assert_true(not component.has_pending_transit(), "Manual transit should not arm from unrelated raycast hits")
+
+	blocker.queue_free()
+	await get_tree().process_frame
+	await get_tree().physics_frame
+
+	var transition_body := StaticBody3D.new()
+	space.add_child(transition_body)
+	transition_body.add_to_group("manual_transition")
+	transition_body.global_position = target_position
+	transition_body.collision_layer = 1
+	var transition_shape := CollisionShape3D.new()
+	transition_body.add_child(transition_shape)
+	transition_shape.shape = BoxShape3D.new()
 
 	var marker := TransitionArrivalMarkerScript.new()
-	space.add_child(marker)
+	transition_body.add_child(marker)
 	marker.arrival_rotation_mode = TransitionArrival.RotationMode.KEEP_CURRENT
-	marker.global_position = Vector3(-3.0, 0.0, 6.0)
+	marker.position = Vector3(-3.0, 0.0, 6.0)
 	marker.global_rotation = Vector3(0.0, 2.4, 0.0)
 
-	component.set_transit_point(marker)
-	component._use_transit()
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	interaction_ray.force_raycast_update()
+
+	_assert_true(component.try_interact(), "Manual transit should trigger when raycast hits a manual_transition node")
 
 	_assert_true(player.global_position.is_equal_approx(marker.global_position), "Manual transit should still use marker position")
 	_assert_float_eq(player.global_rotation.y, 0.75, "KEEP_CURRENT should preserve player yaw")

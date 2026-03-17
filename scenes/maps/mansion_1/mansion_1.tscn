@@ -1,4 +1,4 @@
-[gd_scene load_steps=251 format=4 uid="uid://c2jqgo5cy7g7l"]
+[gd_scene load_steps=249 format=4 uid="uid://c2jqgo5cy7g7l"]
 
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/maps/mansion_1/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="PackedScene" uid="uid://dbcrjnt84rjb5" path="res://scenes/maps/mansion_1/mansion_1_mapmesh.tscn" id="5_6uabt"]
@@ -459,12 +459,6 @@ radius = 0.499541
 height = 0.0419556
 radius = 0.499541
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_1hhje"]
-size = Vector3(1, 2.20598, 0.146158)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_twoj1"]
-size = Vector3(1, 2.20598, 0.146158)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_wkois"]
 size = Vector3(0.052217, 7.57013, 0.567396)
 
@@ -527,7 +521,6 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_f3rg6"]
 script = ExtResource("148_b5j3m")
 speed = 7.4
-chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_m6jr1"]
@@ -1349,7 +1342,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.10393524, 1.0990906, -0.026514053)
 shape = SubResource("BoxShape3D_ckarb")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/FirstFloorUpstairs" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/FirstFloorUpstairs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.0788, -3.4288, 128.361)
 script = ExtResource("1161_arrival")
 
@@ -1362,7 +1355,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 1.022583, 0.20926666)
 shape = SubResource("BoxShape3D_qwtuk")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/SecondFloorDownstairs" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/SecondFloorDownstairs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.9857, 3.79517, -128.043)
 script = ExtResource("1161_arrival")
 
@@ -1375,7 +1368,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 1.01735, 0.139893)
 shape = SubResource("BoxShape3D_tqmk0")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/SecondFloorUpstairs" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/SecondFloorUpstairs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.0371, -5.33006, -8.64111)
 script = ExtResource("1161_arrival")
 
@@ -1388,7 +1381,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.103935, 1.0229, 0.139893)
 shape = SubResource("BoxShape3D_j8qqi")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/ThirdFloorDownstairs" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/ThirdFloorDownstairs"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.2642, 5.23549, 9.02548)
 script = ExtResource("1161_arrival")
 
@@ -1400,7 +1393,7 @@ collision_mask = 3
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/ThirdFloorAbyss"]
 shape = SubResource("BoxShape3D_aw2s6")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/ThirdFloorAbyss" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/ThirdFloorAbyss"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.8271, 11.9337, 3.75611)
 script = ExtResource("1161_arrival")
 
@@ -1413,7 +1406,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11894, 0)
 shape = SubResource("BoxShape3D_hy2fy")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/PianoRoomExit" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/PianoRoomExit"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90.8966, 2.52168, 4.0245)
 script = ExtResource("1161_arrival")
 
@@ -1426,7 +1419,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12881, 0)
 shape = SubResource("BoxShape3D_u2kem")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/PianoRoomEntry" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/PianoRoomEntry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.8583, -2.58844, -4.12794)
 script = ExtResource("1161_arrival")
 
@@ -1439,7 +1432,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12613, 0)
 shape = SubResource("BoxShape3D_uyito")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BigHallEntry" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BigHallEntry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.4184, -0.0311279, 84.3817)
 script = ExtResource("1161_arrival")
 
@@ -1452,7 +1445,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10895, 0)
 shape = SubResource("BoxShape3D_tmodv")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/FirstFloorEntry" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/FirstFloorEntry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -91.4353, -0.0483093, -84.2516)
 script = ExtResource("1161_arrival")
 
@@ -1465,7 +1458,7 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.1228, 0)
 shape = SubResource("CylinderShape3D_m48fq")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementGap" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementGap"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9031, 7.49007, 13.3726)
 script = ExtResource("1161_arrival")
 
@@ -1478,32 +1471,8 @@ collision_mask = 3
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.89096, 0.576065, -3.91628)
 shape = SubResource("CylinderShape3D_xdisi")
 
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementLadder" groups=["spawn_point"]]
+[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/BasementLadder"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.640198, -5.99501, -17.4785)
-script = ExtResource("1161_arrival")
-
-[node name="CageEntry" type="Area3D" parent="NavigationRegion3D/Transitions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.0032)
-collision_layer = 0
-collision_mask = 3
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/CageEntry"]
-shape = SubResource("BoxShape3D_1hhje")
-
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/CageEntry" groups=["manual_spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -1.272, 0.864449)
-script = ExtResource("1161_arrival")
-
-[node name="CageExit" type="Area3D" parent="NavigationRegion3D/Transitions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.9455, 203.472, 87.3587)
-collision_layer = 0
-collision_mask = 3
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/CageExit"]
-shape = SubResource("BoxShape3D_twoj1")
-
-[node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/Transitions/CageExit" groups=["manual_spawn_point"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00722122, -1.272, -0.781258)
 script = ExtResource("1161_arrival")
 
 [node name="Ladder" type="Area3D" parent="NavigationRegion3D" groups=["ladder"]]

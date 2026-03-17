@@ -34,9 +34,10 @@ func _ready():
 	
 	if transitions:
 		for t in transitions.get_children():
+			var marker := _find_transition_arrival_marker(t)
+			if marker:
+				t.connect("body_entered", handle_transition.bind(t.name, marker))
 			for m in t.get_children():
-				if m.is_in_group("spawn_point"):
-					t.connect("body_entered", handle_transition.bind(t.name, m))
 				if m.is_in_group("manual_spawn_point"):
 					t.connect("body_entered", _on_transition_entered.bind(m))
 					t.connect("body_exited", _on_transition_exited)
@@ -242,6 +243,22 @@ func _find_player_spawn_marker(spawn_id: StringName) -> Node3D:
 					return child
 			# Fallback to node name match.
 			if String(child.name) == wanted:
+				return child
+
+	return null
+
+
+func _find_transition_arrival_marker(root: Node) -> TransitionArrivalMarker:
+	if root == null:
+		return null
+
+	var queue: Array[Node] = [root]
+	while not queue.is_empty():
+		var current := queue.pop_front() as Node
+		for child_variant in current.get_children():
+			var child := child_variant as Node
+			queue.append(child)
+			if child is TransitionArrivalMarker and not child.is_in_group("manual_spawn_point"):
 				return child
 
 	return null

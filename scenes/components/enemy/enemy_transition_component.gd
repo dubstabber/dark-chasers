@@ -24,7 +24,6 @@ func _ready() -> void:
 		map_transitions = _enemy_context.get_transitions_node()
 
 
-
 func setup(nav_component: EnemyNavigationComponent, motor_component: EnemyMotorComponent, disappear_zone_component: EnemyDisappearZoneComponent, room_pathing_component: RoomPathingComponent = null) -> void:
 	_nav_component = nav_component
 	_motor_component = motor_component
@@ -135,15 +134,10 @@ func _execute_transition(transition_node: Node3D) -> void:
 	if transition_name not in transition_graph[_owner_enemy.current_room]:
 		return
 
-	# Find the marker (spawn point) within the transition
-	var marker: Marker3D = null
-	for child in transition_node.get_children():
-		if child.is_in_group("spawn_point"):
-			marker = child
-			break
+	var marker := _find_transition_arrival_marker(transition_node)
 
 	if not marker:
-		push_warning("Enemy._execute_transition: No spawn_point marker found in %s" % transition_name)
+		push_warning("Enemy._execute_transition: No TransitionArrivalMarker found in %s" % transition_name)
 		return
 
 	# Execute the transition
@@ -158,7 +152,6 @@ func _execute_transition(transition_node: Node3D) -> void:
 
 	# Restart pathfinding with short delay
 	_owner_enemy.restart_pathfinding(0.1)
-
 
 
 func _reset_post_transition_motion_state() -> void:
@@ -193,3 +186,19 @@ func _get_room_name(node: Object) -> String:
 			return "" if room_value == null else String(room_value)
 
 	return ""
+
+
+func _find_transition_arrival_marker(root: Node) -> TransitionArrivalMarker:
+	if root == null:
+		return null
+
+	var queue: Array[Node] = [root]
+	while not queue.is_empty():
+		var current := queue.pop_front() as Node
+		for child_variant in current.get_children():
+			var child := child_variant as Node
+			queue.append(child)
+			if child is TransitionArrivalMarker and not child.is_in_group("manual_spawn_point"):
+				return child
+
+	return null

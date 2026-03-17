@@ -164,7 +164,6 @@ func _test_enemy_transition_matches_marker_yaw() -> void:
 	var marker := TransitionArrivalMarkerScript.new()
 	transition_node.add_child(marker)
 	marker.arrival_rotation_mode = TransitionArrival.RotationMode.MATCH_MARKER_YAW
-	marker.add_to_group("spawn_point")
 	marker.global_position = Vector3(8.0, 0.0, -5.0)
 	marker.global_rotation = Vector3(0.35, 0.9, -0.4)
 

@@ -1,7 +1,5 @@
 class_name Level extends Node3D
 
-const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
-
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
 
@@ -93,21 +91,16 @@ func handle_transition(body, area3dname, marker):
 		push_warning("handle_transition: body.current_room is empty for %s" % body.name)
 		return
 
+	var to_room: Variant = null
 	var map_transitions = TransitionsData.get_map_transitions(transitions)
-	if from_room not in map_transitions:
-		push_warning("handle_transition: from_room '%s' not in map_transitions for %s" % [from_room, body.name])
-		return
-
-	if area3dname not in map_transitions[from_room]:
-		push_warning("handle_transition: transition '%s' not found from room '%s' for %s" % [area3dname, from_room, body.name])
-		return
-
-	var to_room = map_transitions[from_room][area3dname]
+	if from_room in map_transitions and area3dname in map_transitions[from_room]:
+		to_room = map_transitions[from_room][area3dname]
 	if not TransitionArrival.apply(body as Node3D, marker):
 		push_warning("handle_transition: failed to apply arrival for transition '%s'" % String(area3dname))
 		return
 
-	RoomAware.set_current_room(body, to_room)
+	if to_room != null:
+		RoomAware.set_current_room(body, String(to_room))
 
 	# Use PathfindingEntity interface to make pathfinding responsive after transition
 	PathfindingEntity.make_responsive(body)

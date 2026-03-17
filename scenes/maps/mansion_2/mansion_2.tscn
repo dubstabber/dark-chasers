@@ -1,4 +1,4 @@
-[gd_scene load_steps=688 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=689 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5701,6 +5701,9 @@ size = Vector3(1.9891968, 2.9889832, 0.42578125)
 [sub_resource type="BoxShape3D" id="BoxShape3D_i4yqx"]
 size = Vector3(1.9733887, 2.2807617, 0.4197998)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_w00q8"]
+size = Vector3(2.003296, 5.053711, 1)
+
 [node name="mansion2" type="Node3D"]
 script = ExtResource("1_ophgb")
 
@@ -7362,6 +7365,22 @@ shape = SubResource("BoxShape3D_i4yqx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.518841, 2.08, -6.393569)
 script = ExtResource("131_wqekk")
 metadata/_custom_type_script = "uid://frgl0w6dnh16"
+
+[node name="BackToHall" type="Area3D" parent="NavigationRegion3D/Transitions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -121.3892, 5.5999994, -60.62472)
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Transitions/BackToHall"]
+transform = Transform3D(0.9408985, 0, -0.33868864, 0, 1, 0, 0.33868864, 0, 0.9408985, -0.35199738, 2.537673, 1.3493233)
+shape = SubResource("BoxShape3D_w00q8")
+
+[node name="TransitionArrivalMarker" type="Marker3D" parent="NavigationRegion3D/Transitions/BackToHall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184.14967, 4.7683716e-07, 46.352856)
+script = ExtResource("131_wqekk")
+metadata/_custom_type_script = "uid://frgl0w6dnh16"
+
+[node name="Area3D" type="Area3D" parent="NavigationRegion3D/Transitions"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89.84531, 7.447901, 3.8483734)
 
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true

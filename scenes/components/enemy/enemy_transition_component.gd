@@ -4,8 +4,6 @@ extends Node
 ## Manages room-to-room transitions for an enemy. Handles pathfinding across
 ## rooms via transition points, and executing the actual teleport when reached.
 
-const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
-
 var _owner_enemy: Enemy = null
 var _enemy_context: Node = null
 var _nav_component: EnemyNavigationComponent = null
@@ -119,20 +117,7 @@ func _execute_transition(transition_node: Node3D) -> void:
 	if _disappear_zone_component and _disappear_zone_component.check_overlap_immediate():
 		return
 
-	if not _enemy_context:
-		return
-
-	var transition_graph = _enemy_context.get_transition_graph()
-	if transition_graph.is_empty():
-		return
-
 	var transition_name = transition_node.name
-
-	if _owner_enemy.current_room not in transition_graph:
-		return
-
-	if transition_name not in transition_graph[_owner_enemy.current_room]:
-		return
 
 	var marker := _find_transition_arrival_marker(transition_node)
 
@@ -140,13 +125,19 @@ func _execute_transition(transition_node: Node3D) -> void:
 		push_warning("Enemy._execute_transition: No TransitionArrivalMarker found in %s" % transition_name)
 		return
 
+	var to_room: Variant = null
+	if _enemy_context:
+		var transition_graph: Dictionary = _enemy_context.get_transition_graph()
+		if _owner_enemy.current_room in transition_graph and transition_name in transition_graph[_owner_enemy.current_room]:
+			to_room = transition_graph[_owner_enemy.current_room][transition_name]
+
 	# Execute the transition
-	var to_room = transition_graph[_owner_enemy.current_room][transition_name]
 	if not TransitionArrival.apply(_owner_enemy, marker):
 		push_warning("Enemy._execute_transition: Failed to apply arrival for %s" % transition_name)
 		return
 
-	_owner_enemy.current_room = to_room
+	if to_room != null:
+		_owner_enemy.current_room = String(to_room)
 	_reset_post_transition_motion_state()
 	_owner_enemy.makepath()
 

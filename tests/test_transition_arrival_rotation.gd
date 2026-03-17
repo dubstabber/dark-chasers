@@ -39,8 +39,10 @@ func _ready() -> void:
 	print("=".repeat(60))
 
 	await _test_level_transition_matches_marker_yaw()
+	await _test_level_transition_without_mapping_preserves_room()
 	await _test_manual_transit_keep_current_preserves_yaw()
 	await _test_enemy_transition_matches_marker_yaw()
+	await _test_enemy_transition_without_mapping_preserves_room()
 	await _test_invalid_config_and_missing_marker_degrade_safely()
 
 	if _failed:
@@ -74,6 +76,32 @@ func _test_level_transition_matches_marker_yaw() -> void:
 	_assert_float_eq(body.global_rotation.y, marker.global_rotation.y, "Level transition should copy marker yaw")
 	_assert_float_eq(body.global_rotation.x, 0.0, "Level yaw-only mode should preserve pitch")
 	_assert_true(body.current_room == "RoomB", "Level transition should update current_room")
+
+	space.queue_free()
+	await get_tree().process_frame
+
+
+func _test_level_transition_without_mapping_preserves_room() -> void:
+	var space := _create_test_space()
+	var level := Level.new()
+	level.transitions = MockTransitions.new()
+
+	var body := MockRoomBody.new()
+	space.add_child(body)
+	body.current_room = "RoomA"
+	body.global_rotation = Vector3(0.0, 0.35, 0.0)
+
+	var marker := TransitionArrivalMarkerScript.new()
+	space.add_child(marker)
+	marker.arrival_rotation_mode = TransitionArrival.RotationMode.MATCH_MARKER_YAW
+	marker.global_position = Vector3(-6.0, 0.0, 3.0)
+	marker.global_rotation = Vector3(0.0, -1.1, 0.0)
+
+	level.handle_transition(body, "UnmappedDoor", marker)
+
+	_assert_true(body.global_position.is_equal_approx(marker.global_position), "Fallback level transition should still use marker position")
+	_assert_float_eq(body.global_rotation.y, marker.global_rotation.y, "Fallback level transition should still apply marker yaw")
+	_assert_true(body.current_room == "RoomA", "Fallback level transition should preserve current_room when mapping is missing")
 
 	space.queue_free()
 	await get_tree().process_frame
@@ -177,6 +205,43 @@ func _test_enemy_transition_matches_marker_yaw() -> void:
 	_assert_float_eq(enemy.global_rotation.y, marker.global_rotation.y, "Enemy transition should copy marker yaw")
 	_assert_true(enemy.current_room == "RoomB", "Enemy transition should update current_room")
 	_assert_true(enemy.velocity.is_zero_approx(), "Enemy transition should reset velocity after teleport")
+
+	space.queue_free()
+	await get_tree().process_frame
+
+
+func _test_enemy_transition_without_mapping_preserves_room() -> void:
+	var space := _create_test_space()
+	var enemy := EnemyScene.instantiate()
+	space.add_child(enemy)
+	await get_tree().process_frame
+
+	enemy.current_room = "RoomA"
+	enemy.global_rotation = Vector3(0.0, 0.2, 0.0)
+	enemy.velocity = Vector3(2.0, 0.0, -1.0)
+
+	var transitions := Node3D.new()
+	space.add_child(transitions)
+	var transition_node := Area3D.new()
+	transition_node.name = "UnmappedDoor"
+	transitions.add_child(transition_node)
+
+	var marker := TransitionArrivalMarkerScript.new()
+	transition_node.add_child(marker)
+	marker.arrival_rotation_mode = TransitionArrival.RotationMode.MATCH_MARKER_YAW
+	marker.global_position = Vector3(-8.0, 0.0, 2.0)
+	marker.global_rotation = Vector3(0.0, 1.7, 0.0)
+
+	var component := enemy.get_node("EnemyTransitionComponent") as EnemyTransitionComponent
+	var enemy_context := MockEnemyContext.new()
+	enemy_context.transitions_node = transitions
+	component._enemy_context = enemy_context
+	component._execute_transition(transition_node)
+
+	_assert_true(enemy.global_position.is_equal_approx(marker.global_position), "Fallback enemy transition should still use marker position")
+	_assert_float_eq(enemy.global_rotation.y, marker.global_rotation.y, "Fallback enemy transition should still apply marker yaw")
+	_assert_true(enemy.current_room == "RoomA", "Fallback enemy transition should preserve current_room when mapping is missing")
+	_assert_true(enemy.velocity.is_zero_approx(), "Fallback enemy transition should still reset velocity")
 
 	space.queue_free()
 	await get_tree().process_frame

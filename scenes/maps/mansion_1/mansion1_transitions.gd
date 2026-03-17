@@ -1,4 +1,3 @@
-class_name Mansion1Transitions
 extends Node3D
 
 ## Implements TransitionsData interface for typed access.

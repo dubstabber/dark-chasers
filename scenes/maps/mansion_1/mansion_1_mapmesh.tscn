@@ -1,4 +1,4 @@
-[gd_scene load_steps=930 format=4 uid="uid://dbcrjnt84rjb5"]
+[gd_scene load_steps=931 format=4 uid="uid://dbcrjnt84rjb5"]
 
 [ext_resource type="Texture2D" uid="uid://crhm0o5njpyqs" path="res://models/mansion1/mansion1_HRLAMP.png" id="1_og3yr"]
 [ext_resource type="Texture2D" uid="uid://ebgur1uk7u0t" path="res://models/mansion1/mansion1_HRBBR.png" id="2_ygl8i"]
@@ -44,6 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://dq3d8sqweiifr" path="res://models/mansion1/mansion1_BMIDG10.png" id="42_yuxn5"]
 [ext_resource type="Texture2D" uid="uid://coiqpa5wddfu0" path="res://models/mansion1/mansion1_BMIDG10B.png" id="43_bluko"]
 [ext_resource type="Texture2D" uid="uid://daa256vyjm4nu" path="res://models/mansion1/mansion1_HRBBRCLG.png" id="44_g28t4"]
+[ext_resource type="Script" uid="uid://frgl0w6dnh16" path="res://scenes/components/transition/transition_arrival_marker.gd" id="44_ygl8i"]
 [ext_resource type="Texture2D" uid="uid://btqvw2fy1mxmr" path="res://models/mansion1/mansion1_PNRDRWR.png" id="45_v07sb"]
 [ext_resource type="Texture2D" uid="uid://cwgoiarokw66t" path="res://models/mansion1/mansion1_POSTER03.png" id="46_x003t"]
 [ext_resource type="Texture2D" uid="uid://cuoioboup72sp" path="res://models/mansion1/mansion1_SWTX0186.png" id="47_8nous"]
@@ -9024,12 +9025,16 @@ shape = SubResource("ConcavePolygonShape3D_c0di4")
 mesh = SubResource("ArrayMesh_jqp3p")
 skeleton = NodePath("")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MAP01_044"]
+[node name="StaticBody3D" type="StaticBody3D" parent="MAP01_044" groups=["manual_transition"]]
 collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MAP01_044/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_gpc12")
+
+[node name="Marker3D" type="Marker3D" parent="MAP01_044/StaticBody3D" groups=["manual_spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.976414, 202.2, 87.784065)
+script = ExtResource("44_ygl8i")
 
 [node name="MAP01_045" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_7kk32")

@@ -65,7 +65,7 @@ var map_transitions := {
 	}
 }
 
-var enemy_exceptions := []
+var enemy_exceptions := ["BasementHole", "SmallDarkRoomHole", "SecondFloorAbyss"]
 
 func get_map_transitions() -> Dictionary:
 	return map_transitions

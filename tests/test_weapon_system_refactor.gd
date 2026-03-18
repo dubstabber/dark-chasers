@@ -14,6 +14,7 @@ func _ready():
 	test_weapon_resource_is_pure_config()
 	test_weapon_manager_fire_methods_exist()
 	test_weapon_manager_delegates_to_controllers()
+	test_weapon_manager_uses_movement_intent_for_bobbing()
 	test_weapon_manager_owns_ammo_wiring()
 	test_player_no_ammo_wiring()
 	
@@ -138,6 +139,21 @@ func test_weapon_manager_delegates_to_controllers():
 	assert("_ui_event_controller.forward_ammo_change" in source, "WeaponManager should delegate ammo UI forwarding to WeaponUiEventController")
 	
 	print("✓ WeaponManager delegates firing and equip boundaries to controllers")
+
+
+func test_weapon_manager_uses_movement_intent_for_bobbing():
+	print("\n--- Testing WeaponManager uses movement intent for bobbing ---")
+	
+	var script = load("res://scenes/systems/weapon_manager/weapon_manager.gd") as GDScript
+	var source = script.source_code
+	
+	assert("var bob_velocity := _get_weapon_bob_velocity()" in source, "WeaponManager should derive a dedicated bob velocity")
+	assert("player.movement_component" in source, "WeaponManager should consult PlayerMovementComponent for bob intent when available")
+	assert("player.movement_component.get_direction()" in source, "WeaponManager should use movement direction for weapon bob intent")
+	assert("player.movement_component.get_current_speed()" in source, "WeaponManager should use movement speed for weapon bob intent")
+	assert("_bob_controller.update_speed(bob_velocity, delta)" in source, "WeaponManager should feed bob velocity into WeaponBobController")
+	
+	print("✓ WeaponManager uses movement intent for bobbing")
 
 
 func test_weapon_manager_owns_ammo_wiring():

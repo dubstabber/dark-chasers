@@ -121,7 +121,8 @@ func _process(delta: float) -> void:
 	if not current_weapon or not player or not gun_base:
 		return
 
-	var player_is_moving := player.velocity.length_squared() > BOB_IDLE_EPSILON_SQUARED
+	var bob_velocity := _get_weapon_bob_velocity()
+	var player_is_moving := bob_velocity.length_squared() > BOB_IDLE_EPSILON_SQUARED
 	var bob_offset := _bob_controller.get_offset()
 	var has_significant_bob := bob_offset.length_squared() > BOB_IDLE_EPSILON_SQUARED
 	var should_update_bob: bool = player_is_moving or _animation_state_controller.is_shooting() or is_auto_hitting or has_significant_bob
@@ -131,7 +132,7 @@ func _process(delta: float) -> void:
 			gun_base.position = base_gun_position
 		return
 
-	_update_speed(delta)
+	_update_speed(delta, bob_velocity)
 	_update_bob(delta)
 	_apply_offsets()
 
@@ -143,8 +144,24 @@ func _process(delta: float) -> void:
 # ========================================================================== #
 # Update helpers (delegated to bob controller)
 # ========================================================================== #
-func _update_speed(delta: float) -> void:
-	_bob_controller.update_speed(player.velocity, delta)
+func _update_speed(delta: float, bob_velocity: Vector3) -> void:
+	_bob_controller.update_speed(bob_velocity, delta)
+
+
+func _get_weapon_bob_velocity() -> Vector3:
+	if not player:
+		return Vector3.ZERO
+	var fallback_velocity := player.velocity
+	fallback_velocity.y = 0.0
+	if player.movement_component == null:
+		return fallback_velocity
+	var movement_direction := player.movement_component.get_direction()
+	if movement_direction.length_squared() <= BOB_IDLE_EPSILON_SQUARED:
+		return fallback_velocity
+	var movement_speed := player.movement_component.get_current_speed()
+	var intended_velocity := movement_direction * movement_speed
+	intended_velocity.y = 0.0
+	return intended_velocity
 
 
 func _update_bob(delta: float) -> void:

@@ -3,6 +3,8 @@ extends Node
 
 const EPSILON := 0.000001
 const FLOOR_ANGLE_EPSILON := 0.05
+const MIN_SUPPORT_FLOOR_HITS := 2
+const SUPPORT_FLOOR_HEIGHT_TOLERANCE := 0.04
 
 var _last_debug_message := ""
 var _last_debug_time_msec := 0
@@ -353,7 +355,16 @@ func _find_collision_face_step_candidate(body: CharacterBody3D, origin: Vector3,
 	for forward_offset in forward_offsets:
 		for lateral_offset in lateral_offsets:
 			var probe_origin: Vector3 = collision_position + (horizontal_direction * forward_offset) + (lateral_direction * lateral_offset)
-			var landing_floor := _find_floor(body, probe_origin, up_direction, max_step_height, down_probe_distance)
+			var landing_floor := _find_support_floor(
+				body,
+				probe_origin,
+				up_direction,
+				max_step_height,
+				down_probe_distance,
+				horizontal_direction,
+				body_horizontal_extent,
+				margin
+			)
 			if landing_floor.is_empty():
 				debug_info["fallback_misses"] += 1
 				continue
@@ -456,15 +467,28 @@ func _find_support_floor(body: CharacterBody3D, origin: Vector3, up_direction: V
 			sample_origins.append(base_origin + (lateral_direction * lateral_offset))
 	var best_floor: Dictionary = {}
 	var best_floor_height := -INF
+	var support_floor_results: Array[Dictionary] = []
 	for sample_origin in sample_origins:
 		var floor_result := _find_floor(body, sample_origin, up_direction, max_step_height, down_probe_distance)
 		if floor_result.is_empty():
 			continue
+		support_floor_results.append(floor_result)
 		var floor_position: Vector3 = floor_result["position"]
 		var floor_height: float = floor_position.dot(up_direction)
 		if floor_height > best_floor_height:
 			best_floor_height = floor_height
 			best_floor = floor_result
+	if best_floor.is_empty():
+		return {}
+	var support_hits := 0
+	var support_height_tolerance := maxf(SUPPORT_FLOOR_HEIGHT_TOLERANCE, margin * 4.0)
+	for floor_result in support_floor_results:
+		var floor_position: Vector3 = floor_result["position"]
+		var floor_height: float = floor_position.dot(up_direction)
+		if absf(floor_height - best_floor_height) <= support_height_tolerance:
+			support_hits += 1
+	if support_hits < MIN_SUPPORT_FLOOR_HITS:
+		return {}
 	return best_floor
 
 

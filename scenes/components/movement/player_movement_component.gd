@@ -116,6 +116,7 @@ func process_movement(delta: float, input_dir: Vector2, is_crouching_input: bool
 
 func _update_crouch_state(delta: float, input_dir: Vector2, is_crouching_input: bool, is_sprinting_input: bool) -> void:
 	var currently_sliding = current_state == MovementState.SLIDING
+	var in_crouched_stance := _is_in_crouched_stance()
 	
 	if (is_crouching_input or currently_sliding) and not clip_mode:
 		current_speed = lerp(current_speed, crouching_speed, delta * lerp_speed)
@@ -141,28 +142,50 @@ func _update_crouch_state(delta: float, input_dir: Vector2, is_crouching_input: 
 		if current_state != MovementState.SLIDING:
 			_set_state(MovementState.CROUCHING)
 	
-	elif not crouch_raycast or not crouch_raycast.is_colliding():
-		if standing_collision:
-			standing_collision.disabled = false
-		if crouching_collision:
-			crouching_collision.disabled = true
-		
-		if head:
-			head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
-		
-		if is_sprinting_input and player.velocity.length() > 0.1 and _can_sprint():
-			current_speed = lerp(current_speed, sprinting_speed, delta * lerp_speed)
-			_set_state(MovementState.SPRINTING)
-			_is_sprinting = true
-			_was_sprinting_before_airborne = true
+	elif in_crouched_stance:
+		if _can_stand_up():
+			_apply_standing_stance(delta)
+			_apply_grounded_locomotion(delta, input_dir, is_sprinting_input)
 		else:
-			current_speed = lerp(current_speed, walking_speed, delta * lerp_speed)
+			current_speed = lerp(current_speed, crouching_speed, delta * lerp_speed)
+			if head:
+				head.position.y = lerp(head.position.y, crouching_depth, delta * lerp_speed)
+			if standing_collision:
+				standing_collision.disabled = true
+			if crouching_collision:
+				crouching_collision.disabled = false
 			_is_sprinting = false
 			_was_sprinting_before_airborne = false
-			if input_dir != Vector2.ZERO:
-				_set_state(MovementState.WALKING)
-			else:
-				_set_state(MovementState.IDLE)
+			if current_state != MovementState.SLIDING:
+				_set_state(MovementState.CROUCHING)
+	else:
+		_apply_standing_stance(delta)
+		_apply_grounded_locomotion(delta, input_dir, is_sprinting_input)
+
+
+func _apply_standing_stance(delta: float) -> void:
+	if standing_collision:
+		standing_collision.disabled = false
+	if crouching_collision:
+		crouching_collision.disabled = true
+	if head:
+		head.position.y = lerp(head.position.y, 0.0, delta * lerp_speed)
+
+
+func _apply_grounded_locomotion(delta: float, input_dir: Vector2, is_sprinting_input: bool) -> void:
+	if is_sprinting_input and input_dir != Vector2.ZERO and _can_sprint():
+		current_speed = lerp(current_speed, sprinting_speed, delta * lerp_speed)
+		_set_state(MovementState.SPRINTING)
+		_is_sprinting = true
+		_was_sprinting_before_airborne = true
+	else:
+		current_speed = lerp(current_speed, walking_speed, delta * lerp_speed)
+		_is_sprinting = false
+		_was_sprinting_before_airborne = false
+		if input_dir != Vector2.ZERO:
+			_set_state(MovementState.WALKING)
+		else:
+			_set_state(MovementState.IDLE)
 
 
 func _update_slide(delta: float) -> void:
@@ -245,6 +268,36 @@ func _can_sprint() -> bool:
 	return true
 
 
+func _can_stand_up() -> bool:
+	if not player:
+		return not crouch_raycast or not crouch_raycast.is_colliding()
+	if standing_collision == null or standing_collision.shape == null:
+		return not crouch_raycast or not crouch_raycast.is_colliding()
+	var world := player.get_world_3d()
+	if world == null or world.direct_space_state == null:
+		return not crouch_raycast or not crouch_raycast.is_colliding()
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = standing_collision.shape
+	query.transform = standing_collision.global_transform
+	query.margin = maxf(player.safe_margin, 0.001)
+	query.collision_mask = player.collision_mask
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	query.exclude = [player.get_rid()]
+	var results: Array[Dictionary] = world.direct_space_state.intersect_shape(query, 8)
+	return results.is_empty()
+
+
+func _is_in_crouched_stance() -> bool:
+	if crouching_collision:
+		return not crouching_collision.disabled
+	if standing_collision:
+		return standing_collision.disabled
+	if head:
+		return head.position.y < (crouching_depth * 0.5)
+	return current_state == MovementState.CROUCHING or current_state == MovementState.SLIDING
+
+
 func handle_jump() -> bool:
 	if not player:
 		return false
@@ -310,7 +363,7 @@ func is_sprinting() -> bool:
 
 
 func is_crouching() -> bool:
-	return current_state == MovementState.CROUCHING
+	return _is_in_crouched_stance() and current_state != MovementState.SLIDING
 
 
 func is_sliding() -> bool:

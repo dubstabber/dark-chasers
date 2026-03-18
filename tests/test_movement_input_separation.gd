@@ -16,8 +16,10 @@ func _ready():
 	test_player_owns_physics_process()
 	test_input_component_no_physics_process()
 	test_player_owns_move_and_slide()
+	test_movement_component_uses_standing_clearance_guard()
 	
 	print("=== ALL MOVEMENT INPUT SEPARATION TESTS COMPLETED ===")
+	get_tree().quit()
 
 
 func test_movement_component_no_input_polling():
@@ -54,7 +56,7 @@ func test_movement_component_delegates_slide_state():
 	var script = load("res://scenes/components/movement/player_movement_component.gd") as GDScript
 	var source = script.source_code
 	
-	assert("PlayerSlideControllerScript" in source, "PlayerMovementComponent should preload PlayerSlideController")
+	assert("PlayerSlideController.new()" in source, "PlayerMovementComponent should construct PlayerSlideController")
 	assert("_slide_controller.start_slide" in source, "PlayerMovementComponent should delegate slide start")
 	assert("_slide_controller.update" in source, "PlayerMovementComponent should delegate slide timer updates")
 	assert("_slide_controller.get_slide_vector" in source, "PlayerMovementComponent should read slide vector from PlayerSlideController")
@@ -106,7 +108,21 @@ func test_player_owns_move_and_slide():
 	var player_src = load("res://scenes/player/player.gd").source_code
 	var input_src = load("res://scenes/components/input/player_input_component.gd").source_code
 	
-	assert("move_and_slide()" in player_src, "Player should call move_and_slide()")
-	assert("move_and_slide()" not in input_src, "PlayerInputComponent should NOT call move_and_slide()")
+	assert("\n\tmove_and_slide()" in player_src, "Player should call move_and_slide()")
+	assert("\n\tmove_and_slide()" not in input_src, "PlayerInputComponent should NOT call move_and_slide()")
 	
 	print("✓ Player owns move_and_slide (not input component)")
+
+
+func test_movement_component_uses_standing_clearance_guard():
+	print("\n--- Testing PlayerMovementComponent uses standing clearance guard ---")
+	
+	var movement_src = load("res://scenes/components/movement/player_movement_component.gd").source_code
+	
+	assert("if _can_stand_up():" in movement_src, "PlayerMovementComponent should gate uncrouching through _can_stand_up()")
+	assert("PhysicsShapeQueryParameters3D.new()" in movement_src, "PlayerMovementComponent should build a shape query for standing clearance")
+	assert("intersect_shape(query, 8)" in movement_src, "PlayerMovementComponent should verify standing collision shape clearance with intersect_shape")
+	assert("var in_crouched_stance := _is_in_crouched_stance()" in movement_src, "PlayerMovementComponent should track physical crouch stance before applying stand-up clearance")
+	assert("elif in_crouched_stance:" in movement_src, "PlayerMovementComponent should only use stand-up clearance while physically crouched")
+	
+	print("✓ PlayerMovementComponent uses standing clearance guard")

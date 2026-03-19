@@ -1,0 +1,130 @@
+[gd_scene load_steps=12 format=4 uid="uid://2vsy3j2wpy1o"]
+
+[ext_resource type="Script" uid="uid://d2g5jvjq61kgj" path="res://scenes/objects/door.gd" id="1_7pbps"]
+[ext_resource type="Texture2D" uid="uid://dcmgtalb4gdi5" path="res://models/doors/moving_wall9_SCTWALL.png" id="1_doodt"]
+[ext_resource type="Texture2D" uid="uid://bqb1w0iescsik" path="res://models/doors/moving_wall9_SCTCEG.png" id="2_7pbps"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aoanm"]
+resource_name = "SCTWALL"
+cull_mode = 2
+albedo_texture = ExtResource("1_doodt")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6cti5"]
+resource_name = "SCTCEG"
+cull_mode = 2
+albedo_texture = ExtResource("2_7pbps")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wdc4w"]
+_surfaces = [{
+"aabb": AABB(-7.959999, -1.5600004, -1, 8.959999, 2.560001, 1.2800007),
+"format": 34896613377,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIAAwAFAAEABQACAAEAAwAGAAUABAACAAcABgAEAAcABQAHAAIABgAHAAUA"),
+"name": "SCTWALL",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP7/AAAAAAAA/////wAAAAAAAAAAAAD//wAA//8AAP///v8AAAAA//8AAAAAAAD///////8AAA==")
+}, {
+"aabb": AABB(-7.959999, -1.5600004, -1, 8.959999, 1e-05, 1.2800007),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"name": "SCTCEG",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAAAAD//zQM//8AAP//AAAAAAAAAAA0DP//AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cj5te"]
+resource_name = "moving_wall9_Cube_001"
+_surfaces = [{
+"aabb": AABB(-7.959999, -1.5600004, -1, 8.959999, 2.560001, 1.2800007),
+"attribute_data": PackedByteArray("XpYC9NetnN/XrQL0Xpac32/L///GeKyAb8usgMZ4/v9elr2/161Xq8Z4rIBellerb8v//8Z4rIBvy6yAxnj+/8Z4rID//1er//+9v9etV6s="),
+"format": 34896613399,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEA"),
+"material": SubResource("StandardMaterial3D_aoanm"),
+"name": "SCTWALL",
+"primitive": 3,
+"uv_scale": Vector4(3.49, 2.0080721, 0, 0),
+"vertex_count": 20,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP7/AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD//////v8AAP//AAD+/wAA/////wAAAAD/////AAAAAFTV////////VNX///7/AABoGv//AAD//1TV//8AAP//AIAAAP////8AgP///////wCAAAAAAP//AID///7/AAAAAAAA/////wAAAAD+/wAADvT///////8AAFTVVNVU1VTVVNVU1VTVVNX/f/7//3////9//v//f///qiqqKqoqqirHGRszqiqqKv9/////f////3////9/////f/+//3//vzaM47n/f/+/")
+}, {
+"aabb": AABB(-7.959999, -1.5600004, -1, 8.959999, 1e-05, 1.2800007),
+"attribute_data": PackedByteArray("//92d30E//99BHZ3///+/w=="),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"material": SubResource("StandardMaterial3D_6cti5"),
+"name": "SCTCEG",
+"primitive": 3,
+"uv_scale": Vector4(8.142858, 2.142858, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAA/////zQM////////AAAAAP//AAA0DP//////f/8//3//P/9//z//f/8/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_wdc4w")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_doodt"]
+points = PackedVector3Array(1, 0.99975014, 0.2800007, 1, 0.99975014, -1, -7.959999, 0.99975014, 0.2800007, 1, -1.5600004, 0.2800007, 1, -1.5600004, -1, -7.959999, 0.99975014, -1, -7.959999, -1.5600004, 0.2800007, -7.959999, -1.5600004, -1)
+
+[sub_resource type="Animation" id="Animation_doodt"]
+resource_name = "Open"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 2.5, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7pbps"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1yrxo"]
+_data = {
+&"Open": SubResource("Animation_doodt"),
+&"RESET": SubResource("Animation_7pbps")
+}
+
+[node name="AoMovingWall9" type="Node3D" groups=["door"]]
+script = ExtResource("1_7pbps")
+open_only = true
+can_interrupt = false
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="MovingWallBig" type="MeshInstance3D" parent="AnimatableBody3D"]
+mesh = SubResource("ArrayMesh_cj5te")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
+shape = SubResource("ConvexPolygonShape3D_doodt")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1yrxo")
+}

@@ -1,7 +1,5 @@
 extends Area3D
 
-const TransitionArrival := preload("res://scenes/components/transition/transition_arrival.gd")
-
 ## Deprecated: raw res:// path. Prefer destination_catalog_key.
 @export var level_name: String
 ## SceneCatalog key to use as destination.

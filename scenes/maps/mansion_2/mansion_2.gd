@@ -6,6 +6,7 @@ const STARTING_YAW := PI
 func _ready():
 	super._ready()
 	spawn_player()
+	$Doors/AoMovingWall11.open()
 
 
 func spawn_player() -> Player:

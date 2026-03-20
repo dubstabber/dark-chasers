@@ -61,7 +61,7 @@ _data = {
 &"RESET": SubResource("Animation_bptr3")
 }
 
-[node name="AoWardrobeDoor1" type="Node3D"]
+[node name="AoWardrobeDoor1" type="Node3D" groups=["door"]]
 script = ExtResource("1_bptr3")
 open_sound = ExtResource("2_amc6y")
 close_sound = ExtResource("3_2qkdm")

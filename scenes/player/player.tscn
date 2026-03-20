@@ -75,11 +75,11 @@
 [ext_resource type="Script" uid="uid://7xmfr61xc86r" path="res://scenes/components/movement/stair_step_helper.gd" id="74_stair_step"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gryrd"]
-radius = 0.231423
+radius = 0.251
 height = 1.19463
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y831t"]
-radius = 0.202198
+radius = 0.252
 height = 0.54589844
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ln3h3"]

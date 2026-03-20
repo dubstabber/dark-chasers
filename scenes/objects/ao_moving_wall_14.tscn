@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=4 uid="uid://8dwblsmu03cb"]
+
+[ext_resource type="Texture2D" uid="uid://ct1aq1um60rja" path="res://models/doors/moving_wall14_ORWALL.png" id="1_m3671"]
+[ext_resource type="Texture2D" uid="uid://bt40oo5ndfxco" path="res://models/doors/moving_wall14_ORCELING.png" id="2_hnskn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ytx6d"]
+resource_name = "ORWALL"
+cull_mode = 2
+albedo_texture = ExtResource("1_m3671")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pciin"]
+resource_name = "ORCELING"
+cull_mode = 2
+albedo_texture = ExtResource("2_hnskn")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3ym1q"]
+_surfaces = [{
+"aabb": AABB(-0.63087344, -1.3624685, -0.039536297, 1.2799988, 2.56, 0.07999992),
+"format": 34896613377,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAAAAIAAwAFAAEABQACAAEAAwAGAAUABAACAAcABgAEAAcABQAHAAIABgAHAAUA"),
+"name": "ORWALL",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD//wAA//8AAP////8AAAAA//8AAAAAAAD///////8AAA==")
+}, {
+"aabb": AABB(-0.63087344, -1.3624685, -0.039536297, 1.2799988, 1e-05, 0.07999992),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"name": "ORCELING",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAAAAD//wAA//8AAP//AAAAAAAAAAAAAP//AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_e6r7q"]
+resource_name = "moving_wall14_Cube_001"
+_surfaces = [{
+"aabb": AABB(-0.63087344, -1.3624685, -0.039536297, 1.2799988, 2.56, 0.07999992),
+"attribute_data": PackedByteArray("/////039/3////9/Tf3//6vA//+Olf9/q8D/f46V///ktf+/sMO3vrDD/7/ktbe+q8D//46V/3+rwP9/jpX//wqE//9Ygf9/CoT/f1iB//8="),
+"format": 34896613399,
+"index_count": 30,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEA"),
+"material": SubResource("StandardMaterial3D_ytx6d"),
+"name": "ORWALL",
+"primitive": 3,
+"uv_scale": Vector4(2.96875, 2, 0, 0),
+"vertex_count": 20,
+"vertex_data": PackedByteArray("AAAAAP///78AAP//AAD/vwAA//////+/AAAAAAAA/7///wAA//8AgAAA/////wCA////////AIAAAAAA//8AgP////8AAP//AAD///////8AAP//AAD/////////////AAAAAAAA////////AAD//wAA//8AAP////8AAAAA/////wAAAAD/v/////////+//////wAA/7///wAA////v/9/////f////3////9/////f////3////9/////f////3//v/9//7//f/+//3//v/9/////f////3////9/////fwAA/38AAP9/AAD/fwAA")
+}, {
+"aabb": AABB(-0.63087344, -1.3624685, -0.039536297, 1.2799988, 1e-05, 0.07999992),
+"attribute_data": PackedByteArray("/3//f///////f///////fw=="),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAAADAAEA"),
+"material": SubResource("StandardMaterial3D_pciin"),
+"name": "ORCELING",
+"primitive": 3,
+"uv_scale": Vector4(0.12500004, 2.0000002, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAAVNX//wAA//9U1f//AAAAAFTVAAAAAP//VNWqKlTVqipU1aoqVNWqKlTV")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_3ym1q")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_m3671"]
+points = PackedVector3Array(-0.63087344, -1.3624685, -0.039536297, -0.63087344, -1.3624685, 0.040463626, -0.63087344, 1.1975315, -0.039536297, 0.64912534, -1.3624685, -0.039536297, 0.64912534, -1.3624685, 0.040463626, -0.63087344, 1.1975315, 0.040463626, 0.64912534, 1.1975315, -0.039536297, 0.64912534, 1.1975315, 0.040463626)
+
+[node name="AoMovingWall14" type="Node3D"]
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+collision_priority = 0.1
+
+[node name="MovingWall" type="MeshInstance3D" parent="AnimatableBody3D"]
+mesh = SubResource("ArrayMesh_e6r7q")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D"]
+shape = SubResource("ConvexPolygonShape3D_m3671")

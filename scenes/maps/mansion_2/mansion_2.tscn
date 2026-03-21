@@ -1,4 +1,4 @@
-[gd_scene load_steps=746 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=755 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -140,11 +140,16 @@
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="134_gyxxe"]
 [ext_resource type="PackedScene" uid="uid://bua6oxv2q76tt" path="res://scenes/objects/ao_door3.tscn" id="135_jptvt"]
 [ext_resource type="PackedScene" uid="uid://2vsy3j2wpy1o" path="res://scenes/objects/ao_moving_wall9.tscn" id="136_hbwqe"]
+[ext_resource type="AudioStream" uid="uid://il8siiddu301" path="res://sounds/sfx/DSWITCH.ogg" id="136_syu8f"]
+[ext_resource type="Texture2D" uid="uid://bhwgq40fpbqy0" path="res://images/textures/SW_1_1.png" id="136_t2syr"]
 [ext_resource type="PackedScene" uid="uid://b4avu63jc1ptf" path="res://scenes/objects/moving_bars_3.tscn" id="137_i4yqx"]
+[ext_resource type="Texture2D" uid="uid://bblvo1bgdbm3y" path="res://images/textures/SW1COMM.png" id="138_jxb6l"]
+[ext_resource type="AudioStream" uid="uid://dbc3tw5sjo681" path="res://sounds/sfx/DSSWTCHN.wav" id="138_m3p7y"]
 [ext_resource type="PackedScene" uid="uid://b3i6kpi8hnf7k" path="res://scenes/objects/ao_wardrobe_door_1.tscn" id="138_w00q8"]
 [ext_resource type="PackedScene" uid="uid://beas200jbtsu7" path="res://scenes/objects/moving_bars_2.tscn" id="139_ypbqn"]
 [ext_resource type="PackedScene" uid="uid://ctxyesk4s0fe6" path="res://scenes/objects/ao_moving_wall_10.tscn" id="140_qdbvg"]
 [ext_resource type="AudioStream" uid="uid://dwiycrufspd13" path="res://sounds/sfx/DSBDOPN.wav" id="140_s1bx2"]
+[ext_resource type="Script" uid="uid://dn74w15dnwj5f" path="res://scenes/components/effects/door_opener_effect.gd" id="140_t06qs"]
 [ext_resource type="PackedScene" uid="uid://ds1csj3phl2jj" path="res://scenes/objects/ao_door_4.tscn" id="142_7mt0f"]
 [ext_resource type="PackedScene" uid="uid://bcq8f4kxca4ot" path="res://scenes/objects/ao_moving_bars_4.tscn" id="143_lyskg"]
 [ext_resource type="PackedScene" uid="uid://dxcoqcfv4mwvt" path="res://scenes/objects/ao_moving_wall_11.tscn" id="144_ixhe6"]
@@ -5736,6 +5741,32 @@ size = Vector3(1.2736816, 2.5316772, 0.011474609)
 [sub_resource type="BoxShape3D" id="BoxShape3D_epj47"]
 size = Vector3(0.80700684, 2.5394287, 0.14178467)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_27yvw"]
+size = Vector3(0.20013428, 0.3216858, 0.01)
+
+[sub_resource type="GDScript" id="GDScript_syu8f"]
+script/source = "extends ComposableEffect
+
+@export var reflection_probe_light: ReflectionProbe
+
+func trigger() -> void:
+	if reflection_probe_light:
+		reflection_probe_light.ambient_color = Color(.50,.50,.50)
+"
+
+[sub_resource type="GDScript" id="GDScript_jxb6l"]
+script/source = "extends ComposableEffect
+
+@export var reflection_probe_light: ReflectionProbe
+
+func trigger() -> void:
+	if reflection_probe_light:
+		reflection_probe_light.ambient_color = Color(.50,.50,.50)
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2557n"]
+size = Vector3(0.01, 0.162, 0.199)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ript3"]
 resource_name = "CCURTAIN"
 transparency = 4
@@ -5887,8 +5918,9 @@ metadata/_edit_lock_ = true
 [node name="AreaEvents" type="Node" parent="Events"]
 script = ExtResource("2_uh2hr")
 
-[node name="ButtonEvents" type="Node" parent="Events"]
+[node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("room1reflectionprobe")]
 script = ExtResource("2_gmtai")
+room1reflectionprobe = NodePath("../../Decorations/ReflectionProbe")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_bqar8")
@@ -5897,7 +5929,6 @@ metadata/_edit_lock_ = true
 [node name="Map" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
 metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
 
 [node name="MAP02_142" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_ljkkk")
@@ -8093,8 +8124,86 @@ one_use = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002380371, 1.2671509, -0.080596924)
 shape = SubResource("BoxShape3D_epj47")
 
+[node name="StaticBody3D3" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 73.86, 8.418359, 5.979)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "switch"
+press_sound = ExtResource("136_syu8f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D3"]
+shape = SubResource("BoxShape3D_27yvw")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D3"]
+shaded = true
+texture = ExtResource("136_t2syr")
+
+[node name="ButtonEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D3" node_paths=PackedStringArray("reflection_probe_light")]
+script = SubResource("GDScript_syu8f")
+reflection_probe_light = NodePath("../../../../Decorations/ReflectionProbe")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.978, 7.778, 5.959)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "switch"
+press_sound = ExtResource("136_syu8f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D4"]
+shape = SubResource("BoxShape3D_27yvw")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D4"]
+shaded = true
+texture = ExtResource("136_t2syr")
+
+[node name="ButtonEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D4" node_paths=PackedStringArray("reflection_probe_light")]
+script = SubResource("GDScript_jxb6l")
+reflection_probe_light = NodePath("../../../../Decorations/ReflectionProbe2")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.841, 8.082, -1.681)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "partial_button_panel1"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D5"]
+shape = SubResource("BoxShape3D_2557n")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D5"]
+transform = Transform3D(-9.616505e-08, 0, 2.2, 0, 2.2, 0, -2.2, 0, -9.616505e-08, 0, 0, 0)
+shaded = true
+texture = ExtResource("138_jxb6l")
+region_enabled = true
+region_rect = Rect2(21.214966, 23.299511, 9.567097, 7.357605)
+
+[node name="DoorOpenerEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D5" node_paths=PackedStringArray("target_door")]
+script = ExtResource("140_t06qs")
+target_door = NodePath("../../../../Doors/AoMovingWall9")
+metadata/_custom_type_script = "uid://dn74w15dnwj5f"
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.509, 6.427, -5.116)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"light_broken"
+button_type = "switch"
+one_use = false
+press_sound = ExtResource("136_syu8f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D6"]
+shape = SubResource("BoxShape3D_27yvw")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D6"]
+shaded = true
+texture = ExtResource("136_t2syr")
+
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.968842, 4.160001, -15.697245)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)
 
 [node name="HUD" parent="." instance=ExtResource("130_3bl51")]
 
@@ -8292,6 +8401,36 @@ shape = SubResource("BoxShape3D_fp5gj")
 [node name="MAP02_012" type="MeshInstance3D" parent="Decorations"]
 mesh = SubResource("ArrayMesh_66jik")
 skeleton = NodePath("")
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.90268, 8.691574, 2.732553)
+size = Vector3(8.659847, 4.7822876, 8.235557)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
+
+[node name="ReflectionProbe2" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.023594, 8.2526245, 2.6833334)
+size = Vector3(6.924239, 5.660187, 8.19219)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
+
+[node name="ReflectionProbe3" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.91744, 6.606632, -7.1496596)
+blend_distance = 0.3
+size = Vector3(9.6702175, 3.4482498, 5.3029757)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.16924527, 0.1692453, 0.16924521, 1)
+
+[node name="ReflectionProbe4" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.91744, 6.606632, -12.216494)
+blend_distance = 0.3
+size = Vector3(9.6702175, 3.4482498, 6.0461397)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.11119685, 0.11119684, 0.11119684, 1)
 
 [node name="Corpses" type="Node3D" parent="." groups=["corpse"]]
 unique_name_in_owner = true

@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://k7ha1k1k6ckh"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_1nbo4"]
+[ext_resource type="Shader" uid="uid://c3p87imp1aoah" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader" id="2_6uufu"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="2_484uq"]
+[ext_resource type="Script" uid="uid://ccvuru3xjtx3k" path="res://scenes/components/directional_sprite_3d/directional_sprite_3d.gd" id="3_484uq"]
+
+[sub_resource type="Resource" id="Resource_po7m3"]
+script = ExtResource("2_484uq")
+speed = 4.5
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_po7m3"]
+render_priority = 0
+shader = ExtResource("2_6uufu")
+shader_parameter/atlas_dimensions = Vector2(1, 1)
+shader_parameter/max_sprite_size = Vector2(1, 1)
+shader_parameter/current_frame = 0
+shader_parameter/direction_mode = 0
+shader_parameter/billboard_mode = 0
+shader_parameter/alpha_cut_mode = 0
+shader_parameter/alpha_cut_threshold = 0.5
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/debug_mode = false
+
+[node name="Squatto" instance=ExtResource("1_1nbo4")]
+stats = SubResource("Resource_po7m3")
+
+[node name="DirectionalSprite3D" type="Sprite3D" parent="Graphics" index="0"]
+material_override = SubResource("ShaderMaterial_po7m3")
+script = ExtResource("3_484uq")
+front_idle_sprite = null
+side_idle_sprite = null
+back_idle_sprite = null
+metadata/_custom_type_script = "uid://ccvuru3xjtx3k"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics" index="1"]

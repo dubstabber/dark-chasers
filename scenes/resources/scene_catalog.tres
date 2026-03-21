@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SceneCatalog" load_steps=23 format=3 uid="uid://didlkgnkhva7r"]
+[gd_resource type="Resource" script_class="SceneCatalog" load_steps=25 format=3 uid="uid://didlkgnkhva7r"]
 
 [ext_resource type="Script" uid="uid://c7huvuf510c2t" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://bcbcts05couuc" path="res://scenes/resources/scene_catalog_entry.gd" id="2_entry_script"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c2jqgo5cy7g7l" path="res://scenes/maps/mansion_1/mansion_1.tscn" id="9_mansion_1"]
 [ext_resource type="PackedScene" uid="uid://5q2aomrq4gjw" path="res://scenes/maps/room_1.tscn" id="10_room_1"]
 [ext_resource type="PackedScene" uid="uid://c8ofnx5cpjm60" path="res://scenes/maps/fdm_backrooms.tscn" id="11_fdm_backrooms"]
+[ext_resource type="PackedScene" uid="uid://yfgnl0sdicd0" path="res://scenes/maps/mansion_2/mansion_2.tscn" id="11_nsmg5"]
 [ext_resource type="PackedScene" path="res://scenes/ui/main_menu.tscn" id="12_main_menu"]
 
 [sub_resource type="Resource" id="Resource_player"]
@@ -48,6 +49,12 @@ script = ExtResource("2_entry_script")
 id = &"mansion_1"
 scene = ExtResource("9_mansion_1")
 
+[sub_resource type="Resource" id="Resource_0co34"]
+script = ExtResource("2_entry_script")
+id = &"mansion_2"
+scene = ExtResource("11_nsmg5")
+metadata/_custom_type_script = "uid://bcbcts05couuc"
+
 [sub_resource type="Resource" id="Resource_room_1"]
 script = ExtResource("2_entry_script")
 id = &"room_1"
@@ -67,5 +74,5 @@ scene = ExtResource("12_main_menu")
 script = ExtResource("1_script")
 core_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_player"), SubResource("Resource_hud")])
 enemy_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_aooni"), SubResource("Resource_ilopulu"), SubResource("Resource_whiteface"), SubResource("Resource_image_enemy")])
-map_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_mansion_1"), SubResource("Resource_room_1"), SubResource("Resource_fdm_backrooms")])
+map_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_mansion_1"), SubResource("Resource_0co34"), SubResource("Resource_room_1"), SubResource("Resource_fdm_backrooms")])
 menu_scenes = Array[ExtResource("2_entry_script")]([SubResource("Resource_main_menu")])

@@ -7,6 +7,11 @@ func _ready():
 	super._ready()
 	spawn_player()
 	$Doors/AoMovingWall11.open()
+	#open_all_doors()
+
+
+func _exit_tree():
+	super._exit_tree()
 
 
 func spawn_player() -> Player:
@@ -31,3 +36,16 @@ func test_respawn(player: CharacterBody3D) -> void:
 	TransitionArrival.apply(player, test_spawn)
 	RoomAware.set_current_room(player, STARTING_ROOM)
 	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), player)
+
+
+# For testing purposes
+func open_all_doors():
+	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']
+	# Update the key display when keys are added programmatically
+	refresh_key_display()
+	# Use explicit $Doors node reference instead of group discovery
+	var doors_node = get_node_or_null("Doors")
+	if doors_node:
+		for door in doors_node.get_children():
+			if door is Door:
+				door.open()

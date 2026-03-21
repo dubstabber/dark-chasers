@@ -622,7 +622,7 @@ size = Vector3(0.379883, 1, 1.88623)
 size = Vector3(1, 1.60327, 0.402588)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6wcic"]
-size = Vector3(1, 1.41992, 0.208008)
+size = Vector3(1, 1.41992, 0.22827151)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5dldr"]
 size = Vector3(2.70093, 1, 0.279541)
@@ -2187,7 +2187,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_md7ao")
 
 [node name="PianoExitArea" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3314, 203.352, 105.785)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -80.3314, 203.352, 105.7483)
 collision_layer = 0
 collision_mask = 2
 

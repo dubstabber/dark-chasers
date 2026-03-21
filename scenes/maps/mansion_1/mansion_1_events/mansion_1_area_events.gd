@@ -282,13 +282,10 @@ func _on_area_change_to_next_map(_event: RefCounted) -> void:
 		"reason": "area_change_to_next_map"
 	}
 
-	var room_1_scene := catalog.get_map_scene(&"room_1") if catalog else null
-	if room_1_scene:
-		lm.request_level_transition_scene(room_1_scene, context)
+	var mansion_2_scene := catalog.get_map_scene(&"mansion_2") if catalog else null
+	if mansion_2_scene:
+		lm.request_level_transition_scene(mansion_2_scene, context)
 		return
-
-	# Fallback to raw path (legacy).
-	lm.request_level_transition("res://scenes/maps/room_1.tscn", context)
 
 
 func _on_area_kill_player(event: RefCounted) -> void:

@@ -86,13 +86,6 @@ func _on_ladder_body_exited(body):
 		body.movement_component.set_climbing(false)
 
 
-func _door_locked(text, triggering_player):
-	if triggering_player:
-		# Show event text only to the specific player who triggered the interaction
-		hud.show_event_text_for_player(triggering_player, text, false, 3.0)
-	# If no triggering player is specified (e.g., enemy interaction), don't show any message
-
-
 # For testing purposes
 func open_all_doors():
 	keys_collected = ['ruby', 'weird', 'brown', 'gold', 'emerald', 'silver']

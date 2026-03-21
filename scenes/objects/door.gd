@@ -38,9 +38,6 @@ var _debug_visualization: DoorDebugVisualization
 @onready var _meshes: Array[MeshInstance3D] = []
 
 func _ready() -> void:
-	if not is_in_group("door"):
-		add_to_group("door")
-
 	if _anim:
 		_anim.connect("animation_finished", _on_animation_finished)
 

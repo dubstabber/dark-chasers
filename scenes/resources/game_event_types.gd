@@ -81,6 +81,9 @@ const BUTTON_SHOW_MOVING_BARS := &"button_show_moving_bars"
 const BUTTON_SHOW_SECRET_DOOR := &"button_show_secret_door"
 const BUTTON_SHOW_OPEN_EXIT := &"button_show_open_exit"
 
+const BUTTON_CHECK_BACKDOOR := &"button_check_backdoor"
+const BUTTON_CHECK_FIRST_PAINTING := &"button_check_first_painting"
+
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"
 const AREA_MONSTER_CRAWLS_LIBRARY := &"area_monster_crawls_library"

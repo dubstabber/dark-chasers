@@ -1,3 +1,4 @@
+class_name WorldButton
 extends StaticBody3D
 
 signal button_pressed(body: Node)

@@ -4,6 +4,26 @@ extends Node
 @export var piano_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/PianoExitArea")
 
 
+func _ready() -> void:
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
+
+
+func _exit_tree() -> void:
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
+
+
 func _level() -> Level:
 	if not Services.world_context:
 		return null
@@ -43,26 +63,6 @@ func _show_monster_disappeared_text() -> void:
 		"[color=#6c6c6c]You:[/color] I think that thing is gone...",
 	]
 	hud.show_event_text(random_texts.pick_random(), false, 3.0)
-
-
-func _ready() -> void:
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
-	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
-
-
-func _exit_tree() -> void:
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV, _on_button_check_tv)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP, _on_button_check_map)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_MAP_2, _on_button_check_map_2)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_PLAY_PIANO, _on_button_play_piano)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS, _on_button_show_moving_bars)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_SECRET_DOOR, _on_button_show_secret_door)
-	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_OPEN_EXIT, _on_button_show_open_exit)
 
 
 func _on_button_check_tv(_event: RefCounted) -> void:

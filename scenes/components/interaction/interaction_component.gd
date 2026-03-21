@@ -49,7 +49,7 @@ func try_interact() -> bool:
 
 		# Handle button interaction - buttons are in "button" group and have press() method
 		# Note: Button is a known scene type, so we can call press() directly
-		if collider.is_in_group("button"):
+		if collider is WorldButton:
 			collider.press(player)
 			button_pressed.emit(collider)
 			return true

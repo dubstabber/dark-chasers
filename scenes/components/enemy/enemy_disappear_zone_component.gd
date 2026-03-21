@@ -24,7 +24,7 @@ func _ready() -> void:
 	_owner_overlap_area = _owner_enemy.get_node_or_null("KillZone") as Area3D if _owner_enemy else null
 	if _owner_overlap_area and _owner_enemy:
 		_owner_overlap_area.collision_layer |= _owner_enemy.collision_layer
-		_owner_overlap_area.monitorable = true
+		_owner_overlap_area.set_deferred("monitorable", true)
 	for zone in disappear_zones:
 		_ensure_zone_connected(zone)
 	check_overlap_immediate()

@@ -8070,7 +8070,7 @@ current_room = "FirstBigBasement"
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
+[node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.98083, 5.5999994, -17.031199)
 collision_layer = 8
 collision_mask = 0
@@ -8081,7 +8081,7 @@ event_type_id = &"button_check_backdoor"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.020877838, 1.2679138, -0.014526367)
 shape = SubResource("BoxShape3D_rfpum")
 
-[node name="StaticBody3D2" type="StaticBody3D" parent="NavigationRegion3D/Buttons" groups=["button"]]
+[node name="StaticBody3D2" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.016655, 7.3600016, -7.4076858)
 collision_layer = 8
 collision_mask = 0

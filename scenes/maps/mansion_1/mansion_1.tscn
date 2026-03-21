@@ -619,7 +619,7 @@ size = Vector3(0.126678, 1.91034, 7.59689)
 size = Vector3(0.379883, 1, 1.88623)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_md7ao"]
-size = Vector3(1, 1.60327, 0.402588)
+size = Vector3(1, 1.60327, 0.03891754)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6wcic"]
 size = Vector3(1, 1.41992, 0.22827151)
@@ -2171,7 +2171,7 @@ shape = SubResource("BoxShape3D_15tt7")
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="CrawlingAoOniArea" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.0178, 203.02, -13.1847)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.726795, 203.02, -13.1847)
 collision_layer = 0
 collision_mask = 2
 
@@ -2179,11 +2179,12 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_ti8m0")
 
 [node name="LibraryExitArea" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9327, 203.354, -27.3782)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.9327, 203.354, -28.176455)
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/LibraryExitArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.009822845)
 shape = SubResource("BoxShape3D_md7ao")
 
 [node name="PianoExitArea" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
@@ -2192,6 +2193,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/PianoExitArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35383606)
 shape = SubResource("BoxShape3D_6wcic")
 
 [node name="BarsAoOniRunAway" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
@@ -2200,10 +2202,11 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/BarsAoOniRunAway"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6947098)
 shape = SubResource("BoxShape3D_5dldr")
 
 [node name="HiddenDoorAoOni" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.579, 202.885, -25.3755)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45.579, 202.885, -26.50933)
 collision_layer = 0
 collision_mask = 2
 
@@ -2211,7 +2214,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_q14qu")
 
 [node name="ExitBigHallway" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.1232, 203.195, 89.7027)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.44821, 203.195, 89.679)
 collision_layer = 0
 collision_mask = 2
 
@@ -2219,7 +2222,7 @@ collision_mask = 2
 shape = SubResource("BoxShape3D_8mvc6")
 
 [node name="SmallHallway" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3699, 203.195, 93.7171)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3699, 203.195, 93.35344)
 collision_layer = 0
 collision_mask = 2
 

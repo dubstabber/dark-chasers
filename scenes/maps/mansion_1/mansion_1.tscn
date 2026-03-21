@@ -698,7 +698,6 @@ metadata/_edit_lock_ = true
 
 [node name="Map" parent="NavigationRegion3D" instance=ExtResource("5_6uabt")]
 unique_name_in_owner = true
-metadata/_edit_group_ = true
 
 [node name="Ramps" type="Node3D" parent="NavigationRegion3D"]
 

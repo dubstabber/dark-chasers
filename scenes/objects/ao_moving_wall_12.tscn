@@ -111,7 +111,7 @@ _data = {
 &"RESET": SubResource("Animation_xxash")
 }
 
-[node name="AoMovingWall12" type="Node3D"]
+[node name="AoMovingWall12" type="Node3D" groups=["door"]]
 script = ExtResource("1_xxash")
 open_sound = ExtResource("2_qiq66")
 close_sound = ExtResource("3_rtlsb")

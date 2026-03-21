@@ -33,8 +33,8 @@ static func _evict_if_needed(max_size: int) -> void:
 		_atlas_cache.erase(oldest)
 
 
-static func _put_cache(signature: String, atlas_texture: ImageTexture, max_sprite_size: Vector2i) -> void:
-	_atlas_cache[signature] = {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
+static func _put_cache(signature: String, atlas_texture: ImageTexture, max_sprite_size: Vector2i, frame_layout: Dictionary) -> void:
+	_atlas_cache[signature] = {"texture": atlas_texture, "max_sprite_size": max_sprite_size, "frame_layout": frame_layout}
 	_touch_signature(signature)
 	_evict_if_needed(_get_max_cache_size())
 
@@ -70,33 +70,32 @@ static func generate(
 	if signature in _atlas_cache:
 		var cached = _atlas_cache[signature]
 		_touch_signature(signature)
-		return {"texture": cached.texture, "max_sprite_size": cached.max_sprite_size}
+		return {"texture": cached.texture, "max_sprite_size": cached.max_sprite_size, "frame_layout": cached.frame_layout}
 	
 	# Collect sprites and determine dimensions
+	var frame_layout := _get_frame_layout(directions, idle_sprites, movement_sprites, shooting_sprites)
 	var all_sprites: Array[Array] = []
-	var max_frames = 1
 	
 	for direction in directions:
-		var direction_sprites = _collect_direction_sprites(direction, idle_sprites, movement_sprites, shooting_sprites)
+		var direction_sprites = _collect_direction_sprites(direction, idle_sprites, movement_sprites, shooting_sprites, frame_layout)
 		all_sprites.append([direction, direction_sprites])
-		max_frames = max(max_frames, direction_sprites.size())
 	
 	# Create and populate atlas
-	var atlas_dimensions = Vector2i(max_sprite_size.x * max_frames, max_sprite_size.y * directions.size())
+	var atlas_dimensions = Vector2i(max_sprite_size.x * int(frame_layout.total_frames), max_sprite_size.y * directions.size())
 	var atlas_texture = _create_atlas_texture(all_sprites, atlas_dimensions, max_sprite_size)
 	
 	# Store in cache
 	if atlas_texture:
-		_put_cache(signature, atlas_texture, max_sprite_size)
+		_put_cache(signature, atlas_texture, max_sprite_size, frame_layout)
 	
-	return {"texture": atlas_texture, "max_sprite_size": max_sprite_size}
+	return {"texture": atlas_texture, "max_sprite_size": max_sprite_size, "frame_layout": frame_layout}
 
 
 static func _has_any_sprites(idle_sprites: Dictionary, movement_sprites: Dictionary, shooting_sprites: Dictionary) -> bool:
 	# Check idle sprites
 	for direction in idle_sprites:
-		var sprite = idle_sprites[direction]
-		if sprite != null and sprite is Texture2D:
+		var idle_frames := _get_texture_array(idle_sprites[direction])
+		if not idle_frames.is_empty():
 			return true
 	
 	# Check movement sprites
@@ -131,11 +130,12 @@ static func _compute_signature(
 	
 	for direction in directions:
 		# Idle sprite
-		var idle = idle_sprites.get(direction)
-		if idle is Texture2D:
-			parts.append(idle.resource_path if idle.resource_path else str(idle.get_rid().get_id()))
-		else:
+		var idle_frames := _get_texture_array(idle_sprites.get(direction))
+		if idle_frames.is_empty():
 			parts.append("null")
+		else:
+			for idle in idle_frames:
+				parts.append(idle.resource_path if idle.resource_path else str(idle.get_rid().get_id()))
 		
 		# Movement sprites
 		var movement = movement_sprites.get(direction, [])
@@ -169,8 +169,8 @@ static func _get_sprite_max_dimensions(
 	
 	for direction in directions:
 		# Check idle sprite
-		var idle_sprite = idle_sprites.get(direction)
-		if idle_sprite is Texture2D:
+		var idle_frames := _get_texture_array(idle_sprites.get(direction))
+		for idle_sprite in idle_frames:
 			var dimensions = _get_texture_dimensions(idle_sprite)
 			max_width = max(max_width, dimensions.x)
 			max_height = max(max_height, dimensions.y)
@@ -205,34 +205,55 @@ static func _get_texture_dimensions(tex: Texture2D) -> Vector2i:
 	return Vector2i(image.get_width(), image.get_height())
 
 
+static func _get_frame_layout(
+	directions: Array,
+	idle_sprites: Dictionary,
+	movement_sprites: Dictionary,
+	shooting_sprites: Dictionary
+) -> Dictionary:
+	var idle_count := 1
+	var movement_count := 0
+	var shooting_count := 0
+	for direction in directions:
+		idle_count = max(idle_count, _get_texture_array(idle_sprites.get(direction)).size())
+		movement_count = max(movement_count, _get_texture_array(movement_sprites.get(direction, [])).size())
+		shooting_count = max(shooting_count, _get_texture_array(shooting_sprites.get(direction, [])).size())
+	return {
+		"idle_count": idle_count,
+		"movement_count": movement_count,
+		"shooting_count": shooting_count,
+		"movement_start": idle_count,
+		"shooting_start": idle_count + movement_count,
+		"total_frames": idle_count + movement_count + shooting_count,
+	}
+
+
 static func _collect_direction_sprites(
 	direction: String,
 	idle_sprites: Dictionary,
 	movement_sprites: Dictionary,
-	shooting_sprites: Dictionary
-) -> Array[Texture2D]:
-	var direction_sprites: Array[Texture2D] = []
+	shooting_sprites: Dictionary,
+	frame_layout: Dictionary
+) -> Array:
+	var direction_sprites: Array = []
 	
-	# Add idle sprite or placeholder
-	var idle_sprite = idle_sprites.get(direction)
-	if idle_sprite is Texture2D:
-		direction_sprites.append(idle_sprite)
+	var idle_frames := _get_texture_array(idle_sprites.get(direction))
+	if not idle_frames.is_empty():
+		direction_sprites.append_array(idle_frames)
 	else:
 		direction_sprites.append(null)
+	while direction_sprites.size() < int(frame_layout.idle_count):
+		direction_sprites.append(null)
 	
-	# Add movement sprites
-	var movement_array = movement_sprites.get(direction, [])
-	if movement_array is Array:
-		for sprite in movement_array:
-			if sprite is Texture2D:
-				direction_sprites.append(sprite)
+	var movement_frames := _get_texture_array(movement_sprites.get(direction, []))
+	direction_sprites.append_array(movement_frames)
+	while direction_sprites.size() < int(frame_layout.shooting_start):
+		direction_sprites.append(null)
 	
-	# Add shooting sprites
-	var shooting_array = shooting_sprites.get(direction, [])
-	if shooting_array is Array:
-		for sprite in shooting_array:
-			if sprite is Texture2D:
-				direction_sprites.append(sprite)
+	var shooting_frames := _get_texture_array(shooting_sprites.get(direction, []))
+	direction_sprites.append_array(shooting_frames)
+	while direction_sprites.size() < int(frame_layout.total_frames):
+		direction_sprites.append(null)
 	
 	return direction_sprites
 
@@ -302,3 +323,15 @@ static func _blit_sprite_to_atlas(sprite: Texture2D, atlas_image: Image, col: in
 		dest_pos = cell_pos
 	
 	atlas_image.blit_rect(sprite_image, src_rect, dest_pos)
+
+
+static func _get_texture_array(value) -> Array[Texture2D]:
+	var textures: Array[Texture2D] = []
+	if value is Texture2D:
+		textures.append(value)
+		return textures
+	if value is Array:
+		for sprite in value:
+			if sprite is Texture2D:
+				textures.append(sprite)
+	return textures

@@ -7,7 +7,7 @@ func _ready():
 	super._ready()
 	spawn_player()
 	$Doors/AoMovingWall11.open()
-	#open_all_doors()
+	open_all_doors()
 
 
 func _exit_tree():

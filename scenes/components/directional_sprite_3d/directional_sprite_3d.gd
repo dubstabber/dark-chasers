@@ -80,6 +80,12 @@ var _state_node: Node = null # Node providing moving_state/shooting_state
 		if directional_material:
 			directional_material.set_shader_parameter("debug_mode", debug_mode)
 
+@export var idle_uses_animation: bool = false:
+	set(value):
+		idle_uses_animation = value
+		_request_atlas_generation()
+		notify_property_list_changed()
+
 
 func _ready() -> void:
 	_update_node_references()
@@ -142,6 +148,7 @@ func _get(property: StringName):
 		idle_sprites,
 		movement_sprites,
 		shooting_sprites,
+		idle_uses_animation,
 		IDLE_SUFFIX,
 		MOVEMENT_SUFFIX,
 		SHOOTING_SUFFIX
@@ -165,6 +172,7 @@ func _set(property: StringName, value) -> bool:
 		idle_sprites,
 		movement_sprites,
 		shooting_sprites,
+		idle_uses_animation,
 		IDLE_SUFFIX,
 		MOVEMENT_SUFFIX,
 		SHOOTING_SUFFIX
@@ -177,6 +185,8 @@ func _set(property: StringName, value) -> bool:
 
 func _request_atlas_generation() -> void:
 	"""Defer atlas generation to batch multiple property changes."""
+	if not is_inside_tree():
+		return
 	if _atlas_generation_pending:
 		return
 	_atlas_generation_pending = true
@@ -193,6 +203,7 @@ func _get_property_list():
 		_get_current_directions(),
 		has_moving_state,
 		has_shooting_state,
+		idle_uses_animation,
 		IDLE_SUFFIX,
 		MOVEMENT_SUFFIX,
 		SHOOTING_SUFFIX
@@ -237,14 +248,18 @@ func _get_target_node() -> Node:
 
 
 func _get_current_sprite_state(target_node: Node) -> int:
-	"""Get the current sprite state for the target node.
-	Returns 0 for idle states, 1 for movement states, 2 for shooting states."""
-
 	if not target_node:
 		return 0
-
-	# Use AnimationStateProvider interface for typed state access
 	return AnimationStateProvider.get_state_priority(target_node)
+
+
+func _get_sprite_max_dimensions(directions: Array) -> Vector2i:
+	return DirectionalAtlasGenerator._get_sprite_max_dimensions(
+		directions,
+		idle_sprites,
+		movement_sprites,
+		shooting_sprites
+	)
 
 
 func generate_atlas():

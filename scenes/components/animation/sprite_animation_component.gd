@@ -67,7 +67,7 @@ func _update_animation_state() -> void:
 		is_playing_shoot_animation = false
 	else:
 		# Not shooting, play idle animation
-		sprite_animation_player.play("RESET")
+		sprite_animation_player.play(_get_idle_animation_name())
 		is_playing_shoot_animation = false
 	
 	# Update previous state for next frame
@@ -112,9 +112,15 @@ func play_death_animation() -> void:
 
 func reset_animation() -> void:
 	if sprite_animation_player:
-		sprite_animation_player.play("RESET")
+		sprite_animation_player.play(_get_idle_animation_name())
 	is_playing_shoot_animation = false
 	shooting_state = "idle"
 	previous_shooting_state = "idle"
 	moving_state = "idle"
 	last_weapon_animation = ""
+
+
+func _get_idle_animation_name() -> String:
+	if sprite_animation_player and sprite_animation_player.has_animation("idle"):
+		return "idle"
+	return "RESET"

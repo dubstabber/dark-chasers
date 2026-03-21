@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_directional_sprite_idle_animation"]
+
+[ext_resource type="Script" path="res://tests/test_directional_sprite_idle_animation.gd" id="1_test_runner"]
+
+[node name="DirectionalSpriteIdleAnimationTests" type="Node"]
+script = ExtResource("1_test_runner")

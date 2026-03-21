@@ -27,6 +27,7 @@ floor_snap_length = 0.31
 script = ExtResource("1_fvloq")
 
 [node name="Interaction" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.339, 0)
 target_position = Vector3(0, 0, -1.1)
 collision_mask = 12
 
@@ -35,6 +36,7 @@ collision_mask = 12
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
 path_height_offset = 0.25
 
 [node name="KillZone" type="Area3D" parent="."]

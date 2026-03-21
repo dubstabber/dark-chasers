@@ -208,7 +208,7 @@ func respawn(health_amount: int = -1) -> void:
 	if directional_sprite:
 		directional_sprite.visible = true
 	if sprite_animation_player:
-		sprite_animation_player.play("RESET")
+		sprite_animation_player.play("idle" if sprite_animation_player.has_animation("idle") else "RESET")
 	
 	# Revive health
 	if health_component:

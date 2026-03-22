@@ -21,6 +21,30 @@ extends Node
 @export var ao_mika_disappear_zone: NodePath = NodePath("NavigationRegion3D/DisappearZones/SmallHallway")
 
 
+func _ready() -> void:
+	Services.event_bus.subscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
+	Services.event_bus.subscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
+	Services.event_bus.subscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
+	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
+	Services.event_bus.subscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
+	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
+	Services.event_bus.subscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
+	Services.event_bus.subscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
+	Services.event_bus.subscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
+
+
+func _exit_tree() -> void:
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
+
+
 func _level() -> Level:
 	if not Services.world_context:
 		return null
@@ -62,28 +86,6 @@ func _show_monster_disappeared_text() -> void:
 	hud.show_event_text(random_texts.pick_random(), false, 3.0)
 
 
-func _ready() -> void:
-	Services.event_bus.subscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
-	Services.event_bus.subscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
-	Services.event_bus.subscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
-	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
-	Services.event_bus.subscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
-	Services.event_bus.subscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
-	Services.event_bus.subscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
-	Services.event_bus.subscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
-	Services.event_bus.subscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
-
-
-func _exit_tree() -> void:
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_ENTERED_MANSION_TEXT, _on_area_entered_mansion_text)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_MONSTER_CRAWLS_LIBRARY, _on_area_monster_crawls_library)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_PIANO_ALARM, _on_area_piano_alarm)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_ONI_WIDE_DOOR, _on_area_open_ao_oni_wide_door)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_SPAWN_ILOPULU, _on_area_spawn_ilopulu)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_OPEN_AO_MIKA_WARDROBE, _on_area_open_ao_mika_wardrobe)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_UNDERGROUND_SECRET_INFO, _on_area_underground_secret_info)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP, _on_area_change_to_next_map)
-	Services.event_bus.unsubscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
 
 
 func _on_area_entered_mansion_text(_event: RefCounted) -> void:

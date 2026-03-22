@@ -1,4 +1,4 @@
-[gd_scene load_steps=762 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=764 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -140,6 +140,7 @@
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="134_gyxxe"]
 [ext_resource type="PackedScene" uid="uid://k7ha1k1k6ckh" path="res://scenes/enemies/squatto.tscn" id="134_lr3f2"]
 [ext_resource type="PackedScene" uid="uid://bua6oxv2q76tt" path="res://scenes/objects/ao_door3.tscn" id="135_jptvt"]
+[ext_resource type="Script" uid="uid://b4qc7cl1snpwh" path="res://scenes/maps/mansion_2/door_open_chain_trigger.gd" id="135_oufop"]
 [ext_resource type="PackedScene" uid="uid://2vsy3j2wpy1o" path="res://scenes/objects/ao_moving_wall9.tscn" id="136_hbwqe"]
 [ext_resource type="AudioStream" uid="uid://il8siiddu301" path="res://sounds/sfx/DSWITCH.ogg" id="136_syu8f"]
 [ext_resource type="Texture2D" uid="uid://bhwgq40fpbqy0" path="res://images/textures/SW_1_1.png" id="136_t2syr"]
@@ -5595,6 +5596,12 @@ script = ExtResource("133_gyxxe")
 speed = 5.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
+[sub_resource type="Resource" id="Resource_oufop"]
+resource_local_to_scene = true
+script = ExtResource("133_gyxxe")
+chase_player = false
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
 size = Vector3(1.2736816, 2.5316772, 0.011474609)
 
@@ -5942,9 +5949,9 @@ metadata/_edit_lock_ = true
 [node name="AreaEvents" type="Node" parent="Events"]
 script = ExtResource("2_uh2hr")
 
-[node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("room1reflectionprobe")]
+[node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1")]
 script = ExtResource("2_gmtai")
-room1reflectionprobe = NodePath("../../Decorations/ReflectionProbe")
+squatto1 = NodePath("../../NavigationRegion3D/Enemies/Squatto")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_bqar8")
@@ -8109,7 +8116,7 @@ disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
-stats = SubResource("Resource_gyxxe")
+stats = SubResource("Resource_oufop")
 current_room = "MainHall"
 
 [node name="Lights" type="Node3D" parent="NavigationRegion3D"]
@@ -8117,6 +8124,12 @@ current_room = "MainHall"
 [node name="Shadows" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="AreaEvents" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="DoorOpenChainTrigger" type="Node3D" parent="NavigationRegion3D/AreaEvents" node_paths=PackedStringArray("prerequisite_door", "completion_door")]
+script = ExtResource("135_oufop")
+event_type_id = &"custom_mansion_2_moving_wall_door_chain_triggered"
+prerequisite_door = NodePath("../../../Doors/AoMovingWall9")
+completion_door = NodePath("../../../Doors/AoDoor12")
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 

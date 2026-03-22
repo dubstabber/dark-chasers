@@ -3,6 +3,7 @@ extends Level
 const STARTING_ROOM := "MainHall"
 const STARTING_YAW := PI
 
+
 func _ready():
 	super._ready()
 	spawn_player()

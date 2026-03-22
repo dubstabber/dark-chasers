@@ -28,6 +28,7 @@ var _is_open := false
 var _playing_forward := true
 var _has_reversed_due_block := false
 var _triggering_player: CharacterBody3D = null
+var _opening_triggering_player: CharacterBody3D = null
 
 var _audio_component: DoorAudioComponent
 var _blocking_component: DoorBlockingComponent
@@ -152,6 +153,12 @@ func _on_animation_finished(anim_name: String) -> void:
 		_audio_component.stop_looping_sounds()
 		_audio_component.play_stop_sound()
 
+	if _is_open and not Engine.is_editor_hint():
+		Services.event_bus.emit(GameEventTypes.DOOR_OPENED, {
+			"triggering_player": _opening_triggering_player
+		}, self)
+		_opening_triggering_player = null
+
 	if _is_open and not open_only:
 		await get_tree().create_timer(time_to_close).timeout
 		if _is_open and not _anim.is_playing():
@@ -175,6 +182,7 @@ func is_side_allowed(side_name: String) -> bool:
 
 
 func open():
+	_opening_triggering_player = null
 	_toggle_door(true)
 
 
@@ -192,6 +200,7 @@ func can_open_from_point(hit_pos: Vector3) -> bool:
 func open_with_point(hit_pos: Vector3, triggering_player: CharacterBody3D = null) -> void:
 	_triggering_player = triggering_player
 	if can_open_from_point(hit_pos):
+		_opening_triggering_player = triggering_player
 		_toggle_door()
 	else:
 		if _audio_component:

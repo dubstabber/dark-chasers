@@ -65,6 +65,9 @@ const LEVEL_TRANSITION := &"level_transition"
 # Item events
 const ITEM_PICKEDUP := &"item_pickedup"
 
+# Enemy events
+const ENEMY_TARGET_ACQUIRED := &"enemy_target_acquired"
+
 # === Mansion-specific event IDs ===
 # Key events
 const KEY_SPAWN_AO_ONI_LIBRARY := &"key_spawn_ao_oni_library"

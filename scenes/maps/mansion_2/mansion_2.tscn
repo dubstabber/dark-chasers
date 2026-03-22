@@ -1,4 +1,4 @@
-[gd_scene load_steps=764 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=765 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://biye67usftna7" path="res://scenes/maps/mansion_2/mansion_2_area_events.gd" id="2_uh2hr"]
 [ext_resource type="Texture2D" uid="uid://d1ukclhew6m7g" path="res://models/mansion2/mansion2_CCURTAIN.png" id="3_3bl51"]
 [ext_resource type="Texture2D" uid="uid://csicqpr0l3k57" path="res://models/mansion2/mansion2_BPICT99.png" id="4_8csov"]
+[ext_resource type="Script" uid="uid://bprkl48sefnh3" path="res://scenes/maps/mansion_2/mansion2_custom_events.gd" id="4_gwili"]
 [ext_resource type="Texture2D" uid="uid://dbi7ilhtma50a" path="res://models/mansion2/mansion2_OBWALL.png" id="5_wqekk"]
 [ext_resource type="Texture2D" uid="uid://divurfqbtw000" path="res://models/mansion2/mansion2_HROBWALL.png" id="6_0ufaf"]
 [ext_resource type="Texture2D" uid="uid://by284r4a5mf17" path="res://models/mansion2/mansion2_GRAFITI3.png" id="7_qxfai"]
@@ -5588,7 +5589,6 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_gyxxe"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
-chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_lr3f2"]
@@ -5599,7 +5599,6 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_oufop"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
-chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
@@ -5952,6 +5951,10 @@ script = ExtResource("2_uh2hr")
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1")]
 script = ExtResource("2_gmtai")
 squatto1 = NodePath("../../NavigationRegion3D/Enemies/Squatto")
+
+[node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1")]
+script = ExtResource("4_gwili")
+ao_oni1 = NodePath("../../NavigationRegion3D/Enemies/Ao oni")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_bqar8")

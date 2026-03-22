@@ -263,6 +263,9 @@ func _physics_process(delta):
 func _on_target_acquired(target: Node3D) -> void:
 	if _runtime_coordinator:
 		_runtime_coordinator.on_target_acquired(target)
+	Services.event_bus.emit(GameEventTypes.ENEMY_TARGET_ACQUIRED, {
+				"body": target
+			}, self)
 
 
 func _on_target_died() -> void:

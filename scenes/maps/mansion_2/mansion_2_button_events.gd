@@ -9,6 +9,7 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_LIGHT_SWITCH_BROKEN, _on_button_light_switch_broken)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_FIRST_MOVING_BARS, _on_button_show_first_moving_bars)
 	Services.event_bus.subscribe(GameEventTypes.CUSTOM_MANSION_2_MOVING_WALL_DOOR_CHAIN_TRIGGERED, _on_moving_wall_door_chain_triggered)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_SECOND_PAINTING, _on_button_check_second_painting)
 
 
 func _exit_tree() -> void:
@@ -86,3 +87,9 @@ func _on_sqatto1_disappear() -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
+
+
+func _on_button_check_second_painting(_event: GameEvent) -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] I can't seem to read this unknown language on that paper...", false, 3.0)

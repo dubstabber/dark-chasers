@@ -1,4 +1,4 @@
-[gd_scene load_steps=765 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=767 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5596,6 +5596,11 @@ script = ExtResource("133_gyxxe")
 speed = 5.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
+[sub_resource type="Resource" id="Resource_gwili"]
+resource_local_to_scene = true
+script = ExtResource("133_gyxxe")
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
 [sub_resource type="Resource" id="Resource_oufop"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
@@ -5645,6 +5650,9 @@ func trigger() -> void:
 	if reflection_probe_light:
 		reflection_probe_light.ambient_color = Color(.50,.50,.50)
 "
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fl15c"]
+size = Vector3(0.4730301, 2.5568848, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
@@ -8117,6 +8125,10 @@ stats = SubResource("Resource_lr3f2")
 current_room = "SecondFloor"
 disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 
+[node name="Ao oni3" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 111.19187, 5.4654007, 7.694374)
+stats = SubResource("Resource_gwili")
+
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
 stats = SubResource("Resource_oufop")
@@ -8282,6 +8294,17 @@ texture = ExtResource("136_t2syr")
 [node name="ButtonEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D8" node_paths=PackedStringArray("reflection_probe_light")]
 script = SubResource("GDScript_sbx0a")
 reflection_probe_light = NodePath("../../../../Decorations/ReflectionProbe5")
+
+[node name="StaticBody3D9" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 111.463, 6.74, 7.065)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_check_painting_2"
+one_use = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D9"]
+shape = SubResource("BoxShape3D_fl15c")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)

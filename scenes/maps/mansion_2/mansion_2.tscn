@@ -1,4 +1,4 @@
-[gd_scene load_steps=756 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=762 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -151,7 +151,9 @@
 [ext_resource type="PackedScene" uid="uid://ctxyesk4s0fe6" path="res://scenes/objects/ao_moving_wall_10.tscn" id="140_qdbvg"]
 [ext_resource type="AudioStream" uid="uid://dwiycrufspd13" path="res://sounds/sfx/DSBDOPN.wav" id="140_s1bx2"]
 [ext_resource type="Script" uid="uid://dn74w15dnwj5f" path="res://scenes/components/effects/door_opener_effect.gd" id="140_t06qs"]
+[ext_resource type="Texture2D" uid="uid://cretel0y32xv5" path="res://images/textures/BSW04A.png" id="141_wf3ax"]
 [ext_resource type="PackedScene" uid="uid://ds1csj3phl2jj" path="res://scenes/objects/ao_door_4.tscn" id="142_7mt0f"]
+[ext_resource type="Script" uid="uid://diitw7t3gnsv4" path="res://scenes/components/effects/camera_switch_effect.gd" id="142_sbx0a"]
 [ext_resource type="PackedScene" uid="uid://bcq8f4kxca4ot" path="res://scenes/objects/ao_moving_bars_4.tscn" id="143_lyskg"]
 [ext_resource type="PackedScene" uid="uid://dxcoqcfv4mwvt" path="res://scenes/objects/ao_moving_wall_11.tscn" id="144_ixhe6"]
 [ext_resource type="PackedScene" uid="uid://bhyg2mjmmc8hi" path="res://scenes/objects/ao_moving_wall_12.tscn" id="145_bli0b"]
@@ -5585,6 +5587,12 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 [sub_resource type="Resource" id="Resource_gyxxe"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
+chase_player = false
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_lr3f2"]
+script = ExtResource("133_gyxxe")
+speed = 5.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
@@ -5618,6 +5626,22 @@ func trigger() -> void:
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2557n"]
 size = Vector3(0.01, 0.162, 0.199)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3v18r"]
+size = Vector3(0.32, 0.319, 0.01)
+
+[sub_resource type="GDScript" id="GDScript_sbx0a"]
+script/source = "extends ComposableEffect
+
+@export var reflection_probe_light: ReflectionProbe
+
+func trigger() -> void:
+	if reflection_probe_light:
+		reflection_probe_light.ambient_color = Color(.50,.50,.50)
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
+size = Vector3(1.1420898, 2.2906494, 0.22094727)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ript3"]
 resource_name = "CCURTAIN"
@@ -5929,7 +5953,6 @@ metadata/_edit_lock_ = true
 [node name="Map" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
 metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
 
 [node name="MAP02_142" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_ljkkk")
@@ -7392,7 +7415,28 @@ environment = SubResource("Environment_fdh80")
 unique_name_in_owner = true
 
 [node name="Marker3D" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.913166, 5.5999994, -15.161287)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.04149, 5.5999994, -15.737953)
+
+[node name="Marker3D2" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.942795, 5.5999994, -15.737953)
+
+[node name="Marker3D5" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.943, 5.6, -14.698)
+
+[node name="Marker3D6" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.45794, 6.0799994, -13.019994)
+
+[node name="Marker3D8" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.433678, 6.0799994, -13.019994)
+
+[node name="Marker3D7" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.041, 5.6, -14.698)
+
+[node name="Marker3D3" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.649742, 5.5999994, -15.737953)
+
+[node name="Marker3D4" type="Marker3D" parent="NavigationRegion3D/PlayerSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.649742, 5.5999994, -14.697593)
 
 [node name="Players" type="Node3D" parent="NavigationRegion3D" groups=["players"]]
 unique_name_in_owner = true
@@ -8046,18 +8090,26 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="Enemies" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
 
-[node name="Ao oni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
+[node name="Ao oni" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("132_qxfai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81.83761, 5.3838997, 9.276459)
 stats = SubResource("Resource_qxfai")
-current_room = "MainHall"
+current_room = "SecondFloor"
+disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 
 [node name="Ao oni2" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.731384, 3.3871999, -47.568558)
 stats = SubResource("Resource_gyxxe")
 current_room = "FirstBigBasement"
 
-[node name="Squatto" parent="NavigationRegion3D/Enemies" instance=ExtResource("134_lr3f2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.473373, 4.152767, -20.712555)
+[node name="Squatto" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("134_lr3f2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 87.947815, 5.3606663, -12.324131)
+stats = SubResource("Resource_lr3f2")
+current_room = "SecondFloor"
+disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
+
+[node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
+stats = SubResource("Resource_gyxxe")
 current_room = "MainHall"
 
 [node name="Lights" type="Node3D" parent="NavigationRegion3D"]
@@ -8169,8 +8221,70 @@ shape = SubResource("BoxShape3D_27yvw")
 shaded = true
 texture = ExtResource("136_t2syr")
 
+[node name="StaticBody3D7" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 81.849, 6.968, -2.695)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_show_first_moving_bars"
+button_type = "double_switch"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_3v18r")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D7"]
+shaded = true
+texture = ExtResource("141_wf3ax")
+
+[node name="DoorOpenerEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D7" node_paths=PackedStringArray("target_door")]
+script = ExtResource("140_t06qs")
+target_door = NodePath("../../../../Doors/MovingBars2")
+metadata/_custom_type_script = "uid://dn74w15dnwj5f"
+
+[node name="CameraSwitchEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D7" node_paths=PackedStringArray("target_camera")]
+script = ExtResource("142_sbx0a")
+target_camera = NodePath("../../../Cameras/SmallBasementBarsCamera")
+metadata/_custom_type_script = "uid://diitw7t3gnsv4"
+
+[node name="StaticBody3D8" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 93.389, 6.428, 6.804)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "switch"
+press_sound = ExtResource("136_syu8f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D8"]
+shape = SubResource("BoxShape3D_27yvw")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D8"]
+shaded = true
+texture = ExtResource("136_t2syr")
+
+[node name="ButtonEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D8" node_paths=PackedStringArray("reflection_probe_light")]
+script = SubResource("GDScript_sbx0a")
+reflection_probe_light = NodePath("../../../../Decorations/ReflectionProbe5")
+
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)
+
+[node name="Cameras" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="SmallBasementBarsCamera" type="Camera3D" parent="NavigationRegion3D/Cameras"]
+transform = Transform3D(-0.6935904, 0, -0.72036964, 0, 1, 0, 0.72036964, 0, -0.6935904, 43.931572, 6.7418466, -8.050245)
+cull_mask = 1048571
+
+[node name="DisappearZones" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="SecondDownstairsEndChase" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.452385, 5.7670565, 3.7121286)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/SecondDownstairsEndChase"]
+shape = SubResource("BoxShape3D_6w5b3")
 
 [node name="HUD" parent="." instance=ExtResource("130_3bl51")]
 
@@ -8377,8 +8491,8 @@ ambient_mode = 2
 ambient_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
 
 [node name="ReflectionProbe2" type="ReflectionProbe" parent="Decorations"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.023594, 8.2526245, 2.6833334)
-size = Vector3(6.924239, 5.660187, 8.19219)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.090836, 8.2526245, 2.6833334)
+size = Vector3(6.7897563, 5.660187, 8.19219)
 interior = true
 ambient_mode = 2
 ambient_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
@@ -8398,6 +8512,13 @@ size = Vector3(9.6702175, 3.4482498, 6.0461397)
 interior = true
 ambient_mode = 2
 ambient_color = Color(0.11119685, 0.11119684, 0.11119684, 1)
+
+[node name="ReflectionProbe5" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98.62097, 6.650936, 4.488982)
+size = Vector3(12.185481, 4.6320877, 12.491041)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.13725491, 0.13725491, 0.13725491, 1)
 
 [node name="MAP02_014" type="MeshInstance3D" parent="Decorations"]
 mesh = SubResource("ArrayMesh_i44jv")

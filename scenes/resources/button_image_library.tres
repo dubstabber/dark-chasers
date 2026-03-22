@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ButtonImageLibrary" load_steps=15 format=3 uid="uid://bjdxpmcvfnvvt"]
+[gd_resource type="Resource" script_class="ButtonImageLibrary" load_steps=18 format=3 uid="uid://bjdxpmcvfnvvt"]
 
 [ext_resource type="Script" uid="uid://d3qvtk5k8na7u" path="res://scenes/resources/button_image_library.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://dr4nul1tl6ack" path="res://scenes/resources/button_image_entry.gd" id="2_entry_script"]
@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://bhwgq40fpbqy0" path="res://images/textures/SW_1_1.png" id="7_13a21"]
 [ext_resource type="Texture2D" uid="uid://dlqdjy36mgawl" path="res://images/textures/SW2COMM.png" id="8_qj3n8"]
 [ext_resource type="Texture2D" uid="uid://bblvo1bgdbm3y" path="res://images/textures/SW1COMM.png" id="9_ciciv"]
+[ext_resource type="Texture2D" uid="uid://cretel0y32xv5" path="res://images/textures/BSW04A.png" id="10_ciciv"]
+[ext_resource type="Texture2D" uid="uid://c67o4kmbvm34w" path="res://images/textures/BSW04B.png" id="10_ywn6x"]
 
 [sub_resource type="Resource" id="Resource_lever"]
 script = ExtResource("2_entry_script")
@@ -37,6 +39,13 @@ up = ExtResource("9_ciciv")
 down = ExtResource("8_qj3n8")
 metadata/_custom_type_script = "uid://dr4nul1tl6ack"
 
+[sub_resource type="Resource" id="Resource_qj3n8"]
+script = ExtResource("2_entry_script")
+button_type = &"double_switch"
+up = ExtResource("10_ciciv")
+down = ExtResource("10_ywn6x")
+metadata/_custom_type_script = "uid://dr4nul1tl6ack"
+
 [resource]
 script = ExtResource("1_script")
-buttons = Array[ExtResource("2_entry_script")]([SubResource("Resource_lever"), SubResource("Resource_circle"), SubResource("Resource_ua620"), SubResource("Resource_ywn6x")])
+buttons = Array[ExtResource("2_entry_script")]([SubResource("Resource_lever"), SubResource("Resource_circle"), SubResource("Resource_ua620"), SubResource("Resource_ywn6x"), SubResource("Resource_qj3n8")])

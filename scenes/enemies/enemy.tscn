@@ -1,10 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://ckn5dttugxo5o"]
+[gd_scene load_steps=18 format=3 uid="uid://ckn5dttugxo5o"]
 
 [ext_resource type="Script" uid="uid://b7yj3u8isma1g" path="res://scenes/enemies/enemy.gd" id="1_fvloq"]
 [ext_resource type="Script" uid="uid://c5mn43q8ah2ll" path="res://scenes/components/enemy/blood_effect_component.gd" id="2_blood"]
 [ext_resource type="Script" uid="uid://cf2x6d4kfgfje" path="res://scenes/components/enemy/godot_navigation_component.gd" id="3_nav"]
 [ext_resource type="Script" uid="uid://cbh1612uffdbk" path="res://scenes/components/enemy/enemy_ai_component.gd" id="4_ai"]
+[ext_resource type="PackedScene" uid="uid://dqb5x8m2kv4rl" path="res://scenes/particles/ao_blue_blood_particle.tscn" id="5_pe3k2"]
 [ext_resource type="Script" uid="uid://b7dpx1j72pp0d" path="res://scenes/components/enemy/enemy_wandering_component.gd" id="5_wander"]
+[ext_resource type="PackedScene" uid="uid://bv7k2m8qx5npl" path="res://scenes/particles/blood_splat_decal.tscn" id="6_kugq1"]
 [ext_resource type="Script" uid="uid://2ouq0rt0pf37" path="res://scenes/components/enemy/room_pathing_component.gd" id="6_pathing"]
 [ext_resource type="Script" uid="uid://dxbhfwopw7h8v" path="res://scenes/components/enemy/enemy_door_opener_component.gd" id="7_door"]
 [ext_resource type="Script" uid="uid://diaw03b2phyih" path="res://scenes/components/enemy/enemy_kill_zone_component.gd" id="8_killzone"]
@@ -67,6 +69,9 @@ metadata/_custom_type_script = "uid://oth317tmbcww"
 
 [node name="BloodEffectComponent" type="Node" parent="."]
 script = ExtResource("2_blood")
+blood_color = Color(0, 0, 1, 1)
+particle_scene = ExtResource("5_pe3k2")
+decal_scene = ExtResource("6_kugq1")
 
 [node name="GodotNavigationComponent" type="Node" parent="." node_paths=PackedStringArray("navigation_agent")]
 script = ExtResource("3_nav")

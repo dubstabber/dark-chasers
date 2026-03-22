@@ -84,6 +84,7 @@ const BUTTON_SHOW_OPEN_EXIT := &"button_show_open_exit"
 const BUTTON_CHECK_BACKDOOR := &"button_check_backdoor"
 const BUTTON_CHECK_FIRST_PAINTING := &"button_check_first_painting"
 const BUTTON_LIGHT_SWITCH_BROKEN := &"light_broken"
+const BUTTON_SHOW_FIRST_MOVING_BARS := &"button_show_first_moving_bars"
 
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"

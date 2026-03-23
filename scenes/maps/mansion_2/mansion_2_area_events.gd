@@ -3,6 +3,7 @@ extends Node
 
 @export var hidden_narrow_door: Door
 @export var small_basement_aomika_spawn: Marker3D
+@export var small_basement_aomika_disappear_zone: Area3D
 
 
 func _ready() -> void:
@@ -66,12 +67,24 @@ func _on_area_small_basement_aomika_appear(_event: GameEvent) -> void:
 		aomika.current_room = "SmallBasement"
 		aomika.makepath()
 
+	if small_basement_aomika_disappear_zone:
+		aomika.add_disappear_zone(small_basement_aomika_disappear_zone)
+
 	var music := _music()
 	if music:
 		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
 		music.volume_db = -5
 		music.play()
+		aomika.tree_exited.connect(music.stop)
 
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("The Ao Oni! Run!!!", false, 3.0)
+
+	aomika.tree_exited.connect(_on_aomika_disappeared)
+
+
+func _on_aomika_disappeared() -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)

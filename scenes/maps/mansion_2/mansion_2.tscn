@@ -1,4 +1,4 @@
-[gd_scene load_steps=771 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=776 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -161,6 +161,8 @@
 [ext_resource type="PackedScene" uid="uid://dxcoqcfv4mwvt" path="res://scenes/objects/ao_moving_wall_11.tscn" id="144_ixhe6"]
 [ext_resource type="PackedScene" uid="uid://bhyg2mjmmc8hi" path="res://scenes/objects/ao_moving_wall_12.tscn" id="145_bli0b"]
 [ext_resource type="PackedScene" uid="uid://b84vvvmcg1wvq" path="res://scenes/objects/ao_moving_wall_13.tscn" id="146_1fgol"]
+[ext_resource type="AudioStream" uid="uid://g1v4r2v8yfn8" path="res://sounds/sfx/DSWITCH2.ogg" id="146_epj47"]
+[ext_resource type="Texture2D" uid="uid://d2dnj5bn4o040" path="res://images/textures/SW_14_1.png" id="146_rfpum"]
 [ext_resource type="PackedScene" uid="uid://nbs3x341f5rp" path="res://scenes/objects/ao_moving_wall_15.tscn" id="147_33cd6"]
 [ext_resource type="PackedScene" uid="uid://dvmtywguyoi01" path="res://scenes/objects/ao_moving_wall_16.tscn" id="148_owgv6"]
 [ext_resource type="PackedScene" uid="uid://8dwblsmu03cb" path="res://scenes/objects/ao_moving_wall_14.tscn" id="149_btb4v"]
@@ -5673,8 +5675,28 @@ func trigger() -> void:
 		reflection_probe_light.ambient_color = Color(.50,.50,.50)
 "
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_erv0g"]
+size = Vector3(0.3302827, 0.4812584, 0.01)
+
+[sub_resource type="GDScript" id="GDScript_epj47"]
+script/source = "extends ComposableEffect
+
+@export var reflection_probe_light1: ReflectionProbe
+@export var reflection_probe_light2: ReflectionProbe
+
+
+func trigger() -> void:
+	if reflection_probe_light1:
+		reflection_probe_light1.ambient_color = Color(.30,.30,.30)
+	if reflection_probe_light2:
+		reflection_probe_light2.ambient_color = Color(.30,.30,.30)
+"
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_my5wp"]
+size = Vector3(1.1586914, 2.5498047, 0.35656738)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ript3"]
 resource_name = "CCURTAIN"
@@ -5969,10 +5991,11 @@ metadata/_edit_lock_ = true
 
 [node name="Events" type="Node" parent="."]
 
-[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn")]
+[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone")]
 script = ExtResource("2_uh2hr")
 hidden_narrow_door = NodePath("../../Doors/AoMovingWall19")
 small_basement_aomika_spawn = NodePath("../../NavigationRegion3D/EventSpawners/AoMikaInSmallBasement")
+small_basement_aomika_disappear_zone = NodePath("../../NavigationRegion3D/DisappearZones/AoMikaEndChase")
 
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1")]
 script = ExtResource("2_gmtai")
@@ -8363,6 +8386,28 @@ texture = ExtResource("136_t2syr")
 script = SubResource("GDScript_fp5gj")
 reflection_probe_light = NodePath("../../../../Decorations/ReflectionProbe6")
 
+[node name="StaticBody3D11" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 119.084, 5.471, -71.895)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "big_switch"
+press_sound = ExtResource("146_epj47")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D11"]
+flip_h = true
+shaded = true
+texture = ExtResource("146_rfpum")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_erv0g")
+
+[node name="ButtonEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D11" node_paths=PackedStringArray("reflection_probe_light1", "reflection_probe_light2")]
+script = SubResource("GDScript_epj47")
+reflection_probe_light1 = NodePath("../../../../Decorations/ReflectionProbe7")
+reflection_probe_light2 = NodePath("../../../../Decorations/ReflectionProbe8")
+
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)
 
@@ -8381,6 +8426,15 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/SecondDownstairsEndChase"]
 shape = SubResource("BoxShape3D_6w5b3")
+
+[node name="AoMikaEndChase" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.09548, 7.3600016, -1.5502758)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/AoMikaEndChase"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02758789, 1.2827148, 0.09817988)
+shape = SubResource("BoxShape3D_my5wp")
 
 [node name="EventSpawners" type="Node3D" parent="NavigationRegion3D"]
 
@@ -8667,6 +8721,20 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Decorations/MAP02_002/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_my2ws")
+
+[node name="ReflectionProbe7" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 109.02765, 6.758608, -69.711555)
+size = Vector3(27.227165, 7.551586, 29.152525)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.08468998, 0.08468991, 0.08468992, 1)
+
+[node name="ReflectionProbe8" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92.28474, 6.758608, -67.446526)
+size = Vector3(11.422615, 7.551586, 12.838514)
+interior = true
+ambient_mode = 2
+ambient_color = Color(0.08627451, 0.08627451, 0.08627451, 1)
 
 [node name="Corpses" type="Node3D" parent="." groups=["corpse"]]
 unique_name_in_owner = true

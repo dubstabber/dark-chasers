@@ -8184,7 +8184,7 @@ current_room = "SecondFloor"
 disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 
 [node name="Ao oni3" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 111.19187, 5.4654007, 7.694374)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 111.19187, 5.4654007, 8.115096)
 stats = SubResource("Resource_gwili")
 
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]

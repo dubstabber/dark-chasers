@@ -2091,8 +2091,9 @@ cull_mask = 1048571
 
 [node name="AreaEvents" type="Node3D" parent="NavigationRegion3D"]
 
-[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64.957, 203.464, -26.0587)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_monster_crawls_library"
 
@@ -2103,32 +2104,36 @@ shape = SubResource("BoxShape3D_lougt")
 script = ExtResource("1160_cameff")
 target_camera = NodePath("../../../Cameras/LibraryCamera")
 
-[node name="AreaEvent2" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent2" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90.6126, 202.701, 108.739)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_piano_alarm"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent2"]
 shape = SubResource("BoxShape3D_rps76")
 
-[node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent3" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34.896, 203.717, 83.9186)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_open_ao_oni_wide_door"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent3"]
 shape = SubResource("BoxShape3D_ihf32")
 
-[node name="AreaEvent4" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent4" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.0301, 203.485, 63.0483)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_spawn_ilopulu"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent4"]
 shape = SubResource("BoxShape3D_2onqm")
 
-[node name="AreaEvent6" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent6" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9613, -1.69468, 101.429)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_kill_player"
 one_trigger_only = false
@@ -2136,32 +2141,36 @@ one_trigger_only = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent6"]
 shape = SubResource("WorldBoundaryShape3D_qbtei")
 
-[node name="AreaEvent7" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent7" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 103.882)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_change_to_next_map"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent7"]
 shape = SubResource("BoxShape3D_nes26")
 
-[node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent8" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 39.3534, 203.458, 94.5008)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_open_ao_mika_wardrobe"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent8"]
 shape = SubResource("BoxShape3D_3d1tp")
 
-[node name="AreaEvent9" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent9" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -47.0265, 203.458, -32.1744)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_entered_mansion_text"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AreaEvent9"]
 shape = SubResource("BoxShape3D_asr7d")
 
-[node name="AreaEvent10" type="Area3D" parent="NavigationRegion3D/AreaEvents" groups=["area_event"]]
+[node name="AreaEvent10" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.1956, 203.791, 114.204)
+collision_layer = 0
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_underground_secret_info"
 

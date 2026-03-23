@@ -1,11 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://duukdf1bft8vx"]
+[gd_scene load_steps=8 format=3 uid="uid://duukdf1bft8vx"]
 
 [ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_btl1h"]
 [ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="2_52815"]
 [ext_resource type="Texture2D" uid="uid://cls1vl6l3x42a" path="res://images/enemies/white-face/WHTFA0.png" id="3_0bxla"]
-[ext_resource type="PackedScene" uid="uid://dqb5x8m2kv4rl" path="res://scenes/particles/ao_blue_blood_particle.tscn" id="4_nlm13"]
 [ext_resource type="AudioStream" uid="uid://rmpekd3phfok" path="res://sounds/sfx/DSSCRM.wav" id="4_xoc2c"]
-[ext_resource type="PackedScene" uid="uid://bv7k2m8qx5npl" path="res://scenes/particles/blood_splat_decal.tscn" id="5_52815"]
 
 [sub_resource type="Resource" id="Resource_uvbsx"]
 resource_local_to_scene = true
@@ -14,7 +12,7 @@ speed = 5.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mjagp"]
-radius = 0.38
+radius = 0.2
 height = 1.59168
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1vtrc"]
@@ -51,7 +49,5 @@ shape = SubResource("CapsuleShape3D_1vtrc")
 [node name="EyesDetection3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11734, 0)
 
-[node name="BloodEffectComponent" parent="." index="8"]
+[node name="BloodEffectComponent" parent="." index="9"]
 blood_color = Color(1, 1, 1, 1)
-particle_scene = ExtResource("4_nlm13")
-decal_scene = ExtResource("5_52815")

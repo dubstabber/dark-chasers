@@ -101,6 +101,9 @@ const AREA_UNDERGROUND_SECRET_INFO := &"area_underground_secret_info"
 const AREA_CHANGE_TO_NEXT_MAP := &"area_change_to_next_map"
 const AREA_KILL_PLAYER := &"area_kill_player"
 
+const AREA_SECRET_AOONI_PRANK := &"area_secret_aooni_prank"
+const AREA_SMALL_BASMENT_AOMIKA_APPEAR := &"area_small_basement_aomika_appear"
+
 # Custom/internal events
 const CUSTOM_MONSTER_DISAPPEARED := &"custom_monster_disappeared"
 const CUSTOM_AO_ONI_GAVE_UP := &"custom_ao_oni_gave_up"

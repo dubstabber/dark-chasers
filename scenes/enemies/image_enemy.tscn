@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://crvqpgygs5h8g" path="res://scenes/enemies/image_enemy.gd" id="2_script"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nli0v"]
-radius = 0.360225
+radius = 0.2
 height = 1.195
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yv763"]

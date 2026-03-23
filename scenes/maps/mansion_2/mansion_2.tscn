@@ -1,4 +1,4 @@
-[gd_scene load_steps=776 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=780 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -135,7 +135,9 @@
 [ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="130_3bl51"]
 [ext_resource type="Script" uid="uid://b1n6s3d32mk7d" path="res://scenes/maps/mansion_2/mansion2_transitions.gd" id="130_8csov"]
 [ext_resource type="Script" uid="uid://frgl0w6dnh16" path="res://scenes/components/transition/transition_arrival_marker.gd" id="131_wqekk"]
+[ext_resource type="Shader" uid="uid://dmtxncs76qfjl" path="res://shaders/skybox1.gdshader" id="132_27yvw"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="132_qxfai"]
+[ext_resource type="Texture2D" uid="uid://cor2fyahaajem" path="res://images/skyboxes/SKYMP02.png" id="133_2557n"]
 [ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="133_gyxxe"]
 [ext_resource type="Script" uid="uid://dxrfvve1lpnlr" path="res://scenes/objects/button.gd" id="133_my2ws"]
 [ext_resource type="PackedScene" uid="uid://cao1qnqp5htgl" path="res://scenes/objects/ao_door1.tscn" id="134_gyxxe"]
@@ -5464,7 +5466,22 @@ shadow_mesh = SubResource("ArrayMesh_r54rc")
 data = PackedVector3Array(126.114, 5.9312, -52.0543, 126.114, 3.3711998, -52.0543, 124.834, 3.3711998, -52.0543, 126.114, 5.9312, -52.0543, 124.834, 3.3711998, -52.0543, 124.834, 5.9312, -52.0543)
 backface_collision = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
+shader = ExtResource("132_27yvw")
+shader_parameter/source_panorama = ExtResource("133_2557n")
+shader_parameter/texture_width = 190.0
+
+[sub_resource type="Sky" id="Sky_27yvw"]
+sky_material = SubResource("ShaderMaterial_epj47")
+
 [sub_resource type="Environment" id="Environment_fdh80"]
+background_mode = 2
+background_energy_multiplier = 0.51
+sky = SubResource("Sky_27yvw")
+ambient_light_source = 3
+ambient_light_color = Color(0.6, 0.6, 0.6, 1)
+ambient_light_sky_contribution = 0.06
+ambient_light_energy = 0.13
 
 [sub_resource type="BoxMesh" id="BoxMesh_qxfai"]
 size = Vector3(1.554, 0.5, 1.606)

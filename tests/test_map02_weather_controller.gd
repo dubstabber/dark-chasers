@@ -3,6 +3,10 @@ extends SceneTree
 const FLASH_TIER_FULL := 0
 const FLASH_TIER_PARTIAL := 1
 const FLASH_TIER_NONE := 2
+const RAIN_AUDIO_TIER_LOUD := 0
+const RAIN_AUDIO_TIER_MEDIUM := 1
+const RAIN_AUDIO_TIER_LOW := 2
+const RAIN_AUDIO_TIER_NONE := 3
 
 
 func _init() -> void:
@@ -13,6 +17,9 @@ func _init() -> void:
 	_test_lightning_zone_priority_override()
 	_test_no_flash_zone_blocks_flash()
 	_test_partial_flash_zone_is_weaker_than_full_flash()
+	_test_rain_audio_zone_priority_override()
+	_test_rain_audio_zone_none_suppresses_audio()
+	_test_rain_audio_zone_low_is_quieter_than_medium()
 	print("=== MAP02 WEATHER CONTROLLER TESTS COMPLETED ===")
 	quit(0)
 
@@ -29,7 +36,8 @@ func _build_controller(start_enabled := false) -> Node3D:
 	controller.set("start_enabled", start_enabled)
 	controller.set("check_player_indoor_state", false)
 	controller.set("use_rain_zones", false)
-	controller.set("rain_sound_id", &"")
+	controller.set("rain_sound_id", &"rain_loop")
+	controller.set("rain_sound_inner_id", &"rain_loop_sharp")
 	controller.set("thunder_sound_ids", Array([], TYPE_STRING_NAME, "", null))
 	controller.set("_environment", environment)
 	controller.set("_rain_particles", null)
@@ -54,6 +62,18 @@ func _attach_player(controller: Node3D, position: Vector3) -> Node3D:
 	return player
 
 
+func _ensure_weather_zones_root(controller: Node3D) -> Node3D:
+	var existing_root := controller.get_node_or_null("WeatherZones") as Node3D
+	if existing_root:
+		controller.set("_weather_zones_root", existing_root)
+		return existing_root
+	var zone_root := Node3D.new()
+	zone_root.name = "WeatherZones"
+	controller.add_child(zone_root)
+	controller.set("_weather_zones_root", zone_root)
+	return zone_root
+
+
 func _make_lightning_zone(zone_priority: int, flash_tier: int, zone_position: Vector3, zone_size: Vector3) -> Node:
 	var zone_script := load("res://scenes/maps/mansion_2/weather_lightning_zone.gd") as GDScript
 	var zone := Area3D.new()
@@ -70,15 +90,46 @@ func _make_lightning_zone(zone_priority: int, flash_tier: int, zone_position: Ve
 	return zone
 
 
+func _make_rain_audio_zone(zone_priority: int, rain_audio_tier: int, zone_position: Vector3, zone_size: Vector3) -> Node:
+	var zone_script := load("res://scenes/maps/mansion_2/weather_rain_audio_zone.gd") as GDScript
+	var zone := Area3D.new()
+	zone.name = "WeatherRainAudioZone"
+	zone.set_script(zone_script)
+	zone.priority = zone_priority
+	zone.set("rain_audio_tier", rain_audio_tier)
+	zone.position = zone_position
+	var collision_shape := CollisionShape3D.new()
+	var box_shape := BoxShape3D.new()
+	box_shape.size = zone_size
+	collision_shape.shape = box_shape
+	zone.add_child(collision_shape)
+	return zone
+
+
 func _attach_lightning_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
-	var zone_root := Node3D.new()
-	zone_root.name = "WeatherZones"
-	controller.add_child(zone_root)
+	var zone_root := _ensure_weather_zones_root(controller)
+	var lightning_root := zone_root.get_node_or_null("LightningZones") as Node3D
+	if lightning_root == null:
+		lightning_root = Node3D.new()
+		lightning_root.name = "LightningZones"
+		zone_root.add_child(lightning_root)
 	for zone in zones:
-		zone_root.add_child(zone)
-	controller.set("_weather_zones_root", zone_root)
+		lightning_root.add_child(zone)
 	controller.call("_refresh_lightning_zone_cache")
-	return zone_root
+	return lightning_root
+
+
+func _attach_rain_audio_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
+	var zone_root := _ensure_weather_zones_root(controller)
+	var rain_audio_root := zone_root.get_node_or_null("RainAudioZones") as Node3D
+	if rain_audio_root == null:
+		rain_audio_root = Node3D.new()
+		rain_audio_root.name = "RainAudioZones"
+		zone_root.add_child(rain_audio_root)
+	for zone in zones:
+		rain_audio_root.add_child(zone)
+	controller.call("_refresh_rain_audio_zone_cache")
+	return rain_audio_root
 
 
 func _test_scheduler_ranges() -> void:
@@ -237,3 +288,72 @@ func _test_partial_flash_zone_is_weaker_than_full_flash() -> void:
 	assert(partial_boost > 0.0, "Partial-flash zones should still brighten the environment somewhat")
 	assert(partial_boost < full_boost, "Partial-flash zones should brighten less than full-flash zones")
 	print("✓ Partial-flash zones attenuate lightning relative to full-flash zones")
+
+
+func _test_rain_audio_zone_priority_override() -> void:
+	var controller := _build_controller(false)
+	_prime_controller(controller)
+	_attach_player(controller, Vector3.ZERO)
+	_attach_rain_audio_zones(
+		controller,
+		[
+			_make_rain_audio_zone(1, RAIN_AUDIO_TIER_NONE, Vector3.ZERO, Vector3(12.0, 6.0, 12.0)),
+			_make_rain_audio_zone(5, RAIN_AUDIO_TIER_LOUD, Vector3.ZERO, Vector3(2.0, 2.0, 2.0)),
+		]
+	)
+	var eval := controller.call("debug_evaluate_rain_audio_state") as Dictionary
+	assert(bool(eval["has_zone"]), "Rain-audio evaluation should report the authored active zone")
+	assert(eval["tier"] == &"rain_loud", "Higher-priority local rain-audio override should win")
+	assert(eval["sound_id"] == &"rain_loop_sharp", "Loud rain-audio tier should choose the sharp rain loop")
+	controller.free()
+	print("✓ Rain-audio zones respect highest-priority local overrides")
+
+
+func _test_rain_audio_zone_none_suppresses_audio() -> void:
+	var controller := _build_controller(false)
+	_prime_controller(controller)
+	_attach_player(controller, Vector3.ZERO)
+	_attach_rain_audio_zones(
+		controller,
+		[
+			_make_rain_audio_zone(1, RAIN_AUDIO_TIER_NONE, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
+		]
+	)
+	var eval := controller.call("debug_evaluate_rain_audio_state") as Dictionary
+	assert(eval["tier"] == &"rain_none", "Rain-none zones should suppress rain audio")
+	assert(eval["sound_id"] == &"", "Rain-none zones should not request an audible rain loop")
+	assert(is_equal_approx(float(eval["volume_db"]), -60.0), "Rain-none zones should map to the configured muted volume")
+	controller.free()
+	print("✓ Rain-none zones suppress authored rain ambience")
+
+
+func _test_rain_audio_zone_low_is_quieter_than_medium() -> void:
+	var medium_controller := _build_controller(false)
+	_prime_controller(medium_controller)
+	_attach_player(medium_controller, Vector3.ZERO)
+	_attach_rain_audio_zones(
+		medium_controller,
+		[
+			_make_rain_audio_zone(1, RAIN_AUDIO_TIER_MEDIUM, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
+		]
+	)
+	var medium_eval := medium_controller.call("debug_evaluate_rain_audio_state") as Dictionary
+	medium_controller.free()
+
+	var low_controller := _build_controller(false)
+	_prime_controller(low_controller)
+	_attach_player(low_controller, Vector3.ZERO)
+	_attach_rain_audio_zones(
+		low_controller,
+		[
+			_make_rain_audio_zone(1, RAIN_AUDIO_TIER_LOW, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
+		]
+	)
+	var low_eval := low_controller.call("debug_evaluate_rain_audio_state") as Dictionary
+	low_controller.free()
+
+	assert(medium_eval["tier"] == &"rain_medium", "Medium rain-audio zones should map to the medium tier")
+	assert(low_eval["tier"] == &"rain_low", "Low rain-audio zones should map to the low tier")
+	assert(float(low_eval["volume_db"]) < float(medium_eval["volume_db"]), "Low rain-audio zones should be quieter than medium zones")
+	assert(low_eval["sound_id"] == &"rain_loop", "Low rain-audio zones should keep the muffled base rain loop")
+	print("✓ Low rain-audio zones attenuate ambience relative to medium zones")

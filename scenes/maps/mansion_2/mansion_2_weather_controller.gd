@@ -5,6 +5,7 @@ const TIC_RATE := 35.0
 const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
 const WEATHER_LIGHTNING_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_lightning_zone.gd")
 const WEATHER_RAIN_AUDIO_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_rain_audio_zone.gd")
+const WEATHER_RAIN_VISUAL_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_rain_visual_zone.gd")
 
 @export var weather_zones_root_path: NodePath = NodePath("WeatherZones")
 @export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
@@ -49,6 +50,8 @@ const WEATHER_RAIN_AUDIO_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/wea
 @export_flags_3d_physics var indoor_ray_collision_mask := 1
 
 @export_group("Rain Zones")
+@export var use_rain_visual_zones := true
+@export var use_legacy_rain_visual_fallback_when_no_zone := true
 @export var use_rain_audio_zones := true
 @export var use_legacy_rain_audio_fallback_when_no_zone := true
 @export var use_rain_zones := true
@@ -81,6 +84,7 @@ var _thunder_audio: AudioStreamPlayer
 var _player: Node3D
 var _rain_zones_root: Node3D
 var _lightning_zones: Array[Node] = []
+var _rain_visual_zones: Array[Node] = []
 var _rain_audio_zones: Array[Node] = []
 var _weather_active := false
 var _current_flash_background_boost := 0.0
@@ -89,6 +93,7 @@ var _flash_decay_total_steps := 0
 var _active_rain_zone_center := Vector3.ZERO
 var _current_rain_sound_id: StringName = &""
 var _current_lightning_tier: StringName = &""
+var _current_rain_visual_mode: StringName = &""
 var _current_rain_audio_tier: StringName = &""
 
 
@@ -135,6 +140,7 @@ func _bind_nodes() -> void:
 	_rain_zones_root = get_node_or_null(rain_zones_root_path) as Node3D
 	_player = _resolve_player_from_world_context()
 	_refresh_lightning_zone_cache()
+	_refresh_rain_visual_zone_cache()
 	_refresh_rain_audio_zone_cache()
 
 
@@ -160,6 +166,23 @@ func _collect_lightning_zones(node: Node) -> void:
 				_lightning_zones.append(child_node)
 		if child is Node:
 			_collect_lightning_zones(child as Node)
+
+
+func _refresh_rain_visual_zone_cache() -> void:
+	_rain_visual_zones.clear()
+	if _weather_zones_root == null:
+		return
+	_collect_rain_visual_zones(_weather_zones_root)
+
+
+func _collect_rain_visual_zones(node: Node) -> void:
+	for child in node.get_children():
+		if child is Node:
+			var child_node := child as Node
+			if child_node.get_script() == WEATHER_RAIN_VISUAL_ZONE_SCRIPT:
+				_rain_visual_zones.append(child_node)
+		if child is Node:
+			_collect_rain_visual_zones(child as Node)
 
 
 func _refresh_rain_audio_zone_cache() -> void:
@@ -196,11 +219,11 @@ func start_weather() -> void:
 		return
 	_weather_active = true
 	_refresh_lightning_zone_cache()
+	_refresh_rain_visual_zone_cache()
 	_refresh_rain_audio_zone_cache()
 	_start_rain_ambience()
+	_update_rain_visibility()
 	_schedule_next_flash(false)
-	if _rain_particles:
-		_rain_particles.emitting = true
 
 
 func stop_weather() -> void:
@@ -212,6 +235,7 @@ func stop_weather() -> void:
 	if _rain_audio:
 		_rain_audio.stop()
 	_current_rain_sound_id = &""
+	_current_rain_visual_mode = &""
 	_current_rain_audio_tier = &""
 
 
@@ -233,14 +257,16 @@ func _refresh_indoor_state() -> void:
 
 func _update_rain_visibility() -> void:
 	var zone_eval := _evaluate_rain_zone()
-	var is_in_rain_zone := bool(zone_eval["inside"])
-	var should_emit := not _is_indoor and is_in_rain_zone
+	var visual_eval: Dictionary = _evaluate_rain_visual_state(zone_eval)
+	_current_rain_visual_mode = visual_eval["mode"] as StringName
+	var should_emit := bool(visual_eval["visible"])
 	if _rain_particles:
 		_rain_particles.emitting = should_emit
 
 	if should_emit:
 		if _rain_particles:
-			_rain_particles.global_position = _active_rain_zone_center + Vector3(0.0, rain_zone_particles_height_offset, 0.0)
+			var particle_center := visual_eval["center"] as Vector3
+			_rain_particles.global_position = particle_center + Vector3(0.0, rain_zone_particles_height_offset, 0.0)
 
 	if _rain_audio:
 		var audio_eval: Dictionary = _evaluate_rain_audio_state(zone_eval)
@@ -337,6 +363,38 @@ func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
 
 func _is_player_in_rain_zone() -> bool:
 	return bool(_evaluate_rain_zone()["inside"])
+
+
+func _evaluate_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
+	if use_rain_visual_zones:
+		var listener_position_value: Variant = _get_listener_position()
+		if listener_position_value != null:
+			var listener_position: Vector3 = listener_position_value as Vector3
+			var active_zone := _find_highest_priority_weather_zone(_rain_visual_zones, listener_position)
+			if active_zone != null:
+				return {
+					"has_zone": true,
+					"visible": bool(active_zone.call("shows_visible_rain")),
+					"center": active_zone.call("get_particles_center"),
+					"mode": active_zone.call("get_rain_visibility_mode_name"),
+				}
+		if not use_legacy_rain_visual_fallback_when_no_zone:
+			var fallback_center := Vector3.ZERO
+			if listener_position_value != null:
+				fallback_center = listener_position_value as Vector3
+			return {"has_zone": false, "visible": false, "center": fallback_center, "mode": &"hidden"}
+	return _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval)
+
+
+func _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
+	var zone_eval: Dictionary = legacy_rain_zone_eval if not legacy_rain_zone_eval.is_empty() else _evaluate_rain_zone()
+	var should_show_visible_rain := not _is_indoor and bool(zone_eval["inside"])
+	return {
+		"has_zone": false,
+		"visible": should_show_visible_rain,
+		"center": _active_rain_zone_center,
+		"mode": &"legacy_visible" if should_show_visible_rain else &"legacy_hidden",
+	}
 
 
 func _evaluate_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
@@ -575,6 +633,14 @@ func debug_evaluate_lightning_multiplier() -> float:
 
 func debug_get_current_rain_audio_tier() -> StringName:
 	return _current_rain_audio_tier
+
+
+func debug_get_current_rain_visual_mode() -> StringName:
+	return _current_rain_visual_mode
+
+
+func debug_evaluate_rain_visual_state() -> Dictionary:
+	return _evaluate_rain_visual_state()
 
 
 func debug_evaluate_rain_audio_state() -> Dictionary:

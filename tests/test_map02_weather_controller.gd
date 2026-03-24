@@ -3,6 +3,8 @@ extends SceneTree
 const FLASH_TIER_FULL := 0
 const FLASH_TIER_PARTIAL := 1
 const FLASH_TIER_NONE := 2
+const RAIN_VISUAL_MODE_VISIBLE := 0
+const RAIN_VISUAL_MODE_HIDDEN := 1
 const RAIN_AUDIO_TIER_LOUD := 0
 const RAIN_AUDIO_TIER_MEDIUM := 1
 const RAIN_AUDIO_TIER_LOW := 2
@@ -17,6 +19,9 @@ func _init() -> void:
 	_test_lightning_zone_priority_override()
 	_test_no_flash_zone_blocks_flash()
 	_test_partial_flash_zone_is_weaker_than_full_flash()
+	_test_rain_visual_zone_priority_override()
+	_test_rain_visual_zone_can_differ_from_audio_zone()
+	_test_rain_visual_legacy_fallback_toggle()
 	_test_rain_audio_zone_priority_override()
 	_test_rain_audio_zone_none_suppresses_audio()
 	_test_rain_audio_zone_low_is_quieter_than_medium()
@@ -106,6 +111,22 @@ func _make_rain_audio_zone(zone_priority: int, rain_audio_tier: int, zone_positi
 	return zone
 
 
+func _make_rain_visual_zone(zone_priority: int, rain_visibility_mode: int, zone_position: Vector3, zone_size: Vector3) -> Node:
+	var zone_script := load("res://scenes/maps/mansion_2/weather_rain_visual_zone.gd") as GDScript
+	var zone := Area3D.new()
+	zone.name = "WeatherRainVisualZone"
+	zone.set_script(zone_script)
+	zone.priority = zone_priority
+	zone.set("rain_visibility_mode", rain_visibility_mode)
+	zone.position = zone_position
+	var collision_shape := CollisionShape3D.new()
+	var box_shape := BoxShape3D.new()
+	box_shape.size = zone_size
+	collision_shape.shape = box_shape
+	zone.add_child(collision_shape)
+	return zone
+
+
 func _attach_lightning_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
 	var zone_root := _ensure_weather_zones_root(controller)
 	var lightning_root := zone_root.get_node_or_null("LightningZones") as Node3D
@@ -117,6 +138,19 @@ func _attach_lightning_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
 		lightning_root.add_child(zone)
 	controller.call("_refresh_lightning_zone_cache")
 	return lightning_root
+
+
+func _attach_rain_visual_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
+	var zone_root := _ensure_weather_zones_root(controller)
+	var rain_visual_root := zone_root.get_node_or_null("RainVisualZones") as Node3D
+	if rain_visual_root == null:
+		rain_visual_root = Node3D.new()
+		rain_visual_root.name = "RainVisualZones"
+		zone_root.add_child(rain_visual_root)
+	for zone in zones:
+		rain_visual_root.add_child(zone)
+	controller.call("_refresh_rain_visual_zone_cache")
+	return rain_visual_root
 
 
 func _attach_rain_audio_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
@@ -288,6 +322,69 @@ func _test_partial_flash_zone_is_weaker_than_full_flash() -> void:
 	assert(partial_boost > 0.0, "Partial-flash zones should still brighten the environment somewhat")
 	assert(partial_boost < full_boost, "Partial-flash zones should brighten less than full-flash zones")
 	print("✓ Partial-flash zones attenuate lightning relative to full-flash zones")
+
+
+func _test_rain_visual_zone_priority_override() -> void:
+	var controller := _build_controller(false)
+	_prime_controller(controller)
+	_attach_player(controller, Vector3.ZERO)
+	_attach_rain_visual_zones(
+		controller,
+		[
+			_make_rain_visual_zone(1, RAIN_VISUAL_MODE_VISIBLE, Vector3.ZERO, Vector3(12.0, 6.0, 12.0)),
+			_make_rain_visual_zone(5, RAIN_VISUAL_MODE_HIDDEN, Vector3.ZERO, Vector3(2.0, 2.0, 2.0)),
+		]
+	)
+	var eval := controller.call("debug_evaluate_rain_visual_state") as Dictionary
+	assert(bool(eval["has_zone"]), "Visible-rain evaluation should report the authored active zone")
+	assert(not bool(eval["visible"]), "Higher-priority hidden visual zones should suppress visible rain")
+	assert(eval["mode"] == &"hidden", "Higher-priority hidden visual zones should set the active visual mode")
+	controller.free()
+	print("✓ Rain-visual zones respect highest-priority visibility overrides")
+
+
+func _test_rain_visual_zone_can_differ_from_audio_zone() -> void:
+	var controller := _build_controller(false)
+	_prime_controller(controller)
+	_attach_player(controller, Vector3.ZERO)
+	_attach_rain_visual_zones(
+		controller,
+		[
+			_make_rain_visual_zone(1, RAIN_VISUAL_MODE_VISIBLE, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
+		]
+	)
+	_attach_rain_audio_zones(
+		controller,
+		[
+			_make_rain_audio_zone(1, RAIN_AUDIO_TIER_NONE, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
+		]
+	)
+	var visual_eval := controller.call("debug_evaluate_rain_visual_state") as Dictionary
+	var audio_eval := controller.call("debug_evaluate_rain_audio_state") as Dictionary
+	assert(bool(visual_eval["visible"]), "Visible-rain zones should be able to enable particles")
+	assert(audio_eval["tier"] == &"rain_none", "Rain-audio zones should still be able to mute audible rain")
+	controller.free()
+	print("✓ Visible rain can differ from audible rain when authored separately")
+
+
+func _test_rain_visual_legacy_fallback_toggle() -> void:
+	var fallback_controller := _build_controller(false)
+	_prime_controller(fallback_controller)
+	_attach_player(fallback_controller, Vector3.ZERO)
+	var fallback_eval := fallback_controller.call("debug_evaluate_rain_visual_state") as Dictionary
+	assert(not bool(fallback_eval["has_zone"]), "Legacy fallback should not claim an authored visual zone")
+	assert(bool(fallback_eval["visible"]), "Visible-rain legacy fallback should preserve current outdoor particle behavior")
+	fallback_controller.free()
+
+	var no_fallback_controller := _build_controller(false)
+	_prime_controller(no_fallback_controller)
+	_attach_player(no_fallback_controller, Vector3.ZERO)
+	no_fallback_controller.set("use_legacy_rain_visual_fallback_when_no_zone", false)
+	var no_fallback_eval := no_fallback_controller.call("debug_evaluate_rain_visual_state") as Dictionary
+	assert(not bool(no_fallback_eval["visible"]), "Visible-rain fallback should be suppressible when no authored visual zone applies")
+	assert(no_fallback_eval["mode"] == &"hidden", "Disabled visible-rain fallback should report a hidden state")
+	no_fallback_controller.free()
+	print("✓ Visible-rain legacy fallback can be preserved or disabled")
 
 
 func _test_rain_audio_zone_priority_override() -> void:

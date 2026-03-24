@@ -8821,6 +8821,8 @@ draw_pass_1 = SubResource("BoxMesh_weather_rain_drop")
 
 [node name="LightningZones" type="Node3D" parent="WeatherController/WeatherZones"]
 
+[node name="RainVisualZones" type="Node3D" parent="WeatherController/WeatherZones"]
+
 [node name="RainAudioZones" type="Node3D" parent="WeatherController/WeatherZones"]
 
 [node name="RainAudio" type="AudioStreamPlayer" parent="WeatherController"]

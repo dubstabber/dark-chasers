@@ -1,0 +1,482 @@
+class_name Mansion2WeatherController
+extends Node3D
+
+const TIC_RATE := 35.0
+const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
+const WEATHER_LIGHTNING_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_lightning_zone.gd")
+
+@export var weather_zones_root_path: NodePath = NodePath("WeatherZones")
+@export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
+@export var rain_particles_path: NodePath = NodePath("RainParticles")
+@export var rain_audio_path: NodePath = NodePath("RainAudio")
+@export var thunder_audio_path: NodePath = NodePath("ThunderAudio")
+@export var rain_zones_root_path: NodePath = NodePath("RainZones")
+@export var start_enabled := true
+
+@export_group("Scheduler")
+@export_range(5.0, 40.0, 0.1) var long_flash_min_seconds := 5.0
+@export_range(5.0, 45.0, 0.1) var long_flash_max_seconds := 20.0
+@export_range(1.0, 15.0, 0.1) var short_flash_min_seconds := 2.0
+@export_range(1.0, 20.0, 0.1) var short_flash_max_seconds := 9.0
+@export_range(0.2, 2.0, 0.05) var quick_followup_min_seconds := 16.0 / TIC_RATE
+@export_range(0.2, 2.5, 0.05) var quick_followup_max_seconds := 31.0 / TIC_RATE
+@export_range(0.0, 1.0, 0.01) var quick_followup_chance := QUICK_FOLLOWUP_CHANCE
+@export_range(0.0, 1.0, 0.01) var short_interval_chance := 0.28
+
+@export_group("Flash")
+@export_range(0.0, 2.0, 0.01) var flash_background_boost := 0.48
+@export_range(0.0, 2.0, 0.01) var flash_ambient_boost := 0.4
+@export_range(4, 24, 1) var flash_decay_steps := 12
+@export_range(0.01, 0.2, 0.01) var flash_decay_step_seconds := 0.045
+@export_range(0.0, 1.0, 0.01) var indoor_flash_factor := 0.5
+@export_range(0.0, 1.0, 0.01) var full_flash_multiplier := 1.0
+@export_range(0.0, 1.0, 0.01) var partial_flash_multiplier := 0.35
+@export_range(0.0, 1.0, 0.01) var no_flash_multiplier := 0.0
+@export_range(-80.0, 0.0, 0.1) var rain_volume_db := -16.0
+@export_range(-24.0, 0.0, 0.1) var thunder_base_volume_db := -7.0
+@export_range(0.0, 6.0, 0.1) var thunder_volume_random_db := 2.0
+@export_range(0.8, 1.2, 0.01) var thunder_pitch_min := 0.95
+@export_range(0.8, 1.2, 0.01) var thunder_pitch_max := 1.05
+
+@export_group("Lightning Zones")
+@export var use_lightning_zones := true
+@export var use_indoor_lightning_fallback_when_no_zone := true
+
+@export_group("Indoor Detection")
+@export var check_player_indoor_state := true
+@export_range(10.0, 300.0, 1.0) var sky_check_height := 140.0
+@export_flags_3d_physics var indoor_ray_collision_mask := 1
+
+@export_group("Rain Zones")
+@export var use_rain_zones := true
+@export_range(2.0, 120.0, 0.5) var rain_zone_radius := 36.0
+@export_range(1.0, 80.0, 0.5) var rain_zone_inner_radius := 16.0
+@export_range(1.0, 60.0, 0.5) var rain_zone_particles_height_offset := 20.0
+
+@export_group("Audio IDs")
+@export var rain_sound_id: StringName = &"rain_loop"
+@export var rain_sound_inner_id: StringName = &"rain_loop_sharp"
+@export var thunder_sound_ids: Array[StringName] = [&"thunder_1", &"thunder_2", &"thunder_3", &"thunder_4", &"thunder_5", &"thunder_6", &"thunder_7"]
+
+var _rng := RandomNumberGenerator.new()
+var _next_flash_in_seconds := 0.0
+var _decay_ticks_left := 0
+var _decay_tick_timer := 0.0
+var _is_indoor := false
+
+var _environment: Environment
+var _base_background_energy := 0.0
+var _base_ambient_energy := 0.0
+
+var _weather_zones_root: Node3D
+var _rain_particles: GPUParticles3D
+var _rain_audio: AudioStreamPlayer
+var _thunder_audio: AudioStreamPlayer
+var _player: Node3D
+var _rain_zones_root: Node3D
+var _lightning_zones: Array[Node] = []
+var _weather_active := false
+var _current_flash_background_boost := 0.0
+var _current_flash_ambient_boost := 0.0
+var _flash_decay_total_steps := 0
+var _active_rain_zone_center := Vector3.ZERO
+var _current_rain_sound_id: StringName = &""
+var _current_lightning_tier: StringName = &""
+
+
+func _ready() -> void:
+	_rng.randomize()
+	_bind_nodes()
+	_cache_environment_state()
+	if start_enabled:
+		start_weather()
+
+
+func _process(delta: float) -> void:
+	if not _weather_active:
+		return
+	if check_player_indoor_state:
+		_refresh_indoor_state()
+	_update_rain_visibility()
+
+	if _decay_ticks_left > 0:
+		_decay_tick_timer -= delta
+		if _decay_tick_timer <= 0.0:
+			_decay_tick_timer += flash_decay_step_seconds
+			_apply_decay_step()
+		return
+
+	_next_flash_in_seconds -= delta
+	if _next_flash_in_seconds <= 0.0:
+		_start_lightning_flash()
+
+
+func _exit_tree() -> void:
+	_restore_environment()
+	_weather_active = false
+
+
+func _bind_nodes() -> void:
+	var world_environment := get_node_or_null(world_environment_path) as WorldEnvironment
+	_environment = world_environment.environment if world_environment else null
+
+	_weather_zones_root = get_node_or_null(weather_zones_root_path) as Node3D
+	_rain_particles = get_node_or_null(rain_particles_path) as GPUParticles3D
+	_rain_audio = get_node_or_null(rain_audio_path) as AudioStreamPlayer
+	_thunder_audio = get_node_or_null(thunder_audio_path) as AudioStreamPlayer
+	_rain_zones_root = get_node_or_null(rain_zones_root_path) as Node3D
+	_player = _resolve_player_from_world_context()
+	_refresh_lightning_zone_cache()
+
+
+func _cache_environment_state() -> void:
+	if _environment == null:
+		return
+	_base_background_energy = _environment.background_energy_multiplier
+	_base_ambient_energy = _environment.ambient_light_energy
+
+
+func _refresh_lightning_zone_cache() -> void:
+	_lightning_zones.clear()
+	if _weather_zones_root == null:
+		return
+	_collect_lightning_zones(_weather_zones_root)
+
+
+func _collect_lightning_zones(node: Node) -> void:
+	for child in node.get_children():
+		if child is Node:
+			var child_node := child as Node
+			if child_node.get_script() == WEATHER_LIGHTNING_ZONE_SCRIPT:
+				_lightning_zones.append(child_node)
+		if child is Node:
+			_collect_lightning_zones(child as Node)
+
+
+func _start_rain_ambience() -> void:
+	if _rain_audio == null:
+		return
+
+	_apply_rain_stream(rain_sound_id)
+	_rain_audio.volume_db = rain_volume_db
+	_rain_audio.autoplay = false
+	_rain_audio.stream_paused = false
+	if _rain_audio.stream:
+		_rain_audio.play()
+
+
+func start_weather() -> void:
+	if _weather_active:
+		return
+	_weather_active = true
+	_refresh_lightning_zone_cache()
+	_start_rain_ambience()
+	_schedule_next_flash(false)
+	if _rain_particles:
+		_rain_particles.emitting = true
+
+
+func stop_weather() -> void:
+	_weather_active = false
+	_decay_ticks_left = 0
+	_restore_environment()
+	if _rain_particles:
+		_rain_particles.emitting = false
+	if _rain_audio:
+		_rain_audio.stop()
+	_current_rain_sound_id = &""
+
+
+func _refresh_indoor_state() -> void:
+	if _player == null or not is_instance_valid(_player):
+		_player = _resolve_player_from_world_context()
+		if _player == null:
+			_is_indoor = false
+			return
+
+	var space_state := get_world_3d().direct_space_state
+	var start := _player.global_position + Vector3(0.0, 0.5, 0.0)
+	var target := start + Vector3.UP * sky_check_height
+	var query := PhysicsRayQueryParameters3D.create(start, target, indoor_ray_collision_mask)
+	query.exclude = [_player]
+	var hit := space_state.intersect_ray(query)
+	_is_indoor = not hit.is_empty()
+
+
+func _update_rain_visibility() -> void:
+	if _rain_particles == null:
+		return
+
+	var zone_eval := _evaluate_rain_zone()
+	var is_in_rain_zone := bool(zone_eval["inside"])
+	var is_inner_zone := bool(zone_eval["inner"])
+	var should_emit := not _is_indoor and is_in_rain_zone
+	_rain_particles.emitting = should_emit
+
+	if should_emit:
+		_rain_particles.global_position = _active_rain_zone_center + Vector3(0.0, rain_zone_particles_height_offset, 0.0)
+
+	if _rain_audio:
+		var desired_rain_sound := rain_sound_inner_id if is_inner_zone else rain_sound_id
+		_apply_rain_stream(desired_rain_sound)
+		var indoor_cutoff_db := 9.0 if _is_indoor else 0.0
+		var zone_cutoff_db := 30.0 if not is_in_rain_zone else 0.0
+		_rain_audio.volume_db = rain_volume_db - indoor_cutoff_db - zone_cutoff_db
+
+
+func _start_lightning_flash() -> void:
+	var flash_intensity := _rng.randf_range(0.0, 1.0)
+	_current_flash_background_boost = lerpf(flash_background_boost * 0.7, flash_background_boost, flash_intensity)
+	_current_flash_ambient_boost = lerpf(flash_ambient_boost * 0.7, flash_ambient_boost, flash_intensity)
+	_decay_ticks_left = _rng.randi_range(8, 15)
+	_flash_decay_total_steps = _decay_ticks_left
+
+	if _environment:
+		var flash_multiplier := _get_active_lightning_multiplier()
+		var effective_background := _current_flash_background_boost * flash_multiplier
+		var effective_ambient := _current_flash_ambient_boost * flash_multiplier
+		_environment.background_energy_multiplier = _base_background_energy + effective_background
+		_environment.ambient_light_energy = _base_ambient_energy + effective_ambient
+
+	_play_thunder()
+	_decay_tick_timer = flash_decay_step_seconds
+	_schedule_next_flash(true)
+
+
+func _apply_decay_step() -> void:
+	_decay_ticks_left -= 1
+	if _environment == null:
+		return
+
+	var t := float(_decay_ticks_left) / float(max(1, _flash_decay_total_steps))
+	var flash_multiplier := _get_active_lightning_multiplier()
+	var effective_background := _current_flash_background_boost * flash_multiplier
+	var effective_ambient := _current_flash_ambient_boost * flash_multiplier
+	_environment.background_energy_multiplier = _base_background_energy + effective_background * t
+	_environment.ambient_light_energy = _base_ambient_energy + effective_ambient * t
+
+	if _decay_ticks_left <= 0:
+		_restore_environment()
+
+
+func _restore_environment() -> void:
+	if _environment == null:
+		return
+	_current_lightning_tier = &""
+	_environment.background_energy_multiplier = _base_background_energy
+	_environment.ambient_light_energy = _base_ambient_energy
+
+
+func _schedule_next_flash(previous_flash_happened: bool) -> void:
+	if previous_flash_happened and _rng.randf() < quick_followup_chance:
+		_next_flash_in_seconds = _rng.randf_range(quick_followup_min_seconds, quick_followup_max_seconds)
+		return
+
+	if _rng.randf() < short_interval_chance:
+		_next_flash_in_seconds = _rng.randf_range(short_flash_min_seconds, short_flash_max_seconds)
+	else:
+		_next_flash_in_seconds = _rng.randf_range(long_flash_min_seconds, long_flash_max_seconds)
+
+
+func _play_thunder() -> void:
+	if _thunder_audio == null:
+		return
+	if thunder_sound_ids.is_empty():
+		return
+
+	var thunder_stream: AudioStream = null
+	var available_ids := thunder_sound_ids.filter(func(id: StringName) -> bool: return id != &"")
+	if not available_ids.is_empty():
+		var sound_id: StringName = available_ids[_rng.randi_range(0, available_ids.size() - 1)]
+		thunder_stream = _get_sound_from_catalog(sound_id)
+	if thunder_stream == null:
+		return
+
+	_thunder_audio.stream = thunder_stream
+	_thunder_audio.volume_db = thunder_base_volume_db + _rng.randf_range(0.0, thunder_volume_random_db)
+	_thunder_audio.pitch_scale = _rng.randf_range(thunder_pitch_min, thunder_pitch_max)
+	_thunder_audio.play()
+
+
+func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
+	if sound_id == &"":
+		return null
+	if not is_inside_tree():
+		return null
+	var services := get_node_or_null("/root/Services")
+	if services == null:
+		return null
+	var catalog = services.get_sfx_catalog()
+	if catalog == null:
+		return null
+	return catalog.get_sound(sound_id)
+
+
+func _is_player_in_rain_zone() -> bool:
+	return bool(_evaluate_rain_zone()["inside"])
+
+
+func _get_active_lightning_multiplier() -> float:
+	var eval := _evaluate_lightning_zone()
+	_current_lightning_tier = eval["tier"] as StringName
+	return float(eval["multiplier"])
+
+
+func _evaluate_lightning_zone() -> Dictionary:
+	var fallback_tier: StringName = &"outdoor_fallback"
+	var fallback_multiplier := 1.0
+	if use_indoor_lightning_fallback_when_no_zone and _is_indoor:
+		fallback_tier = &"indoor_fallback"
+		fallback_multiplier = indoor_flash_factor
+
+	if not use_lightning_zones:
+		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
+
+	var listener_position: Variant = _get_listener_position()
+	if listener_position == null:
+		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
+
+	var best_zone: Node = null
+	var best_priority := -2147483648
+	for zone in _lightning_zones:
+		if zone == null or not is_instance_valid(zone):
+			continue
+		if not bool(zone.call("contains_listener_position", listener_position as Vector3)):
+			continue
+		var zone_priority: int = int(zone.call("get_zone_priority"))
+		if best_zone == null or zone_priority > best_priority:
+			best_zone = zone
+			best_priority = zone_priority
+
+	if best_zone == null:
+		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
+
+	return {
+		"has_zone": true,
+		"multiplier": float(best_zone.call("get_flash_multiplier", full_flash_multiplier, partial_flash_multiplier, no_flash_multiplier)),
+		"tier": best_zone.call("get_flash_tier_name"),
+	}
+
+
+func _get_listener_position() -> Variant:
+	if _player == null or not is_instance_valid(_player):
+		_player = _resolve_player_from_world_context()
+		if _player == null:
+			return null
+	return _get_node_world_position(_player)
+
+
+func _resolve_player_from_world_context() -> Node3D:
+	if not is_inside_tree():
+		return null
+	var services := get_node_or_null("/root/Services")
+	if services == null:
+		return null
+	var world_context = services.world_context
+	if world_context == null:
+		return null
+	var level: Node3D = world_context.get_level_node() as Node3D
+	if level == null:
+		return null
+	var players_value: Variant = level.get("players")
+	if not (players_value is Node):
+		return null
+	var players_node: Node = players_value as Node
+	if players_node == null or players_node.get_child_count() == 0:
+		return null
+	var player: Node = players_node.get_child(0)
+	if player is Node3D:
+		return player as Node3D
+	return null
+
+
+func _get_node_world_position(node_3d: Node3D) -> Vector3:
+	if node_3d.is_inside_tree():
+		return node_3d.global_position
+
+	var world_transform := node_3d.transform
+	var current := node_3d.get_parent()
+	while current is Node3D:
+		world_transform = (current as Node3D).transform * world_transform
+		current = current.get_parent()
+	return world_transform.origin
+
+
+func _evaluate_rain_zone() -> Dictionary:
+	if not use_rain_zones:
+		if _player and is_instance_valid(_player):
+			_active_rain_zone_center = _player.global_position
+		return {"inside": true, "inner": true}
+	if _player == null or not is_instance_valid(_player):
+		return {"inside": false, "inner": false}
+	if _rain_zones_root == null:
+		return {"inside": false, "inner": false}
+
+	var player_pos := _player.global_position
+	var nearest_distance := INF
+	var nearest_center := Vector3.ZERO
+	for child in _rain_zones_root.get_children():
+		if child is Node3D:
+			var zone := child as Node3D
+			var distance := zone.global_position.distance_to(player_pos)
+			if distance < nearest_distance:
+				nearest_distance = distance
+				nearest_center = zone.global_position
+
+	if nearest_distance == INF:
+		return {"inside": false, "inner": false}
+
+	_active_rain_zone_center = nearest_center
+	var inside: bool = nearest_distance <= rain_zone_radius
+	var inner_radius: float = min(rain_zone_inner_radius, rain_zone_radius)
+	var inner: bool = nearest_distance <= inner_radius
+	return {"inside": inside, "inner": inner}
+
+
+func _apply_rain_stream(sound_id: StringName) -> void:
+	if _rain_audio == null:
+		return
+	if sound_id == _current_rain_sound_id and _rain_audio.stream != null:
+		return
+
+	var rain_stream := _get_sound_from_catalog(sound_id)
+	if rain_stream == null:
+		return
+	_rain_audio.stream = rain_stream
+	_current_rain_sound_id = sound_id
+	if _weather_active and not _rain_audio.playing:
+		_rain_audio.play()
+
+
+func debug_set_seed(rng_seed: int) -> void:
+	_rng.seed = rng_seed
+
+
+func debug_set_indoor_state(indoor: bool) -> void:
+	_is_indoor = indoor
+
+
+func debug_force_flash_now() -> void:
+	_next_flash_in_seconds = 0.0
+
+
+func debug_get_next_flash_seconds() -> float:
+	return _next_flash_in_seconds
+
+
+func debug_get_decay_ticks_left() -> int:
+	return _decay_ticks_left
+
+
+func debug_get_environment_levels() -> Vector2:
+	if _environment == null:
+		return Vector2.ZERO
+	return Vector2(_environment.background_energy_multiplier, _environment.ambient_light_energy)
+
+
+func debug_get_current_lightning_tier() -> StringName:
+	return _current_lightning_tier
+
+
+func debug_evaluate_lightning_multiplier() -> float:
+	return _get_active_lightning_multiplier()

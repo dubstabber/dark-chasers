@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SfxCatalog" load_steps=23 format=3 uid="uid://bs0u2fasm6swc"]
+[gd_resource type="Resource" script_class="SfxCatalog" load_steps=40 format=3 uid="uid://bs0u2fasm6swc"]
 
 [ext_resource type="Script" uid="uid://djt7h22midtr" path="res://scenes/resources/sfx_catalog.gd" id="1_script"]
 [ext_resource type="AudioStream" uid="uid://cr01r71nniqq2" path="res://sounds/sfx/DSKEYPIC.wav" id="2_key_collected"]
@@ -12,6 +12,15 @@
 [ext_resource type="AudioStream" uid="uid://djr8pmsvviah5" path="res://sounds/music/AOSEE.wav" id="10_ao_see"]
 [ext_resource type="AudioStream" uid="uid://pjh6rgapjvec" path="res://sounds/music/D_RUNNIN.ogg" id="11_d_running"]
 [ext_resource type="Script" uid="uid://b768qhylfb1ax" path="res://scenes/resources/sfx_entry.gd" id="12_entry_script"]
+[ext_resource type="AudioStream" uid="uid://bnj5gj2h50gxl" path="res://sounds/sfx/weather/RAIN.ogg" id="13_rain_loop"]
+[ext_resource type="AudioStream" uid="uid://mycaw0wbmxq4" path="res://sounds/sfx/weather/THUNDER1.ogg" id="14_thunder_1"]
+[ext_resource type="AudioStream" uid="uid://4fcn0x00tlmy" path="res://sounds/sfx/weather/THUNDER2.mp3" id="15_thunder_2"]
+[ext_resource type="AudioStream" uid="uid://c5ao5ivcgj03r" path="res://sounds/sfx/weather/THUNDER3.ogg" id="16_thunder_3"]
+[ext_resource type="AudioStream" uid="uid://qipc2q8idcnf" path="res://sounds/sfx/weather/THUNDER4.mp3" id="17_thunder_4"]
+[ext_resource type="AudioStream" uid="uid://dkrgir8m5v5dm" path="res://sounds/sfx/weather/THUNDER5.ogg" id="18_thunder_5"]
+[ext_resource type="AudioStream" uid="uid://cahdud1n4l2nk" path="res://sounds/sfx/weather/THUNDER6.mp3" id="19_thunder_6"]
+[ext_resource type="AudioStream" uid="uid://d1fq0ly6q7blw" path="res://sounds/sfx/weather/THUNDER7.mp3" id="20_thunder_7"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/weather/AMBRAIN.ogg" id="21_rain_loop_sharp"]
 
 [sub_resource type="Resource" id="Resource_key_collected"]
 script = ExtResource("12_entry_script")
@@ -63,6 +72,51 @@ script = ExtResource("12_entry_script")
 id = &"d_running"
 stream = ExtResource("11_d_running")
 
+[sub_resource type="Resource" id="Resource_rain_loop"]
+script = ExtResource("12_entry_script")
+id = &"rain_loop"
+stream = ExtResource("13_rain_loop")
+
+[sub_resource type="Resource" id="Resource_thunder_1"]
+script = ExtResource("12_entry_script")
+id = &"thunder_1"
+stream = ExtResource("14_thunder_1")
+
+[sub_resource type="Resource" id="Resource_thunder_2"]
+script = ExtResource("12_entry_script")
+id = &"thunder_2"
+stream = ExtResource("15_thunder_2")
+
+[sub_resource type="Resource" id="Resource_thunder_3"]
+script = ExtResource("12_entry_script")
+id = &"thunder_3"
+stream = ExtResource("16_thunder_3")
+
+[sub_resource type="Resource" id="Resource_thunder_4"]
+script = ExtResource("12_entry_script")
+id = &"thunder_4"
+stream = ExtResource("17_thunder_4")
+
+[sub_resource type="Resource" id="Resource_thunder_5"]
+script = ExtResource("12_entry_script")
+id = &"thunder_5"
+stream = ExtResource("18_thunder_5")
+
+[sub_resource type="Resource" id="Resource_thunder_6"]
+script = ExtResource("12_entry_script")
+id = &"thunder_6"
+stream = ExtResource("19_thunder_6")
+
+[sub_resource type="Resource" id="Resource_thunder_7"]
+script = ExtResource("12_entry_script")
+id = &"thunder_7"
+stream = ExtResource("20_thunder_7")
+
+[sub_resource type="Resource" id="Resource_rain_loop_sharp"]
+script = ExtResource("12_entry_script")
+id = &"rain_loop_sharp"
+stream = ExtResource("21_rain_loop_sharp")
+
 [resource]
 script = ExtResource("1_script")
-sounds = Array[ExtResource("12_entry_script")]([SubResource("Resource_key_collected"), SubResource("Resource_water_splash"), SubResource("Resource_kill_player"), SubResource("Resource_event_trigger"), SubResource("Resource_spawn"), SubResource("Resource_bar_shake"), SubResource("Resource_wall_cut"), SubResource("Resource_creep_ambience"), SubResource("Resource_ao_see"), SubResource("Resource_d_running")])
+sounds = Array[ExtResource("12_entry_script")]([SubResource("Resource_key_collected"), SubResource("Resource_water_splash"), SubResource("Resource_kill_player"), SubResource("Resource_event_trigger"), SubResource("Resource_spawn"), SubResource("Resource_bar_shake"), SubResource("Resource_wall_cut"), SubResource("Resource_creep_ambience"), SubResource("Resource_ao_see"), SubResource("Resource_d_running"), SubResource("Resource_rain_loop"), SubResource("Resource_thunder_1"), SubResource("Resource_thunder_2"), SubResource("Resource_thunder_3"), SubResource("Resource_thunder_4"), SubResource("Resource_thunder_5"), SubResource("Resource_thunder_6"), SubResource("Resource_thunder_7"), SubResource("Resource_rain_loop_sharp")])

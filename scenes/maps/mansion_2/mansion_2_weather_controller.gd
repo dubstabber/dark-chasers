@@ -3,9 +3,6 @@ extends Node3D
 
 const TIC_RATE := 35.0
 const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
-const WEATHER_LIGHTNING_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_lightning_zone.gd")
-const WEATHER_RAIN_AUDIO_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_rain_audio_zone.gd")
-const WEATHER_RAIN_VISUAL_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/weather_rain_visual_zone.gd")
 
 @export var weather_zones_root_path: NodePath = NodePath("WeatherZones")
 @export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
@@ -32,16 +29,13 @@ const WEATHER_RAIN_VISUAL_ZONE_SCRIPT := preload("res://scenes/maps/mansion_2/we
 @export_range(0.01, 0.2, 0.01) var flash_decay_step_seconds := 0.045
 @export_range(0.0, 1.0, 0.01) var indoor_flash_factor := 0.5
 @export_range(0.0, 1.0, 0.01) var full_flash_multiplier := 1.0
-@export_range(0.0, 1.0, 0.01) var partial_flash_multiplier := 0.35
-@export_range(0.0, 1.0, 0.01) var no_flash_multiplier := 0.0
 @export_range(-80.0, 0.0, 0.1) var rain_volume_db := -16.0
 @export_range(-24.0, 0.0, 0.1) var thunder_base_volume_db := -7.0
 @export_range(0.0, 6.0, 0.1) var thunder_volume_random_db := 2.0
 @export_range(0.8, 1.2, 0.01) var thunder_pitch_min := 0.95
 @export_range(0.8, 1.2, 0.01) var thunder_pitch_max := 1.05
 
-@export_group("Lightning Zones")
-@export var use_lightning_zones := true
+@export_group("Lightning (environment flash)")
 @export var use_indoor_lightning_fallback_when_no_zone := true
 
 @export_group("Indoor Detection")
@@ -83,7 +77,6 @@ var _rain_audio: AudioStreamPlayer
 var _thunder_audio: AudioStreamPlayer
 var _player: Node3D
 var _rain_zones_root: Node3D
-var _lightning_zones: Array[Node] = []
 var _rain_visual_zones: Array[Node] = []
 var _rain_audio_zones: Array[Node] = []
 var _weather_active := false
@@ -96,14 +89,12 @@ var _current_lightning_tier: StringName = &""
 var _current_rain_visual_mode: StringName = &""
 var _current_rain_audio_tier: StringName = &""
 
-
 func _ready() -> void:
 	_rng.randomize()
 	_bind_nodes()
 	_cache_environment_state()
 	if start_enabled:
 		start_weather()
-
 
 func _process(delta: float) -> void:
 	if not _weather_active:
@@ -123,11 +114,9 @@ func _process(delta: float) -> void:
 	if _next_flash_in_seconds <= 0.0:
 		_start_lightning_flash()
 
-
 func _exit_tree() -> void:
 	_restore_environment()
 	_weather_active = false
-
 
 func _bind_nodes() -> void:
 	var world_environment := get_node_or_null(world_environment_path) as WorldEnvironment
@@ -139,10 +128,8 @@ func _bind_nodes() -> void:
 	_thunder_audio = get_node_or_null(thunder_audio_path) as AudioStreamPlayer
 	_rain_zones_root = get_node_or_null(rain_zones_root_path) as Node3D
 	_player = _resolve_player_from_world_context()
-	_refresh_lightning_zone_cache()
 	_refresh_rain_visual_zone_cache()
 	_refresh_rain_audio_zone_cache()
-
 
 func _cache_environment_state() -> void:
 	if _environment == null:
@@ -150,40 +137,18 @@ func _cache_environment_state() -> void:
 	_base_background_energy = _environment.background_energy_multiplier
 	_base_ambient_energy = _environment.ambient_light_energy
 
-
-func _refresh_lightning_zone_cache() -> void:
-	_lightning_zones.clear()
-	if _weather_zones_root == null:
-		return
-	_collect_lightning_zones(_weather_zones_root)
-
-
-func _collect_lightning_zones(node: Node) -> void:
-	for child in node.get_children():
-		if child is Node:
-			var child_node := child as Node
-			if child_node.get_script() == WEATHER_LIGHTNING_ZONE_SCRIPT:
-				_lightning_zones.append(child_node)
-		if child is Node:
-			_collect_lightning_zones(child as Node)
-
-
 func _refresh_rain_visual_zone_cache() -> void:
 	_rain_visual_zones.clear()
 	if _weather_zones_root == null:
 		return
 	_collect_rain_visual_zones(_weather_zones_root)
 
-
 func _collect_rain_visual_zones(node: Node) -> void:
 	for child in node.get_children():
-		if child is Node:
-			var child_node := child as Node
-			if child_node.get_script() == WEATHER_RAIN_VISUAL_ZONE_SCRIPT:
-				_rain_visual_zones.append(child_node)
+		if child is WeatherRainVisualZone:
+			_rain_visual_zones.append(child as Node)
 		if child is Node:
 			_collect_rain_visual_zones(child as Node)
-
 
 func _refresh_rain_audio_zone_cache() -> void:
 	_rain_audio_zones.clear()
@@ -191,16 +156,12 @@ func _refresh_rain_audio_zone_cache() -> void:
 		return
 	_collect_rain_audio_zones(_weather_zones_root)
 
-
 func _collect_rain_audio_zones(node: Node) -> void:
 	for child in node.get_children():
-		if child is Node:
-			var child_node := child as Node
-			if child_node.get_script() == WEATHER_RAIN_AUDIO_ZONE_SCRIPT:
-				_rain_audio_zones.append(child_node)
+		if child is WeatherRainAudioZone:
+			_rain_audio_zones.append(child as Node)
 		if child is Node:
 			_collect_rain_audio_zones(child as Node)
-
 
 func _start_rain_ambience() -> void:
 	if _rain_audio == null:
@@ -213,18 +174,15 @@ func _start_rain_ambience() -> void:
 	if _rain_audio.stream:
 		_rain_audio.play()
 
-
 func start_weather() -> void:
 	if _weather_active:
 		return
 	_weather_active = true
-	_refresh_lightning_zone_cache()
 	_refresh_rain_visual_zone_cache()
 	_refresh_rain_audio_zone_cache()
 	_start_rain_ambience()
 	_update_rain_visibility()
 	_schedule_next_flash(false)
-
 
 func stop_weather() -> void:
 	_weather_active = false
@@ -237,7 +195,6 @@ func stop_weather() -> void:
 	_current_rain_sound_id = &""
 	_current_rain_visual_mode = &""
 	_current_rain_audio_tier = &""
-
 
 func _refresh_indoor_state() -> void:
 	if _player == null or not is_instance_valid(_player):
@@ -253,7 +210,6 @@ func _refresh_indoor_state() -> void:
 	query.exclude = [_player]
 	var hit := space_state.intersect_ray(query)
 	_is_indoor = not hit.is_empty()
-
 
 func _update_rain_visibility() -> void:
 	var zone_eval := _evaluate_rain_zone()
@@ -272,49 +228,41 @@ func _update_rain_visibility() -> void:
 		var audio_eval: Dictionary = _evaluate_rain_audio_state(zone_eval)
 		_apply_rain_audio_state(audio_eval)
 
-
 func _start_lightning_flash() -> void:
 	var flash_intensity := _rng.randf_range(0.0, 1.0)
 	_current_flash_background_boost = lerpf(flash_background_boost * 0.7, flash_background_boost, flash_intensity)
 	_current_flash_ambient_boost = lerpf(flash_ambient_boost * 0.7, flash_ambient_boost, flash_intensity)
 	_decay_ticks_left = _rng.randi_range(8, 15)
 	_flash_decay_total_steps = _decay_ticks_left
+	var flash_multiplier := _get_active_lightning_multiplier()
 
-	if _environment:
-		var flash_multiplier := _get_active_lightning_multiplier()
-		var effective_background := _current_flash_background_boost * flash_multiplier
-		var effective_ambient := _current_flash_ambient_boost * flash_multiplier
-		_environment.background_energy_multiplier = _base_background_energy + effective_background
-		_environment.ambient_light_energy = _base_ambient_energy + effective_ambient
+	_apply_environment_flash(1.0, flash_multiplier)
 
 	_play_thunder()
 	_decay_tick_timer = flash_decay_step_seconds
 	_schedule_next_flash(true)
 
-
 func _apply_decay_step() -> void:
 	_decay_ticks_left -= 1
-	if _environment == null:
-		return
 
 	var t := float(_decay_ticks_left) / float(max(1, _flash_decay_total_steps))
 	var flash_multiplier := _get_active_lightning_multiplier()
-	var effective_background := _current_flash_background_boost * flash_multiplier
-	var effective_ambient := _current_flash_ambient_boost * flash_multiplier
-	_environment.background_energy_multiplier = _base_background_energy + effective_background * t
-	_environment.ambient_light_energy = _base_ambient_energy + effective_ambient * t
+	_apply_environment_flash(t, flash_multiplier)
 
 	if _decay_ticks_left <= 0:
 		_restore_environment()
 
-
 func _restore_environment() -> void:
 	if _environment == null:
 		return
-	_current_lightning_tier = &""
+	_current_lightning_tier = _evaluate_lightning_zone()["tier"] as StringName
+	_restore_environment_levels()
+
+func _restore_environment_levels() -> void:
+	if _environment == null:
+		return
 	_environment.background_energy_multiplier = _base_background_energy
 	_environment.ambient_light_energy = _base_ambient_energy
-
 
 func _schedule_next_flash(previous_flash_happened: bool) -> void:
 	if previous_flash_happened and _rng.randf() < quick_followup_chance:
@@ -325,7 +273,6 @@ func _schedule_next_flash(previous_flash_happened: bool) -> void:
 		_next_flash_in_seconds = _rng.randf_range(short_flash_min_seconds, short_flash_max_seconds)
 	else:
 		_next_flash_in_seconds = _rng.randf_range(long_flash_min_seconds, long_flash_max_seconds)
-
 
 func _play_thunder() -> void:
 	if _thunder_audio == null:
@@ -346,7 +293,6 @@ func _play_thunder() -> void:
 	_thunder_audio.pitch_scale = _rng.randf_range(thunder_pitch_min, thunder_pitch_max)
 	_thunder_audio.play()
 
-
 func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
 	if sound_id == &"":
 		return null
@@ -360,10 +306,8 @@ func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
 		return null
 	return catalog.get_sound(sound_id)
 
-
 func _is_player_in_rain_zone() -> bool:
 	return bool(_evaluate_rain_zone()["inside"])
-
 
 func _evaluate_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
 	if use_rain_visual_zones:
@@ -385,7 +329,6 @@ func _evaluate_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dict
 			return {"has_zone": false, "visible": false, "center": fallback_center, "mode": &"hidden"}
 	return _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval)
 
-
 func _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
 	var zone_eval: Dictionary = legacy_rain_zone_eval if not legacy_rain_zone_eval.is_empty() else _evaluate_rain_zone()
 	var should_show_visible_rain := not _is_indoor and bool(zone_eval["inside"])
@@ -395,7 +338,6 @@ func _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) 
 		"center": _active_rain_zone_center,
 		"mode": &"legacy_visible" if should_show_visible_rain else &"legacy_hidden",
 	}
-
 
 func _evaluate_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
 	if use_rain_audio_zones:
@@ -410,7 +352,6 @@ func _evaluate_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dicti
 			return _make_rain_audio_state_from_tier(&"rain_none", false)
 	return _evaluate_legacy_rain_audio_state(legacy_rain_zone_eval)
 
-
 func _evaluate_legacy_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
 	var zone_eval: Dictionary = legacy_rain_zone_eval if not legacy_rain_zone_eval.is_empty() else _evaluate_rain_zone()
 	var inside := bool(zone_eval["inside"])
@@ -424,7 +365,6 @@ func _evaluate_legacy_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -
 		else:
 			tier_name = &"rain_medium"
 	return _make_rain_audio_state_from_tier(tier_name, false)
-
 
 func _make_rain_audio_state_from_tier(tier_name: StringName, has_zone: bool) -> Dictionary:
 	var sound_id: StringName = rain_sound_id
@@ -449,7 +389,6 @@ func _make_rain_audio_state_from_tier(tier_name: StringName, has_zone: bool) -> 
 		"volume_db": volume_db,
 	}
 
-
 func _apply_rain_audio_state(audio_eval: Dictionary) -> void:
 	if _rain_audio == null:
 		return
@@ -459,38 +398,18 @@ func _apply_rain_audio_state(audio_eval: Dictionary) -> void:
 		_apply_rain_stream(sound_id)
 	_rain_audio.volume_db = float(audio_eval["volume_db"])
 
-
 func _get_active_lightning_multiplier() -> float:
 	var eval := _evaluate_lightning_zone()
 	_current_lightning_tier = eval["tier"] as StringName
 	return float(eval["multiplier"])
 
-
 func _evaluate_lightning_zone() -> Dictionary:
-	var fallback_tier: StringName = &"outdoor_fallback"
-	var fallback_multiplier := 1.0
+	var fallback_tier: StringName = &"full_flash"
+	var fallback_multiplier := full_flash_multiplier
 	if use_indoor_lightning_fallback_when_no_zone and _is_indoor:
 		fallback_tier = &"indoor_fallback"
 		fallback_multiplier = indoor_flash_factor
-
-	if not use_lightning_zones:
-		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
-
-	var listener_position: Variant = _get_listener_position()
-	if listener_position == null:
-		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
-
-	var best_zone := _find_highest_priority_weather_zone(_lightning_zones, listener_position as Vector3)
-
-	if best_zone == null:
-		return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
-
-	return {
-		"has_zone": true,
-		"multiplier": float(best_zone.call("get_flash_multiplier", full_flash_multiplier, partial_flash_multiplier, no_flash_multiplier)),
-		"tier": best_zone.call("get_flash_tier_name"),
-	}
-
+	return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
 
 func _find_highest_priority_weather_zone(zones: Array[Node], listener_position: Vector3) -> Node:
 	var best_zone: Node = null
@@ -506,14 +425,12 @@ func _find_highest_priority_weather_zone(zones: Array[Node], listener_position: 
 			best_priority = zone_priority
 	return best_zone
 
-
 func _get_listener_position() -> Variant:
 	if _player == null or not is_instance_valid(_player):
 		_player = _resolve_player_from_world_context()
 		if _player == null:
 			return null
 	return _get_node_world_position(_player)
-
 
 func _resolve_player_from_world_context() -> Node3D:
 	if not is_inside_tree():
@@ -538,7 +455,6 @@ func _resolve_player_from_world_context() -> Node3D:
 		return player as Node3D
 	return null
 
-
 func _get_node_world_position(node_3d: Node3D) -> Vector3:
 	if node_3d.is_inside_tree():
 		return node_3d.global_position
@@ -549,7 +465,6 @@ func _get_node_world_position(node_3d: Node3D) -> Vector3:
 		world_transform = (current as Node3D).transform * world_transform
 		current = current.get_parent()
 	return world_transform.origin
-
 
 func _evaluate_rain_zone() -> Dictionary:
 	if not use_rain_zones:
@@ -581,14 +496,13 @@ func _evaluate_rain_zone() -> Dictionary:
 	var inner: bool = nearest_distance <= inner_radius
 	return {"inside": inside, "inner": inner}
 
-
 func _apply_rain_stream(sound_id: StringName) -> void:
 	if _rain_audio == null:
 		return
 	if sound_id == _current_rain_sound_id and _rain_audio.stream != null:
 		return
 
-	var rain_stream := _get_sound_from_catalog(sound_id)
+	var rain_stream: AudioStream = _get_sound_from_catalog(sound_id)
 	if rain_stream == null:
 		return
 	_rain_audio.stream = rain_stream
@@ -596,52 +510,51 @@ func _apply_rain_stream(sound_id: StringName) -> void:
 	if _weather_active and not _rain_audio.playing:
 		_rain_audio.play()
 
-
-func debug_set_seed(rng_seed: int) -> void:
-	_rng.seed = rng_seed
-
-
-func debug_set_indoor_state(indoor: bool) -> void:
-	_is_indoor = indoor
-
-
-func debug_force_flash_now() -> void:
-	_next_flash_in_seconds = 0.0
-
-
-func debug_get_next_flash_seconds() -> float:
-	return _next_flash_in_seconds
-
-
-func debug_get_decay_ticks_left() -> int:
-	return _decay_ticks_left
-
+func _apply_environment_flash(normalized_strength: float, flash_multiplier: float) -> void:
+	if _environment == null:
+		return
+	var effective_background := _current_flash_background_boost * flash_multiplier * normalized_strength
+	var effective_ambient := _current_flash_ambient_boost * flash_multiplier * normalized_strength
+	_environment.background_energy_multiplier = _base_background_energy + effective_background
+	_environment.ambient_light_energy = _base_ambient_energy + effective_ambient
 
 func debug_get_environment_levels() -> Vector2:
 	if _environment == null:
 		return Vector2.ZERO
 	return Vector2(_environment.background_energy_multiplier, _environment.ambient_light_energy)
 
+func debug_set_seed(rng_seed: int) -> void:
+	_rng.seed = rng_seed
+
+func debug_set_indoor_state(indoor: bool) -> void:
+	_is_indoor = indoor
+
+func debug_force_flash_now() -> void:
+	_next_flash_in_seconds = 0.0
+
+func debug_get_next_flash_seconds() -> float:
+	return _next_flash_in_seconds
+
+func debug_get_decay_ticks_left() -> int:
+	return _decay_ticks_left
 
 func debug_get_current_lightning_tier() -> StringName:
 	return _current_lightning_tier
 
-
 func debug_evaluate_lightning_multiplier() -> float:
 	return _get_active_lightning_multiplier()
 
+func debug_evaluate_lightning_state() -> Dictionary:
+	return _evaluate_lightning_zone()
 
 func debug_get_current_rain_audio_tier() -> StringName:
 	return _current_rain_audio_tier
 
-
 func debug_get_current_rain_visual_mode() -> StringName:
 	return _current_rain_visual_mode
 
-
 func debug_evaluate_rain_visual_state() -> Dictionary:
 	return _evaluate_rain_visual_state()
-
 
 func debug_evaluate_rain_audio_state() -> Dictionary:
 	return _evaluate_rain_audio_state()

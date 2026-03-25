@@ -1,8 +1,5 @@
 extends SceneTree
 
-const FLASH_TIER_FULL := 0
-const FLASH_TIER_PARTIAL := 1
-const FLASH_TIER_NONE := 2
 const RAIN_VISUAL_MODE_VISIBLE := 0
 const RAIN_VISUAL_MODE_HIDDEN := 1
 const RAIN_AUDIO_TIER_LOUD := 0
@@ -15,10 +12,9 @@ func _init() -> void:
 	print("=== MAP02 WEATHER CONTROLLER TESTS ===")
 	_test_scheduler_ranges()
 	_test_flash_lifecycle_restores_environment()
-	_test_indoor_flash_is_weaker_than_outdoor()
-	_test_lightning_zone_priority_override()
-	_test_no_flash_zone_blocks_flash()
-	_test_partial_flash_zone_is_weaker_than_full_flash()
+	_test_indoor_lightning_fallback_attenuates_environment_flash()
+	_test_environment_flash_ignores_indoor_state()
+	_test_map02_scene_weather_authoring()
 	_test_rain_visual_zone_priority_override()
 	_test_rain_visual_zone_can_differ_from_audio_zone()
 	_test_rain_visual_legacy_fallback_toggle()
@@ -79,20 +75,15 @@ func _ensure_weather_zones_root(controller: Node3D) -> Node3D:
 	return zone_root
 
 
-func _make_lightning_zone(zone_priority: int, flash_tier: int, zone_position: Vector3, zone_size: Vector3) -> Node:
-	var zone_script := load("res://scenes/maps/mansion_2/weather_lightning_zone.gd") as GDScript
-	var zone := Area3D.new()
-	zone.name = "WeatherLightningZone"
-	zone.set_script(zone_script)
-	zone.priority = zone_priority
-	zone.set("flash_tier", flash_tier)
-	zone.position = zone_position
+func _add_box_collision_shape(zone: Area3D, local_position: Vector3, zone_size: Vector3, collision_name := "CollisionShape3D") -> CollisionShape3D:
 	var collision_shape := CollisionShape3D.new()
+	collision_shape.name = collision_name
+	collision_shape.position = local_position
 	var box_shape := BoxShape3D.new()
 	box_shape.size = zone_size
 	collision_shape.shape = box_shape
 	zone.add_child(collision_shape)
-	return zone
+	return collision_shape
 
 
 func _make_rain_audio_zone(zone_priority: int, rain_audio_tier: int, zone_position: Vector3, zone_size: Vector3) -> Node:
@@ -125,19 +116,6 @@ func _make_rain_visual_zone(zone_priority: int, rain_visibility_mode: int, zone_
 	collision_shape.shape = box_shape
 	zone.add_child(collision_shape)
 	return zone
-
-
-func _attach_lightning_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
-	var zone_root := _ensure_weather_zones_root(controller)
-	var lightning_root := zone_root.get_node_or_null("LightningZones") as Node3D
-	if lightning_root == null:
-		lightning_root = Node3D.new()
-		lightning_root.name = "LightningZones"
-		zone_root.add_child(lightning_root)
-	for zone in zones:
-		lightning_root.add_child(zone)
-	controller.call("_refresh_lightning_zone_cache")
-	return lightning_root
 
 
 func _attach_rain_visual_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
@@ -212,9 +190,42 @@ func _test_flash_lifecycle_restores_environment() -> void:
 	print("✓ Flash lifecycle boosts and restores environment")
 
 
-func _test_indoor_flash_is_weaker_than_outdoor() -> void:
+func _test_indoor_lightning_fallback_attenuates_environment_flash() -> void:
 	var outdoor_controller := _build_controller(false)
 	_prime_controller(outdoor_controller)
+	outdoor_controller.call("debug_set_seed", 7)
+	outdoor_controller.call("start_weather")
+	var outdoor_before := outdoor_controller.call("debug_get_environment_levels") as Vector2
+	outdoor_controller.call("debug_set_indoor_state", false)
+	outdoor_controller.call("debug_force_flash_now")
+	outdoor_controller.call("_process", 0.016)
+	var outdoor_after := outdoor_controller.call("debug_get_environment_levels") as Vector2
+	var outdoor_boost := outdoor_after.x - outdoor_before.x
+	assert(outdoor_controller.call("debug_get_current_lightning_tier") == &"full_flash", "Outdoor lightning should use the full flash tier")
+	outdoor_controller.free()
+
+	var indoor_controller := _build_controller(false)
+	_prime_controller(indoor_controller)
+	indoor_controller.call("debug_set_seed", 7)
+	indoor_controller.call("start_weather")
+	var indoor_before := indoor_controller.call("debug_get_environment_levels") as Vector2
+	indoor_controller.call("debug_set_indoor_state", true)
+	indoor_controller.call("debug_force_flash_now")
+	indoor_controller.call("_process", 0.016)
+	var indoor_after := indoor_controller.call("debug_get_environment_levels") as Vector2
+	var indoor_boost := indoor_after.x - indoor_before.x
+	assert(indoor_controller.call("debug_get_current_lightning_tier") == &"indoor_fallback", "Indoor lightning should use the fallback tier when enabled")
+	indoor_controller.free()
+
+	assert(outdoor_boost > indoor_boost, "Indoor fallback should attenuate the environment flash")
+	assert(indoor_boost > 0.0, "Indoor fallback should still allow a reduced lightning flash")
+	print("✓ Indoor lightning fallback attenuates environment flash when enabled")
+
+
+func _test_environment_flash_ignores_indoor_state() -> void:
+	var outdoor_controller := _build_controller(false)
+	_prime_controller(outdoor_controller)
+	outdoor_controller.set("use_indoor_lightning_fallback_when_no_zone", false)
 	outdoor_controller.call("debug_set_seed", 42)
 	outdoor_controller.call("start_weather")
 	var outdoor_before := outdoor_controller.call("debug_get_environment_levels") as Vector2
@@ -227,6 +238,7 @@ func _test_indoor_flash_is_weaker_than_outdoor() -> void:
 
 	var indoor_controller := _build_controller(false)
 	_prime_controller(indoor_controller)
+	indoor_controller.set("use_indoor_lightning_fallback_when_no_zone", false)
 	indoor_controller.call("debug_set_seed", 42)
 	indoor_controller.call("start_weather")
 	var indoor_before := indoor_controller.call("debug_get_environment_levels") as Vector2
@@ -236,92 +248,27 @@ func _test_indoor_flash_is_weaker_than_outdoor() -> void:
 	var indoor_after := indoor_controller.call("debug_get_environment_levels") as Vector2
 	var indoor_boost := indoor_after.x - indoor_before.x
 	indoor_controller.free()
-	assert(indoor_boost < outdoor_boost, "Indoor flash should be weaker than outdoor flash")
-	print("✓ Indoor attenuation keeps flash weaker indoors")
+	assert(is_equal_approx(indoor_boost, outdoor_boost), "Environment flash should be the same regardless of indoor state")
+	assert(outdoor_boost > 0.0, "Environment flash should always boost when no authored zones exist")
+	print("✓ Environment flash fires at full strength regardless of indoor state")
 
 
-func _test_lightning_zone_priority_override() -> void:
-	var controller := _build_controller(false)
-	_prime_controller(controller)
-	_attach_player(controller, Vector3.ZERO)
-	_attach_lightning_zones(
-		controller,
-		[
-			_make_lightning_zone(1, FLASH_TIER_NONE, Vector3.ZERO, Vector3(12.0, 6.0, 12.0)),
-			_make_lightning_zone(5, FLASH_TIER_FULL, Vector3.ZERO, Vector3(2.0, 2.0, 2.0)),
-		]
-	)
-
-	var multiplier := float(controller.call("debug_evaluate_lightning_multiplier"))
-	var tier := controller.call("debug_get_current_lightning_tier") as StringName
-	assert(is_equal_approx(multiplier, 1.0), "Higher-priority local override zone should win")
-	assert(tier == &"full_flash", "Higher-priority local override zone should set the active flash tier")
-	controller.free()
-	print("✓ Lightning zones respect highest-priority local overrides")
-
-
-func _test_no_flash_zone_blocks_flash() -> void:
-	var controller := _build_controller(false)
-	_prime_controller(controller)
-	_attach_player(controller, Vector3.ZERO)
-	_attach_lightning_zones(
-		controller,
-		[
-			_make_lightning_zone(1, FLASH_TIER_NONE, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
-		]
-	)
-	controller.call("debug_set_seed", 42)
-	controller.call("start_weather")
-	var before := controller.call("debug_get_environment_levels") as Vector2
-	controller.call("debug_force_flash_now")
-	controller.call("_process", 0.016)
-	var after := controller.call("debug_get_environment_levels") as Vector2
-	assert(is_equal_approx(after.x, before.x), "No-flash zones should block background flash boost")
-	assert(is_equal_approx(after.y, before.y), "No-flash zones should block ambient flash boost")
-	controller.free()
-	print("✓ No-flash zones suppress lightning brightening")
-
-
-func _test_partial_flash_zone_is_weaker_than_full_flash() -> void:
-	var full_controller := _build_controller(false)
-	_prime_controller(full_controller)
-	_attach_player(full_controller, Vector3.ZERO)
-	_attach_lightning_zones(
-		full_controller,
-		[
-			_make_lightning_zone(1, FLASH_TIER_FULL, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
-		]
-	)
-	full_controller.call("debug_set_seed", 99)
-	full_controller.call("start_weather")
-	var full_before := full_controller.call("debug_get_environment_levels") as Vector2
-	full_controller.call("debug_force_flash_now")
-	full_controller.call("_process", 0.016)
-	var full_after := full_controller.call("debug_get_environment_levels") as Vector2
-	var full_boost := full_after.x - full_before.x
-	full_controller.free()
-
-	var partial_controller := _build_controller(false)
-	_prime_controller(partial_controller)
-	_attach_player(partial_controller, Vector3.ZERO)
-	_attach_lightning_zones(
-		partial_controller,
-		[
-			_make_lightning_zone(1, FLASH_TIER_PARTIAL, Vector3.ZERO, Vector3(10.0, 6.0, 10.0)),
-		]
-	)
-	partial_controller.call("debug_set_seed", 99)
-	partial_controller.call("start_weather")
-	var partial_before := partial_controller.call("debug_get_environment_levels") as Vector2
-	partial_controller.call("debug_force_flash_now")
-	partial_controller.call("_process", 0.016)
-	var partial_after := partial_controller.call("debug_get_environment_levels") as Vector2
-	var partial_boost := partial_after.x - partial_before.x
-	partial_controller.free()
-
-	assert(partial_boost > 0.0, "Partial-flash zones should still brighten the environment somewhat")
-	assert(partial_boost < full_boost, "Partial-flash zones should brighten less than full-flash zones")
-	print("✓ Partial-flash zones attenuate lightning relative to full-flash zones")
+func _test_map02_scene_weather_authoring() -> void:
+	var scene_text := FileAccess.get_file_as_string("res://scenes/maps/mansion_2/mansion_2.tscn")
+	assert(not scene_text.is_empty(), "MAP02 scene text should be readable for weather authoring verification")
+	assert(scene_text.contains("[node name=\"LightningZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored lightning zone root")
+	assert(scene_text.contains("[node name=\"RainAudioZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored rain-audio zone root")
+	assert(scene_text.contains("[node name=\"RainVisualZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored rain-visual zone root")
+	assert(scene_text.count('type="ReflectionProbe" parent="WeatherController/WeatherZones/LightningZones"') == 2, "MAP02 scene should author two ReflectionProbes under LightningZones")
+	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/LightningZones"') == 0, "MAP02 scene should no longer use authored lightning-zone Area3D volumes")
+	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"') == 7, "MAP02 scene should author the expected rain-audio zone set")
+	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"') == 7, "MAP02 scene should author the expected rain-visual zone set")
+	assert(scene_text.contains("[node name=\"ReflectionProbe\" type=\"ReflectionProbe\" parent=\"WeatherController/WeatherZones/LightningZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should keep the main hall lightning ReflectionProbe")
+	assert(scene_text.contains("[node name=\"ReflectionProbe2\" type=\"ReflectionProbe\" parent=\"WeatherController/WeatherZones/LightningZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 87.547226, 7.0142565, 5.460824)\nblend_distance = 11.0"), "MAP02 scene should keep the partial lightning ReflectionProbe with tuned blend distance")
+	assert(scene_text.contains("[node name=\"Zone_BasementHoleLow\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainAudioZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)\ncollision_layer = 0\ncollision_mask = 0\npriority = 5\nscript = ExtResource(\"165_rain_audio_zone\")\nrain_audio_tier = 2"), "MAP02 scene should author a low-rain basement-hole audio override")
+	assert(scene_text.contains("[node name=\"Zone_BasementHoleVisible\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainVisualZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)\ncollision_layer = 0\ncollision_mask = 0\npriority = 5\nscript = ExtResource(\"166_rain_visual_zone\")"), "MAP02 scene should author a visible-rain basement-hole override")
+	assert(scene_text.contains("[node name=\"Zone_MainHallHidden\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainVisualZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 6, -14)\ncollision_layer = 0\ncollision_mask = 0\npriority = 2\nscript = ExtResource(\"166_rain_visual_zone\")\nrain_visibility_mode = 1"), "MAP02 scene should author a sheltered main-hall visible-rain zone")
+	print("✓ MAP02 scene includes ReflectionProbe lightning masking plus authored rain-audio and rain-visual coverage")
 
 
 func _test_rain_visual_zone_priority_override() -> void:

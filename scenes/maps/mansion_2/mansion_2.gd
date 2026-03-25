@@ -3,7 +3,7 @@ extends Level
 const STARTING_ROOM := "MainHall"
 const STARTING_YAW := PI
 const WEATHER_CONTROLLER_PATH := NodePath("WeatherController")
-const WEATHER_CONTROLLER_SCRIPT := preload("res://scenes/maps/mansion_2/mansion_2_weather_controller.gd")
+const WEATHER_CONTROLLER_SCRIPT = preload("res://scenes/maps/mansion_2/mansion_2_weather_controller.gd")
 
 
 func _ready():

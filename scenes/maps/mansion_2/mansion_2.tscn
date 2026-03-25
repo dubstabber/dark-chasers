@@ -8995,6 +8995,26 @@ origin_offset = Vector3(0.6938714, 0.01, -0.7875427)
 ambient_mode = 2
 ambient_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 
+[node name="Rain" type="Node3D" parent="Decorations"]
+
+[node name="RainParticles" type="GPUParticles3D" parent="Decorations/Rain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.313774, 7.820366, 13.236824)
+cast_shadow = 0
+amount = 1750
+lifetime = 0.8
+visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
+process_material = ExtResource("172_xjcub")
+draw_pass_1 = ExtResource("173_m7gha")
+
+[node name="RainParticles2" type="GPUParticles3D" parent="Decorations/Rain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.756706, 7.6200485, 1.9202442)
+cast_shadow = 0
+amount = 760
+lifetime = 0.8
+visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
+process_material = SubResource("ParticleProcessMaterial_m7gha")
+draw_pass_1 = ExtResource("173_m7gha")
+
 [node name="Corpses" type="Node3D" parent="." groups=["corpse"]]
 unique_name_in_owner = true
 
@@ -9032,29 +9052,6 @@ volume_db = -5.0
 
 [node name="WeatherController" type="Node3D" parent="."]
 script = ExtResource("163_weather")
-rain_zones_root_path = NodePath("")
-
-[node name="WeatherZones" type="Node3D" parent="WeatherController"]
-
-[node name="RainVisualZones" type="Node3D" parent="WeatherController/WeatherZones"]
-
-[node name="RainParticles" type="GPUParticles3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.313774, 7.820366, 13.236824)
-cast_shadow = 0
-amount = 1750
-lifetime = 0.8
-visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
-process_material = ExtResource("172_xjcub")
-draw_pass_1 = ExtResource("173_m7gha")
-
-[node name="RainParticles2" type="GPUParticles3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.756706, 7.6200485, 1.9202442)
-cast_shadow = 0
-amount = 760
-lifetime = 0.8
-visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
-process_material = SubResource("ParticleProcessMaterial_m7gha")
-draw_pass_1 = ExtResource("173_m7gha")
 
 [node name="ThunderAudio" type="AudioStreamPlayer" parent="WeatherController"]
 

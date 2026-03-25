@@ -2,22 +2,16 @@ extends Level
 
 const STARTING_ROOM := "MainHall"
 const STARTING_YAW := PI
-const WEATHER_CONTROLLER_PATH := NodePath("WeatherController")
-const WEATHER_CONTROLLER_SCRIPT = preload("res://scenes/maps/mansion_2/mansion_2_weather_controller.gd")
 
 
 func _ready():
 	super._ready()
 	spawn_player()
 	$Doors/AoMovingWall11.open()
-	_initialize_weather()
 	#open_all_doors()
 
 
 func _exit_tree():
-	var weather_controller: Node = get_node_or_null(WEATHER_CONTROLLER_PATH)
-	if weather_controller != null and weather_controller.get_script() == WEATHER_CONTROLLER_SCRIPT:
-		weather_controller.call("stop_weather")
 	super._exit_tree()
 
 
@@ -32,12 +26,6 @@ func spawn_player() -> Player:
 	player.global_rotation = player_rotation
 	
 	return player
-
-
-func _initialize_weather() -> void:
-	var weather_controller: Node = get_node_or_null(WEATHER_CONTROLLER_PATH)
-	if weather_controller != null and weather_controller.get_script() == WEATHER_CONTROLLER_SCRIPT:
-		weather_controller.call("start_weather")
 
 
 func test_respawn(player: CharacterBody3D) -> void:

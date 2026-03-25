@@ -4,10 +4,8 @@ extends Node3D
 const TIC_RATE := 35.0
 const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
 
-@export var weather_zones_root_path: NodePath = NodePath("WeatherZones")
 @export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
 @export var thunder_audio_path: NodePath = NodePath("ThunderAudio")
-@export var rain_zones_root_path: NodePath = NodePath("RainZones")
 @export var start_enabled := true
 
 @export_group("Scheduler")
@@ -40,13 +38,6 @@ const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
 @export_range(10.0, 300.0, 1.0) var sky_check_height := 140.0
 @export_flags_3d_physics var indoor_ray_collision_mask := 1
 
-@export_group("Rain Zones")
-@export var use_rain_visual_zones := true
-@export var use_legacy_rain_visual_fallback_when_no_zone := true
-@export var use_rain_zones := true
-@export_range(2.0, 120.0, 0.5) var rain_zone_radius := 36.0
-@export_range(1.0, 80.0, 0.5) var rain_zone_inner_radius := 16.0
-
 @export_group("Audio IDs")
 @export var thunder_sound_ids: Array[StringName] = [&"thunder_1", &"thunder_2", &"thunder_3", &"thunder_4", &"thunder_5", &"thunder_6", &"thunder_7"]
 
@@ -60,19 +51,13 @@ var _environment: Environment
 var _base_background_energy := 0.0
 var _base_ambient_energy := 0.0
 
-var _weather_zones_root: Node3D
-var _rain_particles: GPUParticles3D
 var _thunder_audio: AudioStreamPlayer
 var _player: Node3D
-var _rain_zones_root: Node3D
-var _rain_visual_zones: Array[Node] = []
 var _weather_active := false
 var _current_flash_background_boost := 0.0
 var _current_flash_ambient_boost := 0.0
 var _flash_decay_total_steps := 0
-var _active_rain_zone_center := Vector3.ZERO
 var _current_lightning_tier: StringName = &""
-var _current_rain_visual_mode: StringName = &""
 
 func _ready() -> void:
 	_rng.randomize()
@@ -86,7 +71,6 @@ func _process(delta: float) -> void:
 		return
 	if check_player_indoor_state:
 		_refresh_indoor_state()
-	_update_rain_visibility()
 
 	if _decay_ticks_left > 0:
 		_decay_tick_timer -= delta
@@ -107,11 +91,8 @@ func _bind_nodes() -> void:
 	var world_environment := get_node_or_null(world_environment_path) as WorldEnvironment
 	_environment = world_environment.environment if world_environment else null
 
-	_weather_zones_root = get_node_or_null(weather_zones_root_path) as Node3D
 	_thunder_audio = get_node_or_null(thunder_audio_path) as AudioStreamPlayer
-	_rain_zones_root = get_node_or_null(rain_zones_root_path) as Node3D
 	_player = _resolve_player_from_world_context()
-	_refresh_rain_visual_zone_cache()
 
 func _cache_environment_state() -> void:
 	if _environment == null:
@@ -119,32 +100,16 @@ func _cache_environment_state() -> void:
 	_base_background_energy = _environment.background_energy_multiplier
 	_base_ambient_energy = _environment.ambient_light_energy
 
-func _refresh_rain_visual_zone_cache() -> void:
-	_rain_visual_zones.clear()
-	if _weather_zones_root == null:
-		return
-	_collect_rain_visual_zones(_weather_zones_root)
-
-func _collect_rain_visual_zones(node: Node) -> void:
-	for child in node.get_children():
-		if child is WeatherRainVisualZone:
-			_rain_visual_zones.append(child as Node)
-		if child is Node:
-			_collect_rain_visual_zones(child as Node)
-
 func start_weather() -> void:
 	if _weather_active:
 		return
 	_weather_active = true
-	_refresh_rain_visual_zone_cache()
-	_update_rain_visibility()
 	_schedule_next_flash(false)
 
 func stop_weather() -> void:
 	_weather_active = false
 	_decay_ticks_left = 0
 	_restore_environment()
-	_current_rain_visual_mode = &""
 
 func _refresh_indoor_state() -> void:
 	if _player == null or not is_instance_valid(_player):
@@ -160,11 +125,6 @@ func _refresh_indoor_state() -> void:
 	query.exclude = [_player]
 	var hit := space_state.intersect_ray(query)
 	_is_indoor = not hit.is_empty()
-
-func _update_rain_visibility() -> void:
-	var zone_eval := _evaluate_rain_zone()
-	var visual_eval: Dictionary = _evaluate_rain_visual_state(zone_eval)
-	_current_rain_visual_mode = visual_eval["mode"] as StringName
 
 func _start_lightning_flash() -> void:
 	var flash_intensity := _rng.randf_range(0.0, 1.0)
@@ -244,44 +204,6 @@ func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
 		return null
 	return catalog.get_sound(sound_id)
 
-func _is_player_in_rain_zone() -> bool:
-	return bool(_evaluate_rain_zone()["inside"])
-
-func _evaluate_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
-	if use_rain_visual_zones:
-		var listener_position_value: Variant = _get_listener_position()
-		if listener_position_value != null:
-			var listener_position: Vector3 = listener_position_value as Vector3
-			var active_zone := _find_highest_priority_weather_zone(_rain_visual_zones, listener_position)
-			if active_zone != null:
-				return {
-					"has_zone": true,
-					"visible": bool(active_zone.call("shows_visible_rain")),
-					"center": listener_position,
-					"mode": active_zone.call("get_rain_visibility_mode_name"),
-				}
-		if not use_legacy_rain_visual_fallback_when_no_zone:
-			var fallback_center := Vector3.ZERO
-			if listener_position_value != null:
-				fallback_center = listener_position_value as Vector3
-			return {
-				"has_zone": false,
-				"visible": false,
-				"center": fallback_center,
-				"mode": &"hidden",
-			}
-	return _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval)
-
-func _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
-	var zone_eval: Dictionary = legacy_rain_zone_eval if not legacy_rain_zone_eval.is_empty() else _evaluate_rain_zone()
-	var should_show_visible_rain := not _is_indoor and bool(zone_eval["inside"])
-	return {
-		"has_zone": false,
-		"visible": should_show_visible_rain,
-		"center": _active_rain_zone_center,
-		"mode": &"legacy_visible" if should_show_visible_rain else &"legacy_hidden",
-	}
-
 func _get_active_lightning_multiplier() -> float:
 	var eval := _evaluate_lightning_zone()
 	_current_lightning_tier = eval["tier"] as StringName
@@ -294,27 +216,6 @@ func _evaluate_lightning_zone() -> Dictionary:
 		fallback_tier = &"indoor_fallback"
 		fallback_multiplier = indoor_flash_factor
 	return {"has_zone": false, "multiplier": fallback_multiplier, "tier": fallback_tier}
-
-func _find_highest_priority_weather_zone(zones: Array[Node], listener_position: Vector3) -> Node:
-	var best_zone: Node = null
-	var best_priority := -2147483648
-	for zone in zones:
-		if zone == null or not is_instance_valid(zone):
-			continue
-		if not bool(zone.call("contains_listener_position", listener_position)):
-			continue
-		var zone_priority: int = int(zone.call("get_zone_priority"))
-		if best_zone == null or zone_priority > best_priority:
-			best_zone = zone
-			best_priority = zone_priority
-	return best_zone
-
-func _get_listener_position() -> Variant:
-	if _player == null or not is_instance_valid(_player):
-		_player = _resolve_player_from_world_context()
-		if _player == null:
-			return null
-	return _get_node_world_position(_player)
 
 func _resolve_player_from_world_context() -> Node3D:
 	if not is_inside_tree():
@@ -338,47 +239,6 @@ func _resolve_player_from_world_context() -> Node3D:
 	if player is Node3D:
 		return player as Node3D
 	return null
-
-func _get_node_world_position(node_3d: Node3D) -> Vector3:
-	if node_3d.is_inside_tree():
-		return node_3d.global_position
-
-	var world_transform := node_3d.transform
-	var current := node_3d.get_parent()
-	while current is Node3D:
-		world_transform = (current as Node3D).transform * world_transform
-		current = current.get_parent()
-	return world_transform.origin
-
-func _evaluate_rain_zone() -> Dictionary:
-	if not use_rain_zones:
-		if _player and is_instance_valid(_player):
-			_active_rain_zone_center = _get_node_world_position(_player)
-		return {"inside": true, "inner": true}
-	if _player == null or not is_instance_valid(_player):
-		return {"inside": false, "inner": false}
-	if _rain_zones_root == null:
-		return {"inside": false, "inner": false}
-
-	var player_pos := _get_node_world_position(_player)
-	var nearest_distance := INF
-	var nearest_center := Vector3.ZERO
-	for child in _rain_zones_root.get_children():
-		if child is Node3D:
-			var zone := child as Node3D
-			var distance := _get_node_world_position(zone).distance_to(player_pos)
-			if distance < nearest_distance:
-				nearest_distance = distance
-				nearest_center = _get_node_world_position(zone)
-
-	if nearest_distance == INF:
-		return {"inside": false, "inner": false}
-
-	_active_rain_zone_center = nearest_center
-	var inside: bool = nearest_distance <= rain_zone_radius
-	var inner_radius: float = min(rain_zone_inner_radius, rain_zone_radius)
-	var inner: bool = nearest_distance <= inner_radius
-	return {"inside": inside, "inner": inner}
 
 func _apply_environment_flash(normalized_strength: float, flash_multiplier: float) -> void:
 	if _environment == null:
@@ -416,18 +276,3 @@ func debug_evaluate_lightning_multiplier() -> float:
 
 func debug_evaluate_lightning_state() -> Dictionary:
 	return _evaluate_lightning_zone()
-
-func debug_get_current_rain_visual_mode() -> StringName:
-	return _current_rain_visual_mode
-
-func debug_evaluate_rain_visual_state() -> Dictionary:
-	return _evaluate_rain_visual_state()
-
-func debug_get_rain_particles_state() -> Dictionary:
-	if _rain_particles == null:
-		return {}
-	return {
-		"amount": _rain_particles.amount,
-		"position": _get_node_world_position(_rain_particles),
-		"visibility_aabb": _rain_particles.visibility_aabb,
-	}

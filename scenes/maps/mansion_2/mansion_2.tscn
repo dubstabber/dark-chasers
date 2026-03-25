@@ -1,4 +1,4 @@
-[gd_scene load_steps=788 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=793 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -6025,6 +6025,21 @@ size = Vector3(1.1791992, 2.4891968, 0.21566772)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mdtbf"]
 size = Vector3(1.0722656, 3.0336914, 0.21276855)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_fj37k"]
+size = Vector3(2.011963, 3.0336914, 0.21276855)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c807w"]
+size = Vector3(1.1225586, 2.5122986, 0.12084961)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7ru5d"]
+size = Vector3(1.97229, 2.4891968, 0.21566772)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1q57w"]
+size = Vector3(1.251564, 0.21788025, 1.1210585)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n8bub"]
+size = Vector3(1.7078857, 2.5220947, 1)
+
 [node name="mansion2" type="Node3D"]
 script = ExtResource("1_ophgb")
 metadata/_edit_lock_ = true
@@ -9078,6 +9093,69 @@ music_player = NodePath("../../AmbientMusic")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Rain1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00390625, 1.0168457, -0.024108887)
 shape = SubResource("BoxShape3D_mdtbf")
+
+[node name="Rain2" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.041786, 5.926144, 10.028412)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"rain_loop"
+music_player = NodePath("../../AmbientMusic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Rain2"]
+shape = SubResource("BoxShape3D_mdtbf")
+
+[node name="Rain3" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.339386, 7.436846, 2.0118954)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"rain_loop"
+music_player = NodePath("../../AmbientMusic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Rain3"]
+shape = SubResource("BoxShape3D_fj37k")
+
+[node name="SharpRain1" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.087704, 4.16, 10.430897)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"rain_loop_sharp"
+music_player = NodePath("../../AmbientMusic")
+metadata/_custom_type_script = "uid://btaa0qsiyl7bi"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/SharpRain1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.061279297, 1.2865448, 0.026733398)
+shape = SubResource("BoxShape3D_c807w")
+
+[node name="Quake2" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.803326, 8.884044, -7.1931634)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"quake"
+music_player = NodePath("../../AmbientMusic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Quake2"]
+shape = SubResource("BoxShape3D_7ru5d")
+
+[node name="Quake3" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.07691, 9.119918, -15.106332)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"quake"
+music_player = NodePath("../../AmbientMusic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Quake3"]
+shape = SubResource("BoxShape3D_1q57w")
+
+[node name="Creature1" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.299286, 5.9122486, -71.44052)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"creature"
+music_player = NodePath("../../AmbientMusic")
+metadata/_custom_type_script = "uid://btaa0qsiyl7bi"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Creature1"]
+shape = SubResource("BoxShape3D_n8bub")
 
 [node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("175_m7gha")

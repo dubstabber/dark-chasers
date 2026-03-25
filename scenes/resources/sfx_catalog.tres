@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SfxCatalog" load_steps=43 format=3 uid="uid://bs0u2fasm6swc"]
+[gd_resource type="Resource" script_class="SfxCatalog" load_steps=45 format=3 uid="uid://bs0u2fasm6swc"]
 
 [ext_resource type="Script" uid="uid://djt7h22midtr" path="res://scenes/resources/sfx_catalog.gd" id="1_script"]
 [ext_resource type="AudioStream" uid="uid://cr01r71nniqq2" path="res://sounds/sfx/DSKEYPIC.wav" id="2_key_collected"]
@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://d1fq0ly6q7blw" path="res://sounds/sfx/weather/THUNDER7.mp3" id="20_thunder_7"]
 [ext_resource type="AudioStream" uid="uid://px8bxx2q5stp" path="res://sounds/sfx/weather/AMBRAIN.ogg" id="21_rain_loop_sharp"]
 [ext_resource type="AudioStream" uid="uid://gbhblbuogiof" path="res://sounds/sfx/weather/QUAKE.ogg" id="22_dwk8j"]
+[ext_resource type="AudioStream" uid="uid://duji85igw0ocm" path="res://sounds/sfx/CREATURE.ogg" id="23_ht6fe"]
 
 [sub_resource type="Resource" id="Resource_key_collected"]
 script = ExtResource("12_entry_script")
@@ -124,6 +125,12 @@ id = &"quake"
 stream = ExtResource("22_dwk8j")
 metadata/_custom_type_script = "uid://b768qhylfb1ax"
 
+[sub_resource type="Resource" id="Resource_sakuq"]
+script = ExtResource("12_entry_script")
+id = &"creature"
+stream = ExtResource("23_ht6fe")
+metadata/_custom_type_script = "uid://b768qhylfb1ax"
+
 [resource]
 script = ExtResource("1_script")
-sounds = Array[ExtResource("12_entry_script")]([SubResource("Resource_key_collected"), SubResource("Resource_water_splash"), SubResource("Resource_kill_player"), SubResource("Resource_event_trigger"), SubResource("Resource_spawn"), SubResource("Resource_bar_shake"), SubResource("Resource_wall_cut"), SubResource("Resource_creep_ambience"), SubResource("Resource_ao_see"), SubResource("Resource_d_running"), SubResource("Resource_rain_loop"), SubResource("Resource_thunder_1"), SubResource("Resource_thunder_2"), SubResource("Resource_thunder_3"), SubResource("Resource_thunder_4"), SubResource("Resource_thunder_5"), SubResource("Resource_thunder_6"), SubResource("Resource_thunder_7"), SubResource("Resource_rain_loop_sharp"), SubResource("Resource_ht6fe")])
+sounds = Array[ExtResource("12_entry_script")]([SubResource("Resource_key_collected"), SubResource("Resource_water_splash"), SubResource("Resource_kill_player"), SubResource("Resource_event_trigger"), SubResource("Resource_spawn"), SubResource("Resource_bar_shake"), SubResource("Resource_wall_cut"), SubResource("Resource_creep_ambience"), SubResource("Resource_ao_see"), SubResource("Resource_d_running"), SubResource("Resource_rain_loop"), SubResource("Resource_thunder_1"), SubResource("Resource_thunder_2"), SubResource("Resource_thunder_3"), SubResource("Resource_thunder_4"), SubResource("Resource_thunder_5"), SubResource("Resource_thunder_6"), SubResource("Resource_thunder_7"), SubResource("Resource_rain_loop_sharp"), SubResource("Resource_ht6fe"), SubResource("Resource_sakuq")])

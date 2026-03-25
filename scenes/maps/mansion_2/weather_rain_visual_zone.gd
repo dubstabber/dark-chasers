@@ -42,10 +42,6 @@ func get_rain_visibility_mode_name() -> StringName:
 			return &"visible"
 
 
-func get_particles_center() -> Vector3:
-	return _get_node_world_transform(self).origin
-
-
 func _get_primary_collision_shape() -> CollisionShape3D:
 	for child in get_children():
 		if child is CollisionShape3D:

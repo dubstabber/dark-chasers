@@ -1,0 +1,10 @@
+[gd_resource type="BoxMesh" load_steps=2 format=3 uid="uid://c2n0mjlitlken"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ao_rain"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.92941177, 0.9607843, 1, 1)
+
+[resource]
+material = SubResource("StandardMaterial3D_ao_rain")
+size = Vector3(0.009, 0.46, 0.009)

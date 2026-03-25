@@ -6,7 +6,6 @@ const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
 
 @export var weather_zones_root_path: NodePath = NodePath("WeatherZones")
 @export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
-@export var rain_particles_path: NodePath = NodePath("RainParticles")
 @export var rain_audio_path: NodePath = NodePath("RainAudio")
 @export var thunder_audio_path: NodePath = NodePath("ThunderAudio")
 @export var rain_zones_root_path: NodePath = NodePath("RainZones")
@@ -51,7 +50,6 @@ const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
 @export var use_rain_zones := true
 @export_range(2.0, 120.0, 0.5) var rain_zone_radius := 36.0
 @export_range(1.0, 80.0, 0.5) var rain_zone_inner_radius := 16.0
-@export_range(1.0, 60.0, 0.5) var rain_zone_particles_height_offset := 20.0
 @export_range(-80.0, 0.0, 0.1) var rain_loud_volume_db := -12.0
 @export_range(-80.0, 0.0, 0.1) var rain_low_volume_db := -24.0
 @export_range(-80.0, 0.0, 0.1) var rain_none_volume_db := -60.0
@@ -123,7 +121,6 @@ func _bind_nodes() -> void:
 	_environment = world_environment.environment if world_environment else null
 
 	_weather_zones_root = get_node_or_null(weather_zones_root_path) as Node3D
-	_rain_particles = get_node_or_null(rain_particles_path) as GPUParticles3D
 	_rain_audio = get_node_or_null(rain_audio_path) as AudioStreamPlayer
 	_thunder_audio = get_node_or_null(thunder_audio_path) as AudioStreamPlayer
 	_rain_zones_root = get_node_or_null(rain_zones_root_path) as Node3D
@@ -188,8 +185,6 @@ func stop_weather() -> void:
 	_weather_active = false
 	_decay_ticks_left = 0
 	_restore_environment()
-	if _rain_particles:
-		_rain_particles.emitting = false
 	if _rain_audio:
 		_rain_audio.stop()
 	_current_rain_sound_id = &""
@@ -215,14 +210,6 @@ func _update_rain_visibility() -> void:
 	var zone_eval := _evaluate_rain_zone()
 	var visual_eval: Dictionary = _evaluate_rain_visual_state(zone_eval)
 	_current_rain_visual_mode = visual_eval["mode"] as StringName
-	var should_emit := bool(visual_eval["visible"])
-	if _rain_particles:
-		_rain_particles.emitting = should_emit
-
-	if should_emit:
-		if _rain_particles:
-			var particle_center := visual_eval["center"] as Vector3
-			_rain_particles.global_position = particle_center + Vector3(0.0, rain_zone_particles_height_offset, 0.0)
 
 	if _rain_audio:
 		var audio_eval: Dictionary = _evaluate_rain_audio_state(zone_eval)
@@ -319,14 +306,19 @@ func _evaluate_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dict
 				return {
 					"has_zone": true,
 					"visible": bool(active_zone.call("shows_visible_rain")),
-					"center": active_zone.call("get_particles_center"),
+					"center": listener_position,
 					"mode": active_zone.call("get_rain_visibility_mode_name"),
 				}
 		if not use_legacy_rain_visual_fallback_when_no_zone:
 			var fallback_center := Vector3.ZERO
 			if listener_position_value != null:
 				fallback_center = listener_position_value as Vector3
-			return {"has_zone": false, "visible": false, "center": fallback_center, "mode": &"hidden"}
+			return {
+				"has_zone": false,
+				"visible": false,
+				"center": fallback_center,
+				"mode": &"hidden",
+			}
 	return _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval)
 
 func _evaluate_legacy_rain_visual_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
@@ -348,8 +340,8 @@ func _evaluate_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dicti
 			if active_zone != null:
 				var tier_name := active_zone.call("get_rain_audio_tier_name") as StringName
 				return _make_rain_audio_state_from_tier(tier_name, true)
-		if not use_legacy_rain_audio_fallback_when_no_zone:
-			return _make_rain_audio_state_from_tier(&"rain_none", false)
+	if not use_legacy_rain_audio_fallback_when_no_zone:
+		return _make_rain_audio_state_from_tier(&"rain_none", false)
 	return _evaluate_legacy_rain_audio_state(legacy_rain_zone_eval)
 
 func _evaluate_legacy_rain_audio_state(legacy_rain_zone_eval: Dictionary = {}) -> Dictionary:
@@ -558,3 +550,12 @@ func debug_evaluate_rain_visual_state() -> Dictionary:
 
 func debug_evaluate_rain_audio_state() -> Dictionary:
 	return _evaluate_rain_audio_state()
+
+func debug_get_rain_particles_state() -> Dictionary:
+	if _rain_particles == null:
+		return {}
+	return {
+		"amount": _rain_particles.amount,
+		"position": _get_node_world_position(_rain_particles),
+		"visibility_aabb": _rain_particles.visibility_aabb,
+	}

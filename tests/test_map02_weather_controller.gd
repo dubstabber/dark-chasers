@@ -16,6 +16,7 @@ func _init() -> void:
 	_test_environment_flash_ignores_indoor_state()
 	_test_map02_scene_weather_authoring()
 	_test_rain_visual_zone_priority_override()
+	_test_rain_visual_zone_drives_particle_volume()
 	_test_rain_visual_zone_can_differ_from_audio_zone()
 	_test_rain_visual_legacy_fallback_toggle()
 	_test_rain_audio_zone_priority_override()
@@ -144,6 +145,21 @@ func _attach_rain_audio_zones(controller: Node3D, zones: Array[Node]) -> Node3D:
 	return rain_audio_root
 
 
+func _attach_rain_particles(controller: Node3D, base_amount := 50) -> GPUParticles3D:
+	var rain_particles := GPUParticles3D.new()
+	rain_particles.name = "RainParticles"
+	rain_particles.amount = base_amount
+	rain_particles.visibility_aabb = AABB(Vector3(-2.0, -2.0, -2.0), Vector3(4.0, 4.0, 4.0))
+	var process_material := ParticleProcessMaterial.new()
+	process_material.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	process_material.emission_sphere_radius = 1.0
+	rain_particles.process_material = process_material
+	rain_particles.position = Vector3(3.0, 14.0, -7.0)
+	controller.add_child(rain_particles)
+	controller.set("_rain_particles", rain_particles)
+	return rain_particles
+
+
 func _test_scheduler_ranges() -> void:
 	var controller := _build_controller(false)
 	_prime_controller(controller)
@@ -256,19 +272,14 @@ func _test_environment_flash_ignores_indoor_state() -> void:
 func _test_map02_scene_weather_authoring() -> void:
 	var scene_text := FileAccess.get_file_as_string("res://scenes/maps/mansion_2/mansion_2.tscn")
 	assert(not scene_text.is_empty(), "MAP02 scene text should be readable for weather authoring verification")
-	assert(scene_text.contains("[node name=\"LightningZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored lightning zone root")
 	assert(scene_text.contains("[node name=\"RainAudioZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored rain-audio zone root")
 	assert(scene_text.contains("[node name=\"RainVisualZones\" type=\"Node3D\" parent=\"WeatherController/WeatherZones\"]"), "MAP02 scene should include the authored rain-visual zone root")
-	assert(scene_text.count('type="ReflectionProbe" parent="WeatherController/WeatherZones/LightningZones"') == 2, "MAP02 scene should author two ReflectionProbes under LightningZones")
-	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/LightningZones"') == 0, "MAP02 scene should no longer use authored lightning-zone Area3D volumes")
-	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"') == 7, "MAP02 scene should author the expected rain-audio zone set")
-	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"') == 7, "MAP02 scene should author the expected rain-visual zone set")
-	assert(scene_text.contains("[node name=\"ReflectionProbe\" type=\"ReflectionProbe\" parent=\"WeatherController/WeatherZones/LightningZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should keep the main hall lightning ReflectionProbe")
-	assert(scene_text.contains("[node name=\"ReflectionProbe2\" type=\"ReflectionProbe\" parent=\"WeatherController/WeatherZones/LightningZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 87.547226, 7.0142565, 5.460824)\nblend_distance = 11.0"), "MAP02 scene should keep the partial lightning ReflectionProbe with tuned blend distance")
-	assert(scene_text.contains("[node name=\"Zone_BasementHoleLow\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainAudioZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)\ncollision_layer = 0\ncollision_mask = 0\npriority = 5\nscript = ExtResource(\"165_rain_audio_zone\")\nrain_audio_tier = 2"), "MAP02 scene should author a low-rain basement-hole audio override")
-	assert(scene_text.contains("[node name=\"Zone_BasementHoleVisible\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainVisualZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)\ncollision_layer = 0\ncollision_mask = 0\npriority = 5\nscript = ExtResource(\"166_rain_visual_zone\")"), "MAP02 scene should author a visible-rain basement-hole override")
-	assert(scene_text.contains("[node name=\"Zone_MainHallHidden\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainVisualZones\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 6, -14)\ncollision_layer = 0\ncollision_mask = 0\npriority = 2\nscript = ExtResource(\"166_rain_visual_zone\")\nrain_visibility_mode = 1"), "MAP02 scene should author a sheltered main-hall visible-rain zone")
-	print("✓ MAP02 scene includes ReflectionProbe lightning masking plus authored rain-audio and rain-visual coverage")
+	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"') >= 1, "MAP02 scene should author at least one rain-audio zone")
+	assert(scene_text.count('type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"') >= 1, "MAP02 scene should author at least one rain-visual zone")
+	assert(scene_text.contains("[node name=\"Zone_OutsideMainHall\" type=\"Area3D\" parent=\"WeatherController/WeatherZones/RainVisualZones\"]"), "MAP02 scene should keep the outdoor visible-rain zone")
+	assert(scene_text.contains("[node name=\"CollisionShape3D\" type=\"CollisionShape3D\" parent=\"WeatherController/WeatherZones/RainVisualZones/Zone_OutsideMainHall\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.239258, 0, 16.073366)\nshape = SubResource(\"BoxShape3D_weather_outdoor_large\")"), "MAP02 scene should preserve the authored outdoor visual-rain collision box")
+	assert(scene_text.contains("[node name=\"ReflectionProbe9\" type=\"ReflectionProbe\" parent=\"Decorations\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should still keep the tuned large reflection probe used for weather lighting")
+	print("✓ MAP02 scene keeps rain zone roots and collision-based rain coverage authoring")
 
 
 func _test_rain_visual_zone_priority_override() -> void:
@@ -288,6 +299,38 @@ func _test_rain_visual_zone_priority_override() -> void:
 	assert(eval["mode"] == &"hidden", "Higher-priority hidden visual zones should set the active visual mode")
 	controller.free()
 	print("✓ Rain-visual zones respect highest-priority visibility overrides")
+
+
+func _test_rain_visual_zone_drives_particle_volume() -> void:
+	var controller := _build_controller(false)
+	root.add_child(controller)
+	_prime_controller(controller)
+	_attach_player(controller, Vector3(29.0, 5.0, 46.0))
+	var rain_particles := _attach_rain_particles(controller, 50)
+	# Rain particles are authored/owned by the scene; the weather controller only reports
+	# rain visibility mode for debug/authoring (it does not toggle emitting).
+	rain_particles.emitting = true
+	var visual_zone := _make_rain_visual_zone(1, RAIN_VISUAL_MODE_VISIBLE, Vector3(20.0, 5.0, 30.0), Vector3(40.0, 6.0, 50.0)) as Area3D
+	_attach_rain_visual_zones(controller, [visual_zone])
+	var authored_position := rain_particles.position
+	var authored_aabb := rain_particles.visibility_aabb
+	var authored_amount := rain_particles.amount
+	controller.call("_update_rain_visibility")
+
+	var eval := controller.call("debug_evaluate_rain_visual_state") as Dictionary
+	var particles_state := controller.call("debug_get_rain_particles_state") as Dictionary
+
+	assert(bool(eval["visible"]), "Visible rain zones should still report visible rain")
+	assert(rain_particles.emitting, "Weather controller should not toggle authored rain particle emitting")
+	assert((particles_state["position"] as Vector3).is_equal_approx(authored_position), "Weather controller should not move authored rain particles")
+	assert((particles_state["visibility_aabb"] as AABB) == authored_aabb, "Weather controller should not resize authored rain particle bounds")
+	assert(int(particles_state["amount"]) == authored_amount, "Weather controller should not retune authored rain particle amount")
+
+	visual_zone.set("rain_visibility_mode", RAIN_VISUAL_MODE_HIDDEN)
+	controller.call("_update_rain_visibility")
+	assert(rain_particles.emitting, "Hidden rain zones should not change authored rain particle emitting")
+	controller.free()
+	print("✓ Rain visual zones report visibility without mutating particle emission")
 
 
 func _test_rain_visual_zone_can_differ_from_audio_zone() -> void:

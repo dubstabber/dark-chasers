@@ -9056,6 +9056,8 @@ visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
 process_material = SubResource("ParticleProcessMaterial_m7gha")
 draw_pass_1 = ExtResource("173_m7gha")
 
-[node name="RainAudio" type="AudioStreamPlayer" parent="WeatherController"]
-
 [node name="ThunderAudio" type="AudioStreamPlayer" parent="WeatherController"]
+
+[node name="MusicChangeAreas" type="Node3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="MusicChangeAreas"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=793 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=784 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -171,8 +171,6 @@
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="151_j5g58"]
 [ext_resource type="PackedScene" uid="uid://nxkfxv0h1ev7" path="res://scenes/objects/ao_moving_wall_17.tscn" id="162_tgv7v"]
 [ext_resource type="Script" uid="uid://b8lhfitvvo2ld" path="res://scenes/maps/mansion_2/mansion_2_weather_controller.gd" id="163_weather"]
-[ext_resource type="Script" uid="uid://cdxp4mutc8k8w" path="res://scenes/maps/mansion_2/weather_rain_audio_zone.gd" id="165_rain_audio_zone"]
-[ext_resource type="Script" uid="uid://d2wnukitng2w6" path="res://scenes/maps/mansion_2/weather_rain_visual_zone.gd" id="166_rain_visual_zone"]
 [ext_resource type="Material" uid="uid://c7beg6p521a7" path="res://scenes/particles/ao_rain_material.tres" id="172_xjcub"]
 [ext_resource type="BoxMesh" uid="uid://c2n0mjlitlken" path="res://scenes/particles/ao_rain_particle.tres" id="173_m7gha"]
 
@@ -6019,27 +6017,6 @@ gravity = Vector3(0, -110, 0)
 scale_min = 0.16
 scale_max = 0.24
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_outdoor_large"]
-size = Vector3(101.521484, 18, 41.116943)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_outdoor_entry"]
-size = Vector3(42, 12, 28)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_main_hall_partial"]
-size = Vector3(48, 12, 52)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_library_partial"]
-size = Vector3(36, 10, 28)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_basement_large"]
-size = Vector3(16.69635, 7.0024414, 13.6311035)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_second_basement"]
-size = Vector3(16.787598, 20, 60)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_weather_basement_hole"]
-size = Vector3(1.6280518, 6.0532227, 1.652771)
-
 [node name="mansion2" type="Node3D"]
 script = ExtResource("1_ophgb")
 metadata/_edit_lock_ = true
@@ -9066,186 +9043,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.313774, 7.820366, 13.23682
 cast_shadow = 0
 amount = 1750
 lifetime = 0.8
-visibility_aabb = AABB(-24, -28, -24, 48, 56, 48)
+visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
 process_material = ExtResource("172_xjcub")
 draw_pass_1 = ExtResource("173_m7gha")
 
 [node name="RainParticles2" type="GPUParticles3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.55735, 9.284739, 1.9202442)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.756706, 7.6200485, 1.9202442)
 cast_shadow = 0
 amount = 760
 lifetime = 0.8
-visibility_aabb = AABB(-24, -28, -24, 48, 56, 48)
+visibility_aabb = AABB(-70, -100, -30, 140, 200, 60)
 process_material = SubResource("ParticleProcessMaterial_m7gha")
 draw_pass_1 = ExtResource("173_m7gha")
-
-[node name="Zone_OutsideMainHall" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.0932, 6.0799994, 15.011557)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("166_rain_visual_zone")
-debug_label = "Outside main hall"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_OutsideMainHall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.239258, 0, 16.073366)
-shape = SubResource("BoxShape3D_weather_outdoor_large")
-
-[node name="Zone_OutsideEntry" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.21771, 6.2399993, -22.718115)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("166_rain_visual_zone")
-debug_label = "Outside entry"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_OutsideEntry"]
-shape = SubResource("BoxShape3D_weather_outdoor_entry")
-
-[node name="Zone_MainHallHidden" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 6, -14)
-collision_layer = 0
-collision_mask = 0
-priority = 2
-script = ExtResource("166_rain_visual_zone")
-rain_visibility_mode = 1
-debug_label = "Main hall hidden"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_MainHallHidden"]
-shape = SubResource("BoxShape3D_weather_main_hall_partial")
-
-[node name="Zone_LongLibraryHidden" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.05104, 6.56, -48.59695)
-collision_layer = 0
-collision_mask = 0
-priority = 2
-script = ExtResource("166_rain_visual_zone")
-rain_visibility_mode = 1
-debug_label = "Long library hidden"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_LongLibraryHidden"]
-shape = SubResource("BoxShape3D_weather_library_partial")
-
-[node name="Zone_FirstBasementHidden" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.071114, 5.6000013, -4.902657)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("166_rain_visual_zone")
-rain_visibility_mode = 1
-debug_label = "First basement hidden"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_FirstBasementHidden"]
-shape = SubResource("BoxShape3D_weather_basement_large")
-
-[node name="Zone_SecondBasementHidden" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.97635, -2.1967, 0.80020666)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("166_rain_visual_zone")
-rain_visibility_mode = 1
-debug_label = "Second basement hidden"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_SecondBasementHidden"]
-shape = SubResource("BoxShape3D_weather_second_basement")
-
-[node name="Zone_BasementHoleVisible" type="Area3D" parent="WeatherController/WeatherZones/RainVisualZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)
-collision_layer = 0
-collision_mask = 0
-priority = 5
-script = ExtResource("166_rain_visual_zone")
-debug_label = "Basement hole visible"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainVisualZones/Zone_BasementHoleVisible"]
-shape = SubResource("BoxShape3D_weather_basement_hole")
-
-[node name="RainAudioZones" type="Node3D" parent="WeatherController/WeatherZones"]
-visible = false
-
-[node name="Zone_OutsideMainHall" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.665405, 6.0799994, 15.011557)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 0
-debug_label = "Outside main hall"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_OutsideMainHall"]
-shape = SubResource("BoxShape3D_weather_outdoor_large")
-
-[node name="Zone_OutsideEntry" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -105.21771, 6.2399993, -22.718115)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 0
-debug_label = "Outside entry"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_OutsideEntry"]
-shape = SubResource("BoxShape3D_weather_outdoor_entry")
-
-[node name="Zone_MainHallMedium" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 6, -14)
-collision_layer = 0
-collision_mask = 0
-priority = 2
-script = ExtResource("165_rain_audio_zone")
-debug_label = "Main hall medium"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_MainHallMedium"]
-shape = SubResource("BoxShape3D_weather_main_hall_partial")
-
-[node name="Zone_LongLibraryLow" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.05104, 6.56, -48.59695)
-collision_layer = 0
-collision_mask = 0
-priority = 2
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 2
-debug_label = "Long library low"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_LongLibraryLow"]
-shape = SubResource("BoxShape3D_weather_library_partial")
-
-[node name="Zone_FirstBasementNone" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.071114, 5.6000013, -4.902657)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 3
-debug_label = "First basement none"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_FirstBasementNone"]
-shape = SubResource("BoxShape3D_weather_basement_large")
-
-[node name="Zone_SecondBasementNone" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.97635, -2.1967, 0.80020666)
-collision_layer = 0
-collision_mask = 0
-priority = 1
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 3
-debug_label = "Second basement none"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_SecondBasementNone"]
-shape = SubResource("BoxShape3D_weather_second_basement")
-
-[node name="Zone_BasementHoleLow" type="Area3D" parent="WeatherController/WeatherZones/RainAudioZones"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.15332, 6.92608, -1.7114701)
-collision_layer = 0
-collision_mask = 0
-priority = 5
-script = ExtResource("165_rain_audio_zone")
-rain_audio_tier = 2
-debug_label = "Basement hole low"
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WeatherController/WeatherZones/RainAudioZones/Zone_BasementHoleLow"]
-shape = SubResource("BoxShape3D_weather_basement_hole")
 
 [node name="RainAudio" type="AudioStreamPlayer" parent="WeatherController"]
 

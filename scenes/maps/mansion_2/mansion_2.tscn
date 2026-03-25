@@ -1,4 +1,4 @@
-[gd_scene load_steps=793 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=794 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -6038,7 +6038,10 @@ size = Vector3(1.97229, 2.4891968, 0.21566772)
 size = Vector3(1.251564, 0.21788025, 1.1210585)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_n8bub"]
-size = Vector3(1.7078857, 2.5220947, 1)
+size = Vector3(1.7790833, 2.5220947, 1.3953857)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dkv1e"]
+size = Vector3(2.4486942, 2.545681, 1.3735307)
 
 [node name="mansion2" type="Node3D"]
 script = ExtResource("1_ophgb")
@@ -9147,15 +9150,26 @@ music_player = NodePath("../../AmbientMusic")
 shape = SubResource("BoxShape3D_1q57w")
 
 [node name="Creature1" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.299286, 5.9122486, -71.44052)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.299286, 5.9122486, -71.36207)
 collision_layer = 0
 script = ExtResource("174_xjcub")
 sound_id = &"creature"
 music_player = NodePath("../../AmbientMusic")
+volume_db = -10.0
 metadata/_custom_type_script = "uid://btaa0qsiyl7bi"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Creature1"]
 shape = SubResource("BoxShape3D_n8bub")
+
+[node name="Quake4" type="Area3D" parent="MusicChangeAreas" node_paths=PackedStringArray("music_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.07691, 6.872842, -5.887294)
+collision_layer = 0
+script = ExtResource("174_xjcub")
+sound_id = &"quake"
+music_player = NodePath("../../AmbientMusic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MusicChangeAreas/Quake4"]
+shape = SubResource("BoxShape3D_dkv1e")
 
 [node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("175_m7gha")

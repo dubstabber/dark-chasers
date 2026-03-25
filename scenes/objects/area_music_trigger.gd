@@ -30,6 +30,12 @@ func _on_body_entered(body: Node) -> void:
 		push_warning("AreaMusicTrigger: sound id '%s' was not found in SfxCatalog" % String(sound_id))
 		return
 
+	# Avoid restarting from the beginning if this track is already playing on the target player.
+	if music_player.stream == sound and music_player.playing:
+		if trigger_once:
+			_triggered = true
+		return
+
 	_triggered = true
 	music_player.stream = sound
 	music_player.volume_db = volume_db

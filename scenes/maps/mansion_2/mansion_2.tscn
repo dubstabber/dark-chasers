@@ -9053,8 +9053,6 @@ volume_db = -5.0
 [node name="WeatherController" type="Node3D" parent="."]
 script = ExtResource("163_weather")
 
-[node name="ThunderAudio" type="AudioStreamPlayer" parent="WeatherController"]
-
 [node name="MusicChangeAreas" type="Node3D" parent="."]
 
 [node name="Area3D" type="Area3D" parent="MusicChangeAreas"]

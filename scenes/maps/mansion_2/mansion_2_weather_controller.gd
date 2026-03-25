@@ -3,26 +3,24 @@ extends Node3D
 
 const TIC_RATE := 35.0
 const QUICK_FOLLOWUP_CHANCE := 50.0 / 256.0
+const LIGHTNING_FIRST_DELAY_MIN_SECONDS := 5.0
+const LIGHTNING_FIRST_DELAY_MAX_SECONDS := 20.0
+const LIGHTNING_SHORT_DELAY_MIN_SECONDS := 2.0
+const LIGHTNING_SHORT_DELAY_MAX_SECONDS := 9.0
+const LIGHTNING_QUICK_DELAY_MIN_TICS := 16
+const LIGHTNING_QUICK_DELAY_MAX_TICS := 31
 
 @export var world_environment_path: NodePath = NodePath("../NavigationRegion3D/WorldEnvironment")
-@export var thunder_audio_path: NodePath = NodePath("ThunderAudio")
 @export var start_enabled := true
 
 @export_group("Scheduler")
-@export_range(5.0, 40.0, 0.1) var long_flash_min_seconds := 5.0
-@export_range(5.0, 45.0, 0.1) var long_flash_max_seconds := 20.0
-@export_range(1.0, 15.0, 0.1) var short_flash_min_seconds := 2.0
-@export_range(1.0, 20.0, 0.1) var short_flash_max_seconds := 9.0
-@export_range(0.2, 2.0, 0.05) var quick_followup_min_seconds := 16.0 / TIC_RATE
-@export_range(0.2, 2.5, 0.05) var quick_followup_max_seconds := 31.0 / TIC_RATE
-@export_range(0.0, 1.0, 0.01) var quick_followup_chance := QUICK_FOLLOWUP_CHANCE
-@export_range(0.0, 1.0, 0.01) var short_interval_chance := 0.28
+@export var use_engine_lightning_schedule := true
 
 @export_group("Flash")
 @export_range(0.0, 2.0, 0.01) var flash_background_boost := 0.48
 @export_range(0.0, 2.0, 0.01) var flash_ambient_boost := 0.4
 @export_range(4, 24, 1) var flash_decay_steps := 12
-@export_range(0.01, 0.2, 0.01) var flash_decay_step_seconds := 0.045
+@export_range(0.01, 0.2, 0.01) var flash_decay_step_seconds := 1.0 / TIC_RATE
 @export_range(0.0, 1.0, 0.01) var indoor_flash_factor := 0.5
 @export_range(0.0, 1.0, 0.01) var full_flash_multiplier := 1.0
 @export_range(-24.0, 0.0, 0.1) var thunder_base_volume_db := -7.0
@@ -51,13 +49,14 @@ var _environment: Environment
 var _base_background_energy := 0.0
 var _base_ambient_energy := 0.0
 
-var _thunder_audio: AudioStreamPlayer
 var _player: Node3D
 var _weather_active := false
 var _current_flash_background_boost := 0.0
 var _current_flash_ambient_boost := 0.0
 var _flash_decay_total_steps := 0
 var _current_lightning_tier: StringName = &""
+var _weather_tick_accumulator := 0.0
+var _weather_tick_counter := 0
 
 func _ready() -> void:
 	_rng.randomize()
@@ -69,6 +68,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not _weather_active:
 		return
+	_accumulate_weather_ticks(delta)
 	if check_player_indoor_state:
 		_refresh_indoor_state()
 
@@ -91,7 +91,6 @@ func _bind_nodes() -> void:
 	var world_environment := get_node_or_null(world_environment_path) as WorldEnvironment
 	_environment = world_environment.environment if world_environment else null
 
-	_thunder_audio = get_node_or_null(thunder_audio_path) as AudioStreamPlayer
 	_player = _resolve_player_from_world_context()
 
 func _cache_environment_state() -> void:
@@ -104,6 +103,8 @@ func start_weather() -> void:
 	if _weather_active:
 		return
 	_weather_active = true
+	_weather_tick_accumulator = 0.0
+	_weather_tick_counter = 0
 	_schedule_next_flash(false)
 
 func stop_weather() -> void:
@@ -163,18 +164,26 @@ func _restore_environment_levels() -> void:
 	_environment.ambient_light_energy = _base_ambient_energy
 
 func _schedule_next_flash(previous_flash_happened: bool) -> void:
-	if previous_flash_happened and _rng.randf() < quick_followup_chance:
-		_next_flash_in_seconds = _rng.randf_range(quick_followup_min_seconds, quick_followup_max_seconds)
+	if use_engine_lightning_schedule:
+		_schedule_next_flash_engine(previous_flash_happened)
+		return
+	_schedule_next_flash_engine(previous_flash_happened)
+
+func _schedule_next_flash_engine(previous_flash_happened: bool) -> void:
+	if not previous_flash_happened:
+		_next_flash_in_seconds = float(_rng.randi_range(int(LIGHTNING_FIRST_DELAY_MIN_SECONDS), int(LIGHTNING_FIRST_DELAY_MAX_SECONDS)))
 		return
 
-	if _rng.randf() < short_interval_chance:
-		_next_flash_in_seconds = _rng.randf_range(short_flash_min_seconds, short_flash_max_seconds)
+	if _rng.randi_range(0, 255) < int(QUICK_FOLLOWUP_CHANCE * 256.0):
+		_next_flash_in_seconds = float(_rng.randi_range(LIGHTNING_QUICK_DELAY_MIN_TICS, LIGHTNING_QUICK_DELAY_MAX_TICS)) / TIC_RATE
+		return
+
+	if _rng.randi_range(0, 255) < 128 and (_weather_tick_counter & 32) == 0:
+		_next_flash_in_seconds = float(_rng.randi_range(int(LIGHTNING_SHORT_DELAY_MIN_SECONDS), int(LIGHTNING_SHORT_DELAY_MAX_SECONDS)))
 	else:
-		_next_flash_in_seconds = _rng.randf_range(long_flash_min_seconds, long_flash_max_seconds)
+		_next_flash_in_seconds = float(_rng.randi_range(int(LIGHTNING_FIRST_DELAY_MIN_SECONDS), int(LIGHTNING_FIRST_DELAY_MAX_SECONDS)))
 
 func _play_thunder() -> void:
-	if _thunder_audio == null:
-		return
 	if thunder_sound_ids.is_empty():
 		return
 
@@ -186,10 +195,26 @@ func _play_thunder() -> void:
 	if thunder_stream == null:
 		return
 
-	_thunder_audio.stream = thunder_stream
-	_thunder_audio.volume_db = thunder_base_volume_db + _rng.randf_range(0.0, thunder_volume_random_db)
-	_thunder_audio.pitch_scale = _rng.randf_range(thunder_pitch_min, thunder_pitch_max)
-	_thunder_audio.play()
+	_play_thunder_stream(thunder_stream)
+
+func _play_thunder_stream(thunder_stream: AudioStream) -> void:
+	var thunder_player := AudioStreamPlayer.new()
+	thunder_player.stream = thunder_stream
+	thunder_player.volume_db = thunder_base_volume_db + _rng.randf_range(0.0, thunder_volume_random_db)
+	thunder_player.pitch_scale = _rng.randf_range(thunder_pitch_min, thunder_pitch_max)
+	add_child(thunder_player)
+	thunder_player.finished.connect(thunder_player.queue_free)
+	if thunder_player.is_inside_tree():
+		thunder_player.play()
+	else:
+		thunder_player.call_deferred("play")
+
+func _accumulate_weather_ticks(delta: float) -> void:
+	_weather_tick_accumulator += delta
+	var tic_duration := 1.0 / TIC_RATE
+	while _weather_tick_accumulator >= tic_duration:
+		_weather_tick_accumulator -= tic_duration
+		_weather_tick_counter += 1
 
 func _get_sound_from_catalog(sound_id: StringName) -> AudioStream:
 	if sound_id == &"":

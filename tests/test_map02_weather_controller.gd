@@ -7,6 +7,7 @@ func _init() -> void:
 	_test_flash_lifecycle_restores_environment()
 	_test_indoor_lightning_fallback_attenuates_environment_flash()
 	_test_environment_flash_ignores_indoor_state()
+	_test_thunder_players_are_ephemeral()
 	_test_map02_scene_weather_authoring()
 	print("=== MAP02 WEATHER CONTROLLER TESTS COMPLETED ===")
 	quit(0)
@@ -25,7 +26,6 @@ func _build_controller(start_enabled := false) -> Node3D:
 	controller.set("check_player_indoor_state", false)
 	controller.set("thunder_sound_ids", Array([], TYPE_STRING_NAME, "", null))
 	controller.set("_environment", environment)
-	controller.set("_thunder_audio", null)
 	controller.set("_base_background_energy", environment.background_energy_multiplier)
 	controller.set("_base_ambient_energy", environment.ambient_light_energy)
 	return controller
@@ -45,7 +45,7 @@ func _test_scheduler_ranges() -> void:
 	for _i in range(50):
 		controller.call("_schedule_next_flash", false)
 		var next_flash := float(controller.call("debug_get_next_flash_seconds"))
-		assert(next_flash >= 2.0 and next_flash <= 20.0, "Normal next flash must be in [2.0, 20.0] seconds")
+		assert(next_flash >= 5.0 and next_flash <= 20.0, "Initial next flash must be in [5.0, 20.0] seconds")
 
 	for _j in range(50):
 		controller.call("_schedule_next_flash", true)
@@ -145,10 +145,33 @@ func _test_environment_flash_ignores_indoor_state() -> void:
 	print("✓ Environment flash fires at full strength regardless of indoor state")
 
 
+func _test_thunder_players_are_ephemeral() -> void:
+	var controller := _build_controller(false)
+	_prime_controller(controller)
+	get_root().add_child(controller)
+	var thunder_stream := AudioStreamWAV.new()
+
+	controller.call("_play_thunder_stream", thunder_stream)
+	controller.call("_play_thunder_stream", thunder_stream)
+
+	var thunder_players: Array[AudioStreamPlayer] = []
+	for child in controller.get_children():
+		if child is AudioStreamPlayer:
+			thunder_players.append(child as AudioStreamPlayer)
+
+	assert(thunder_players.size() == 2, "Each thunder playback should create its own AudioStreamPlayer child")
+	for thunder_player in thunder_players:
+		thunder_player.emit_signal("finished")
+		assert(thunder_player.is_queued_for_deletion(), "Finished thunder players should queue_free themselves")
+
+	controller.free()
+	print("✓ Thunder players are spawned per strike and auto-cleaned")
+
+
 func _test_map02_scene_weather_authoring() -> void:
 	var scene_text := FileAccess.get_file_as_string("res://scenes/maps/mansion_2/mansion_2.tscn")
 	assert(not scene_text.is_empty(), "MAP02 scene text should be readable for weather authoring verification")
 	assert(scene_text.contains("[node name=\"WeatherController\" type=\"Node3D\" parent=\".\"]"), "MAP02 scene should include WeatherController root")
-	assert(scene_text.contains("parent=\"WeatherController\"") and scene_text.contains("ThunderAudio"), "MAP02 scene should include ThunderAudio under WeatherController")
+	assert(not scene_text.contains("[node name=\"ThunderAudio\" type=\"AudioStreamPlayer\" parent=\"WeatherController\"]"), "MAP02 scene should not include shared ThunderAudio under WeatherController")
 	assert(scene_text.contains("[node name=\"ReflectionProbe9\" type=\"ReflectionProbe\" parent=\"Decorations\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should still keep the tuned large reflection probe used for weather lighting")
-	print("✓ MAP02 scene keeps lightning/thunder controller authoring")
+	print("✓ MAP02 scene keeps weather controller authoring without shared thunder node")

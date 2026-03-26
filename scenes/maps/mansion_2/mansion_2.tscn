@@ -5494,10 +5494,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_mdtbf"]
+[sub_resource type="QuadMesh" id="QuadMesh_c807w"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_c807w"]
+[sub_resource type="QuadMesh" id="QuadMesh_7ru5d"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -6446,6 +6446,7 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Map/MAP02_029/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053310394, 0.08722305, 0.0022087097)
 shape = SubResource("ConcavePolygonShape3D_mdtbf")
 
 [node name="MAP02_030" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
@@ -6592,6 +6593,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_6qmpg")
 
 [node name="MAP02_043" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+layers = 8
 mesh = SubResource("ArrayMesh_j8gjm")
 skeleton = NodePath("")
 
@@ -7671,7 +7673,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_mdtbf")
+mesh = SubResource("QuadMesh_c807w")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7679,7 +7681,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_c807w")
+mesh = SubResource("QuadMesh_7ru5d")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -8419,7 +8421,7 @@ stats = SubResource("Resource_x6afc")
 disappear_zones = [NodePath("../../DisappearZones/TwoOnisDisappear")]
 
 [node name="Fuwatty" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_c807w")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 70.74889, 5.590715, -30.28012)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 70.74889, 5.5768943, -30.307636)
 current_room = "LongLibrary"
 disappear_zones = [NodePath("../../DisappearZones/FuwattyStopsChasing")]
 
@@ -9160,9 +9162,9 @@ ambient_mode = 2
 ambient_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 
 [node name="ReflectionProbe16" type="ReflectionProbe" parent="Decorations"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.602795, 3.1604886, -13.080023)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.602795, 3.1604886, -12.913704)
 blend_distance = 0.0
-size = Vector3(35.5455, 14.403802, 36.147224)
+size = Vector3(35.5455, 14.403802, 36.479862)
 ambient_mode = 2
 ambient_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 
@@ -9348,6 +9350,16 @@ size = Vector3(2.258121, 7.226961, 3.7557943)
 origin_offset = Vector3(0.6938714, 0.01, -0.7875427)
 ambient_mode = 2
 ambient_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+
+[node name="ReflectionProbe41" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.27389, 6.85083, 10.507044)
+layers = 8
+blend_distance = 0.0
+size = Vector3(12.243797, 2.894043, 10.923752)
+interior = true
+cull_mask = 1048574
+ambient_mode = 2
+ambient_color = Color(0.00017475674, 0.019208489, 0.18882489, 1)
 
 [node name="Rain" type="Node3D" parent="Decorations"]
 

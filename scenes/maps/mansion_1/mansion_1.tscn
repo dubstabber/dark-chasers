@@ -1524,7 +1524,7 @@ stats = SubResource("Resource_xenhl")
 current_room = "BigHall"
 
 [node name="Fuwatty" parent="NavigationRegion3D/Enemies" instance=ExtResource("13_f3rg6")]
-transform = Transform3D(-0.999791, 0, -0.02041895, 0, 1, 0, 0.02041895, 0, -0.999791, -46.64094, 202.18578, -25.523413)
+transform = Transform3D(-0.999791, 0, -0.02041895, 0, 1, 0, 0.02041895, 0, -0.999791, -46.64094, 202.19063, -25.523413)
 stats = SubResource("Resource_f3rg6")
 current_room = "FirstFloor"
 

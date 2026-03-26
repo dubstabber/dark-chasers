@@ -99,4 +99,3 @@ func _on_quick_aooni_behind_door_disappeared() -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
-

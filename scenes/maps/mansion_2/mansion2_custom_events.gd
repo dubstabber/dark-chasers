@@ -69,4 +69,4 @@ func _on_aooni1_disappear() -> void:
 func _on_aooni2_disappear() -> void:
 	var hud := _hud()
 	if hud:
-		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
+		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it's gone now...", false, 3.0)

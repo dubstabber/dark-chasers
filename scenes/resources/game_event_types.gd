@@ -108,6 +108,7 @@ const AREA_SECRET_AOONI_PRANK := &"area_secret_aooni_prank"
 const AREA_SMALL_BASMENT_AOMIKA_APPEAR := &"area_small_basement_aomika_appear"
 const AREA_QUICK_AOONI_BEHIND_DOOR := &"area_quick_aooni_behind_door"
 const AREA_DOUBLE_AO_ONI_CHASE := &"area_double_ao_oni_chase"
+const AREA_AO_ONI_ATE_LADDER := &"area_ao_oni_ate_ladder"
 
 # Custom/internal events
 const CUSTOM_MONSTER_DISAPPEARED := &"custom_monster_disappeared"

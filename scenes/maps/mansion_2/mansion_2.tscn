@@ -1,4 +1,4 @@
-[gd_scene load_steps=818 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=824 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -171,6 +171,8 @@
 [ext_resource type="PackedScene" uid="uid://dvmtywguyoi01" path="res://scenes/objects/ao_moving_wall_16.tscn" id="148_owgv6"]
 [ext_resource type="PackedScene" uid="uid://8dwblsmu03cb" path="res://scenes/objects/ao_moving_wall_14.tscn" id="149_btb4v"]
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="151_j5g58"]
+[ext_resource type="Shader" uid="uid://cx8c305w66oq3" path="res://shaders/procedural_direction_overlay.gdshader" id="152_mdtbf"]
+[ext_resource type="Script" uid="uid://d3mpgd2k02ifk" path="res://scenes/components/procedural_overlay_indicator/procedural_overlay_indicator.gd" id="153_c807w"]
 [ext_resource type="PackedScene" uid="uid://nxkfxv0h1ev7" path="res://scenes/objects/ao_moving_wall_17.tscn" id="162_tgv7v"]
 [ext_resource type="Script" uid="uid://b8lhfitvvo2ld" path="res://scenes/maps/mansion_2/mansion_2_weather_controller.gd" id="163_weather"]
 [ext_resource type="Material" uid="uid://c7beg6p521a7" path="res://scenes/particles/ao_rain_material.tres" id="172_xjcub"]
@@ -5474,6 +5476,29 @@ shadow_mesh = SubResource("ArrayMesh_r54rc")
 data = PackedVector3Array(126.114, 5.9312, -52.0543, 126.114, 3.3711998, -52.0543, 124.834, 3.3711998, -52.0543, 126.114, 5.9312, -52.0543, 124.834, 3.3711998, -52.0543, 124.834, 5.9312, -52.0543)
 backface_collision = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mdtbf"]
+render_priority = 0
+shader = ExtResource("152_mdtbf")
+shader_parameter/point_count = 7
+shader_parameter/polygon_points = Array[Vector2]([Vector2(-0.7, 0), Vector2(-0.28, 0.3), Vector2(-0.28, 0.14), Vector2(0.3, 0.14), Vector2(0.3, -0.14), Vector2(-0.28, -0.14), Vector2(-0.28, -0.3), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0), Vector2(0, 0)])
+shader_parameter/shape_scale = Vector2(1, 1)
+shader_parameter/shape_offset = Vector2(0, 0)
+shader_parameter/shape_rotation = 0.0
+shader_parameter/base_color = Color(1, 1, 1, 1)
+shader_parameter/opacity = 0.45
+shader_parameter/edge_softness = 0.08
+shader_parameter/center_falloff = 0.25
+shader_parameter/glow_boost = 1.8
+shader_parameter/scanline_strength = 0.35
+shader_parameter/scanline_density = 40.0
+shader_parameter/drift_speed = 0.45
+
+[sub_resource type="QuadMesh" id="QuadMesh_mdtbf"]
+size = Vector2(2.2, 0.9)
+
+[sub_resource type="QuadMesh" id="QuadMesh_c807w"]
+size = Vector2(2.2, 0.9)
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
 shader = ExtResource("132_27yvw")
 shader_parameter/source_panorama = ExtResource("133_2557n")
@@ -5668,6 +5693,9 @@ size = Vector3(4.1456146, 0.041748047, 4.030884)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8hixq"]
 size = Vector3(2.5150146, 2.5441895, 0.40808105)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2gsln"]
+size = Vector3(3.7490845, 2.0639648, 0.25146484)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
 size = Vector3(1.2736816, 2.5316772, 0.011474609)
@@ -6127,7 +6155,7 @@ metadata/_edit_lock_ = true
 
 [node name="Events" type="Node" parent="."]
 
-[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall", "ao_takeshi_enemy", "ao_mika_enemy")]
+[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall", "ao_takeshi_enemy", "ao_mika_enemy", "indicators")]
 script = ExtResource("2_uh2hr")
 hidden_narrow_door = NodePath("../../Doors/AoMovingWall19")
 small_basement_aomika_spawn = NodePath("../../NavigationRegion3D/EventSpawners/AoMikaInSmallBasement")
@@ -6137,6 +6165,7 @@ takuro_wall = NodePath("../../Decorations/MAP02_003/StaticBody3D")
 mika_wall = NodePath("../../Decorations/MAP02_002/StaticBody3D")
 ao_takeshi_enemy = NodePath("../../NavigationRegion3D/Enemies/AoTakeshi")
 ao_mika_enemy = NodePath("../../NavigationRegion3D/Enemies/Ao mika")
+indicators = [NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator"), NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator2")]
 
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera")]
 script = ExtResource("2_gmtai")
@@ -7614,6 +7643,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125.428185, 3.3711998, -51.56
 script = ExtResource("131_wqekk")
 metadata/_custom_type_script = "uid://frgl0w6dnh16"
 
+[node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
+material_override = SubResource("ShaderMaterial_mdtbf")
+mesh = SubResource("QuadMesh_mdtbf")
+script = ExtResource("153_c807w")
+custom_shape_points = PackedVector2Array()
+metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
+
+[node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
+material_override = SubResource("ShaderMaterial_mdtbf")
+mesh = SubResource("QuadMesh_c807w")
+script = ExtResource("153_c807w")
+custom_shape_points = PackedVector2Array()
+metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="NavigationRegion3D"]
 environment = SubResource("Environment_fdh80")
 
@@ -8393,6 +8438,15 @@ event_type_id = &"area_double_ao_oni_chase"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/TwoOnisChase"]
 shape = SubResource("BoxShape3D_8hixq")
+
+[node name="AteLadder" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76.87247, 5.6831822, -78.69618)
+collision_layer = 0
+script = ExtResource("137_fp5gj")
+event_type_id = &"area_ao_oni_ate_ladder"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/AteLadder"]
+shape = SubResource("BoxShape3D_2gsln")
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 

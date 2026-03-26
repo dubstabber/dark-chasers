@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d4m18d4yoq8gr"]
+
+[ext_resource type="Script" path="res://scenes/components/procedural_overlay_indicator/procedural_overlay_indicator.gd" id="1_4d0ec"]
+
+[node name="ProceduralOverlayIndicator" type="MeshInstance3D"]
+script = ExtResource("1_4d0ec")

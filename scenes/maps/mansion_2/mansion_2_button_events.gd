@@ -6,6 +6,8 @@ extends Node
 @export var creature_disappear_marker1: Marker3D
 @export var creature_disappear_zone1: Area3D
 @export var near_tv_camera: Camera3D
+@export var basement_camera_1: Camera3D
+@export var basement_camera_2: Camera3D
 
 var _player_killed_by_enemy := false
 var _last_killing_enemy: Node = null
@@ -21,6 +23,9 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV_2, _on_button_check_tv_2)
 	Services.event_bus.subscribe(&"enemy_killed_player", _on_enemy_killed_player)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
+	
+
 
 func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_BACKDOOR, _on_button_check_backdoor)
@@ -31,6 +36,7 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV_2, _on_button_check_tv_2)
 	Services.event_bus.unsubscribe(&"enemy_killed_player", _on_enemy_killed_player)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
 
 
 func _level() -> Level:
@@ -165,3 +171,16 @@ func _on_button_broken_no_effect(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] This switch is defect, and doesn't appear to do anything.", false, 3.0)
+
+
+func _on_button_show_moving_bars_2(_event: GameEvent) -> void:
+	var seq := SequenceData.create(&"show_moving_bars_2")
+	seq.block_players()
+	if basement_camera_1:
+		seq.camera_cut(basement_camera_1)
+	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger_2"))
+	seq.wait(1.5)
+	seq.camera_restore()
+	seq.unblock_players()
+	Services.sequence_director.play_sequence(seq)
+

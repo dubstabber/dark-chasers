@@ -8,7 +8,7 @@ func _ready():
 	super._ready()
 	spawn_player()
 	$Doors/AoMovingWall11.open()
-	open_all_doors()
+	#open_all_doors()
 
 
 func _exit_tree():
@@ -35,7 +35,7 @@ func test_respawn(player: CharacterBody3D) -> void:
 		return
 
 	TransitionArrival.apply(player, test_spawn)
-	RoomAware.set_current_room(player, STARTING_ROOM)
+	RoomAware.set_current_room(player, "SecondBigBasement")
 	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), player)
 
 

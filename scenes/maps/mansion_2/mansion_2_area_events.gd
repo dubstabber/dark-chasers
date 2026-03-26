@@ -9,9 +9,13 @@ extends Node
 
 @export var takuro_wall: StaticBody3D
 @export var mika_wall: StaticBody3D
+@export var hidden_basement_wall: StaticBody3D
 
 @export var ao_takeshi_enemy: Enemy
 @export var ao_mika_enemy: Enemy
+@export var ao_oni_in_basement: Enemy
+
+@export var fast_ao_oni_wall: StaticBody3D
 
 @export var indicators: Array[ProceduralOverlayIndicator] = []
 
@@ -30,6 +34,10 @@ func _ready() -> void:
 		quick_aooni_behind_door.tree_exited.connect(_on_quick_aooni_behind_door_disappeared)
 	Services.event_bus.subscribe(GameEventTypes.AREA_DOUBLE_AO_ONI_CHASE, _on_area_double_ao_oni_chase)
 	Services.event_bus.subscribe(GameEventTypes.AREA_AO_ONI_ATE_LADDER, _on_area_ao_oni_ate_ladder)
+	Services.event_bus.subscribe(GameEventTypes.AREA_BASEMENT_HINT, _on_area_basement_hint)
+	Services.event_bus.subscribe(GameEventTypes.AREA_BASEMENT_AOONI_CHASE, _on_area_basement_aooni_chase)
+	Services.event_bus.subscribe(GameEventTypes.AREA_SECRET_MESSAGE, _on_area_secret_message)
+	Services.event_bus.subscribe(GameEventTypes.AREA_RELEASE_FAST_AO_ONI, _on_area_release_fast_ao_oni)
 
 
 func _exit_tree() -> void:
@@ -37,6 +45,10 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_SMALL_BASMENT_AOMIKA_APPEAR, _on_area_small_basement_aomika_appear)
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_DOUBLE_AO_ONI_CHASE, _on_area_double_ao_oni_chase)
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_AO_ONI_ATE_LADDER, _on_area_ao_oni_ate_ladder)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_BASEMENT_HINT, _on_area_basement_hint)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_BASEMENT_AOONI_CHASE, _on_area_basement_aooni_chase)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_SECRET_MESSAGE, _on_area_secret_message)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_RELEASE_FAST_AO_ONI, _on_area_release_fast_ao_oni)
 
 
 func _hud() -> Node:
@@ -182,3 +194,41 @@ func _on_area_ao_oni_ate_ladder(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] Ao Oni ate the ladder... There must be another way out!", false, 5.0)
+
+
+func _on_area_basement_hint(_event: GameEvent) -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("Hint: There's a switch in this room.", false, 3.0)
+
+
+func _on_area_basement_aooni_chase(_event: GameEvent) -> void:
+	if hidden_basement_wall:
+		hidden_basement_wall.collision_layer = 0
+		hidden_basement_wall.set_collision_layer_value(WALLS_FOR_PLAYER_LAYER_BIT, true)
+	var music := _music()
+	if music:
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
+		music.volume_db = -5
+		music.play()
+		if ao_oni_in_basement:
+			ao_oni_in_basement.tree_exited.connect(music.stop)
+			ao_oni_in_basement.tree_exited.connect(_on_ao_oni_in_basement_disappeared)
+
+
+func _on_ao_oni_in_basement_disappeared() -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] He's gone now!", false, 3.0)
+
+
+func _on_area_secret_message(_event: GameEvent) -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#a600cf]???:[/color] Walk forward in the dark.", false, 3.0)
+
+
+func _on_area_release_fast_ao_oni(_event: GameEvent) -> void:
+	if fast_ao_oni_wall:
+		fast_ao_oni_wall.collision_layer = 0
+		fast_ao_oni_wall.set_collision_layer_value(WALLS_FOR_PLAYER_LAYER_BIT, true)

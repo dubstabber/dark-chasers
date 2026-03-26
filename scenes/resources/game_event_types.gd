@@ -93,6 +93,7 @@ const BUTTON_LIGHT_SWITCH_BROKEN := &"light_broken"
 const BUTTON_SHOW_FIRST_MOVING_BARS := &"button_show_first_moving_bars"
 const BUTTON_CHECK_TV_2 := &"button_check_tv_2"
 const BUTTON_BROKEN_NO_EFFECT := &"button_broken_no_effect"
+const BUTTON_SHOW_MOVING_BARS_2 := &"button_show_moving_bars_2"
 
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"
@@ -110,6 +111,10 @@ const AREA_SMALL_BASMENT_AOMIKA_APPEAR := &"area_small_basement_aomika_appear"
 const AREA_QUICK_AOONI_BEHIND_DOOR := &"area_quick_aooni_behind_door"
 const AREA_DOUBLE_AO_ONI_CHASE := &"area_double_ao_oni_chase"
 const AREA_AO_ONI_ATE_LADDER := &"area_ao_oni_ate_ladder"
+const AREA_BASEMENT_HINT := &"area_basement_hint"
+const AREA_BASEMENT_AOONI_CHASE := &"area_basement_aooni_chase"
+const AREA_SECRET_MESSAGE := &"area_secret_message"
+const AREA_RELEASE_FAST_AO_ONI := &"area_release_fast_ao_oni"
 
 # Custom/internal events
 const CUSTOM_MONSTER_DISAPPEARED := &"custom_monster_disappeared"

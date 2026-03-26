@@ -117,7 +117,12 @@ func _on_button_check_tv_2(_event: GameEvent) -> void:
 	seq.block_players()
 	if near_tv_camera:
 		seq.camera_cut(near_tv_camera)
-	seq.wait(5.5)
+	seq.wait(1.5)
+	seq.custom(func():
+		if hidden_aooni_enemy and is_instance_valid(hidden_aooni_enemy):
+				hidden_aooni_enemy.start_chasing_players(true)
+		return null)
+	seq.wait(4.0)
 	seq.camera_restore()
 	seq.unblock_players()
 	Services.sequence_director.play_sequence(seq)

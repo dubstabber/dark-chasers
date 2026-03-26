@@ -220,6 +220,23 @@ func _setup_ai_component() -> void:
 		_ai_component.target_died.connect(_on_target_died)
 
 
+func start_chasing_players(force_scan: bool = true) -> void:
+	if not _ai_component:
+		return
+	_ai_component.detection_enabled = true
+	_ai_component.chase_player = true
+	if force_scan:
+		# Force an immediate scan so chase starts right away.
+		_ai_component.update_scanning(999.0)
+
+
+func stop_chasing_players() -> void:
+	if not _ai_component:
+		return
+	_ai_component.chase_player = false
+	_ai_component.clear_target()
+
+
 func _setup_health_component() -> void:
 	_health_component = get_node_or_null("HealthComponent")
 	if _health_component:

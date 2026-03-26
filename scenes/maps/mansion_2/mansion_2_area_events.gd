@@ -10,7 +10,15 @@ extends Node
 @export var takuro_wall: StaticBody3D
 @export var mika_wall: StaticBody3D
 
+@export var ao_takeshi_enemy: Enemy
+@export var ao_mika_enemy: Enemy
+
 const WALLS_FOR_PLAYER_LAYER_BIT := 7
+
+var _ao_double_music: AudioStreamPlayer = null
+var _ao_takeshi_gone := false
+var _ao_mika_gone := false
+var _ao_double_disappearance_handled := false
 
 
 func _ready() -> void:
@@ -113,6 +121,35 @@ func _on_area_double_ao_oni_chase(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("The Ao oni! Run!", false, 3.0)
+	var music := _music()
+	if music:
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
+		music.volume_db = -5
+		music.play()
+		# Track disappear state using flags so timing/order doesn't prevent the "both" condition.
+		_ao_double_music = music
+		_ao_double_disappearance_handled = false
+		_ao_takeshi_gone = not is_instance_valid(ao_takeshi_enemy)
+		_ao_mika_gone = not is_instance_valid(ao_mika_enemy)
+
+		if is_instance_valid(ao_takeshi_enemy):
+			ao_takeshi_enemy.tree_exited.connect(_on_ao_takeshi_tree_exited)
+		if is_instance_valid(ao_mika_enemy):
+			ao_mika_enemy.tree_exited.connect(_on_ao_mika_tree_exited)
+
+		# Handles the edge case where one/both enemies already disappeared before the chase event.
+		_on_both_ao_oni_disappeared(music)
+
+
+func _on_ao_takeshi_tree_exited() -> void:
+	_ao_takeshi_gone = true
+	_on_both_ao_oni_disappeared(_ao_double_music)
+
+
+func _on_ao_mika_tree_exited() -> void:
+	_ao_mika_gone = true
+	_on_both_ao_oni_disappeared(_ao_double_music)
+
 
 
 func _set_wall_for_player_only(wall: StaticBody3D) -> void:
@@ -120,3 +157,14 @@ func _set_wall_for_player_only(wall: StaticBody3D) -> void:
 		return
 	wall.collision_layer = 0
 	wall.set_collision_layer_value(WALLS_FOR_PLAYER_LAYER_BIT, true)
+
+
+func _on_both_ao_oni_disappeared(music: AudioStreamPlayer) -> void:
+	if _ao_double_disappearance_handled:
+		return
+	if music and is_instance_valid(music) and _ao_takeshi_gone and _ao_mika_gone:
+		_ao_double_disappearance_handled = true
+		music.stop()
+		var hud := _hud()
+		if hud:
+			hud.show_event_text("[color=#6c6c6c]You:[/color] They both disappeared!", false, 3.0)

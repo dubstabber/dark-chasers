@@ -6127,7 +6127,7 @@ metadata/_edit_lock_ = true
 
 [node name="Events" type="Node" parent="."]
 
-[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall")]
+[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall", "ao_takeshi_enemy", "ao_mika_enemy")]
 script = ExtResource("2_uh2hr")
 hidden_narrow_door = NodePath("../../Doors/AoMovingWall19")
 small_basement_aomika_spawn = NodePath("../../NavigationRegion3D/EventSpawners/AoMikaInSmallBasement")
@@ -6135,6 +6135,8 @@ small_basement_aomika_disappear_zone = NodePath("../../NavigationRegion3D/Disapp
 quick_aooni_behind_door = NodePath("../../NavigationRegion3D/Enemies/Ao oni4")
 takuro_wall = NodePath("../../Decorations/MAP02_003/StaticBody3D")
 mika_wall = NodePath("../../Decorations/MAP02_002/StaticBody3D")
+ao_takeshi_enemy = NodePath("../../NavigationRegion3D/Enemies/AoTakeshi")
+ao_mika_enemy = NodePath("../../NavigationRegion3D/Enemies/Ao mika")
 
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera")]
 script = ExtResource("2_gmtai")

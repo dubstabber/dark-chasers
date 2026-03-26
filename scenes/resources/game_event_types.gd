@@ -67,6 +67,7 @@ const ITEM_PICKEDUP := &"item_pickedup"
 
 # Enemy events
 const ENEMY_TARGET_ACQUIRED := &"enemy_target_acquired"
+const ENEMY_KILLED_PLAYER := &"enemy_killed_player"
 
 # === Mansion-specific event IDs ===
 # Key events
@@ -89,6 +90,7 @@ const BUTTON_CHECK_FIRST_PAINTING := &"button_check_first_painting"
 const BUTTON_CHECK_SECOND_PAINTING := &"button_check_painting_2"
 const BUTTON_LIGHT_SWITCH_BROKEN := &"light_broken"
 const BUTTON_SHOW_FIRST_MOVING_BARS := &"button_show_first_moving_bars"
+const BUTTON_CHECK_TV_2 := &"button_check_tv_2"
 
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"

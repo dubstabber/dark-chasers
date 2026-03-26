@@ -17,6 +17,10 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if not enabled:
 		return
+
+	# Prevent duplicate death/events if the player stays inside the kill zone.
+	if not Mortal.is_alive(body):
+		return
 	
 	if body.is_in_group("player"):
 		var msg = ""
@@ -25,6 +29,16 @@ func _on_body_entered(body: Node3D) -> void:
 		
 		# Use Mortal interface to kill the player
 		Mortal.kill(body, global_position, msg)
+
+		# Map scripts can react to typed events via Services.event_bus.
+		Services.event_bus.emit(
+			&"enemy_killed_player",
+			{
+				"body": body,
+				"enemy": _owner_enemy,
+			},
+			_owner_enemy
+		)
 		
 		player_killed.emit(body)
 		

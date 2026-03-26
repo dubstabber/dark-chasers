@@ -88,13 +88,13 @@ func _show_monster_disappeared_text() -> void:
 
 
 
-func _on_area_entered_mansion_text(_event: RefCounted) -> void:
+func _on_area_entered_mansion_text(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("You enter carefully into the mansion.", false, 3.0)
 
 
-func _on_area_monster_crawls_library(_event: RefCounted) -> void:
+func _on_area_monster_crawls_library(_event: GameEvent) -> void:
 	var seq = SequenceData.create(&"monster_crawls_library")
 	seq.block_players()
 	seq.custom(_spawn_crawling_aooni)
@@ -134,7 +134,7 @@ func _spawn_crawling_aooni() -> void:
 	aooni.makepath()
 
 
-func _on_area_piano_alarm(_event: RefCounted) -> void:
+func _on_area_piano_alarm(_event: GameEvent) -> void:
 	var level := _level()
 	var enemies := _enemies()
 	if not (level and enemies):
@@ -173,7 +173,7 @@ func _on_area_piano_alarm(_event: RefCounted) -> void:
 	aooni.tree_exited.connect(_on_monster_disappeared)
 
 
-func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
+func _on_area_open_ao_oni_wide_door(_event: GameEvent) -> void:
 	var level := _level()
 	if not level:
 		return
@@ -202,7 +202,7 @@ func _on_area_open_ao_oni_wide_door(_event: RefCounted) -> void:
 			ao_oni.tree_exited.connect(music.stop)
 
 
-func _on_area_spawn_ilopulu(event: RefCounted) -> void:
+func _on_area_spawn_ilopulu(event: GameEvent) -> void:
 	var body = event.get_body()
 	var seq = SequenceData.create(&"spawn_ilopulu")
 	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger"))
@@ -232,7 +232,7 @@ func _spawn_ilopulu(target: Node) -> void:
 		ilopulu.add_disappear_zone(disappear_zone)
 
 
-func _on_area_open_ao_mika_wardrobe(_event: RefCounted) -> void:
+func _on_area_open_ao_mika_wardrobe(_event: GameEvent) -> void:
 	var level := _level()
 	if not level:
 		return
@@ -261,13 +261,13 @@ func _on_area_open_ao_mika_wardrobe(_event: RefCounted) -> void:
 			aomika.tree_exited.connect(music.stop)
 
 
-func _on_area_underground_secret_info(_event: RefCounted) -> void:
+func _on_area_underground_secret_info(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("You need to find the switch, to open a hidden passage.", false, 3.0)
 
 
-func _on_area_change_to_next_map(_event: RefCounted) -> void:
+func _on_area_change_to_next_map(_event: GameEvent) -> void:
 	var catalog: SceneCatalog = null
 	if Services:
 		catalog = Services.get_scene_catalog()
@@ -290,7 +290,7 @@ func _on_area_change_to_next_map(_event: RefCounted) -> void:
 		return
 
 
-func _on_area_kill_player(event: RefCounted) -> void:
+func _on_area_kill_player(event: GameEvent) -> void:
 	var body = event.get_body()
 	if Mortal.can_kill(body):
 		Mortal.kill(body)

@@ -78,7 +78,7 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.KEY_SPAWN_WHITE_FACE, _on_key_spawn_white_face)
 
 
-func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
+func _on_key_spawn_ao_oni_library(event: GameEvent) -> void:
 	var level := _level()
 	var enemies := _enemies()
 	if not (level and enemies):
@@ -113,7 +113,7 @@ func _on_key_spawn_ao_oni_library(event: RefCounted) -> void:
 	aooni.tree_exited.connect(_on_monster_disappeared)
 
 
-func _on_key_ao_oni_tries_bars(_event: RefCounted) -> void:
+func _on_key_ao_oni_tries_bars(_event: GameEvent) -> void:
 	var level := _level()
 	if not level:
 		return
@@ -185,7 +185,7 @@ func _bars_aooni_give_up() -> void:
 			_bars_aooni.waypoints.push_back(giveup_node.position)
 
 
-func _on_key_teleport_to_void(event: RefCounted) -> void:
+func _on_key_teleport_to_void(event: GameEvent) -> void:
 	var level := _level()
 	if not level:
 		return
@@ -195,7 +195,7 @@ func _on_key_teleport_to_void(event: RefCounted) -> void:
 		body.position = spawn_node.position
 
 
-func _on_key_spawn_white_face(event: RefCounted) -> void:
+func _on_key_spawn_white_face(event: GameEvent) -> void:
 	var level := _level()
 	var enemies := _enemies()
 	if not (level and enemies):

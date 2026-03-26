@@ -65,25 +65,25 @@ func _show_monster_disappeared_text() -> void:
 	hud.show_event_text(random_texts.pick_random(), false, 3.0)
 
 
-func _on_button_check_tv(_event: RefCounted) -> void:
+func _on_button_check_tv(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] The television doesn't appear to turn on. It's probably broken.", false, 3.0)
 
 
-func _on_button_check_map(_event: RefCounted) -> void:
+func _on_button_check_map(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] The resort map of the Mansion. Nuff said...", false, 3.0)
 
 
-func _on_button_check_map_2(_event: RefCounted) -> void:
+func _on_button_check_map_2(_event: GameEvent) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] This map says that there's a hidden passage nearby.", false, 3.0)
 
 
-func _on_button_play_piano(event: RefCounted) -> void:
+func _on_button_play_piano(event: GameEvent) -> void:
 	var level := _level()
 	var enemies := _enemies()
 	if not (level and enemies):
@@ -118,7 +118,7 @@ func _on_button_play_piano(event: RefCounted) -> void:
 	aooni.tree_exited.connect(_on_monster_disappeared)
 
 
-func _on_button_show_moving_bars(_event: RefCounted) -> void:
+func _on_button_show_moving_bars(_event: GameEvent) -> void:
 	var seq = SequenceData.create(&"show_moving_bars")
 	seq.block_players()
 	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger"))
@@ -129,7 +129,7 @@ func _on_button_show_moving_bars(_event: RefCounted) -> void:
 	Services.sequence_director.play_sequence(seq)
 
 
-func _on_button_show_secret_door(_event: RefCounted) -> void:
+func _on_button_show_secret_door(_event: GameEvent) -> void:
 	var seq = SequenceData.create(&"show_secret_door")
 	seq.block_players()
 	seq.wait(1.0)
@@ -139,7 +139,7 @@ func _on_button_show_secret_door(_event: RefCounted) -> void:
 	Services.sequence_director.play_sequence(seq)
 
 
-func _on_button_show_open_exit(_event: RefCounted) -> void:
+func _on_button_show_open_exit(_event: GameEvent) -> void:
 	var seq = SequenceData.create(&"show_open_exit")
 	seq.block_players()
 	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger"))

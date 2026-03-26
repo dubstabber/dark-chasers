@@ -7,6 +7,10 @@ extends Node
 
 @export var quick_aooni_behind_door: Enemy
 
+@export var takuro_wall: StaticBody3D
+@export var mika_wall: StaticBody3D
+
+const WALLS_FOR_PLAYER_LAYER_BIT := 7
 
 
 func _ready() -> void:
@@ -14,11 +18,13 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.AREA_SMALL_BASMENT_AOMIKA_APPEAR, _on_area_small_basement_aomika_appear)
 	if quick_aooni_behind_door:
 		quick_aooni_behind_door.tree_exited.connect(_on_quick_aooni_behind_door_disappeared)
+	Services.event_bus.subscribe(GameEventTypes.AREA_DOUBLE_AO_ONI_CHASE, _on_area_double_ao_oni_chase)
 
 
 func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_SECRET_AOONI_PRANK, _on_area_aooni_prank)
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_SMALL_BASMENT_AOMIKA_APPEAR, _on_area_small_basement_aomika_appear)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_DOUBLE_AO_ONI_CHASE, _on_area_double_ao_oni_chase)
 
 
 func _hud() -> Node:
@@ -99,3 +105,18 @@ func _on_quick_aooni_behind_door_disappeared() -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
+
+
+func _on_area_double_ao_oni_chase(_event: GameEvent) -> void:
+	_set_wall_for_player_only(takuro_wall)
+	_set_wall_for_player_only(mika_wall)
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("The Ao oni! Run!", false, 3.0)
+
+
+func _set_wall_for_player_only(wall: StaticBody3D) -> void:
+	if not wall:
+		return
+	wall.collision_layer = 0
+	wall.set_collision_layer_value(WALLS_FOR_PLAYER_LAYER_BIT, true)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=824 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=829 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -160,6 +160,7 @@
 [ext_resource type="Script" uid="uid://dn74w15dnwj5f" path="res://scenes/components/effects/door_opener_effect.gd" id="140_t06qs"]
 [ext_resource type="Texture2D" uid="uid://cretel0y32xv5" path="res://images/textures/BSW04A.png" id="141_wf3ax"]
 [ext_resource type="PackedScene" uid="uid://ds1csj3phl2jj" path="res://scenes/objects/ao_door_4.tscn" id="142_7mt0f"]
+[ext_resource type="PackedScene" uid="uid://d3gwecawhtco5" path="res://scenes/enemies/fuwatty.tscn" id="142_c807w"]
 [ext_resource type="Script" uid="uid://diitw7t3gnsv4" path="res://scenes/components/effects/camera_switch_effect.gd" id="142_sbx0a"]
 [ext_resource type="PackedScene" uid="uid://bcq8f4kxca4ot" path="res://scenes/objects/ao_moving_bars_4.tscn" id="143_lyskg"]
 [ext_resource type="PackedScene" uid="uid://dxcoqcfv4mwvt" path="res://scenes/objects/ao_moving_wall_11.tscn" id="144_ixhe6"]
@@ -5775,6 +5776,23 @@ func trigger() -> void:
 [sub_resource type="BoxShape3D" id="BoxShape3D_7wp4t"]
 size = Vector3(1.2687988, 1.4343262, 0.052459717)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_amsmk"]
+size = Vector3(0.32, 0.319, 0.01)
+
+[sub_resource type="GDScript" id="GDScript_mdtbf"]
+script/source = "extends ComposableEffect
+
+@export var wall_mesh: MeshInstance3D
+
+
+func trigger() -> void:
+	if wall_mesh:
+		wall_mesh.queue_free()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2b8gq"]
+size = Vector3(0.32, 0.319, 0.01)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
 
@@ -5792,6 +5810,9 @@ size = Vector3(2.5761108, 2.3581543, 0.6713867)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vxojd"]
 size = Vector3(0.33984375, 2.5322266, 1.216919)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g21cd"]
+size = Vector3(1.1888428, 2.5391846, 0.52246094)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ript3"]
 resource_name = "CCURTAIN"
@@ -6176,10 +6197,11 @@ creature_disappear_marker1 = NodePath("../../NavigationRegion3D/EventSpawners/Hi
 creature_disappear_zone1 = NodePath("../../NavigationRegion3D/DisappearZones/HiddenAoOniDisappears")
 near_tv_camera = NodePath("../../NavigationRegion3D/Cameras/NearTvCamera")
 
-[node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1", "ao_oni2")]
+[node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1", "ao_oni2", "fuwatty")]
 script = ExtResource("4_gwili")
 ao_oni1 = NodePath("../../NavigationRegion3D/Enemies/Ao oni")
 ao_oni2 = NodePath("../../NavigationRegion3D/Enemies/Ao oni5")
+fuwatty = NodePath("../../NavigationRegion3D/Enemies/Fuwatty")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_bqar8")
@@ -8393,6 +8415,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.05503, 4.6642013, -37.3834
 stats = SubResource("Resource_x6afc")
 disappear_zones = [NodePath("../../DisappearZones/TwoOnisDisappear")]
 
+[node name="Fuwatty" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_c807w")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 70.74889, 5.590715, -30.28012)
+current_room = "LongLibrary"
+disappear_zones = [NodePath("../../DisappearZones/FuwattyStopsChasing")]
+
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
 stats = SubResource("Resource_oufop")
@@ -8660,6 +8687,47 @@ event_type_id = &"button_check_tv_2"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08312988, -0.22253418, 0.010025024)
 shape = SubResource("BoxShape3D_7wp4t")
 
+[node name="StaticBody3D13" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 18.88, 5.119, -16.559)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "double_switch"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_amsmk")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D13"]
+shaded = true
+texture = ExtResource("141_wf3ax")
+
+[node name="DisableWallEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D13" node_paths=PackedStringArray("wall_mesh")]
+script = SubResource("GDScript_mdtbf")
+wall_mesh = NodePath("../../../Map/MAP02_007")
+
+[node name="StaticBody3D14" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 52.804, 6.559, -25.081)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+button_type = "double_switch"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D14"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_2b8gq")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D14"]
+shaded = true
+texture = ExtResource("141_wf3ax")
+
+[node name="DoorOpenerEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D14" node_paths=PackedStringArray("target_door")]
+script = ExtResource("140_t06qs")
+target_door = NodePath("../../../../Doors/MovingBar3")
+metadata/_custom_type_script = "uid://dn74w15dnwj5f"
+
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)
 
@@ -8723,6 +8791,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/TwoOnisDisappear"]
 shape = SubResource("BoxShape3D_vxojd")
+
+[node name="FuwattyStopsChasing" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.842793, 5.429592, -6.5909967)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/FuwattyStopsChasing"]
+shape = SubResource("BoxShape3D_g21cd")
 
 [node name="EventSpawners" type="Node3D" parent="NavigationRegion3D"]
 

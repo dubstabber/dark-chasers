@@ -68,6 +68,7 @@ const ITEM_PICKEDUP := &"item_pickedup"
 # Enemy events
 const ENEMY_TARGET_ACQUIRED := &"enemy_target_acquired"
 const ENEMY_KILLED_PLAYER := &"enemy_killed_player"
+const ENEMY_DISAPPEARED := &"enemy_disappeared"
 
 # === Mansion-specific event IDs ===
 # Key events
@@ -105,6 +106,7 @@ const AREA_KILL_PLAYER := &"area_kill_player"
 
 const AREA_SECRET_AOONI_PRANK := &"area_secret_aooni_prank"
 const AREA_SMALL_BASMENT_AOMIKA_APPEAR := &"area_small_basement_aomika_appear"
+const AREA_QUICK_AOONI_BEHIND_DOOR := &"area_quick_aooni_behind_door"
 
 # Custom/internal events
 const CUSTOM_MONSTER_DISAPPEARED := &"custom_monster_disappeared"

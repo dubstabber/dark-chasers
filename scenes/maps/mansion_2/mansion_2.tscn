@@ -1,4 +1,4 @@
-[gd_scene load_steps=809 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=811 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5635,6 +5635,11 @@ resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
+[sub_resource type="Resource" id="Resource_m7gha"]
+resource_local_to_scene = true
+script = ExtResource("133_gyxxe")
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
 [sub_resource type="Resource" id="Resource_oufop"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
@@ -5733,6 +5738,9 @@ size = Vector3(1.1586914, 2.5498047, 0.35656738)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kkubs"]
 size = Vector3(0.58984375, 1, 1.6081543)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dhpw4"]
+size = Vector3(3.0583496, 2.545845, 0.57910156)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ript3"]
 resource_name = "CCURTAIN"
@@ -6095,11 +6103,12 @@ metadata/_edit_lock_ = true
 
 [node name="Events" type="Node" parent="."]
 
-[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone")]
+[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door")]
 script = ExtResource("2_uh2hr")
 hidden_narrow_door = NodePath("../../Doors/AoMovingWall19")
 small_basement_aomika_spawn = NodePath("../../NavigationRegion3D/EventSpawners/AoMikaInSmallBasement")
 small_basement_aomika_disappear_zone = NodePath("../../NavigationRegion3D/DisappearZones/AoMikaEndChase")
+quick_aooni_behind_door = NodePath("../../NavigationRegion3D/Enemies/Ao oni4")
 
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera")]
 script = ExtResource("2_gmtai")
@@ -8290,6 +8299,11 @@ disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 111.19187, 5.4654007, 8.115096)
 stats = SubResource("Resource_gwili")
 
+[node name="Ao oni4" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("132_qxfai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 97.94831, 4.667201, -62.43273)
+stats = SubResource("Resource_m7gha")
+disappear_zones = [NodePath("../../DisappearZones/QuickEnemyDisappear")]
+
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
 stats = SubResource("Resource_oufop")
@@ -8578,6 +8592,14 @@ collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/HiddenAoOniDisappears"]
 shape = SubResource("BoxShape3D_kkubs")
+
+[node name="QuickEnemyDisappear" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98.210526, 5.924124, -65.13255)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/QuickEnemyDisappear"]
+shape = SubResource("BoxShape3D_dhpw4")
 
 [node name="EventSpawners" type="Node3D" parent="NavigationRegion3D"]
 

@@ -5,10 +5,15 @@ extends Node
 @export var small_basement_aomika_spawn: Marker3D
 @export var small_basement_aomika_disappear_zone: Area3D
 
+@export var quick_aooni_behind_door: Enemy
+
+
 
 func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.AREA_SECRET_AOONI_PRANK, _on_area_aooni_prank)
 	Services.event_bus.subscribe(GameEventTypes.AREA_SMALL_BASMENT_AOMIKA_APPEAR, _on_area_small_basement_aomika_appear)
+	if quick_aooni_behind_door:
+		quick_aooni_behind_door.tree_exited.connect(_on_quick_aooni_behind_door_disappeared)
 
 
 func _exit_tree() -> void:
@@ -88,3 +93,10 @@ func _on_aomika_disappeared() -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
+
+
+func _on_quick_aooni_behind_door_disappeared() -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] I think it disappeared...", false, 3.0)
+

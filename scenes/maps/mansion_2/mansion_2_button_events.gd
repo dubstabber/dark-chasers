@@ -20,7 +20,7 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_SECOND_PAINTING, _on_button_check_second_painting)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_TV_2, _on_button_check_tv_2)
 	Services.event_bus.subscribe(&"enemy_killed_player", _on_enemy_killed_player)
-
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
 
 func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_BACKDOOR, _on_button_check_backdoor)
@@ -30,6 +30,8 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.CUSTOM_MANSION_2_MOVING_WALL_DOOR_CHAIN_TRIGGERED, _on_moving_wall_door_chain_triggered)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_TV_2, _on_button_check_tv_2)
 	Services.event_bus.unsubscribe(&"enemy_killed_player", _on_enemy_killed_player)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
+
 
 func _level() -> Level:
 	if not Services.world_context:
@@ -157,3 +159,9 @@ func was_player_killed_by_enemy() -> bool:
 
 func get_last_killing_enemy() -> Node:
 	return _last_killing_enemy
+
+
+func _on_button_broken_no_effect(_event: GameEvent) -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] This switch is defect, and doesn't appear to do anything.", false, 3.0)

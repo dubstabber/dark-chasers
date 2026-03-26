@@ -92,6 +92,7 @@ const BUTTON_CHECK_SECOND_PAINTING := &"button_check_painting_2"
 const BUTTON_LIGHT_SWITCH_BROKEN := &"light_broken"
 const BUTTON_SHOW_FIRST_MOVING_BARS := &"button_show_first_moving_bars"
 const BUTTON_CHECK_TV_2 := &"button_check_tv_2"
+const BUTTON_BROKEN_NO_EFFECT := &"button_broken_no_effect"
 
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"

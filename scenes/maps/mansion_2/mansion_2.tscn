@@ -1,4 +1,4 @@
-[gd_scene load_steps=829 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=830 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5793,6 +5793,9 @@ func trigger() -> void:
 [sub_resource type="BoxShape3D" id="BoxShape3D_2b8gq"]
 size = Vector3(0.32, 0.319, 0.01)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_4fjju"]
+size = Vector3(0.32, 0.319, 0.01)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
 
@@ -8727,6 +8730,23 @@ texture = ExtResource("141_wf3ax")
 script = ExtResource("140_t06qs")
 target_door = NodePath("../../../../Doors/MovingBar3")
 metadata/_custom_type_script = "uid://dn74w15dnwj5f"
+
+[node name="StaticBody3D15" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, -28.914, 6.559, 15.784)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_broken_no_effect"
+button_type = "double_switch"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D15"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_4fjju")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D15"]
+shaded = true
+texture = ExtResource("141_wf3ax")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.85664, 7.3600016, 7.53331)

@@ -8,6 +8,9 @@ extends Node
 @export var near_tv_camera: Camera3D
 @export var basement_camera_1: Camera3D
 @export var basement_camera_2: Camera3D
+@export var creepy_ao_oni_camera: Camera3D
+@export var creepy_ao_oni_enemy_spawn: Marker3D
+@export var creepy_ao_oni_enemy_disappear_zone: Area3D
 
 var _player_killed_by_enemy := false
 var _last_killing_enemy: Node = null
@@ -24,7 +27,8 @@ func _ready() -> void:
 	Services.event_bus.subscribe(&"enemy_killed_player", _on_enemy_killed_player)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
-	
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_3, _on_button_show_moving_bars_3)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_TRIGGER_CREEPY_AO_ONI, _on_button_trigger_creepy_ao_oni)
 
 
 func _exit_tree() -> void:
@@ -37,6 +41,8 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(&"enemy_killed_player", _on_enemy_killed_player)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_BROKEN_NO_EFFECT, _on_button_broken_no_effect)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_3, _on_button_show_moving_bars_3)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_TRIGGER_CREEPY_AO_ONI, _on_button_trigger_creepy_ao_oni)
 
 
 func _level() -> Level:
@@ -58,6 +64,12 @@ func _music() -> AudioStreamPlayer:
 	if not Services.world_context:
 		return null
 	return Services.world_context.get_global_music_player()
+
+
+func _enemies() -> Node:
+	if not Services.world_context:
+		return null
+	return Services.world_context.get_enemies_node()
 
 
 func _on_button_check_backdoor(_event: GameEvent) -> void:
@@ -184,3 +196,58 @@ func _on_button_show_moving_bars_2(_event: GameEvent) -> void:
 	seq.unblock_players()
 	Services.sequence_director.play_sequence(seq)
 
+
+func _on_button_show_moving_bars_3(_event: GameEvent) -> void:
+	var seq := SequenceData.create(&"show_moving_bars_3")
+	seq.block_players()
+	if basement_camera_2:
+		seq.camera_cut(basement_camera_2)
+	seq.play_music(Services.get_sfx_catalog().get_sound(&"event_trigger_2"))
+	seq.wait(1.5)
+	seq.camera_restore()
+	seq.unblock_players()
+	Services.sequence_director.play_sequence(seq)
+
+
+func _on_button_trigger_creepy_ao_oni(_event: GameEvent) -> void:		
+	var seq := SequenceData.create(&"trigger_creepy_ao_oni")
+	seq.block_players()
+	seq.wait(1.0)
+	if creepy_ao_oni_camera:
+		seq.camera_cut(creepy_ao_oni_camera)
+	var enemies := _enemies()
+	if not enemies:
+		return
+	var aooni = Services.get_scene_catalog().get_enemy_scene(&"aooni").instantiate() as Enemy
+	aooni.stats.speed = 16.0
+	aooni.navigation_mode = Enemy.NavigationMode.DOOM
+	enemies.add_child(aooni)
+	seq.custom(_spawn_creepy_ao_oni.bind(aooni))
+	seq.wait(3.0)
+	seq.custom(_on_creepy_ao_oni_killed_player.bind(aooni))
+	seq.wait(2.0)
+	seq.camera_restore()
+	seq.unblock_players()
+	Services.sequence_director.play_sequence(seq)
+
+
+func _spawn_creepy_ao_oni(aooni: Enemy) -> void:
+	if creepy_ao_oni_enemy_spawn:
+		aooni.global_position = creepy_ao_oni_enemy_spawn.global_position
+		aooni.makepath()
+
+
+func _on_creepy_ao_oni_killed_player(aooni: Enemy) -> void:
+	if aooni:
+		if creepy_ao_oni_enemy_disappear_zone:
+			aooni.add_disappear_zone(creepy_ao_oni_enemy_disappear_zone)
+		if creepy_ao_oni_enemy_spawn:
+			aooni.waypoints.append(creepy_ao_oni_enemy_spawn.global_position)
+			aooni.makepath()
+		aooni.tree_exited.connect(_on_creepy_ao_oni_disappeared)
+
+
+func _on_creepy_ao_oni_disappeared() -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#a600cf]Ao Oni:[/color] Heheh...", false, 3.0)

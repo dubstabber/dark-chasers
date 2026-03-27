@@ -1,4 +1,4 @@
-[gd_scene load_steps=839 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=842 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5788,6 +5788,12 @@ size = Vector3(0.32, 0.319, 0.01)
 [sub_resource type="BoxShape3D" id="BoxShape3D_byj7j"]
 size = Vector3(0.32, 0.319, 0.01)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_hb8up"]
+size = Vector3(0.32, 0.319, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qlgkw"]
+size = Vector3(0.018066406, 2.1818237, 5.0537415)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
 
@@ -5814,6 +5820,9 @@ size = Vector3(2.1687012, 2.5372314, 1.4375)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5ogty"]
 size = Vector3(1.1974487, 2.5372314, 1.4375)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_64ry5"]
+size = Vector3(0.6405029, 1, 1.2735596)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m7gha"]
 emission_shape = 3
@@ -6228,7 +6237,7 @@ ao_oni_in_basement = NodePath("../../NavigationRegion3D/Enemies/Ao oni6")
 fast_ao_oni_wall = NodePath("../../Decorations/MAP02_011/StaticBody3D")
 indicators = [NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator"), NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator2")]
 
-[node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera", "basement_camera_1")]
+[node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera", "basement_camera_1", "basement_camera_2", "creepy_ao_oni_camera", "creepy_ao_oni_enemy_spawn", "creepy_ao_oni_enemy_disappear_zone")]
 script = ExtResource("2_gmtai")
 squatto1 = NodePath("../../NavigationRegion3D/Enemies/Squatto")
 hidden_wall_static_body = NodePath("../../Decorations/MAP02_006/StaticBody3D")
@@ -6237,6 +6246,10 @@ creature_disappear_marker1 = NodePath("../../NavigationRegion3D/EventSpawners/Hi
 creature_disappear_zone1 = NodePath("../../NavigationRegion3D/DisappearZones/HiddenAoOniDisappears")
 near_tv_camera = NodePath("../../NavigationRegion3D/Cameras/NearTvCamera")
 basement_camera_1 = NodePath("../../NavigationRegion3D/Cameras/BasementCamera1")
+basement_camera_2 = NodePath("../../NavigationRegion3D/Cameras/BasementCamera2")
+creepy_ao_oni_camera = NodePath("../../NavigationRegion3D/Cameras/BlueberryFarmCamera")
+creepy_ao_oni_enemy_spawn = NodePath("../../NavigationRegion3D/EventSpawners/CreepyFastAoOniSpawn")
+creepy_ao_oni_enemy_disappear_zone = NodePath("../../NavigationRegion3D/DisappearZones/CreepyAoOniDisappear")
 
 [node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1", "ao_oni2", "fuwatty")]
 script = ExtResource("4_gwili")
@@ -8847,8 +8860,41 @@ script = ExtResource("140_t06qs")
 target_door = NodePath("../../../../Doors/AoMovingBars5")
 metadata/_custom_type_script = "uid://dn74w15dnwj5f"
 
+[node name="StaticBody3D17" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 14.08, 6.559, -41.519)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_show_moving_bars_3"
+button_type = "double_switch"
+press_sound = ExtResource("138_m3p7y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D17"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.001)
+shape = SubResource("BoxShape3D_hb8up")
+
+[node name="Sprite3D" type="Sprite3D" parent="NavigationRegion3D/Buttons/StaticBody3D17"]
+shaded = true
+texture = ExtResource("141_wf3ax")
+
+[node name="DoorOpenerEffect" type="Node" parent="NavigationRegion3D/Buttons/StaticBody3D17" node_paths=PackedStringArray("target_door")]
+script = ExtResource("140_t06qs")
+target_door = NodePath("../../../../Doors/AoMovingBars4")
+metadata/_custom_type_script = "uid://dn74w15dnwj5f"
+
+[node name="StaticBody3D18" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.93788, 6.4516096, -34.154083)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_trigger_creepy_ao_oni"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07006836, 0.24325562, 1.9282684)
+shape = SubResource("BoxShape3D_qlgkw")
+
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.61382, 5.6, -38.204067)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.66649, 5.6000004, -58.53362)
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D"]
 
@@ -8862,6 +8908,15 @@ cull_mask = 1048571
 
 [node name="BasementCamera1" type="Camera3D" parent="NavigationRegion3D/Cameras"]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -68.533745, 6.916693, -45.8074)
+cull_mask = 1048571
+
+[node name="BasementCamera2" type="Camera3D" parent="NavigationRegion3D/Cameras"]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -73.87724, 6.790846, -43.118706)
+cull_mask = 1048571
+
+[node name="BlueberryFarmCamera" type="Camera3D" parent="NavigationRegion3D/Cameras"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15.601898, 7.0852904, -35.534966)
+cull_mask = 1048571
 
 [node name="DisappearZones" type="Node3D" parent="NavigationRegion3D"]
 
@@ -8938,6 +8993,14 @@ collision_mask = 2
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/BasementAoOniDisappear2"]
 shape = SubResource("BoxShape3D_5ogty")
 
+[node name="CreepyAoOniDisappear" type="Area3D" parent="NavigationRegion3D/DisappearZones"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.370959, 6.1, -32.176376)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/DisappearZones/CreepyAoOniDisappear"]
+shape = SubResource("BoxShape3D_64ry5")
+
 [node name="EventSpawners" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="AoMikaInSmallBasement" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
@@ -8945,6 +9008,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.64184, 5.6000013, -13.6043
 
 [node name="HiddenAoOniMovesAlong" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 127.362625, 3.3711996, -47.7766)
+
+[node name="CreepyFastAoOniSpawn" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7114897, 5.6, -32.15989)
 
 [node name="HUD" parent="." instance=ExtResource("130_3bl51")]
 

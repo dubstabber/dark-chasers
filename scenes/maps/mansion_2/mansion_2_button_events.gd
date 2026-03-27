@@ -29,6 +29,7 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_3, _on_button_show_moving_bars_3)
 	Services.event_bus.subscribe(GameEventTypes.BUTTON_TRIGGER_CREEPY_AO_ONI, _on_button_trigger_creepy_ao_oni)
+	Services.event_bus.subscribe(GameEventTypes.BUTTON_CHECK_NEWS_POSTER, _on_button_check_news_poster)
 
 
 func _exit_tree() -> void:
@@ -43,6 +44,7 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_2, _on_button_show_moving_bars_2)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_SHOW_MOVING_BARS_3, _on_button_show_moving_bars_3)
 	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_TRIGGER_CREEPY_AO_ONI, _on_button_trigger_creepy_ao_oni)
+	Services.event_bus.unsubscribe(GameEventTypes.BUTTON_CHECK_NEWS_POSTER, _on_button_check_news_poster)
 
 
 func _level() -> Level:
@@ -251,3 +253,9 @@ func _on_creepy_ao_oni_disappeared() -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#a600cf]Ao Oni:[/color] Heheh...", false, 3.0)
+
+
+func _on_button_check_news_poster(_event: GameEvent) -> void:
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#393939]NEWS:[/color] OLD MANSION IS ACCUSED OF BEING HAUNTED.", false, 3.0)

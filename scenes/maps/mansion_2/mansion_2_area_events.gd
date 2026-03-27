@@ -78,6 +78,8 @@ func _ready() -> void:
 		release_takuro_basement_wall_zone.body_entered.connect(_on_release_takuro_basement_wall_zone_body_entered)
 	if takuro_released_zone:
 		takuro_released_zone.body_entered.connect(_on_takuro_released_zone_body_entered)
+	Services.event_bus.subscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
+	
 
 
 func _exit_tree() -> void:
@@ -103,6 +105,7 @@ func _exit_tree() -> void:
 		release_takuro_basement_wall_zone.body_entered.disconnect(_on_release_takuro_basement_wall_zone_body_entered)
 	if takuro_released_zone:
 		takuro_released_zone.body_entered.disconnect(_on_takuro_released_zone_body_entered)
+	Services.event_bus.unsubscribe(GameEventTypes.AREA_KILL_PLAYER, _on_area_kill_player)
 
 
 func _hud() -> Node:
@@ -367,3 +370,14 @@ func _on_takuro_released_zone_body_entered(body: Player) -> void:
 	if takuro_released_enemy:
 		takuro_released_enemy.current_target = body
 		takuro_released_enemy.makepath()
+
+
+func _on_area_kill_player(event: GameEvent) -> void:
+	var body = event.get_body()
+	if not body:
+		return
+	if Mortal.can_kill(body):
+		if body is Enemy:
+			body.queue_free()
+		else:
+			Mortal.kill(body)

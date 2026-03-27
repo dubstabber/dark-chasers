@@ -293,7 +293,10 @@ func _on_area_change_to_next_map(_event: GameEvent) -> void:
 func _on_area_kill_player(event: GameEvent) -> void:
 	var body = event.get_body()
 	if Mortal.can_kill(body):
-		Mortal.kill(body)
+		if body is Enemy:
+			body.queue_free()
+		else:
+			Mortal.kill(body)
 
 
 func _on_monster_disappeared() -> void:

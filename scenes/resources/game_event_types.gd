@@ -96,6 +96,7 @@ const BUTTON_BROKEN_NO_EFFECT := &"button_broken_no_effect"
 const BUTTON_SHOW_MOVING_BARS_2 := &"button_show_moving_bars_2"
 const BUTTON_SHOW_MOVING_BARS_3 := &"button_show_moving_bars_3"
 const BUTTON_TRIGGER_CREEPY_AO_ONI := &"button_trigger_creepy_ao_oni"
+const BUTTON_CHECK_NEWS_POSTER := &"button_check_news_poster"
 
 # Area events
 const AREA_ENTERED_MANSION_TEXT := &"area_entered_mansion_text"

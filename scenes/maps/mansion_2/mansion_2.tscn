@@ -1,4 +1,4 @@
-[gd_scene load_steps=863 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=865 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -5751,6 +5751,8 @@ size = Vector3(0.44604492, 2.5390625, 1.9188232)
 [sub_resource type="BoxShape3D" id="BoxShape3D_i7qj4"]
 size = Vector3(1.241272, 2.342041, 0.6097412)
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_dkv1e"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
 size = Vector3(1.2736816, 2.5316772, 0.011474609)
 
@@ -5857,6 +5859,9 @@ size = Vector3(0.32, 0.319, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qlgkw"]
 size = Vector3(0.018066406, 2.1818237, 5.0537415)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lrdmy"]
+size = Vector3(0.0345459, 1.3583984, 0.56311035)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_6w5b3"]
 size = Vector3(1.1420898, 2.2906494, 0.22094727)
@@ -6289,7 +6294,7 @@ metadata/_edit_lock_ = true
 
 [node name="Events" type="Node" parent="."]
 
-[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall", "hidden_basement_wall", "ao_takeshi_enemy", "ao_mika_enemy", "ao_oni_in_basement", "fast_ao_oni_wall", "zelda_talks_zone", "open_secret_door_zone", "secret_door", "open_underground_door_zone", "underground_door1", "underground_door2", "underground_door3", "underground_secret_radio", "close_big_wall_zone", "release_takuro_basement_wall_zone", "takuro_basement_wall", "big_wall", "takuro_released_zone", "indicators")]
+[node name="AreaEvents" type="Node" parent="Events" node_paths=PackedStringArray("hidden_narrow_door", "small_basement_aomika_spawn", "small_basement_aomika_disappear_zone", "quick_aooni_behind_door", "takuro_wall", "mika_wall", "hidden_basement_wall", "ao_takeshi_enemy", "ao_mika_enemy", "ao_oni_in_basement", "fast_ao_oni_wall", "zelda_talks_zone", "open_secret_door_zone", "secret_door", "open_underground_door_zone", "underground_door1", "underground_door2", "underground_door3", "underground_secret_radio", "close_big_wall_zone", "release_takuro_basement_wall_zone", "takuro_basement_wall", "big_wall", "takuro_released_zone", "takuro_released_enemy", "indicators")]
 script = ExtResource("2_uh2hr")
 hidden_narrow_door = NodePath("../../Doors/AoMovingWall19")
 small_basement_aomika_spawn = NodePath("../../NavigationRegion3D/EventSpawners/AoMikaInSmallBasement")
@@ -6315,6 +6320,7 @@ release_takuro_basement_wall_zone = NodePath("../../NavigationRegion3D/AreaEvent
 takuro_basement_wall = NodePath("../../Doors/AoMovingWall17")
 big_wall = NodePath("../../Doors/AoMovingWall11")
 takuro_released_zone = NodePath("../../NavigationRegion3D/AreaEvents/TakuroReleased")
+takuro_released_enemy = NodePath("../../NavigationRegion3D/Enemies/TakuroOni")
 indicators = [NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator"), NodePath("../../NavigationRegion3D/Map/ProceduralOverlayIndicator2")]
 
 [node name="ButtonEvents" type="Node" parent="Events" node_paths=PackedStringArray("squatto1", "hidden_wall_static_body", "hidden_aooni_enemy", "creature_disappear_marker1", "creature_disappear_zone1", "near_tv_camera", "basement_camera_1", "basement_camera_2", "creepy_ao_oni_camera", "creepy_ao_oni_enemy_spawn", "creepy_ao_oni_enemy_disappear_zone")]
@@ -8761,6 +8767,17 @@ collision_layer = 0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/TakuroReleased"]
 shape = SubResource("BoxShape3D_i7qj4")
 
+[node name="KillPlayer" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -16.50489, 0)
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("137_fp5gj")
+event_type_id = &"area_kill_player"
+one_trigger_only = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/KillPlayer"]
+shape = SubResource("WorldBoundaryShape3D_dkv1e")
+
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
@@ -9085,6 +9102,18 @@ event_type_id = &"button_trigger_creepy_ao_oni"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D18"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07006836, 0.24325562, 1.9282684)
 shape = SubResource("BoxShape3D_qlgkw")
+
+[node name="StaticBody3D19" type="StaticBody3D" parent="NavigationRegion3D/Buttons"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.68338, 6.4583983, -42.148014)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("133_my2ws")
+event_type_id = &"button_check_news_poster"
+one_use = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Buttons/StaticBody3D19"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.047668457, -0.17919922, -0.022277832)
+shape = SubResource("BoxShape3D_lrdmy")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.66649, 5.6000004, -58.53362)

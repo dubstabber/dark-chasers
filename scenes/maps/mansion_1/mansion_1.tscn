@@ -2134,6 +2134,7 @@ shape = SubResource("BoxShape3D_2onqm")
 [node name="AreaEvent6" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.9613, -1.69468, 101.429)
 collision_layer = 0
+collision_mask = 3
 script = ExtResource("146_vhxkd")
 event_type_id = &"area_kill_player"
 one_trigger_only = false

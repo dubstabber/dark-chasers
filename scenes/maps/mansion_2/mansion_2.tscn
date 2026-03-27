@@ -1,4 +1,4 @@
-[gd_scene load_steps=849 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=854 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -170,7 +170,6 @@
 [ext_resource type="PackedScene" uid="uid://4wmv11shq67i" path="res://scenes/enemies/jellyfish_oni.tscn" id="145_fj37k"]
 [ext_resource type="PackedScene" uid="uid://b84vvvmcg1wvq" path="res://scenes/objects/ao_moving_wall_13.tscn" id="146_1fgol"]
 [ext_resource type="AudioStream" uid="uid://g1v4r2v8yfn8" path="res://sounds/sfx/DSWITCH2.ogg" id="146_epj47"]
-[ext_resource type="PackedScene" uid="uid://cftnkr3f4aq6d" path="res://scenes/enemies/takuro_oni.tscn" id="146_n8bub"]
 [ext_resource type="Texture2D" uid="uid://d2dnj5bn4o040" path="res://images/textures/SW_14_1.png" id="146_rfpum"]
 [ext_resource type="PackedScene" uid="uid://nbs3x341f5rp" path="res://scenes/objects/ao_moving_wall_15.tscn" id="147_33cd6"]
 [ext_resource type="PackedScene" uid="uid://dvmtywguyoi01" path="res://scenes/objects/ao_moving_wall_16.tscn" id="148_owgv6"]
@@ -5464,10 +5463,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_n8bub"]
+[sub_resource type="QuadMesh" id="QuadMesh_fj37k"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_dkv1e"]
+[sub_resource type="QuadMesh" id="QuadMesh_n8bub"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -5661,22 +5660,34 @@ script = ExtResource("133_gyxxe")
 speed = 18.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
-[sub_resource type="Resource" id="Resource_7ru5d"]
-resource_local_to_scene = true
+[sub_resource type="Resource" id="Resource_dkv1e"]
 script = ExtResource("133_gyxxe")
-chase_player = false
+speed = 7.4
+is_wandering = true
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_7y60k"]
+script = ExtResource("133_gyxxe")
+speed = 1.0
+is_wandering = true
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_fj37k"]
+script = ExtResource("133_gyxxe")
+speed = 5.0
+is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_n8bub"]
 script = ExtResource("133_gyxxe")
 speed = 3.0
-chase_player = false
+is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_1d2jy"]
 script = ExtResource("133_gyxxe")
 speed = 6.0
-chase_player = false
+is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_oufop"]
@@ -5708,6 +5719,15 @@ size = Vector3(6.9960938, 2.5506592, 0.3466797)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nov78"]
 size = Vector3(6.9846497, 2.5421143, 0.5756836)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_re0ic"]
+size = Vector3(1.8355713, 1.9536133, 1.1592407)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yllct"]
+size = Vector3(0.33898926, 2.5297852, 1.5140533)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7yho6"]
+size = Vector3(2.0097656, 2.5302734, 0.9808655)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rfpum"]
 size = Vector3(1.2736816, 2.5316772, 0.011474609)
@@ -6181,6 +6201,9 @@ shadow_mesh = SubResource("ArrayMesh_brnud")
 data = PackedVector3Array(-52.907097, 5.6, -47.0239, -51.947098, 8.16, -47.0239, -52.907097, 8.16, -47.0239, -52.907097, 5.6, -47.0239, -51.947098, 5.6, -47.0239, -51.947098, 8.16, -47.0239)
 backface_collision = true
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_kxtuo"]
+size = Vector3(1.2978516, 2.5456543, 0.30664063)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_x6afc"]
 size = Vector3(1.1791992, 2.4891968, 0.21566772)
 
@@ -6273,11 +6296,20 @@ creepy_ao_oni_camera = NodePath("../../NavigationRegion3D/Cameras/BlueberryFarmC
 creepy_ao_oni_enemy_spawn = NodePath("../../NavigationRegion3D/EventSpawners/CreepyFastAoOniSpawn")
 creepy_ao_oni_enemy_disappear_zone = NodePath("../../NavigationRegion3D/DisappearZones/CreepyAoOniDisappear")
 
-[node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1", "ao_oni2", "fuwatty")]
+[node name="CustomEvents" type="Node" parent="Events" node_paths=PackedStringArray("ao_oni1", "ao_oni2", "fuwatty", "blueberry_farm_fuwatty", "blueberry_farm_jellyfish", "blueberry_farm_hundred_eyed_monster", "blueberry_farm_squatto", "blueberry_farm_hunchback_monster", "blueberry_door", "blueberry_farm_blocker", "blueberry_farm_open_door_zone", "blueberry_farm_all_enemies_disappear_zone")]
 script = ExtResource("4_gwili")
 ao_oni1 = NodePath("../../NavigationRegion3D/Enemies/Ao oni")
 ao_oni2 = NodePath("../../NavigationRegion3D/Enemies/Ao oni5")
 fuwatty = NodePath("../../NavigationRegion3D/Enemies/Fuwatty")
+blueberry_farm_fuwatty = NodePath("../../NavigationRegion3D/Enemies/Fuwatty2")
+blueberry_farm_jellyfish = NodePath("../../NavigationRegion3D/Enemies/JellyfishOni")
+blueberry_farm_hundred_eyed_monster = NodePath("../../NavigationRegion3D/Enemies/HundredEyesOni")
+blueberry_farm_squatto = NodePath("../../NavigationRegion3D/Enemies/Squatto2")
+blueberry_farm_hunchback_monster = NodePath("../../NavigationRegion3D/Enemies/HunchbackOni")
+blueberry_door = NodePath("../../Doors/AoMovingWall18")
+blueberry_farm_blocker = NodePath("../../Blockers/TempBlueberryBlocker")
+blueberry_farm_open_door_zone = NodePath("../../NavigationRegion3D/AreaEvents/OpenBlueberryFarmDoor")
+blueberry_farm_all_enemies_disappear_zone = NodePath("../../NavigationRegion3D/AreaEvents/BlueberryEnemiesDisappear")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_bqar8")
@@ -7735,7 +7767,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_n8bub")
+mesh = SubResource("QuadMesh_fj37k")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7743,7 +7775,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_dkv1e")
+mesh = SubResource("QuadMesh_n8bub")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -8499,23 +8531,30 @@ stats = SubResource("Resource_c807w")
 navigation_mode = 1
 current_room = "SecondBigBasement"
 
-[node name="Ao oni8" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6159997, -34.355217)
-stats = SubResource("Resource_7ru5d")
+[node name="Fuwatty2" parent="NavigationRegion3D/Enemies" instance=ExtResource("142_c807w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.733262, 5.5906405, -35.71492)
+stats = SubResource("Resource_dkv1e")
+current_room = "BlueberryRoom"
 
 [node name="HundredEyesOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_7ru5d")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.59614, -32.529152)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.545937, 5.59614, -40.15415)
+stats = SubResource("Resource_7y60k")
+current_room = "BlueberryRoom"
+
+[node name="Squatto2" parent="NavigationRegion3D/Enemies" instance=ExtResource("134_lr3f2")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.380173, 5.5927663, -31.864538)
+stats = SubResource("Resource_fj37k")
+current_room = "BlueberryRoom"
 
 [node name="HunchbackOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("144_1q57w")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5973625, -36.477)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5893478, 5.5973625, -39.458714)
 stats = SubResource("Resource_n8bub")
+current_room = "BlueberryRoom"
 
 [node name="JellyfishOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("145_fj37k")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2945287, 5.5936537, -35.487965)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5870473, 5.5936537, -34.554737)
 stats = SubResource("Resource_1d2jy")
-
-[node name="TakuroOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("146_n8bub")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6518672, 5.5981703, -34.413387)
+current_room = "BlueberryRoom"
 
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)
@@ -8607,6 +8646,31 @@ event_type_id = &"area_release_fast_ao_oni"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/ReleaseFastAoOni"]
 shape = SubResource("BoxShape3D_nov78")
+
+[node name="BlueberryChaseSequence" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.856598, 6.5980015, -28.246826)
+collision_layer = 0
+script = ExtResource("137_fp5gj")
+event_type_id = &"custom_blueberry_farm_chase_sequence"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/BlueberryChaseSequence"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17266846, 0.47680664, 0.17184448)
+shape = SubResource("BoxShape3D_re0ic")
+
+[node name="OpenBlueberryFarmDoor" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.350118, 6.8648925, -28.047686)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/OpenBlueberryFarmDoor"]
+shape = SubResource("BoxShape3D_yllct")
+
+[node name="BlueberryEnemiesDisappear" type="Area3D" parent="NavigationRegion3D/AreaEvents"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.78085, 6.8651366, -59.368614)
+collision_layer = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/AreaEvents/BlueberryEnemiesDisappear"]
+shape = SubResource("BoxShape3D_7yho6")
 
 [node name="Buttons" type="Node3D" parent="NavigationRegion3D"]
 
@@ -9642,6 +9706,16 @@ key_type = "weird"
 [node name="Key6" parent="Items" instance=ExtResource("151_j5g58")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.393635, 5.720276, -54.528896)
 key_type = "emerald"
+
+[node name="Blockers" type="Node3D" parent="."]
+
+[node name="TempBlueberryBlocker" type="StaticBody3D" parent="Blockers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1081624, 6.872827, -29.061106)
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Blockers/TempBlueberryBlocker"]
+shape = SubResource("BoxShape3D_kxtuo")
 
 [node name="WeatherController" type="Node3D" parent="."]
 script = ExtResource("163_weather")

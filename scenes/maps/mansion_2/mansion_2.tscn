@@ -1,4 +1,4 @@
-[gd_scene load_steps=842 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=849 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -162,11 +162,15 @@
 [ext_resource type="PackedScene" uid="uid://ds1csj3phl2jj" path="res://scenes/objects/ao_door_4.tscn" id="142_7mt0f"]
 [ext_resource type="PackedScene" uid="uid://d3gwecawhtco5" path="res://scenes/enemies/fuwatty.tscn" id="142_c807w"]
 [ext_resource type="Script" uid="uid://diitw7t3gnsv4" path="res://scenes/components/effects/camera_switch_effect.gd" id="142_sbx0a"]
+[ext_resource type="PackedScene" uid="uid://brwg0ld1m60wi" path="res://scenes/enemies/hundred_eyes_oni.tscn" id="143_7ru5d"]
 [ext_resource type="PackedScene" uid="uid://bcq8f4kxca4ot" path="res://scenes/objects/ao_moving_bars_4.tscn" id="143_lyskg"]
+[ext_resource type="PackedScene" uid="uid://dj1gyqnuwc1iy" path="res://scenes/enemies/hunchback_oni.tscn" id="144_1q57w"]
 [ext_resource type="PackedScene" uid="uid://dxcoqcfv4mwvt" path="res://scenes/objects/ao_moving_wall_11.tscn" id="144_ixhe6"]
 [ext_resource type="PackedScene" uid="uid://bhyg2mjmmc8hi" path="res://scenes/objects/ao_moving_wall_12.tscn" id="145_bli0b"]
+[ext_resource type="PackedScene" uid="uid://4wmv11shq67i" path="res://scenes/enemies/jellyfish_oni.tscn" id="145_fj37k"]
 [ext_resource type="PackedScene" uid="uid://b84vvvmcg1wvq" path="res://scenes/objects/ao_moving_wall_13.tscn" id="146_1fgol"]
 [ext_resource type="AudioStream" uid="uid://g1v4r2v8yfn8" path="res://sounds/sfx/DSWITCH2.ogg" id="146_epj47"]
+[ext_resource type="PackedScene" uid="uid://cftnkr3f4aq6d" path="res://scenes/enemies/takuro_oni.tscn" id="146_n8bub"]
 [ext_resource type="Texture2D" uid="uid://d2dnj5bn4o040" path="res://images/textures/SW_14_1.png" id="146_rfpum"]
 [ext_resource type="PackedScene" uid="uid://nbs3x341f5rp" path="res://scenes/objects/ao_moving_wall_15.tscn" id="147_33cd6"]
 [ext_resource type="PackedScene" uid="uid://dvmtywguyoi01" path="res://scenes/objects/ao_moving_wall_16.tscn" id="148_owgv6"]
@@ -5460,10 +5464,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_c807w"]
+[sub_resource type="QuadMesh" id="QuadMesh_n8bub"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_7ru5d"]
+[sub_resource type="QuadMesh" id="QuadMesh_dkv1e"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -5655,6 +5659,24 @@ metadata/_custom_type_script = "uid://diolsigsqgtkb"
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
 speed = 18.0
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_7ru5d"]
+resource_local_to_scene = true
+script = ExtResource("133_gyxxe")
+chase_player = false
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_n8bub"]
+script = ExtResource("133_gyxxe")
+speed = 3.0
+chase_player = false
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_1d2jy"]
+script = ExtResource("133_gyxxe")
+speed = 6.0
+chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_oufop"]
@@ -7713,7 +7735,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_c807w")
+mesh = SubResource("QuadMesh_n8bub")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7721,7 +7743,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_7ru5d")
+mesh = SubResource("QuadMesh_dkv1e")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -8476,6 +8498,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.419838, 5.6159997, -46.41
 stats = SubResource("Resource_c807w")
 navigation_mode = 1
 current_room = "SecondBigBasement"
+
+[node name="Ao oni8" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6159997, -34.355217)
+stats = SubResource("Resource_7ru5d")
+
+[node name="HundredEyesOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_7ru5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.59614, -32.529152)
+
+[node name="HunchbackOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("144_1q57w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5973625, -36.477)
+stats = SubResource("Resource_n8bub")
+
+[node name="JellyfishOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("145_fj37k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2945287, 5.5936537, -35.487965)
+stats = SubResource("Resource_1d2jy")
+
+[node name="TakuroOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("146_n8bub")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6518672, 5.5981703, -34.413387)
 
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)

@@ -1,0 +1,142 @@
+[gd_scene load_steps=14 format=3 uid="uid://4wmv11shq67i"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_q206t"]
+[ext_resource type="Texture2D" uid="uid://beb0p28p5wkpg" path="res://images/enemies/ao-spider/AOWTA0.png" id="2_5n0dg"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="2_wnmna"]
+[ext_resource type="Texture2D" uid="uid://bb7ap1tcnt7jr" path="res://images/enemies/ao-spider/AOWTB0.png" id="3_h5wga"]
+[ext_resource type="Script" uid="uid://b5x4ehxe1tlru" path="res://scenes/systems/dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="4_o7rr8"]
+[ext_resource type="Texture2D" uid="uid://drtvb25xoimb6" path="res://images/enemies/ao-spider/AOWTC0.png" id="4_wnmna"]
+[ext_resource type="Texture2D" uid="uid://crmmsy1x88dku" path="res://images/enemies/ao-spider/AOWTD0.png" id="5_pvigb"]
+
+[sub_resource type="Resource" id="Resource_pvigb"]
+script = ExtResource("2_wnmna")
+speed = 6.0
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Animation" id="Animation_o7rr8"]
+resource_name = "move"
+length = 0.4
+loop_mode = 1
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("2_5n0dg"), ExtResource("3_h5wga"), ExtResource("4_wnmna"), ExtResource("5_pvigb")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:offset:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0.0, -2.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../DarkChasersFootstepSurfaceDetector")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}, {
+"args": [],
+"method": &"play_footstep"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_pvigb"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_5n0dg")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite3D:offset:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h5wga"]
+_data = {
+&"RESET": SubResource("Animation_pvigb"),
+&"move": SubResource("Animation_o7rr8")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h5wga"]
+radius = 0.2
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_h5wga"]
+height = 2.186821
+radius = 1.3710938
+
+[node name="JellyfishOni" instance=ExtResource("1_q206t")]
+stats = SubResource("Resource_pvigb")
+
+[node name="Sprite3D" type="Sprite3D" parent="Graphics" index="0"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+offset = Vector2(0, 54)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("2_5n0dg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Graphics" index="1"]
+libraries = {
+&"": SubResource("AnimationLibrary_h5wga")
+}
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0067353, 0)
+shape = SubResource("CapsuleShape3D_h5wga")
+
+[node name="DarkChasersFootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="4"]
+script = ExtResource("4_o7rr8")
+metadata/_custom_type_script = "uid://b5x4ehxe1tlru"
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0997566, 0)
+shape = SubResource("CylinderShape3D_h5wga")
+
+[node name="EyesDetection3D" parent="." index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2281898, 0)
+
+[node name="EnemyAnimationComponent" parent="." index="8" node_paths=PackedStringArray("animation_player")]
+animation_player = NodePath("../Graphics/AnimationPlayer")
+speed_scale_factor = 5.0

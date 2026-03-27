@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://brwg0ld1m60wi"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_d4ppq"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="2_16mo0"]
+[ext_resource type="Texture2D" uid="uid://bl52s830mpera" path="res://images/enemies/ao-blob/AOBLA0.png" id="2_34g1k"]
+[ext_resource type="Texture2D" uid="uid://nk23ampoo5j3" path="res://images/enemies/ao-blob/AOBLB0.png" id="3_qvyle"]
+[ext_resource type="Texture2D" uid="uid://cu7oyfrw1oxls" path="res://images/enemies/ao-blob/AOBLC0.png" id="4_16mo0"]
+[ext_resource type="Texture2D" uid="uid://cgm5ss57fkrw3" path="res://images/enemies/ao-blob/AOBLD0.png" id="5_hdn6u"]
+
+[sub_resource type="Resource" id="Resource_hdn6u"]
+script = ExtResource("2_16mo0")
+speed = 1.0
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d4ppq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_34g1k")
+}],
+"loop": false,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_34g1k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qvyle")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_16mo0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_hdn6u")
+}],
+"loop": true,
+"name": &"move",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qvyle"]
+radius = 0.2
+height = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_16mo0"]
+radius = 1.1975098
+height = 2.3950195
+
+[node name="HundredEyesOni" instance=ExtResource("1_d4ppq")]
+stats = SubResource("Resource_hdn6u")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="Graphics" index="0"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+offset = Vector2(0, 57.38)
+billboard = 2
+shaded = true
+sprite_frames = SubResource("SpriteFrames_d4ppq")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5038601, 0)
+shape = SubResource("CapsuleShape3D_qvyle")
+
+[node name="NavigationAgent3D" parent="." index="3"]
+path_desired_distance = 0.4
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2113179, 0)
+shape = SubResource("CapsuleShape3D_16mo0")
+
+[node name="EyesDetection3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4014479, 0)
+
+[node name="EnemyAnimationComponent" parent="." index="7" node_paths=PackedStringArray("animated_sprite")]
+animation_type = 1
+animated_sprite = NodePath("../Graphics/AnimatedSprite3D")
+idle_animation = "idle"

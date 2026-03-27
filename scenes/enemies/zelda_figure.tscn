@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://ct00fv87qx3ud"]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_1tg8j"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="2_bsqxn"]
+[ext_resource type="Texture2D" uid="uid://cq1xb2gi8bpxf" path="res://images/enemies/static-images/BENAA0.png" id="2_wgcmn"]
+
+[sub_resource type="Resource" id="Resource_seadd"]
+script = ExtResource("2_bsqxn")
+chase_player = false
+can_open_door = false
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bsqxn"]
+radius = 0.28027344
+height = 0.8781748
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_wgcmn"]
+radius = 0.01
+
+[node name="ZeldaFigure" instance=ExtResource("1_1tg8j")]
+stats = SubResource("Resource_seadd")
+
+[node name="Sprite3D" type="Sprite3D" parent="Graphics" index="0"]
+transform = Transform3D(0.28, 0, 0, 0, 0.28, 0, 0, 0, 0.28, 0, 0, 0)
+offset = Vector2(0, 174.25)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("2_wgcmn")
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.533983, 0)
+shape = SubResource("CapsuleShape3D_bsqxn")
+
+[node name="KillZone" parent="." index="4"]
+collision_mask = 0
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2751602, 0)
+shape = SubResource("SphereShape3D_wgcmn")
+
+[node name="EyesDetection3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.574947, 0)
+
+[node name="BloodEffectComponent" parent="." index="8"]
+blood_color = Color(1, 0, 0, 1)

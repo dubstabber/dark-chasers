@@ -17,6 +17,16 @@ extends Node
 
 @export var fast_ao_oni_wall: StaticBody3D
 
+@export var zelda_talks_zone: Area3D
+@export var open_secret_door_zone: Area3D
+@export var secret_door: Door
+@export var open_underground_door_zone: Area3D
+@export var underground_door1: Door
+@export var underground_door2: Door
+@export var underground_door3: Door
+
+@export var underground_secret_radio: Area3D
+
 @export var indicators: Array[ProceduralOverlayIndicator] = []
 
 const WALLS_FOR_PLAYER_LAYER_BIT := 7
@@ -25,6 +35,10 @@ var _ao_double_music: AudioStreamPlayer = null
 var _ao_takeshi_gone := false
 var _ao_mika_gone := false
 var _ao_double_disappearance_handled := false
+var _zelda_talks_zone_triggered := false
+var _open_secret_door_zone_triggered := false
+var _open_underground_door_zone_triggered := false
+var _underground_secret_radio_triggered := false
 
 
 func _ready() -> void:
@@ -38,6 +52,14 @@ func _ready() -> void:
 	Services.event_bus.subscribe(GameEventTypes.AREA_BASEMENT_AOONI_CHASE, _on_area_basement_aooni_chase)
 	Services.event_bus.subscribe(GameEventTypes.AREA_SECRET_MESSAGE, _on_area_secret_message)
 	Services.event_bus.subscribe(GameEventTypes.AREA_RELEASE_FAST_AO_ONI, _on_area_release_fast_ao_oni)
+	if zelda_talks_zone:
+		zelda_talks_zone.body_entered.connect(_on_zelda_talks_zone_body_entered)
+	if open_secret_door_zone:
+		open_secret_door_zone.body_entered.connect(_on_open_secret_door_zone_body_entered)
+	if open_underground_door_zone:
+		open_underground_door_zone.body_entered.connect(_on_open_underground_door_zone_body_entered)
+	if underground_secret_radio:
+		underground_secret_radio.body_entered.connect(_on_underground_secret_radio_body_entered)
 
 
 func _exit_tree() -> void:
@@ -49,6 +71,14 @@ func _exit_tree() -> void:
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_BASEMENT_AOONI_CHASE, _on_area_basement_aooni_chase)
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_SECRET_MESSAGE, _on_area_secret_message)
 	Services.event_bus.unsubscribe(GameEventTypes.AREA_RELEASE_FAST_AO_ONI, _on_area_release_fast_ao_oni)
+	if zelda_talks_zone:
+		zelda_talks_zone.body_entered.disconnect(_on_zelda_talks_zone_body_entered)
+	if open_secret_door_zone:
+		open_secret_door_zone.body_entered.disconnect(_on_open_secret_door_zone_body_entered)
+	if open_underground_door_zone:
+		open_underground_door_zone.body_entered.disconnect(_on_open_underground_door_zone_body_entered)
+	if underground_secret_radio:
+		underground_secret_radio.body_entered.disconnect(_on_underground_secret_radio_body_entered)
 
 
 func _hud() -> Node:
@@ -232,3 +262,45 @@ func _on_area_release_fast_ao_oni(_event: GameEvent) -> void:
 	if fast_ao_oni_wall:
 		fast_ao_oni_wall.collision_layer = 0
 		fast_ao_oni_wall.set_collision_layer_value(WALLS_FOR_PLAYER_LAYER_BIT, true)
+
+
+func _on_zelda_talks_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _zelda_talks_zone_triggered:
+		return
+	_zelda_talks_zone_triggered = true
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#08f300]Elegy of Emptiness:[/color] Come closer... don't be afraid!", false, 3.0)
+
+
+func _on_open_secret_door_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _open_secret_door_zone_triggered:
+		return
+	_open_secret_door_zone_triggered = true
+	secret_door.open()
+
+
+func _on_open_underground_door_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _open_underground_door_zone_triggered:
+		return
+	_open_underground_door_zone_triggered = true
+	underground_door1.open()
+	underground_door2.open()
+	underground_door3.open()
+
+
+func _on_underground_secret_radio_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _underground_secret_radio_triggered:
+		return
+	_underground_secret_radio_triggered = true
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("[color=#6c6c6c]You:[/color] A radio!?", false, 3.0)

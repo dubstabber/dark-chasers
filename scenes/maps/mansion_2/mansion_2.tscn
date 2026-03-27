@@ -1,4 +1,4 @@
-[gd_scene load_steps=865 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=867 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -172,6 +172,7 @@
 [ext_resource type="AudioStream" uid="uid://g1v4r2v8yfn8" path="res://sounds/sfx/DSWITCH2.ogg" id="146_epj47"]
 [ext_resource type="PackedScene" uid="uid://cftnkr3f4aq6d" path="res://scenes/enemies/takuro_oni.tscn" id="146_n8bub"]
 [ext_resource type="Texture2D" uid="uid://d2dnj5bn4o040" path="res://images/textures/SW_14_1.png" id="146_rfpum"]
+[ext_resource type="PackedScene" uid="uid://curr1hvhg2u61" path="res://scenes/enemies/ilopulu.tscn" id="147_1d2jy"]
 [ext_resource type="PackedScene" uid="uid://nbs3x341f5rp" path="res://scenes/objects/ao_moving_wall_15.tscn" id="147_33cd6"]
 [ext_resource type="PackedScene" uid="uid://dvmtywguyoi01" path="res://scenes/objects/ao_moving_wall_16.tscn" id="148_owgv6"]
 [ext_resource type="PackedScene" uid="uid://8dwblsmu03cb" path="res://scenes/objects/ao_moving_wall_14.tscn" id="149_btb4v"]
@@ -5692,6 +5693,12 @@ speed = 6.0
 is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
+[sub_resource type="Resource" id="Resource_27cxm"]
+resource_local_to_scene = true
+script = ExtResource("133_gyxxe")
+speed = 9.0
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
 [sub_resource type="Resource" id="Resource_oufop"]
 resource_local_to_scene = true
 script = ExtResource("133_gyxxe")
@@ -8601,6 +8608,16 @@ current_room = "BlueberryRoom"
 [node name="TakuroOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("146_n8bub")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -105.22192, 5.5981703, -28.60925)
 current_room = "SecondBigBasement"
+
+[node name="Ilopulu" parent="NavigationRegion3D/Enemies" instance=ExtResource("147_1d2jy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.761333, 5.6100354, -110.11901)
+stats = SubResource("Resource_27cxm")
+
+[node name="HundredEyesOni2" parent="NavigationRegion3D/Enemies" instance=ExtResource("143_7ru5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43.76426, 5.5961404, -78.406334)
+
+[node name="HunchbackOni2" parent="NavigationRegion3D/Enemies" instance=ExtResource("144_1q57w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -121.38226, 5.597362, -59.82895)
 
 [node name="TestAoOni" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.263601, 4.1760006, -22.269402)

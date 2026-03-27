@@ -26,6 +26,15 @@ extends Node
 @export var underground_door3: Door
 
 @export var underground_secret_radio: Area3D
+@export var close_big_wall_zone: Area3D
+
+@export var release_takuro_basement_wall_zone: Area3D
+@export var takuro_basement_wall: Door
+
+@export var big_wall: Door
+
+@export var takuro_released_zone: Area3D
+@export var takuro_released_enemy: Enemy
 
 @export var indicators: Array[ProceduralOverlayIndicator] = []
 
@@ -39,6 +48,9 @@ var _zelda_talks_zone_triggered := false
 var _open_secret_door_zone_triggered := false
 var _open_underground_door_zone_triggered := false
 var _underground_secret_radio_triggered := false
+var _close_big_wall_zone_triggered := false
+var _release_takuro_basement_wall_zone_triggered := false
+var _takuro_released_zone_triggered := false
 
 
 func _ready() -> void:
@@ -60,6 +72,12 @@ func _ready() -> void:
 		open_underground_door_zone.body_entered.connect(_on_open_underground_door_zone_body_entered)
 	if underground_secret_radio:
 		underground_secret_radio.body_entered.connect(_on_underground_secret_radio_body_entered)
+	if close_big_wall_zone:
+		close_big_wall_zone.body_entered.connect(_on_close_big_wall_zone_body_entered)
+	if release_takuro_basement_wall_zone:
+		release_takuro_basement_wall_zone.body_entered.connect(_on_release_takuro_basement_wall_zone_body_entered)
+	if takuro_released_zone:
+		takuro_released_zone.body_entered.connect(_on_takuro_released_zone_body_entered)
 
 
 func _exit_tree() -> void:
@@ -79,6 +97,12 @@ func _exit_tree() -> void:
 		open_underground_door_zone.body_entered.disconnect(_on_open_underground_door_zone_body_entered)
 	if underground_secret_radio:
 		underground_secret_radio.body_entered.disconnect(_on_underground_secret_radio_body_entered)
+	if close_big_wall_zone:
+		close_big_wall_zone.body_entered.disconnect(_on_close_big_wall_zone_body_entered)
+	if release_takuro_basement_wall_zone:
+		release_takuro_basement_wall_zone.body_entered.disconnect(_on_release_takuro_basement_wall_zone_body_entered)
+	if takuro_released_zone:
+		takuro_released_zone.body_entered.disconnect(_on_takuro_released_zone_body_entered)
 
 
 func _hud() -> Node:
@@ -304,3 +328,42 @@ func _on_underground_secret_radio_body_entered(body: Player) -> void:
 	var hud := _hud()
 	if hud:
 		hud.show_event_text("[color=#6c6c6c]You:[/color] A radio!?", false, 3.0)
+
+
+func _on_close_big_wall_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _close_big_wall_zone_triggered:
+		return
+	_close_big_wall_zone_triggered = true
+	if big_wall:
+		big_wall.open()
+
+
+func _on_release_takuro_basement_wall_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _release_takuro_basement_wall_zone_triggered:
+		return
+	_release_takuro_basement_wall_zone_triggered = true
+	if takuro_basement_wall:
+		takuro_basement_wall.open()
+
+
+func _on_takuro_released_zone_body_entered(body: Player) -> void:
+	if not body:
+		return
+	if _takuro_released_zone_triggered:
+		return
+	_takuro_released_zone_triggered = true
+	var hud := _hud()
+	if hud:
+		hud.show_event_text("The Ao Oni! Run!", false, 3.0)
+	var music := _music()
+	if music:
+		music.stream = Services.get_sfx_catalog().get_sound(&"ao_see")
+		music.volume_db = -5
+		music.play()
+	if takuro_released_enemy:
+		takuro_released_enemy.current_target = body
+		takuro_released_enemy.makepath()

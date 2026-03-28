@@ -9145,7 +9145,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.047668457, -0.17919922, -0
 shape = SubResource("BoxShape3D_lrdmy")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.663067, 7.3599997, -9.488393)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60.137226, 9.242, -108.3295)
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D"]
 
@@ -9597,6 +9597,13 @@ blend_distance = 0.0
 size = Vector3(65.06207, 11.28302, 24.156906)
 ambient_mode = 2
 ambient_color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+
+[node name="ReflectionProbe42" type="ReflectionProbe" parent="Decorations"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.16512, 9.017134, -128.46237)
+blend_distance = 8.0
+size = Vector3(41.50573, 11.28302, 74.15358)
+ambient_mode = 2
+ambient_color = Color(0.40832916, 0.40832955, 0.40832937, 1)
 
 [node name="ReflectionProbe13" type="ReflectionProbe" parent="Decorations"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.464645, 7.6006327, 3.581698)

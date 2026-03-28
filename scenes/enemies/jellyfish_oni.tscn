@@ -129,6 +129,8 @@ shape = SubResource("CapsuleShape3D_h5wga")
 
 [node name="DarkChasersFootstepSurfaceDetector" type="AudioStreamPlayer3D" parent="." index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.187, 0)
+attenuation_model = 2
+volume_db = -20.0
 script = ExtResource("4_o7rr8")
 footstep_material_library = ExtResource("8_osm1a")
 metadata/_custom_type_script = "uid://b5x4ehxe1tlru"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=867 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=868 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -60,10 +60,11 @@
 [ext_resource type="Texture2D" uid="uid://ghsp7r5fl24w" path="res://models/mansion2/mansion2_SWTX0641.png" id="54_7ru5d"]
 [ext_resource type="Texture2D" uid="uid://dv2eao3s17eqb" path="res://models/mansion2/mansion2_SWTX0913.png" id="55_1q57w"]
 [ext_resource type="Texture2D" uid="uid://dp4mskswhxr3l" path="res://models/mansion2/mansion2_SWTX0231.png" id="56_fj37k"]
-[ext_resource type="Texture2D" uid="uid://csyofyawcp7xv" path="res://models/mansion2/mansion2_IMTRTX.png" id="57_n8bub"]
 [ext_resource type="Texture2D" uid="uid://cqe07wtd3jdat" path="res://models/mansion2/mansion2_POSTER12.png" id="58_dkv1e"]
 [ext_resource type="Texture2D" uid="uid://d3ashwaut1p3j" path="res://models/mansion2/mansion2_SW_14_1.png" id="59_1d2jy"]
+[ext_resource type="Shader" uid="uid://c2dcn0hevbk4h" path="res://shaders/imtrtx.gdshader" id="59_7y60k"]
 [ext_resource type="Texture2D" uid="uid://bxtv55x55n3o4" path="res://models/mansion2/mansion2_AGREYFL1.png" id="60_7y60k"]
+[ext_resource type="Texture2D" uid="uid://cxf7vjfghtr8n" path="res://images/textures/IMTRTX.png" id="60_27cxm"]
 [ext_resource type="Texture2D" uid="uid://cktuak8xsqmcl" path="res://models/mansion2/mansion2_CMMETAL.png" id="61_27cxm"]
 [ext_resource type="Texture2D" uid="uid://d2prslnrcyj3m" path="res://models/mansion2/mansion2_CVWALL.png" id="62_jaqgk"]
 [ext_resource type="Texture2D" uid="uid://csjeyeidjtdhn" path="res://models/mansion2/mansion2_OROOMFNC.png" id="63_yd1bl"]
@@ -2470,10 +2471,12 @@ shadow_mesh = SubResource("ArrayMesh_1yt78")
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_hb8up"]
 data = PackedVector3Array(-77.1271, 7.2799997, -29.763899, -77.1271, 6.64, -29.763899, -76.507095, 6.64, -29.763899, -77.1271, 7.2799997, -29.763899, -76.507095, 6.64, -29.763899, -76.507095, 7.2799997, -29.763899)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uacx2"]
-resource_name = "IMTRTX"
-cull_mode = 2
-albedo_texture = ExtResource("57_n8bub")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jaqgk"]
+render_priority = 0
+shader = ExtResource("59_7y60k")
+shader_parameter/albedo = ExtResource("60_27cxm")
+shader_parameter/distortion = 0.14400000684
+shader_parameter/time_scale = Vector2(1, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_idrqs"]
 _surfaces = [{
@@ -2497,7 +2500,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 1536,
 "index_data": PackedByteArray("AAABAAIAAAACAAMABAAFAAYABAAGAAcACAAJAAoACAAKAAsADAANAA4ADAAOAA8AEAARABIAEAASABMAFAAVABYAFAAWABcAGAAZABoAGAAaABsAHAAdAB4AHAAeAB8AIAAhACIAIAAiACMAJAAlACYAJAAmACcAKAApACoAKAAqACsALAAtAC4ALAAuAC8AMAAxADIAMAAyADMANAA1ADYANAA2ADcAOAA5ADoAOAA6ADsAPAA9AD4APAA+AD8AQABBAEIAQABCAEMARABFAEYARABGAEcASABJAEoASABKAEsATABNAE4ATABOAE8AUABRAFIAUABSAFMAVABVAFYAVABWAFcAWABZAFoAWABaAFsAXABdAF4AXABeAF8AYABhAGIAYABiAGMAZABlAGYAZABmAGcAaABpAGoAaABqAGsAbABtAG4AbABuAG8AcABxAHIAcAByAHMAdAB1AHYAdAB2AHcAeAB5AHoAeAB6AHsAfAB9AH4AfAB+AH8AgACBAIIAgACCAIMAhACFAIYAhACGAIcAiACJAIoAiACKAIsAjACNAI4AjACOAI8AkACRAJIAkACSAJMAlACVAJYAlACWAJcAmACZAJoAmACaAJsAnACdAJ4AnACeAJ8AoAChAKIAoACiAKMApAClAKYApACmAKcAqACpAKoAqACqAKsArACtAK4ArACuAK8AsACxALIAsACyALMAtAC1ALYAtAC2ALcAuAC5ALoAuAC6ALsAvAC9AL4AvAC+AL8AwADBAMIAwADCAMMAxADFAMYAxADGAMcAyADJAMoAyADKAMsAzADNAM4AzADOAM8A0ADRANIA0ADSANMA1ADVANYA1ADWANcA2ADZANoA2ADaANsA3ADdAN4A3ADeAN8A4ADhAOIA4ADiAOMA5ADlAOYA5ADmAOcA6ADpAOoA6ADqAOsA7ADtAO4A7ADuAO8A8ADxAPIA8ADyAPMA9AD1APYA9AD2APcA+AD5APoA+AD6APsA/AD9AP4A/AD+AP8AAAEBAQIBAAECAQMBBAEFAQYBBAEGAQcBCAEJAQoBCAEKAQsBDAENAQ4BDAEOAQ8BEAERARIBEAESARMBFAEVARYBFAEWARcBGAEZARoBGAEaARsBHAEdAR4BHAEeAR8BIAEhASIBIAEiASMBJAElASYBJAEmAScBKAEpASoBKAEqASsBLAEtAS4BLAEuAS8BMAExATIBMAEyATMBNAE1ATYBNAE2ATcBOAE5AToBOAE6ATsBPAE9AT4BPAE+AT8BQAFBAUIBQAFCAUMBRAFFAUYBRAFGAUcBSAFJAUoBSAFKAUsBTAFNAU4BTAFOAU8BUAFRAVIBUAFSAVMBVAFVAVYBVAFWAVcBWAFZAVoBWAFaAVsBXAFdAV4BXAFeAV8BYAFhAWIBYAFiAWMBZAFlAWYBZAFmAWcBaAFpAWoBaAFqAWsBbAFtAW4BbAFuAW8BcAFxAXIBcAFyAXMBdAF1AXYBdAF2AXcBeAF5AXoBeAF6AXsBfAF9AX4BfAF+AX8BgAGBAYIBgAGCAYMBhAGFAYYBhAGGAYcBiAGJAYoBiAGKAYsBjAGNAY4BjAGOAY8BkAGRAZIBkAGSAZMBlAGVAZYBlAGWAZcBmAGZAZoBmAGaAZsBnAGdAZ4BnAGeAZ8BoAGhAaIBoAGiAaMBpAGlAaYBpAGmAacBqAGpAaoBqAGqAasBrAGtAa4BrAGuAa8BsAGxAbIBsAGyAbMBtAG1AbYBtAG2AbcBuAG5AboBuAG6AbsBvAG9Ab4BvAG+Ab8BwAHBAcIBwAHCAcMBxAHFAcYBxAHGAccByAHJAcoByAHKAcsBzAHNAc4BzAHOAc8B0AHRAdIB0AHSAdMB1AHVAdYB1AHWAdcB2AHZAdoB2AHaAdsB3AHdAd4B3AHeAd8B4AHhAeIB4AHiAeMB5AHlAeYB5AHmAecB6AHpAeoB6AHqAesB7AHtAe4B7AHuAe8B8AHxAfIB8AHyAfMB9AH1AfYB9AH2AfcB+AH5AfoB+AH6AfsB/AH9Af4B/AH+Af8BAAIBAgICAAICAgMCBAIFAgYCBwIGAgUCCAIEAgYCCQIGAgcCCgIIAgYCCwIGAgkCDAIKAgYCBgILAgwCDQIMAgsCDAINAg4CDQIPAg4CDwIQAg4CDgIQAhECEQIQAhICDwITAhACEwIUAhACEAIUAhUCFgIVAhQCFAIXAhYCFgIYAhUCGAIWAhkCGAIaAhUCGgIYAhsCHAIbAhgCHQIcAhgCHgIcAh0CHgIdAh8CHwIdAiACIQIfAiACIgIfAiECIgIhAiMCIwIhAiQCJQImAicCKAInAiYCJgIlAikCKgInAigCKQIlAisCLAIqAigCKwIlAi0CKgIsAi4CKwItAi8CMAIuAiwCLQIxAi8CMgIuAjACLwIxAjMCLgIyAjQCMwIxAjUCNAIyAjYCNQIxAjcCOAI2AjICNQI3AjkCOAI6AjYCOwI6AjgCPAI6AjsCPAI9AjoCPgI9AjwCPQI+Aj8CQAI/Aj4CQQI/AkACPwJBAkICQgJBAkMCRAJDAkECRQJDAkQCQwJFAkYCNQI5AkcCRwI5AkgCRwJIAkkCSgJHAkkCSwJHAkoCSwJKAkwCSwJNAkcCTQJLAk4CTwJOAksCUAJHAk0CTgJPAlECUQJPAlICUgJPAlMCVAJHAlACVQJUAlACVgJVAlACVwJWAlACVgJXAlgCVwJZAlgCWgJYAlkCWwJYAloCXAJYAlsCXAJbAl0CXAJdAl4CXgJdAl8CXwJdAmACYQJYAlwCYgJYAmECWAJiAmMCZAJjAmICYgJhAmUCZQJmAmICYgJmAmcCaAJnAmYCaQJnAmgCagJpAmgCawJpAmoCbAJrAmoCbQJrAmwCbgJtAmwCbwJtAm4CcAJvAm4CbwJwAnECcgJvAnECcwJxAnACcAJ0AnMCcwJ0AnUCdgJxAnMCdwJxAnYCdwJ2AngCeQJxAncCcQJ5AnoCewJyAnECewJ8AnICcgJ8An0CfAJ7An4CfAJ/An0CfwJ8AoACgQJ9An8CfQKBAoICgwJ+AnsCgwJ7AoQCgwKFAn4CfgKFAoYChwKIAokCigKIAocChwKJAosCjAKIAooCiwKJAo0CjgKMAooCiwKNAo8CkAKMAo4CjwKNApECkgKMApACkQKNApMClAKSApACkQKTApUCkgKUApYClQKTApcCmAKWApQClQKXApkCmgKWApgClQKZApsCnAKWApoCmwKZAp0CngKcApoCnQKZAp8CnQKfAqACnwKhAqACoAKhAqICowKiAqECogKjAqQCpAKjAqUCpgKlAqMCpwKlAqYCpQKnAqgCqQKeApoCngKpAqoCqgKpAqsCqwKpAqwCrAKpAq0CrQKuAqwCqQKvAq0CsAKtAq8CrQKwArECsgKxArACswKxArICsQKzArQCrwKpArUCtQKpArYCtQK2ArcCtQK3ArgCtQK4ArkCugK5ArgCuQK6ArsCuwK6ArwCvAK6Ar0CvQK6Ar4CvQK+Ar8CvwK+AsACvwLAAsECwQLCAr8CvgK6AsMCugLEAsMCxQLDAsQCxgLEAroCxALGAscCyALFAsQCyQLIAsQCyALJAsoCygLJAssCygLLAswCzALLAs0CzALNAs4CzgLNAs8CzgLPAtAC0QLQAs8C0ALRAtIC0gLRAtMC1ALTAtEC0gLTAtUC0gLVAtYC1gLVAtcC1QLTAtgC2QLYAtMC2ALZAtoC2QLTAtsC2wLTAtwC0wLUAt0C3gLdAtQC3wLeAtQC4ALdAt4C4QLeAt8C3gLhAuIC4QLfAuMC4wLfAuQC4ALlAt0C3QLlAuYC5QLgAucC5wLgAugC6QLqAusC7ALpAusC6wLqAu0C7QLqAu4C6QLvAuoC8ALqAu8C6gLwAvEC6gLxAvIC8gLxAvMC8gLzAvQC8gL0AvUC9QL0AvYC9gL0AvcC9gL3AvgC9gL4AvkC6QLsAvoC+gLsAvsC+wL8AvoC/QL6AvwC/QL8Av4C/wL6Av0C+gL/AgAD/QL+AgEDAgMBA/4CAQMCAwMDBAMDAwIDAwMEAwUDBgMBAwMDBwMBAwYDAQMHAwgD"),
-"material": SubResource("StandardMaterial3D_uacx2"),
+"material": SubResource("ShaderMaterial_jaqgk"),
 "name": "IMTRTX",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -5466,10 +5469,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_1d2jy"]
+[sub_resource type="QuadMesh" id="QuadMesh_7y60k"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_7y60k"]
+[sub_resource type="QuadMesh" id="QuadMesh_27cxm"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -7816,7 +7819,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_1d2jy")
+mesh = SubResource("QuadMesh_7y60k")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7824,7 +7827,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_7y60k")
+mesh = SubResource("QuadMesh_27cxm")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -8541,10 +8544,12 @@ disappear_zones = [NodePath("../../DisappearZones/SecondDownstairsEndChase")]
 [node name="Ao oni3" parent="NavigationRegion3D/Enemies" instance=ExtResource("132_qxfai")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 111.19187, 5.4654007, 8.115096)
 stats = SubResource("Resource_gwili")
+current_room = "ThirdFloor"
 
 [node name="Ao oni4" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("132_qxfai")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 97.94831, 4.667201, -62.43273)
 stats = SubResource("Resource_m7gha")
+current_room = "FirstBigBasement"
 disappear_zones = [NodePath("../../DisappearZones/QuickEnemyDisappear")]
 
 [node name="Ao oni5" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("132_qxfai")]
@@ -8561,6 +8566,7 @@ disappear_zones = [NodePath("../../DisappearZones/TwoOnisDisappear")]
 [node name="Ao mika" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("139_erv0g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.05503, 4.6642013, -37.38345)
 stats = SubResource("Resource_x6afc")
+current_room = "FirstBigBasement"
 disappear_zones = [NodePath("../../DisappearZones/TwoOnisDisappear")]
 
 [node name="Fuwatty" parent="NavigationRegion3D/Enemies" node_paths=PackedStringArray("disappear_zones") instance=ExtResource("142_c807w")]

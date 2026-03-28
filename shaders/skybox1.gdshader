@@ -3,6 +3,13 @@ shader_type sky;
 uniform sampler2D source_panorama : filter_linear, repeat_enable, source_color, hint_default_black;
 uniform float texture_width = 190.0;
 
+// Half-sphere / dome: EYEDIR.y is up. Below horizon_cutoff_y = ground tint; at/above dome_cap_y = solid cap from texture top row.
+uniform float horizon_cutoff_y : hint_range(-1.0, 0.2, 0.001) = -0.08;
+uniform float dome_cap_y : hint_range(0.05, 1.0, 0.01) = 0.7;
+uniform float cap_edge_softness : hint_range(0.001, 0.25, 0.001) = 0.06;
+// Panorama V at eye level (y≈0); lower V samples higher on the texture strip toward zenith.
+uniform float horizon_panorama_v : hint_range(0.0, 1.0, 0.001) = 0.92;
+
 void sky() {
 	vec3 eyedir = normalize(EYEDIR);
 	
@@ -21,30 +28,23 @@ void sky() {
 		texture(source_panorama, vec2(0.875, 0.001)).rgb
 	) * 0.25;
 	
-	// Cap threshold - texture ends here, solid cap above
-	// Value of 1.0 means texture goes all the way to the zenith
-	float cap_threshold = 0.7;
+	float cap_y = max(dome_cap_y, horizon_cutoff_y + 0.001);
 	
 	vec3 final_color;
 	
-	if (eyedir.y < -0.08) {
-		// Below horizon (lower hemisphere): dark blue-gray
+	if (eyedir.y < horizon_cutoff_y) {
 		final_color = vec3(0.05, 0.05, 0.05);
 	}
-	else if (eyedir.y >= cap_threshold) {
-		// Above cap threshold: solid cap color (no hole possible)
+	else if (eyedir.y >= cap_y) {
 		final_color = cap_color;
 	}
 	else {
-		// Textured region: from horizon (y=0) up to cap_threshold
-		// Map so that: horizon -> v=1 (bottom of texture), cap_threshold -> v=0 (top of texture)
-		float v = 0.92 - (eyedir.y / cap_threshold);
-		// Clamp v to avoid any edge issues
+		float v = horizon_panorama_v - (eyedir.y / cap_y);
 		v = clamp(v, 0.001, 0.999);
 		
 		vec3 tex_color = texture(source_panorama, vec2(u, v)).rgb;
-		float cap_fade = 0.06;
-		float cap_blend = smoothstep(cap_threshold - cap_fade, cap_threshold, eyedir.y);
+		float fade = max(cap_edge_softness, 1e-4);
+		float cap_blend = smoothstep(cap_y - fade, cap_y, eyedir.y);
 		final_color = mix(tex_color, cap_color, cap_blend);
 	}
 	

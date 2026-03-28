@@ -35,7 +35,7 @@ func test_respawn(player: CharacterBody3D) -> void:
 		return
 
 	TransitionArrival.apply(player, test_spawn)
-	RoomAware.set_current_room(player, "SecondBigBasement")
+	RoomAware.set_current_room(player, STARTING_ROOM)
 	Services.utils.play_sound(Services.get_sfx_catalog().get_sound(&"spawn"), player)
 
 

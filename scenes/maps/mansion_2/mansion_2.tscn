@@ -1,4 +1,4 @@
-[gd_scene load_steps=868 format=4 uid="uid://yfgnl0sdicd0"]
+[gd_scene load_steps=870 format=4 uid="uid://yfgnl0sdicd0"]
 
 [ext_resource type="Texture2D" uid="uid://oi16v312y3cl" path="res://models/mansion2/mansion2_HROBWB02.png" id="1_fdh80"]
 [ext_resource type="Script" uid="uid://0pqafd4c7k18" path="res://scenes/maps/mansion_2/mansion_2.gd" id="1_ophgb"]
@@ -180,6 +180,8 @@
 [ext_resource type="PackedScene" uid="uid://dg47h20poxtdy" path="res://scenes/items/key.tscn" id="151_j5g58"]
 [ext_resource type="Shader" uid="uid://cx8c305w66oq3" path="res://shaders/procedural_direction_overlay.gdshader" id="152_mdtbf"]
 [ext_resource type="Script" uid="uid://d3mpgd2k02ifk" path="res://scenes/components/procedural_overlay_indicator/procedural_overlay_indicator.gd" id="153_c807w"]
+[ext_resource type="PackedScene" uid="uid://615vmwtlm2a4" path="res://scenes/objects/tree_2.tscn" id="161_27cxm"]
+[ext_resource type="PackedScene" uid="uid://dmy56t78queaj" path="res://scenes/objects/tree_1.tscn" id="162_jaqgk"]
 [ext_resource type="PackedScene" uid="uid://nxkfxv0h1ev7" path="res://scenes/objects/ao_moving_wall_17.tscn" id="162_tgv7v"]
 [ext_resource type="Script" uid="uid://b8lhfitvvo2ld" path="res://scenes/maps/mansion_2/mansion_2_weather_controller.gd" id="163_weather"]
 [ext_resource type="Material" uid="uid://c7beg6p521a7" path="res://scenes/particles/ao_rain_material.tres" id="172_xjcub"]
@@ -5469,16 +5471,20 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_7y60k"]
+[sub_resource type="QuadMesh" id="QuadMesh_jaqgk"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_27cxm"]
+[sub_resource type="QuadMesh" id="QuadMesh_yd1bl"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
 shader = ExtResource("132_27yvw")
 shader_parameter/source_panorama = ExtResource("133_2557n")
 shader_parameter/texture_width = 190.0
+shader_parameter/horizon_cutoff_y = -0.22299996309250003
+shader_parameter/dome_cap_y = 0.59999998845146
+shader_parameter/cap_edge_softness = 0.06
+shader_parameter/horizon_panorama_v = 0.92
 
 [sub_resource type="Sky" id="Sky_27yvw"]
 sky_material = SubResource("ShaderMaterial_epj47")
@@ -6369,7 +6375,6 @@ metadata/_edit_lock_ = true
 [node name="Map" type="Node3D" parent="NavigationRegion3D"]
 unique_name_in_owner = true
 metadata/_edit_lock_ = true
-metadata/_edit_group_ = true
 
 [node name="MAP02_142" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 mesh = SubResource("ArrayMesh_ljkkk")
@@ -6773,6 +6778,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_in1fj")
 
 [node name="MAP02_046" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+sorting_offset = 50.0
 mesh = SubResource("ArrayMesh_nedoh")
 skeleton = NodePath("")
 
@@ -7819,7 +7825,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_7y60k")
+mesh = SubResource("QuadMesh_jaqgk")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7827,7 +7833,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_27cxm")
+mesh = SubResource("QuadMesh_yd1bl")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -9139,7 +9145,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.047668457, -0.17919922, -0
 shape = SubResource("BoxShape3D_lrdmy")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53.66649, 5.6000004, -58.53362)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.663067, 7.3599997, -9.488393)
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D"]
 
@@ -9256,6 +9262,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 127.362625, 3.3711996, -47.77
 
 [node name="CreepyFastAoOniSpawn" type="Marker3D" parent="NavigationRegion3D/EventSpawners"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.7114897, 5.6, -32.15989)
+
+[node name="Decorations" type="Node3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.9186783, 0.65487003, -0.27237892)
+
+[node name="Tree1" parent="NavigationRegion3D/Decorations" instance=ExtResource("162_jaqgk")]
+transform = Transform3D(0.59999996, 0, 0, 0, 0.59999996, 0, 0, 0, 0.59999996, 66.93126, 6.575285, 19.593445)
+
+[node name="Tree2" parent="NavigationRegion3D/Decorations" instance=ExtResource("161_27cxm")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 66.88472, 6.577592, 15.396707)
+
+[node name="Tree3" parent="NavigationRegion3D/Decorations" instance=ExtResource("162_jaqgk")]
+transform = Transform3D(0.59999996, 0, 0, 0, 0.59999996, 0, 0, 0, 0.59999996, 55.373302, 6.5752845, 22.201916)
 
 [node name="HUD" parent="." instance=ExtResource("130_3bl51")]
 

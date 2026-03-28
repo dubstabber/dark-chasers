@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b123gkcklkyle" path="res://scenes/maps/fdm_backrooms.gd" id="1_6igmb"]
 [ext_resource type="Texture2D" uid="uid://cpybh486tk8go" path="res://models/fdmbackrooms/fdmbackrooms_FWATER1.png" id="2_o4rnc"]
 [ext_resource type="Texture2D" uid="uid://chpic3d76je4h" path="res://models/fdmbackrooms/fdmbackrooms_TILE04.png" id="3_pvi25"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_5e57n"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="4_5e57n"]
 [ext_resource type="Texture2D" uid="uid://ctvryfbh5wlg5" path="res://models/fdmbackrooms/fdmbackrooms_OCONCU14.png" id="4_gvtcf"]
 [ext_resource type="Texture2D" uid="uid://di042kpu4c4ah" path="res://models/fdmbackrooms/fdmbackrooms_OCONCP40.png" id="5_fv7nk"]
 [ext_resource type="Texture2D" uid="uid://bal0dx5n5cdy" path="res://models/fdmbackrooms/fdmbackrooms_OCONCU40.png" id="6_84g8u"]

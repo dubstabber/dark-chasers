@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://ga3gwr1a2f0q"]
 
 [ext_resource type="Script" uid="uid://objctwjw0i14" path="res://scenes/maps/backrooms_maze.gd" id="1_dqm2f"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="2_hud"]
 
 [sub_resource type="Environment" id="Environment_3b4gm"]
 

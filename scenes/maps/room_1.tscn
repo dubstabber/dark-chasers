@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dr1cm2nba1v1x" path="res://scenes/objects/teleport.tscn" id="3_6e2tk"]
 [ext_resource type="Script" uid="uid://dl4vwbd37cqf8" path="res://scenes/maps/room_1_transitions.gd" id="3_bgx1e"]
 [ext_resource type="PackedScene" uid="uid://d3gwecawhtco5" path="res://scenes/enemies/fuwatty.tscn" id="4_1ibpi"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_vk5nm"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="4_vk5nm"]
 [ext_resource type="PackedScene" uid="uid://dtnl3ap2wwpc5" path="res://scenes/enemies/giant_scorpion.tscn" id="5_p8nu4"]
 [ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="7_hjews"]
 [ext_resource type="Script" uid="uid://frgl0w6dnh16" path="res://scenes/components/transition/transition_arrival_marker.gd" id="8_arrival"]

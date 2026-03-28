@@ -15,17 +15,17 @@ footstep_profile = ExtResource("1_5528t")
 
 [sub_resource type="Resource" id="Resource_gvg06"]
 script = ExtResource("1_5idub")
-material_names = Array[String](["CCFLOOR", "HL2CRPT1", "HRBED", "HL2CRPT3", "BTEPPI07", "HRPLLOW"])
+material_names = Array[String](["CCFLOOR", "HL2CRPT1", "HRBED", "HL2CRPT3", "BTEPPI07", "HRPLLOW", "HL2CRPT2"])
 footstep_profile = ExtResource("3_kuofs")
 
 [sub_resource type="Resource" id="Resource_ihibf"]
 script = ExtResource("1_5idub")
-material_names = Array[String](["HRWDFLR", "HRWDPLN", "CMTVWOOD", "HRWOOD01", "HRWOOD02", "CHRWOOD", "PNRFLOOR", "PNRWOOD"])
+material_names = Array[String](["HRWDFLR", "HRWDPLN", "CMTVWOOD", "HRWOOD01", "HRWOOD02", "CHRWOOD", "PNRFLOOR", "PNRWOOD", "ORFLOOR", "OBFLOOR"])
 footstep_profile = ExtResource("4_3alrb")
 
 [sub_resource type="Resource" id="Resource_2futc"]
 script = ExtResource("1_5idub")
-material_names = Array[String](["OSASPHLT", "HL2CNCR2"])
+material_names = Array[String](["OSASPHLT", "HL2CNCR2", "HROBFLOR", "HL2CFLR1", "CRCEDGE", "AGREYFL1"])
 footstep_profile = ExtResource("5_owgbv")
 
 [sub_resource type="Resource" id="Resource_fdg5s"]

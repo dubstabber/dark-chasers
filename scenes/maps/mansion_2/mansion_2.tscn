@@ -132,7 +132,7 @@
 [ext_resource type="Texture2D" uid="uid://bq5ng50ni2llc" path="res://models/mansion2/mansion2_HRLAMP.png" id="126_u1shp"]
 [ext_resource type="Texture2D" uid="uid://bkdvqu68m0bse" path="res://models/mansion2/mansion2_CDORTRAK.png" id="127_dhfri"]
 [ext_resource type="Texture2D" uid="uid://247huhsrp5hb" path="res://models/mansion2/mansion2_MDORTRAK.png" id="128_in3wm"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="130_3bl51"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="130_3bl51"]
 [ext_resource type="Script" uid="uid://b1n6s3d32mk7d" path="res://scenes/maps/mansion_2/mansion2_transitions.gd" id="130_8csov"]
 [ext_resource type="Script" uid="uid://frgl0w6dnh16" path="res://scenes/components/transition/transition_arrival_marker.gd" id="131_wqekk"]
 [ext_resource type="Shader" uid="uid://dmtxncs76qfjl" path="res://shaders/skybox1.gdshader" id="132_27yvw"]
@@ -5466,10 +5466,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_n8bub"]
+[sub_resource type="QuadMesh" id="QuadMesh_1d2jy"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_dkv1e"]
+[sub_resource type="QuadMesh" id="QuadMesh_7y60k"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -7816,7 +7816,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_n8bub")
+mesh = SubResource("QuadMesh_1d2jy")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7824,7 +7824,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_dkv1e")
+mesh = SubResource("QuadMesh_7y60k")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"

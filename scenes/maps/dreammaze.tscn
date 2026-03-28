@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://l1lrb43ix2i3" path="res://scenes/maps/dreammaze.gd" id="1_bt6le"]
 [ext_resource type="PackedScene" uid="uid://j37rkfrjqae2" path="res://models/dreammaze/dreammaze.glb" id="1_kwt5g"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_fn1fw"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="4_fn1fw"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="5_yjp8p"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_h377g"]

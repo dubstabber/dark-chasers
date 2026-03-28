@@ -66,7 +66,7 @@
 [ext_resource type="PackedScene" uid="uid://w1g0kuukrgj8" path="res://scenes/objects/ao_moving_wall_6.tscn" id="170_qrnci"]
 [ext_resource type="PackedScene" uid="uid://8hwyygyn6mxm" path="res://scenes/objects/ao_moving_wall_7.tscn" id="171_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://swf63peiq0st" path="res://scenes/items/sushi.tscn" id="177_qeaeg"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="183_ainjx"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="183_ainjx"]
 [ext_resource type="Script" uid="uid://cgtyip2baqmg2" path="res://addons/Mirror/Mirror/Mirror.gd" id="194_0vynp"]
 [ext_resource type="Texture2D" uid="uid://33sg71rnk7ug" path="res://images/objects/static/SEXEA0.png" id="198_0l5v2"]
 [ext_resource type="PackedScene" uid="uid://hb2sga12bblt" path="res://scenes/items/ao_shield.tscn" id="205_0l5v2"]

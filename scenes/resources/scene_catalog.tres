@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c7huvuf510c2t" path="res://scenes/resources/scene_catalog.gd" id="1_script"]
 [ext_resource type="Script" uid="uid://bcbcts05couuc" path="res://scenes/resources/scene_catalog_entry.gd" id="2_entry_script"]
 [ext_resource type="PackedScene" uid="uid://by6immycqwkt5" path="res://scenes/player/player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://cojpeusa1t4t6" path="res://scenes/ui/hud/hud.tscn" id="4_hud"]
 [ext_resource type="PackedScene" uid="uid://b1vimowqmce5w" path="res://scenes/enemies/ao_oni.tscn" id="5_aooni"]
 [ext_resource type="PackedScene" uid="uid://curr1hvhg2u61" path="res://scenes/enemies/ilopulu.tscn" id="6_ilopulu"]
 [ext_resource type="PackedScene" uid="uid://duukdf1bft8vx" path="res://scenes/enemies/white_face.tscn" id="7_whiteface"]

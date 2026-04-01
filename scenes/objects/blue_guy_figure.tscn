@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://br7s1opdpwnc"]
+
+[ext_resource type="Texture2D" uid="uid://cq3fehlwn5e1s" path="res://images/objects/static/OYONA0.png" id="1_r2qq7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r2qq7"]
+size = Vector3(0.19458008, 0.40100098, 0.16333008)
+
+[node name="BlueGuyFigure" type="StaticBody3D" groups=["entity"]]
+collision_layer = 64
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018310547, 0.22052002, 0.00036621094)
+shape = SubResource("BoxShape3D_r2qq7")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20959625, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_r2qq7")

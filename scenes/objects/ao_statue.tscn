@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dk4i6otj52d52"]
+
+[ext_resource type="Texture2D" uid="uid://qe0w48g2xwg8" path="res://images/objects/static/STTUA0.png" id="1_l4j5u"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l4j5u"]
+size = Vector3(0.55457306, 1.0206299, 0.5923042)
+
+[node name="AoStatue" type="StaticBody3D" groups=["entity"]]
+collision_layer = 64
+collision_mask = 0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.55234444, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_l4j5u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008350372, 0.5215454, -0.0017681122)
+shape = SubResource("BoxShape3D_l4j5u")

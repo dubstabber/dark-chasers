@@ -6,10 +6,11 @@
 size = Vector3(0.246094, 0.1604, 0.272461)
 
 [node name="BoxStatic" type="StaticBody3D" groups=["entity"]]
-collision_layer = 4
-collision_mask = 7
+collision_layer = 64
+collision_mask = 0
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.039146155, 0)
 billboard = 2
 shaded = true
 texture = ExtResource("1_3syhb")

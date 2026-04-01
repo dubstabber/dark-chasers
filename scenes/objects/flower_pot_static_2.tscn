@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6y6qbp7wvjek"]
+
+[ext_resource type="Texture2D" uid="uid://cqqiunkyk1mtf" path="res://images/objects/static/PLTPA0.png" id="1_u3ik0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u3ik0"]
+radius = 0.20410156
+height = 1.2389069
+
+[node name="FlowerPotStatic2" type="StaticBody3D" groups=["entity"]]
+collision_layer = 64
+collision_mask = 0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.6237717, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_u3ik0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62311554, 0)
+shape = SubResource("CapsuleShape3D_u3ik0")

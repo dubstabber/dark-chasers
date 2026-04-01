@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqjb251yh4u28"]
+
+[ext_resource type="Texture2D" uid="uid://bhfx18q5ds30x" path="res://images/objects/static/WDSTA0.png" id="1_wh1gr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1ppbe"]
+size = Vector3(0.32904053, 0.8831787, 0.35253906)
+
+[node name="AoDoll1" type="StaticBody3D" groups=["entity"]]
+collision_layer = 64
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00045776367, 0.44891357, -0.0063476563)
+shape = SubResource("BoxShape3D_1ppbe")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0.4406945, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_wh1gr")

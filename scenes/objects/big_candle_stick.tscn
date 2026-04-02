@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvju4djvjwg0v"]
+
+[ext_resource type="Texture2D" uid="uid://uojn3jofhioo" path="res://images/objects/static/CBRAA0.png" id="1_0mu6b"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_0mu6b"]
+height = 1.1497574
+radius = 0.25097656
+
+[node name="BigCandleStick" type="StaticBody3D" groups=["entity"]]
+collision_layer = 4
+collision_mask = 0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_0mu6b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.03938675, 0)
+shape = SubResource("CylinderShape3D_0mu6b")

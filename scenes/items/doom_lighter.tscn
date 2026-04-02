@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://b254pho30ji8e" path="res://scenes/systems/weapon_manager/weapons/doom_lighter.tres" id="2_1ie13"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8kfoi"]
-size = Vector3(0.293564, 0.246067, 0.288145)
+size = Vector3(0.9239182, 0.246067, 1.0370238)
 
 [node name="DoomLighter" type="Area3D" groups=["item"]]
 collision_layer = 8
@@ -21,7 +21,7 @@ texture_filter = 2
 texture = ExtResource("1_8kfoi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00599769, 0.00824153, -0.00654888)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0061925836, 0.00824153, -0.005706735)
 shape = SubResource("BoxShape3D_8kfoi")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

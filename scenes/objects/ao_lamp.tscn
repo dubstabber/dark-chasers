@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkqx4epsaygx6"]
+
+[ext_resource type="Texture2D" uid="uid://b3u121r736k8q" path="res://images/objects/static/1038A0.png" id="1_entx0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_entx0"]
+size = Vector3(0.2698822, 0.46020508, 0.26116943)
+
+[node name="AoLamp" type="StaticBody3D" groups=["entity"]]
+collision_layer = 64
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.0007247925, 0.0013427734, -0.000579834)
+shape = SubResource("BoxShape3D_entx0")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21663535, 0)
+light_color = Color(1, 1, 0, 1)
+light_energy = 0.4
+light_indirect_energy = 10.615
+light_size = 0.234
+distance_fade_begin = 929.42
+distance_fade_shadow = 2133.11
+distance_fade_length = 431.3
+omni_range = 1.5643095
+omni_attenuation = 0.2
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+billboard = 2
+shaded = true
+texture_filter = 2
+texture = ExtResource("1_entx0")

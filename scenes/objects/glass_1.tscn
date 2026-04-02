@@ -17,8 +17,8 @@ horizontal_velocity = 7.0
 metadata/_custom_type_script = "uid://cas04n52fxase"
 
 [node name="Glass1" type="StaticBody3D" groups=["entity"]]
-collision_layer = 4
-collision_mask = 7
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("1_cv8iv")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]

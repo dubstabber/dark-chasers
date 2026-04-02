@@ -5499,10 +5499,10 @@ shader_parameter/scanline_strength = 0.35
 shader_parameter/scanline_density = 40.0
 shader_parameter/drift_speed = 0.45
 
-[sub_resource type="QuadMesh" id="QuadMesh_nov78"]
+[sub_resource type="QuadMesh" id="QuadMesh_64ry5"]
 size = Vector2(2.2, 0.9)
 
-[sub_resource type="QuadMesh" id="QuadMesh_hb8up"]
+[sub_resource type="QuadMesh" id="QuadMesh_vtvv8"]
 size = Vector2(2.2, 0.9)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_epj47"]
@@ -6480,6 +6480,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_fp5gj")
 
 [node name="MAP02_017" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+layers = 8
 mesh = SubResource("ArrayMesh_s8xcx")
 skeleton = NodePath("")
 
@@ -6630,6 +6631,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.053310394, 0.08722305, 0.00
 shape = SubResource("ConcavePolygonShape3D_mdtbf")
 
 [node name="MAP02_030" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+layers = 8
 mesh = SubResource("ArrayMesh_tg4cn")
 skeleton = NodePath("")
 
@@ -6663,6 +6665,7 @@ collision_mask = 0
 shape = SubResource("ConcavePolygonShape3D_1q57w")
 
 [node name="MAP02_033" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
+layers = 8
 mesh = SubResource("ArrayMesh_usj36")
 skeleton = NodePath("")
 
@@ -7854,7 +7857,7 @@ metadata/_custom_type_script = "uid://frgl0w6dnh16"
 [node name="ProceduralOverlayIndicator" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 4.6607904, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_nov78")
+mesh = SubResource("QuadMesh_64ry5")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -7862,7 +7865,7 @@ metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
 [node name="ProceduralOverlayIndicator2" type="MeshInstance3D" parent="NavigationRegion3D/Map"]
 transform = Transform3D(-1, 8.742278e-08, 3.821371e-15, 0, -4.371139e-08, 1, 8.742278e-08, 1, 4.371139e-08, 95.37071, 7.2112, -48.969696)
 material_override = SubResource("ShaderMaterial_mdtbf")
-mesh = SubResource("QuadMesh_hb8up")
+mesh = SubResource("QuadMesh_vtvv8")
 script = ExtResource("153_c807w")
 custom_shape_points = PackedVector2Array()
 metadata/_custom_type_script = "uid://d3mpgd2k02ifk"
@@ -9172,7 +9175,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.047668457, -0.17919922, -0
 shape = SubResource("BoxShape3D_lrdmy")
 
 [node name="TestSpawn" type="Marker3D" parent="NavigationRegion3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.70057, 5.6000004, -58.600277)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64.39007, 7.3599997, -9.702946)
 
 [node name="Cameras" type="Node3D" parent="NavigationRegion3D"]
 
@@ -10608,6 +10611,72 @@ light_negative = true
 light_specular = 1.323
 omni_range = 4.592605
 omni_attenuation = 2.371
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.82176, 10.8315325, 3.3649075)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91.47848, 4.516409, 1.3040485)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89.84156, 8.975882, 3.8203082)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 117.889854, 3.825264, 0.4253298)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.870453, 9.226102, -5.5310645)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D7" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.35973, 6.540601, -0.27779174)
+light_energy = 0.8
+light_negative = true
+light_cull_mask = 4294967287
+omni_range = 4.057418
+
+[node name="OmniLight3D8" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.074461, 8.478681, -12.125593)
+light_energy = 0.8
+light_negative = true
+omni_range = 4.057418
+
+[node name="OmniLight3D9" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 71.3497, 5.2204237, -61.572105)
+light_energy = 0.8
+light_negative = true
+omni_range = 4.057418
+
+[node name="OmniLight3D10" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.775343, 5.3637395, -14.507503)
+light_energy = 0.8
+light_negative = true
+omni_range = 4.057418
+
+[node name="OmniLight3D11" type="OmniLight3D" parent="Shadows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.958553, -0.99578106, -19.512508)
+light_energy = 0.8
+light_negative = true
+omni_range = 4.057418
 
 [node name="Blockers" type="Node3D" parent="."]
 

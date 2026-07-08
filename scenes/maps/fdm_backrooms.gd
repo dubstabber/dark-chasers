@@ -16,7 +16,6 @@ func _ready():
 	super._ready()
 	
 	current_game_mode = GAME_MODE.STANDARD
-	spawn_player()
 	_setup_spawner_controller()
 
 

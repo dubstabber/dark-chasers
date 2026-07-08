@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://m8ujlgs3pq2q"]
+
+[ext_resource type="PackedScene" uid="uid://ppfn5yvfbsgu" path="res://scenes/maps/level.tscn" id="1_qekp8"]
+[ext_resource type="MeshLibrary" uid="uid://rlrytui8qnrf" path="res://models/mansion1-tiles/mansion-tiles1.tres" id="2_e1dk0"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_sbhjq"]
+
+[node name="Level" unique_id=2017014214 instance=ExtResource("1_qekp8")]
+
+[node name="NavigationRegion3D" parent="." index="0" unique_id=457590490]
+navigation_mesh = SubResource("NavigationMesh_sbhjq")
+
+[node name="GridMap" type="GridMap" parent="NavigationRegion3D" index="1" unique_id=77683904]
+mesh_library = ExtResource("2_e1dk0")
+collision_layer = 4
+collision_mask = 0
+data = {
+"cells": PackedInt32Array(0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 65535, 1, 0, 65535, 0, 0, 2, 0, 0, 2, 65535, 0, 1, 65535, 0, 0, 65535, 0, 65535, 65535, 0, 65534, 0, 0, 65534, 1, 0, 65533, 1, 0, 65532, 1, 0, 65532, 0, 0, 65531, 0, 0, 65531, 65535, 0, 65530, 65535, 0, 65530, 65534, 0, 65530, 65533, 0, 65531, 65533, 0, 65531, 65534, 0, 65532, 65534, 0, 65532, 65535, 0, 65533, 65535, 0, 65533, 0, 0, 65534, 65535, 0, 65533, 65534, 0, 65533, 65533, 0, 65532, 65533, 0, 65534, 65534, 0, 65535, 65534, 0, 0, 65534, 0, 0, 65533, 0, 1, 65533, 0, 2, 65533, 0, 2, 65534, 0, 3, 65534, 0, 1, 65534, 0, 65535, 65533, 0, 65534, 65533, 0)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)
+
+[node name="Marker3D" type="Marker3D" parent="PlayerSpawners" parent_id_path=PackedInt32Array(433907289) index="0" unique_id=802346827]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1500001, 0)

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DarkChasersFootstepMaterialLibrary" load_steps=13 format=3 uid="uid://dvab7my8m4tta"]
+[gd_resource type="Resource" script_class="DarkChasersFootstepMaterialLibrary" format=3 uid="uid://dvab7my8m4tta"]
 
 [ext_resource type="Script" uid="uid://b2xga2b7umghm" path="res://scenes/systems/dynamic_footstep_system/scripts/footstep_material_profile.gd" id="1_5idub"]
 [ext_resource type="Script" uid="uid://dp3iwntgjj6g7" path="res://scenes/systems/dynamic_footstep_system/scripts/footstep_material_library.gd" id="1_7qjs8"]

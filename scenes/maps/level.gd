@@ -1,5 +1,7 @@
 class_name Level extends Node3D
 
+@export var auto_spawn_player := true
+
 # Base key collection system - can be overridden by specific maps
 var keys_collected: Array = []
 
@@ -8,11 +10,11 @@ var _initial_spawn_id: StringName = &""
 var _initial_spawn_consumed: bool = false
 
 @onready var hud = $HUD
-@onready var transitions = get_node_or_null("%Transitions")
-@onready var player_spawners = get_node_or_null("%PlayerSpawners")
-@onready var players = get_node_or_null("%Players")
-@onready var enemies = get_node_or_null("%Enemies")
-@onready var corpses = get_node_or_null("%Corpses")
+@onready var transitions = _get_named_level_node(&"Transitions")
+@onready var player_spawners = _get_named_level_node(&"PlayerSpawners")
+@onready var players = _get_named_level_node(&"Players")
+@onready var enemies = _get_named_level_node(&"Enemies")
+@onready var corpses = _get_named_level_node(&"Corpses")
 
 
 func _ready():
@@ -42,12 +44,22 @@ func _ready():
 
 	_capture_initial_transition_context()
 
+	if auto_spawn_player:
+		spawn_player()
+
 
 func _exit_tree():
 	# Unsubscribe from event bus when level is removed
 	Services.event_bus.unsubscribe(GameEventTypes.KEY_COLLECTED, _on_key_event)
 	Services.event_bus.unsubscribe(GameEventTypes.DOOR_LOCKED, _on_door_locked_event)
 	Services.event_bus.unsubscribe(GameEventTypes.ITEM_PICKEDUP, _on_item_pickedup_event)
+
+
+func _get_named_level_node(node_name: StringName) -> Node:
+	var unique_node := get_node_or_null(NodePath("%" + String(node_name)))
+	if unique_node:
+		return unique_node
+	return get_node_or_null(NodePath(String(node_name)))
 
 
 # === SHARED EVENT HANDLERS ===
@@ -142,12 +154,17 @@ func setup_player(player: CharacterBody3D) -> void:
 	Args:
 		player: The player instance to set up
 	"""
-	if hud:
+	if hud and "hud" in player:
 		player.hud = hud
 
 	# Add player to "player" group if not already
 	if not player.is_in_group("player"):
 		player.add_to_group("player")
+
+	var player_camera := _get_player_camera(player)
+	if player_camera and Services and Services.camera_manager:
+		Services.camera_manager.set_player_camera(player_camera)
+		Services.camera_manager.set_active_camera(player_camera)
 
 
 func refresh_key_display():
@@ -170,7 +187,25 @@ func spawn_player() -> Player:
 	adds it to the players node, and respawns at a random spawner.
 	Subclasses like mansion_1 override this for custom intro sequences.
 	"""
-	var player = Services.get_scene_catalog().get_player_scene().instantiate() as Player
+	var existing_player := _find_existing_player()
+	if existing_player:
+		setup_player(existing_player)
+		return existing_player
+
+	if not players:
+		push_warning("Level: No %Players found; cannot spawn player")
+		return null
+
+	var player_scene := Services.get_scene_catalog().get_player_scene()
+	if player_scene == null:
+		push_warning("Level: Player scene is missing from SceneCatalog")
+		return null
+
+	var player := player_scene.instantiate() as Player
+	if player == null:
+		push_warning("Level: Player scene did not instantiate a Player")
+		return null
+
 	players.add_child(player)
 	setup_player(player)
 	respawn(player)
@@ -182,6 +217,13 @@ func respawn(player: CharacterBody3D) -> void:
 	
 	Default implementation places the player at a random spawner position.
 	"""
+	var test_spawn := _find_unique_test_spawn_marker()
+	if test_spawn:
+		_initial_spawn_consumed = true
+		if TransitionArrival.apply(player, test_spawn):
+			return
+		push_warning("Level: failed to apply unique TestSpawn arrival")
+
 	if not _initial_spawn_consumed:
 		_initial_spawn_consumed = true
 		if _initial_spawn_id != &"":
@@ -193,13 +235,14 @@ func respawn(player: CharacterBody3D) -> void:
 			else:
 				push_warning("Level: spawn_id '%s' not found in PlayerSpawners for %s" % [String(_initial_spawn_id), scene_file_path])
 
-	if player_spawners:
-		var random_spawner := player_spawners.get_children().pick_random() as Node3D
+	var spawn_markers := _get_player_spawn_markers()
+	if not spawn_markers.is_empty():
+		var random_spawner := spawn_markers.pick_random() as Marker3D
 		if random_spawner and TransitionArrival.apply(player, random_spawner):
 			return
-		push_warning("Level: random player spawner is missing or invalid")
+		push_warning("Level: random player spawner is invalid")
 
-	push_warning("Level: No %PlayerSpawners found; cannot respawn player")
+	push_warning("Level: No Marker3D spawners found under %PlayerSpawners; cannot respawn player")
 
 
 func _capture_initial_transition_context() -> void:
@@ -220,7 +263,7 @@ func _capture_initial_transition_context() -> void:
 		_initial_spawn_id = StringName(spawn_var)
 
 
-func _find_player_spawn_marker(spawn_id: StringName) -> Node3D:
+func _find_player_spawn_marker(spawn_id: StringName) -> Marker3D:
 	if not player_spawners:
 		return null
 
@@ -230,17 +273,82 @@ func _find_player_spawn_marker(spawn_id: StringName) -> Node3D:
 		var node := queue.pop_front() as Node
 		for child in node.get_children():
 			queue.append(child)
-			if not (child is Node3D):
+			if not (child is Marker3D):
 				continue
 
 			# Prefer explicit metadata if present.
 			if child.has_meta("spawn_id"):
 				var meta_val: Variant = child.get_meta("spawn_id")
 				if String(meta_val) == wanted:
-					return child
+					return child as Marker3D
 			# Fallback to node name match.
 			if String(child.name) == wanted:
-				return child
+				return child as Marker3D
+
+	return null
+
+
+func _find_unique_test_spawn_marker() -> Marker3D:
+	if not player_spawners:
+		return null
+
+	var queue: Array[Node] = [player_spawners]
+	while not queue.is_empty():
+		var node := queue.pop_front() as Node
+		for child in node.get_children():
+			queue.append(child)
+			if child is Marker3D and child.name == &"TestSpawn" and child.unique_name_in_owner:
+				return child as Marker3D
+
+	return null
+
+
+func _get_player_spawn_markers() -> Array[Marker3D]:
+	var spawn_markers: Array[Marker3D] = []
+	if not player_spawners:
+		return spawn_markers
+
+	var queue: Array[Node] = [player_spawners]
+	while not queue.is_empty():
+		var node := queue.pop_front() as Node
+		for child in node.get_children():
+			queue.append(child)
+			if child is Marker3D:
+				spawn_markers.append(child as Marker3D)
+
+	return spawn_markers
+
+
+func _find_existing_player() -> Player:
+	if players:
+		for child in players.get_children():
+			if child is Player:
+				return child as Player
+
+	var queue: Array[Node] = [self]
+	while not queue.is_empty():
+		var node := queue.pop_front() as Node
+		for child in node.get_children():
+			queue.append(child)
+			if child is Player:
+				return child as Player
+
+	return null
+
+
+func _get_player_camera(player: Node) -> Camera3D:
+	if player == null:
+		return null
+
+	if "camera_3d" in player:
+		var camera_var: Variant = player.get("camera_3d")
+		if camera_var is Camera3D:
+			return camera_var
+
+	if player.has_method("get_hud_camera"):
+		var hud_camera_var: Variant = player.call("get_hud_camera")
+		if hud_camera_var is Camera3D:
+			return hud_camera_var
 
 	return null
 

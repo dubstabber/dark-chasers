@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="BitmapFontCatalog" load_steps=23 format=3 uid="uid://deu6iyqx42g0b"]
+[gd_resource type="Resource" script_class="BitmapFontCatalog" format=3 uid="uid://deu6iyqx42g0b"]
 
 [ext_resource type="Script" uid="uid://c3yxd6ctx2u5y" path="res://scenes/resources/bitmap_font_glyph.gd" id="1_v1cdw"]
 [ext_resource type="Texture2D" uid="uid://berleh354tn6p" path="res://images/fonts/STFSNUM0.png" id="2_4sjts"]

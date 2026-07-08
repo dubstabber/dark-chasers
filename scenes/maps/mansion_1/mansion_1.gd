@@ -9,7 +9,6 @@ const USE_TEST_SPAWN := false
 
 func _ready():
 	super._ready()
-	spawn_player()
 	#open_all_doors()
 
 

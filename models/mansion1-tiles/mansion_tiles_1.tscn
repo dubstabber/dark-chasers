@@ -1,0 +1,56 @@
+[gd_scene format=4 uid="uid://cjk2fv2tbq01w"]
+
+[ext_resource type="Texture2D" uid="uid://8wmyd01rnkjp" path="res://models/mansion1-tiles/mansion-tile1_Sprite_EntranceTileset_30.png" id="1_46lvw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o78fn"]
+resource_name = "Material.001"
+cull_mode = 2
+albedo_texture = ExtResource("1_46lvw")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8cmb7"]
+_surfaces = [{
+"aabb": AABB(-1, -0.05, -1, 2, 0.2, 2),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD/////AAAAAP//AAD//wAA////////AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xvl4h"]
+resource_name = "mansion-tile1_Cube_002"
+_surfaces = [{
+"aabb": AABB(-1, -0.05, -1, 2, 0.2, 2),
+"attribute_data": PackedByteArray("/z////9/VNX/f////z9U1f8/VNX/f6qq/39U1f8/qqr/P6qq/3//f/9/qqr/P/9//z//f/9/VFX/f/9//z9UVQAAqqr/P/9//z+qqgAA/3//f6qq/7//f/+/qqr/f/9/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_o78fn"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(4, 6, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP//AAD///////8AAP//AAD/////////////VNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////wAA/38AAP9/AAD/fwAA/3//f/+//3//v/9//7//f/+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_8cmb7")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_46lvw"]
+points = PackedVector3Array(-1, -0.05, -1, -1, 0.15, -1, 1, -0.05, -1, -1, -0.05, 1, -1, 0.15, 1, 1, 0.15, -1, 1, -0.05, 1, 1, 0.15, 1)
+
+[node name="mansion-tiles1" type="Node3D" unique_id=283404839]
+
+[node name="Tile1" type="MeshInstance3D" parent="." unique_id=260117702]
+mesh = SubResource("ArrayMesh_xvl4h")
+skeleton = NodePath("")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Tile1" unique_id=1408767583]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Tile1/StaticBody3D" unique_id=413922706]
+shape = SubResource("ConvexPolygonShape3D_46lvw")

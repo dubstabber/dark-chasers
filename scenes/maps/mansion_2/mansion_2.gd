@@ -6,7 +6,6 @@ const STARTING_YAW := PI
 
 func _ready():
 	super._ready()
-	spawn_player()
 	$Doors/AoMovingWall11.open()
 	#open_all_doors()
 
@@ -29,7 +28,9 @@ func spawn_player() -> Player:
 
 
 func test_respawn(player: CharacterBody3D) -> void:
-	var test_spawn := get_node_or_null("NavigationRegion3D/TestSpawn") as Node3D
+	var test_spawn := _find_unique_test_spawn_marker() as Node3D
+	if test_spawn == null:
+		test_spawn = get_node_or_null("NavigationRegion3D/TestSpawn") as Node3D
 	if test_spawn == null:
 		push_warning("mansion_2: TestSpawn node is missing")
 		return

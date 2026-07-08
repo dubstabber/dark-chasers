@@ -3,14 +3,31 @@ extends Node
 var _failed := false
 
 
+class MockHUD extends CanvasLayer:
+	func connect_to_player(_provider: Node) -> void:
+		pass
+
+	func add_log(_message: String) -> void:
+		pass
+
+	func update_keys_display(_keys: Array) -> void:
+		pass
+
+	func show_event_text_for_player(_player: CharacterBody3D, _text: String, _faded: bool = true, _text_time: float = 0.0) -> void:
+		pass
+
+
 func _ready() -> void:
 	print("=== LEVEL SWITCHING BOOTSTRAP TESTS ===")
 	_test_startup_scene_selection_uses_scene_catalog()
 	_test_teleport_resolves_destination_via_scene_catalog()
 	_test_transition_context_sanitization_strips_objects()
 	_test_mansion_spawn_uses_level_base_flow()
+	await _test_level_auto_spawns_player_once()
 	await _test_spawn_handoff_uses_spawn_id_once()
-	await _test_mansion_next_map_transitions_to_room_1()
+	await _test_unique_test_spawn_overrides_spawn_id()
+	await _test_non_unique_test_spawn_uses_normal_selection()
+	await _test_mansion_next_map_transitions_to_mansion_2()
 	print("=== LEVEL SWITCHING BOOTSTRAP TESTS COMPLETED ===")
 	get_tree().quit(1 if _failed else 0)
 
@@ -101,6 +118,32 @@ func _test_mansion_spawn_uses_level_base_flow() -> void:
 	print("✓ Mansion spawn delegates to the current Level architecture")
 
 
+func _test_level_auto_spawns_player_once() -> void:
+	print("\n--- Testing Level default auto-spawn ---")
+	var level := _create_minimal_level()
+	var marker := Marker3D.new()
+	marker.name = "Start"
+	marker.position = Vector3(3, 1, -5)
+	level.get_node("PlayerSpawners").add_child(marker)
+
+	add_child(level)
+
+	var players_node := level.players as Node3D
+	_assert(players_node != null, "Minimal Level should resolve %Players")
+	_assert(players_node.get_child_count() == 1, "Level._ready should auto-spawn exactly one player")
+	var player := players_node.get_child(0) as Player
+	_assert(player != null, "Auto-spawned child should be a Player")
+	_assert(player.global_position == marker.global_position, "Auto-spawned player should be placed at a PlayerSpawners Marker3D")
+
+	var respawned_player := level.spawn_player()
+	_assert(respawned_player == player, "Calling spawn_player again should reuse the existing player")
+	_assert(players_node.get_child_count() == 1, "Repeated spawn_player should not duplicate players")
+	print("✓ Level auto-spawns one player and keeps spawn_player idempotent")
+
+	level.queue_free()
+	await get_tree().process_frame
+
+
 func _test_spawn_handoff_uses_spawn_id_once() -> void:
 	print("\n--- Testing spawn handoff ---")
 	var lm := Services.level_manager as LevelManager
@@ -108,6 +151,7 @@ func _test_spawn_handoff_uses_spawn_id_once() -> void:
 
 	# Create a minimal Level with a PlayerSpawners container and a named marker.
 	var level := Level.new()
+	level.auto_spawn_player = false
 	# Level has @onready var hud = $HUD, so we must provide a HUD node before it enters the tree.
 	var hud := Node.new()
 	hud.name = "HUD"
@@ -166,8 +210,88 @@ func _test_spawn_handoff_uses_spawn_id_once() -> void:
 	await get_tree().process_frame
 
 
-func _test_mansion_next_map_transitions_to_room_1() -> void:
-	print("\n--- Testing mansion next-map transition to room_1 ---")
+func _test_unique_test_spawn_overrides_spawn_id() -> void:
+	print("\n--- Testing unique TestSpawn priority ---")
+	var level := Level.new()
+	level.auto_spawn_player = false
+	var hud := MockHUD.new()
+	hud.name = "HUD"
+	level.add_child(hud)
+
+	var spawners := Node3D.new()
+	spawners.name = "PlayerSpawners"
+	level.add_child(spawners)
+
+	var spawn_a := Marker3D.new()
+	spawn_a.name = "SpawnA"
+	spawn_a.position = Vector3(9, 2, 3)
+	spawners.add_child(spawn_a)
+
+	var test_spawn := Marker3D.new()
+	test_spawn.name = "TestSpawn"
+	test_spawn.unique_name_in_owner = true
+	test_spawn.position = Vector3(-12, 4, 6)
+	spawners.add_child(test_spawn)
+
+	add_child(level)
+	await get_tree().process_frame
+	level.player_spawners = spawners
+
+	level._initial_spawn_id = &"SpawnA"
+	var player := CharacterBody3D.new()
+	level.add_child(player)
+	await get_tree().process_frame
+	level.respawn(player)
+
+	_assert(player.global_position == test_spawn.global_position, "Unique TestSpawn should override transition spawn_id")
+	_assert(level._initial_spawn_consumed, "Unique TestSpawn should consume the initial spawn attempt")
+	print("✓ Unique TestSpawn is the only active default spawner")
+
+	level.queue_free()
+	await get_tree().process_frame
+
+
+func _test_non_unique_test_spawn_uses_normal_selection() -> void:
+	print("\n--- Testing non-unique TestSpawn fallback ---")
+	var level := Level.new()
+	level.auto_spawn_player = false
+	var hud := MockHUD.new()
+	hud.name = "HUD"
+	level.add_child(hud)
+
+	var spawners := Node3D.new()
+	spawners.name = "PlayerSpawners"
+	level.add_child(spawners)
+
+	var spawn_a := Marker3D.new()
+	spawn_a.name = "SpawnA"
+	spawn_a.position = Vector3(2, 0, 8)
+	spawners.add_child(spawn_a)
+
+	var test_spawn := Marker3D.new()
+	test_spawn.name = "TestSpawn"
+	test_spawn.position = Vector3(-7, 0, -3)
+	spawners.add_child(test_spawn)
+
+	add_child(level)
+	await get_tree().process_frame
+	level.player_spawners = spawners
+
+	level._initial_spawn_id = &"SpawnA"
+	var player := CharacterBody3D.new()
+	level.add_child(player)
+	await get_tree().process_frame
+	level.respawn(player)
+
+	_assert(player.global_position == spawn_a.global_position, "Non-unique TestSpawn should not override spawn_id selection")
+	print("✓ Non-unique TestSpawn remains a normal marker")
+
+	level.queue_free()
+	await get_tree().process_frame
+
+
+func _test_mansion_next_map_transitions_to_mansion_2() -> void:
+	print("\n--- Testing mansion next-map transition to mansion_2 ---")
 	var lm := Services.level_manager as LevelManager
 	_assert(lm != null, "Services.level_manager should be a LevelManager")
 
@@ -178,19 +302,39 @@ func _test_mansion_next_map_transitions_to_room_1() -> void:
 	var script := load("res://scenes/maps/mansion_1/mansion_1_events/mansion_1_area_events.gd")
 	var events_node: Node = script.new()
 	# The event arg is unused in the handler.
-	events_node._on_area_change_to_next_map(RefCounted.new())
+	events_node._on_area_change_to_next_map(GameEvent.new(GameEventTypes.AREA_CHANGE_TO_NEXT_MAP))
 	await get_tree().process_frame
 
 	var req: Dictionary = lm.get_last_transition_request()
-	_assert(req.get("scene_path") == "res://scenes/maps/room_1.tscn", "Next-map handler should request room_1 transition")
+	_assert(req.get("scene_path") == "res://scenes/maps/mansion_2/mansion_2.tscn", "Next-map handler should request mansion_2 transition")
 	_assert(host.get_child_count() == 1, "LevelHost should contain exactly one active level")
 
 	var active_level := host.get_child(0)
 	_assert(active_level is Node, "Active level should be a Node")
-	_assert((active_level as Node).scene_file_path == "res://scenes/maps/room_1.tscn", "LevelHost child should be room_1 scene")
-	print("✓ Mansion next-map event triggers transition to room_1")
+	_assert((active_level as Node).scene_file_path == "res://scenes/maps/mansion_2/mansion_2.tscn", "LevelHost child should be mansion_2 scene")
+	print("✓ Mansion next-map event triggers transition to mansion_2")
 	host.queue_free()
 	await get_tree().process_frame
+
+
+func _create_minimal_level() -> Level:
+	var level := Level.new()
+
+	var hud := MockHUD.new()
+	hud.name = "HUD"
+	level.add_child(hud)
+
+	var spawners := Node3D.new()
+	spawners.name = "PlayerSpawners"
+	spawners.unique_name_in_owner = true
+	level.add_child(spawners)
+
+	var players := Node3D.new()
+	players.name = "Players"
+	players.unique_name_in_owner = true
+	level.add_child(players)
+
+	return level
 
 
 func _assert(condition: bool, message: String) -> void:

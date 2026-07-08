@@ -11,3 +11,4 @@
 *.mp3 filter=lfs diff=lfs merge=lfs -text
 *.bin filter=lfs diff=lfs merge=lfs -text
 *.gltf filter=lfs diff=lfs merge=lfs -text
+scenes/maps/**/*_mapmesh.scn filter=lfs diff=lfs merge=lfs -text

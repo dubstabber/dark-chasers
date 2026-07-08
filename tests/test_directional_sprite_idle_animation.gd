@@ -1,5 +1,18 @@
 extends Node
 
+const SAVED_DIRECTIONAL_SCENE_PATHS := [
+	"res://scenes/enemies/ao_mika.tscn",
+	"res://scenes/enemies/ao_oni.tscn",
+	"res://scenes/enemies/ao_takeshi.tscn",
+	"res://scenes/enemies/fuwatty.tscn",
+	"res://scenes/enemies/hunchback_oni.tscn",
+	"res://scenes/enemies/rat.tscn",
+	"res://scenes/enemies/squatto.tscn",
+	"res://scenes/enemies/takuro_oni.tscn",
+	"res://scenes/objects/white_chair.tscn",
+	"res://scenes/player/player.tscn",
+]
+
 var _failed := false
 
 
@@ -10,6 +23,8 @@ func _ready() -> void:
 	_test_idle_animation_array_preserves_empty_slots_for_inspector_editing()
 	_test_movement_array_preserves_empty_slots_for_inspector_editing()
 	_test_idle_animation_frames_extend_atlas_width()
+	_test_generated_atlas_resources_are_cleared_for_save()
+	_test_saved_directional_scenes_do_not_embed_generated_textures()
 	_test_enemy_idle_animation_falls_back_to_idle_clip()
 	_test_enemy_animation_component_auto_discovers_player_and_starts_idle()
 	await _test_squatto_scene_autowires_and_starts_animations()
@@ -82,6 +97,38 @@ func _test_idle_animation_frames_extend_atlas_width() -> void:
 	_assert(result.texture != null, "Atlas generation should succeed for animated idle frames")
 	_assert(result.texture.get_width() == 48, "Atlas width should include idle animation frames before movement frames")
 	_assert(result.texture.get_height() == 16, "Atlas height should stay tied to direction count")
+
+
+func _test_generated_atlas_resources_are_cleared_for_save() -> void:
+	var sprite := DirectionalSprite3D.new()
+	var frame := _create_test_texture(16, 16, Color.RED)
+	var generated_atlas := _create_test_texture(16, 16, Color.GREEN)
+	var generated_placeholder := _create_test_texture(16, 16, Color.BLUE)
+	var editor_placeholder := load("res://scenes/components/directional_sprite_3d/directional_sprite_placeholder.tres")
+	var material := ShaderMaterial.new()
+	material.shader = load("res://scenes/components/directional_sprite_3d/directional_sprite_3d.gdshader")
+	material.set_shader_parameter("atlas_texture", generated_atlas)
+	material.set_shader_parameter("atlas_dimensions", Vector2(16, 16))
+	material.set_shader_parameter("max_sprite_size", Vector2(16, 16))
+	sprite.idle_sprites["front"] = frame
+	sprite.material_override = material
+	sprite.atlas_texture = generated_atlas
+	sprite.texture = generated_placeholder
+	sprite._clear_transient_generated_resources_for_save()
+	_assert(sprite.atlas_texture == editor_placeholder, "Generated atlas texture cache should be replaced with the editor placeholder before scene save")
+	_assert(sprite.texture == editor_placeholder, "Generated Sprite3D texture should be replaced with the editor placeholder before scene save")
+	_assert(material.get_shader_parameter("atlas_texture") == editor_placeholder, "Generated shader atlas parameter should be replaced with the editor placeholder before scene save")
+	_assert(material.get_shader_parameter("atlas_dimensions") == Vector2.ONE, "Atlas dimensions should be reset to a tiny placeholder before scene save")
+	_assert(material.get_shader_parameter("max_sprite_size") == Vector2.ONE, "Max sprite size should be reset to a tiny placeholder before scene save")
+
+
+func _test_saved_directional_scenes_do_not_embed_generated_textures() -> void:
+	for scene_path in SAVED_DIRECTIONAL_SCENE_PATHS:
+		var scene := load(scene_path) as PackedScene
+		_assert(scene != null, "%s should load after generated atlas cleanup" % scene_path)
+		var scene_text := FileAccess.get_file_as_string(scene_path)
+		_assert("shader_parameter/atlas_texture = SubResource(" not in scene_text, "%s should not save generated shader atlas textures" % scene_path)
+		_assert("texture = SubResource(\"ImageTexture" not in scene_text, "%s should not save generated Sprite3D placeholder textures" % scene_path)
 
 
 func _test_enemy_idle_animation_falls_back_to_idle_clip() -> void:

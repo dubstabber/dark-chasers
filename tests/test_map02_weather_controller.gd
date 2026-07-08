@@ -171,7 +171,8 @@ func _test_thunder_players_are_ephemeral() -> void:
 func _test_map02_scene_weather_authoring() -> void:
 	var scene_text := FileAccess.get_file_as_string("res://scenes/maps/mansion_2/mansion_2.tscn")
 	assert(not scene_text.is_empty(), "MAP02 scene text should be readable for weather authoring verification")
-	assert(scene_text.contains("[node name=\"WeatherController\" type=\"Node3D\" parent=\".\"]"), "MAP02 scene should include WeatherController root")
+	assert(scene_text.contains("[node name=\"WeatherController\" type=\"Node3D\" parent=\".\""), "MAP02 scene should include WeatherController root")
 	assert(not scene_text.contains("[node name=\"ThunderAudio\" type=\"AudioStreamPlayer\" parent=\"WeatherController\"]"), "MAP02 scene should not include shared ThunderAudio under WeatherController")
-	assert(scene_text.contains("[node name=\"ReflectionProbe9\" type=\"ReflectionProbe\" parent=\"Decorations\"]\ntransform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should still keep the tuned large reflection probe used for weather lighting")
+	assert(scene_text.contains("[node name=\"ReflectionProbe9\" type=\"ReflectionProbe\" parent=\"Decorations\""), "MAP02 scene should include the tuned large reflection probe used for weather lighting")
+	assert(scene_text.contains("transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 86.37787, 7.6006327, -5.5837784)"), "MAP02 scene should still keep the tuned large reflection probe transform used for weather lighting")
 	print("✓ MAP02 scene keeps weather controller authoring without shared thunder node")

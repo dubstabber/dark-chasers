@@ -12,6 +12,7 @@ enum DirectionMode {
 const IDLE_SUFFIX = "_idle_sprite"
 const MOVEMENT_SUFFIX = "_movement_sprites"
 const SHOOTING_SUFFIX = "_shooting_sprites"
+const EDITOR_PLACEHOLDER_TEXTURE := preload("res://scenes/components/directional_sprite_3d/directional_sprite_placeholder.tres")
 
 
 # Direction definitions for each mode
@@ -104,6 +105,10 @@ func _ready() -> void:
 		material_override = directional_material
 	else:
 		directional_material = material_override
+		_atlas_generation_pending = false
+		_shader_sync_dirty = false
+		_request_atlas_generation()
+		return
 
 	_sync_shader_params(true)
 	
@@ -111,6 +116,41 @@ func _ready() -> void:
 	# even if scene was saved with stale values
 	_atlas_generation_pending = false # Cancel any pending deferred calls
 	generate_atlas()
+
+
+func _notification(what: int) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	match what:
+		NOTIFICATION_EDITOR_PRE_SAVE:
+			_clear_transient_generated_resources_for_save()
+		NOTIFICATION_EDITOR_POST_SAVE:
+			_request_atlas_generation()
+
+
+func _clear_transient_generated_resources_for_save() -> void:
+	if not _has_directional_source_sprites():
+		return
+
+	_apply_editor_placeholder_texture()
+
+
+func _apply_editor_placeholder_texture() -> void:
+	atlas_texture = EDITOR_PLACEHOLDER_TEXTURE
+	texture = EDITOR_PLACEHOLDER_TEXTURE
+
+	var material := material_override as ShaderMaterial
+	if material == null:
+		return
+
+	material.set_shader_parameter("atlas_texture", EDITOR_PLACEHOLDER_TEXTURE)
+	material.set_shader_parameter("atlas_dimensions", Vector2.ONE)
+	material.set_shader_parameter("max_sprite_size", Vector2.ONE)
+
+
+func _has_directional_source_sprites() -> bool:
+	return DirectionalAtlasGenerator._has_any_sprites(idle_sprites, movement_sprites, shooting_sprites)
 
 
 func _sync_shader_params(force: bool = false) -> void:
@@ -195,7 +235,7 @@ func _request_atlas_generation() -> void:
 
 func _do_deferred_atlas_generation() -> void:
 	_atlas_generation_pending = false
-	generate_atlas()
+	generate_atlas(not Engine.is_editor_hint())
 
 
 func _get_property_list():
@@ -262,7 +302,7 @@ func _get_sprite_max_dimensions(directions: Array) -> Vector2i:
 	)
 
 
-func generate_atlas():
+func generate_atlas(notify_properties: bool = true):
 	var directions = _get_current_directions()
 	var result = DirectionalAtlasGenerator.generate(
 		direction_mode,
@@ -301,7 +341,8 @@ func generate_atlas():
 		directional_material.set_shader_parameter("debug_mode", debug_mode)
 		_shader_sync_dirty = false
 
-	notify_property_list_changed()
+	if notify_properties:
+		notify_property_list_changed()
 
 
 func _mark_shader_sync_dirty() -> void:

@@ -1,0 +1,66 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" uid="uid://5q2aomrq4gjw" path="res://scenes/maps/room_1.tscn" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/blue_demon.tscn" id="2_demon"]
+[ext_resource type="Script" path="res://scenes/components/enemy/blue_demon/blue_demon_patrol_point.gd" id="3_point"]
+
+[node name="BlueDemonRoom" instance=ExtResource("1_room")]
+
+[node name="BlueDemon" parent="Enemies" instance=ExtResource("2_demon")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -18, 0.5, -34)
+current_room = "MainRoom"
+
+[node name="BlueDemonPatrol" type="Node3D" parent="."]
+
+[node name="P0Start" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -18, 0.5, -34)
+script = ExtResource("3_point")
+room = "MainRoom"
+type = 1
+moving_speed = 2.0
+thinking_time = 5.0
+swing_head = true
+next_points = [NodePath("../P1")]
+
+[node name="P1" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -46)
+script = ExtResource("3_point")
+room = "MainRoom"
+moving_speed = 2.5
+head_to_forward = false
+next_points = [NodePath("../P2")]
+
+[node name="P2" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 18, 0.5, -34)
+script = ExtResource("3_point")
+room = "MainRoom"
+moving_speed = 2.0
+thinking_time = 10.0
+next_points = [NodePath("../P3Lookout")]
+
+[node name="P3Lookout" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.5, -30)
+script = ExtResource("3_point")
+room = "MainRoom"
+moving_speed = 3.0
+thinking_time = 5.0
+swing_head = true
+next_points = [NodePath("../P0Start")]
+
+[node name="S0" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 0.5, 6)
+script = ExtResource("3_point")
+room = "SmallRoom"
+moving_speed = 2.0
+thinking_time = 5.0
+swing_head = true
+next_points = [NodePath("../S1")]
+
+[node name="S1" type="Node3D" parent="BlueDemonPatrol" node_paths=PackedStringArray("next_points")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 85, 0.5, 14)
+script = ExtResource("3_point")
+room = "SmallRoom"
+moving_speed = 2.0
+thinking_time = 5.0
+swing_head = true
+next_points = [NodePath("../S0")]

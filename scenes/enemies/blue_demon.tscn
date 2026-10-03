@@ -1,0 +1,133 @@
+[gd_scene load_steps=24 format=3]
+
+[ext_resource type="PackedScene" uid="uid://ckn5dttugxo5o" path="res://scenes/enemies/enemy.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/enemies/blue_demon.gd" id="2_script"]
+[ext_resource type="Script" uid="uid://diolsigsqgtkb" path="res://scenes/resources/enemy_stats.gd" id="3_stats"]
+[ext_resource type="PackedScene" path="res://models/blue_demon/blue_demon.glb" id="4_model"]
+[ext_resource type="Material" path="res://scenes/enemies/blue_demon_material.tres" id="5_mat"]
+[ext_resource type="Script" uid="uid://b5x4ehxe1tlru" path="res://scenes/systems/dynamic_footstep_system/scripts/footstep_surface_detector.gd" id="6_footstep"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/blue_demon/FOOTSTEP_Leather_Wood_Hollow_Land_RR7_mono.wav" id="7_step"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/blue_demon/horror_title.wav" id="8_find"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/blue_demon/fear_drone.wav" id="9_look"]
+[ext_resource type="AudioStream" path="res://sounds/sfx/blue_demon/violin_horror_1.wav" id="10_chase"]
+[ext_resource type="Script" path="res://scenes/components/enemy/blue_demon/blue_demon_body.gd" id="11_body"]
+[ext_resource type="Script" path="res://scenes/components/enemy/blue_demon/blue_demon_foot.gd" id="12_foot"]
+[ext_resource type="Script" path="res://scenes/components/enemy/blue_demon/blue_demon_se.gd" id="13_se"]
+
+[sub_resource type="Resource" id="Resource_stats"]
+resource_local_to_scene = true
+script = ExtResource("3_stats")
+chase_player = false
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_walk"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_run"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_loco"]
+min_space = 0.05
+blend_point_0/node = SubResource("AnimationNodeAnimation_walk")
+blend_point_0/pos = 0.05
+blend_point_0/name = &"walk"
+blend_point_1/node = SubResource("AnimationNodeAnimation_run")
+blend_point_1/pos = 1.0
+blend_point_1/name = &"run"
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_moving"]
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_demon"]
+nodes/idle/node = SubResource("AnimationNodeAnimation_idle")
+nodes/idle/position = Vector2(0, 0)
+nodes/locomotion/node = SubResource("AnimationNodeBlendSpace1D_loco")
+nodes/locomotion/position = Vector2(0, 160)
+nodes/moving/node = SubResource("AnimationNodeBlend2_moving")
+nodes/moving/position = Vector2(320, 80)
+node_connections = [&"output", 0, &"moving", &"moving", 0, &"idle", &"moving", 1, &"locomotion"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.2
+height = 1.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kill"]
+radius = 0.8
+height = 2.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_step"]
+streams_count = 1
+stream_0/stream = ExtResource("7_step")
+
+[node name="BlueDemon" instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+stats = SubResource("Resource_stats")
+body_material = ExtResource("5_mat")
+
+[node name="Model" parent="Graphics" index="0" instance=ExtResource("4_model")]
+transform = Transform3D(0.714286, 0, 0, 0, 0.714286, 0, 0, 0, 0.714286, 0, 0.0771, 0)
+
+[node name="AnimationTree" type="AnimationTree" parent="Graphics" index="1"]
+tree_root = SubResource("AnimationNodeBlendTree_demon")
+anim_player = NodePath("../Model/AnimationPlayer")
+parameters/locomotion/blend_position = 0.05
+parameters/moving/blend_amount = 0.0
+
+[node name="DummyLookTarget" type="Node3D" parent="Graphics" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.71, -10)
+
+[node name="CollisionShape3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.705, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="NavigationAgent3D" parent="." index="3"]
+radius = 0.2
+
+[node name="KillZone" parent="." index="4"]
+visible = false
+enabled = false
+
+[node name="CollisionShape3D" parent="KillZone" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kill")
+
+[node name="EyesDetection3D" parent="." index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.414, 0)
+
+[node name="EnemyAnimationComponent" parent="." index="7"]
+animation_type = 1
+scale_speed_with_movement = false
+
+[node name="EnemyAIComponent" parent="." index="11"]
+detection_enabled = false
+
+[node name="FootL" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0.19, 0)
+unit_size = 7.0
+max_distance = 70.0
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_footstep")
+generic_fallback_footstep_profile = SubResource("AudioStreamRandomizer_step")
+
+[node name="FootR" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.19, 0)
+unit_size = 7.0
+max_distance = 70.0
+attenuation_filter_cutoff_hz = 20500.0
+script = ExtResource("6_footstep")
+generic_fallback_footstep_profile = SubResource("AudioStreamRandomizer_step")
+
+[node name="SePlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Music"
+script = ExtResource("13_se")
+find_stream = ExtResource("8_find")
+look_stream = ExtResource("9_look")
+chase_stream = ExtResource("10_chase")
+
+[node name="BlueDemonFoot" type="Node" parent="."]
+script = ExtResource("12_foot")
+
+[node name="BlueDemonBody" type="Node" parent="."]
+process_priority = 100
+script = ExtResource("11_body")

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dliomlps2yye0" path="res://scenes/maps/mansion_1/mansion_1.gd" id="1_0bnm5"]
 [ext_resource type="PackedScene" uid="uid://t3t6vrblg3oe" path="res://scenes/maps/mansion_1/mansion_1_mapmesh.scn" id="5_by4ms"]
 [ext_resource type="PackedScene" uid="uid://d3gwecawhtco5" path="res://scenes/enemies/fuwatty.tscn" id="13_f3rg6"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/blue_demon.tscn" id="14_by4ms"]
 [ext_resource type="Texture2D" uid="uid://cche7hts27gxi" path="res://images/textures/BSW01A.png" id="56_lu5ku"]
 [ext_resource type="Texture2D" uid="uid://dgun863x5u6v5" path="res://images/textures/BSW05A.png" id="62_t8gua"]
 [ext_resource type="Texture2D" uid="uid://ebgur1uk7u0t" path="res://models/mansion1/mansion1_HRBBR.png" id="69_pankb"]
@@ -466,33 +467,15 @@ radius = 0.499541
 [sub_resource type="BoxShape3D" id="BoxShape3D_wkois"]
 size = Vector3(0.052217, 7.57013, 0.567396)
 
-[sub_resource type="Resource" id="Resource_8u62s"]
-resource_local_to_scene = true
-script = ExtResource("148_b5j3m")
-metadata/_custom_type_script = "uid://diolsigsqgtkb"
-
-[sub_resource type="Resource" id="Resource_by4ms"]
-resource_local_to_scene = true
-script = ExtResource("148_b5j3m")
-speed = 8.0
-metadata/_custom_type_script = "uid://diolsigsqgtkb"
-
 [sub_resource type="Resource" id="Resource_5oaxs"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
-speed = 3.0
-chase_player = false
-can_open_door = false
-is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_4se0q"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
-speed = 3.0
-chase_player = false
-can_open_door = false
-is_wandering = true
+speed = 8.0
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
 [sub_resource type="Resource" id="Resource_aw4qs"]
@@ -522,20 +505,43 @@ can_open_door = false
 is_wandering = true
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
+[sub_resource type="Resource" id="Resource_31muj"]
+resource_local_to_scene = true
+script = ExtResource("148_b5j3m")
+speed = 3.0
+chase_player = false
+can_open_door = false
+is_wandering = true
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_dgoki"]
+resource_local_to_scene = true
+script = ExtResource("148_b5j3m")
+speed = 3.0
+chase_player = false
+can_open_door = false
+is_wandering = true
+metadata/_custom_type_script = "uid://diolsigsqgtkb"
+
+[sub_resource type="Resource" id="Resource_b1kip"]
+resource_local_to_scene = true
+script = ExtResource("148_b5j3m")
+chase_player = false
+
 [sub_resource type="Resource" id="Resource_f3rg6"]
 script = ExtResource("148_b5j3m")
 speed = 7.4
 chase_player = false
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
-[sub_resource type="Resource" id="Resource_31muj"]
+[sub_resource type="Resource" id="Resource_ufdgu"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
 chase_player = false
 death_message = "lolz"
 metadata/_custom_type_script = "uid://diolsigsqgtkb"
 
-[sub_resource type="Resource" id="Resource_dgoki"]
+[sub_resource type="Resource" id="Resource_it36s"]
 resource_local_to_scene = true
 script = ExtResource("148_b5j3m")
 speed = 8.0
@@ -1494,38 +1500,56 @@ unique_name_in_owner = true
 
 [node name="Ao oni" parent="NavigationRegion3D/Enemies" unique_id=815898544 instance=ExtResource("141_yrprg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5699, 202.506, 89.2973)
-stats = SubResource("Resource_8u62s")
+stats = SubResource("Resource_5oaxs")
 current_room = "BigHall"
 
 [node name="Ao mika" parent="NavigationRegion3D/Enemies" unique_id=913771311 instance=ExtResource("142_dc1jo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.7969, 202.677, 100.782)
-stats = SubResource("Resource_by4ms")
+stats = SubResource("Resource_4se0q")
 current_room = "BigHall"
 
 [node name="Rat" parent="NavigationRegion3D/Enemies" unique_id=1812802165 instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -75.9618, 202.197, -29.1142)
-stats = SubResource("Resource_5oaxs")
+stats = SubResource("Resource_aw4qs")
 current_room = "FirstFloor"
 
 [node name="Rat2" parent="NavigationRegion3D/Enemies" unique_id=1967118449 instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -26.541, 202.677, 136.024)
-stats = SubResource("Resource_4se0q")
+stats = SubResource("Resource_3rlxk")
 current_room = "ThirdFloor"
 
 [node name="Rat3" parent="NavigationRegion3D/Enemies" unique_id=2033787583 instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, -24.6666, 202.197, -32.7973)
-stats = SubResource("Resource_aw4qs")
+stats = SubResource("Resource_srnem")
 current_room = "FirstFloor"
 
 [node name="Rat4" parent="NavigationRegion3D/Enemies" unique_id=1206112026 instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 37.9792, 202.517, 89.6282)
-stats = SubResource("Resource_3rlxk")
+stats = SubResource("Resource_31muj")
 current_room = "BigHall"
 
 [node name="Rat5" parent="NavigationRegion3D/Enemies" unique_id=1570707337 instance=ExtResource("143_fu78y")]
 transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 21.4969, 202.197, 79.9931)
-stats = SubResource("Resource_srnem")
+stats = SubResource("Resource_dgoki")
 current_room = "BigHall"
+
+[node name="BlueDemon" parent="NavigationRegion3D/Enemies" unique_id=2087341857 instance=ExtResource("14_by4ms")]
+transform = Transform3D(-0.999791, 0, -0.02041895, 0, 1, 0, 0.02041895, 0, -0.999791, -46.64094, 202.2, -28.010414)
+model_scale = 0.714286
+speed_scale = 1.4
+start_asleep = false
+return_home = true
+chase_room_hops = 1
+revive_grace_time = 3.0
+sight_mask = 5
+hearing_intensity_per_speed = 0.125
+lighter_counts_as_flashlight = true
+arrive_radius = 0.5
+arrive_max_height_delta = 1.0
+blocked_grace = 0.5
+stall_timeout = 3.0
+stats = SubResource("Resource_b1kip")
+current_room = "FirstFloor"
 
 [node name="Fuwatty" parent="NavigationRegion3D/Enemies" unique_id=520673947 instance=ExtResource("13_f3rg6")]
 transform = Transform3D(-0.999791, 0, -0.02041895, 0, 1, 0, 0.02041895, 0, -0.999791, -46.64094, 202.19063, -25.523413)
@@ -1534,13 +1558,13 @@ current_room = "FirstFloor"
 
 [node name="Ao oni Test" parent="NavigationRegion3D/Enemies" unique_id=373204974 instance=ExtResource("141_yrprg")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -47.6345, 202.216, -26.7313)
-stats = SubResource("Resource_31muj")
+stats = SubResource("Resource_ufdgu")
 navigation_mode = 1
 current_room = "FirstFloor"
 
 [node name="Ao mika Test" parent="NavigationRegion3D/Enemies" unique_id=424928515 instance=ExtResource("142_dc1jo")]
 transform = Transform3D(-0.965613, 0, -0.259982, 0, 1, 0, 0.259982, 0, -0.965613, -48.6751, 202.197, -31.5108)
-stats = SubResource("Resource_dgoki")
+stats = SubResource("Resource_it36s")
 navigation_mode = 1
 current_room = "FirstFloor"
 override_chase_player = false
